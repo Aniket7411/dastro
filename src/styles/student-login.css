@@ -1,0 +1,474 @@
+/**
+ * Student login — scoped under .student-login-page (beats style.min.css resets).
+ */
+
+.site-shell .student-login-page {
+  width: 100% !important;
+  min-height: calc(100vh - 5rem) !important;
+  margin: 0 !important;
+  padding: clamp(1.25rem, 3vw, 2.25rem) var(--page-pad-x) clamp(2rem, 4vw, 3rem) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(200, 131, 42, 0.14), transparent 28%),
+    radial-gradient(circle at 88% 0%, rgba(42, 15, 2, 0.08), transparent 30%),
+    linear-gradient(135deg, #fffaf3 0%, #f8ead8 100%) !important;
+  font-family: 'Be Vietnam Pro', 'Be Vietnam', sans-serif !important;
+}
+
+.site-shell .student-login-page .sl-glow {
+  position: absolute !important;
+  width: 28rem !important;
+  height: 28rem !important;
+  top: -4rem !important;
+  right: -4rem !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle, rgba(200, 131, 42, 0.18), transparent 70%) !important;
+}
+
+.site-shell .student-login-page .sl-card {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 920px !important;
+  min-height: 34rem !important;
+  max-height: calc(100vh - 7rem) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid rgba(139, 74, 30, 0.12) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  box-shadow: 0 24px 64px rgba(73, 39, 15, 0.14) !important;
+}
+
+.site-shell .student-login-page .sl-form-panel {
+  flex: 0 0 46% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+  padding: 1.75rem 1.85rem 1.5rem !important;
+  border-right: 1px solid rgba(139, 74, 30, 0.1) !important;
+  overflow-y: auto !important;
+}
+
+.site-shell .student-login-page .sl-back {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  margin: 0 0 1.25rem !important;
+  padding: 0.5rem 0.75rem !important;
+  border: 1px solid rgba(139, 74, 30, 0.15) !important;
+  border-radius: 0.5rem !important;
+  background: #fffbf5 !important;
+  color: #5c3d26 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.site-shell .student-login-page .sl-back:hover {
+  background: #fff7ed !important;
+  border-color: rgba(200, 131, 42, 0.35) !important;
+  color: #8b4a1e !important;
+}
+
+.site-shell .student-login-page .sl-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin: 0 0 1.35rem !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-brand-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0.625rem !important;
+  background: linear-gradient(135deg, #8b4a1e, #c8832a) !important;
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 10px 24px rgba(200, 131, 42, 0.28) !important;
+}
+
+.site-shell .student-login-page .sl-brand-name {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #2a0f02 !important;
+}
+
+.site-shell .student-login-page .sl-brand-name em {
+  font-style: normal !important;
+  color: #c8832a !important;
+}
+
+.site-shell .student-login-page .sl-kicker {
+  display: inline-block !important;
+  margin: 0 0 0.5rem !important;
+  padding: 0 !important;
+  font-size: 0.6875rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #c8832a !important;
+}
+
+.site-shell .student-login-page .sl-title {
+  margin: 0 0 0.5rem !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(1.65rem, 3vw, 2rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  color: #230b02 !important;
+}
+
+.site-shell .student-login-page .sl-sub {
+  margin: 0 0 1.25rem !important;
+  padding: 0 !important;
+  max-width: 22rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  color: #714626 !important;
+}
+
+.site-shell .student-login-page .sl-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.4rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-label-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-label {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #5b4638 !important;
+}
+
+.site-shell .student-login-page .sl-link-btn {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  color: #a35d1f !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.site-shell .student-login-page .sl-link-btn:hover {
+  color: #5a2609 !important;
+}
+
+.site-shell .student-login-page .sl-input-wrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-input-icon {
+  position: absolute !important;
+  left: 0.85rem !important;
+  color: #b58b66 !important;
+  font-size: 0.8125rem !important;
+  pointer-events: none !important;
+}
+
+.site-shell .student-login-page .sl-input {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0.65rem 2.25rem 0.65rem 2.35rem !important;
+  min-height: 2.75rem !important;
+  border: 1px solid #ead8c6 !important;
+  border-radius: 0.625rem !important;
+  background: #ffffff !important;
+  color: #1d0b03 !important;
+  font-family: 'Be Vietnam Pro', 'Be Vietnam', sans-serif !important;
+  font-size: 0.875rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+.site-shell .student-login-page .sl-input:focus {
+  border-color: #c8832a !important;
+  box-shadow: 0 0 0 3px rgba(200, 131, 42, 0.12) !important;
+}
+
+.site-shell .student-login-page .sl-eye {
+  position: absolute !important;
+  right: 0.65rem !important;
+  margin: 0 !important;
+  padding: 0.25rem !important;
+  border: none !important;
+  background: transparent !important;
+  color: #b58b66 !important;
+  cursor: pointer !important;
+  font-size: 0.875rem !important;
+}
+
+.site-shell .student-login-page .sl-error {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0.65rem 0.85rem !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  border-radius: 0.5rem !important;
+  background: rgba(254, 226, 226, 0.5) !important;
+  color: #b91c1c !important;
+  font-size: 0.8125rem !important;
+}
+
+.site-shell .student-login-page .sl-submit {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  margin: 0.25rem 0 0 !important;
+  padding: 0.7rem 1.25rem !important;
+  min-height: 2.75rem !important;
+  border: none !important;
+  border-radius: 0.625rem !important;
+  background: linear-gradient(135deg, #2a0f02, #8b4a1e) !important;
+  color: #ffffff !important;
+  font-size: 0.9375rem !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  box-shadow: 0 14px 30px rgba(139, 74, 30, 0.22) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.site-shell .student-login-page .sl-submit:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
+}
+
+.site-shell .student-login-page .sl-submit:disabled {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+
+.site-shell .student-login-page .sl-submit--secondary {
+  background: #fff7ed !important;
+  color: #6b3514 !important;
+  border: 1px solid rgba(200, 131, 42, 0.22) !important;
+  box-shadow: none !important;
+}
+
+.site-shell .student-login-page .sl-action-row {
+  display: flex !important;
+  gap: 0.75rem !important;
+  margin: 0.5rem 0 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-action-row .sl-submit {
+  flex: 1 !important;
+  margin-top: 0 !important;
+}
+
+.site-shell .student-login-page .sl-spinner {
+  width: 0.875rem !important;
+  height: 0.875rem !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  border-top-color: #ffffff !important;
+  border-radius: 50% !important;
+  animation: sl-spin 0.7s linear infinite !important;
+}
+
+@keyframes sl-spin {
+  to { transform: rotate(360deg); }
+}
+
+.site-shell .student-login-page .sl-notes {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.4rem !important;
+  margin: 1rem 0 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.site-shell .student-login-page .sl-note {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
+  margin: 0 !important;
+  padding: 0.45rem 0.35rem !important;
+  min-height: 2rem !important;
+  border: 1px solid #f0dfcf !important;
+  border-radius: 0.625rem !important;
+  background: #fffaf4 !important;
+  color: #70401d !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+}
+
+.site-shell .student-login-page .sl-note i {
+  color: #c8832a !important;
+  font-size: 0.75rem !important;
+}
+
+/* Visual panel */
+.site-shell .student-login-page .sl-visual {
+  flex: 1 !important;
+  position: relative !important;
+  display: none !important;
+  overflow: hidden !important;
+  background: linear-gradient(145deg, #2a0f02, #6b3514) !important;
+}
+
+@media (min-width: 860px) {
+  .site-shell .student-login-page .sl-visual {
+    display: block !important;
+  }
+}
+
+.site-shell .student-login-page .sl-visual::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(180deg, rgba(42, 15, 2, 0.78) 0%, rgba(42, 15, 2, 0.08) 48%, rgba(42, 15, 2, 0.72) 100%),
+    linear-gradient(90deg, rgba(42, 15, 2, 0.6) 0%, transparent 46%) !important;
+}
+
+.site-shell .student-login-page .sl-visual-inner {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .student-login-page .sl-visual-copy {
+  position: absolute !important;
+  top: 1.75rem !important;
+  left: 1.75rem !important;
+  right: 1.75rem !important;
+  z-index: 2 !important;
+  color: #fff7ed !important;
+}
+
+.site-shell .student-login-page .sl-visual-kicker {
+  display: block !important;
+  margin: 0 0 0.5rem !important;
+  padding: 0 !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #f5c98d !important;
+}
+
+.site-shell .student-login-page .sl-visual-title {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 18rem !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: #fff7ed !important;
+}
+
+.site-shell .student-login-page .sl-visual-img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 22rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.site-shell .student-login-page .sl-visual-pill {
+  position: absolute !important;
+  left: 1.75rem !important;
+  bottom: 1.75rem !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0.65rem 0.85rem !important;
+  border: 1px solid rgba(255, 247, 237, 0.22) !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 247, 237, 0.14) !important;
+  color: #fff7ed !important;
+  font-size: 0.8125rem !important;
+  font-weight: 800 !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+@media (max-width: 859px) {
+  .site-shell .student-login-page .sl-card {
+    display: block !important;
+    max-width: 28rem !important;
+    min-height: auto !important;
+    max-height: none !important;
+  }
+
+  .site-shell .student-login-page .sl-form-panel {
+    flex: none !important;
+    border-right: none !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+
+  .site-shell .student-login-page .sl-notes {
+    grid-template-columns: 1fr !important;
+  }
+
+  .site-shell .student-login-page .sl-note {
+    justify-content: flex-start !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .site-shell .student-login-page .sl-form-panel {
+    flex-basis: 50% !important;
+  }
+}
