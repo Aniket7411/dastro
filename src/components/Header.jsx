@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import ConsultationModal from './ConsultationModal';
 import SuccessModal from './SuccessModal';
 import API_BASE from '../utils/api';
@@ -19,6 +20,7 @@ function Header() {
     isAdmin: false,
     studentName: ''
   });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileGroup, setOpenMobileGroup] = useState(null);
   const [desktopDropdownLocked, setDesktopDropdownLocked] = useState(false);
   const [formData, setFormData] = useState({
@@ -249,6 +251,7 @@ function Header() {
 
   useEffect(() => {
     closeDesktopDropdown();
+    setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   return (
@@ -620,7 +623,34 @@ function Header() {
           background: var(--bg-color);
           width: min(100%, 24rem) !important;
           max-width: 24rem;
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: 100vh;
+          z-index: 1055;
+          overflow-y: auto;
+          transform: translateX(100%);
           transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+          box-shadow: -4px 0 24px rgba(139, 74, 30, 0.15);
+        }
+
+        .mobile-offcanvas.is-open {
+          transform: translateX(0);
+        }
+
+        .mobile-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(42, 15, 2, 0.45);
+          z-index: 1054;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+
+        .mobile-backdrop.is-open {
+          opacity: 1;
+          pointer-events: all;
         }
 
         .mobile-offcanvas .offcanvas-header {
@@ -887,8 +917,13 @@ function Header() {
               </div>
             </Link>
              
-            <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu">
-              <i className="fas fa-bars"></i>
+            <button
+              className="navbar-toggler"
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu size={20} color="#fff" strokeWidth={2.5} />
             </button>
 
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
@@ -963,19 +998,27 @@ function Header() {
       </header>
       </div>{/* /header-fixed-wrapper */}
 
-      <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
-        <div className="offcanvas-header border-bottom">
-          <h5 className="offcanvas-title fw-bold d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>
+      <div className={`mobile-backdrop${isMobileMenuOpen ? ' is-open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} />
+      <div className={`mobile-offcanvas${isMobileMenuOpen ? ' is-open' : ''}`} tabIndex="-1">
+        <div className="offcanvas-header border-bottom" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.1rem 1.2rem' }}>
+          <h5 className="offcanvas-title fw-bold d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)', margin: 0 }}>
             <img src="/newbg.webp" alt={brandName} style={{ height: '40px', width: 'auto' }} />
             {brandName}
           </h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Close menu"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', color: 'var(--primary-color)' }}
+          >
+            <X size={24} strokeWidth={2} />
+          </button>
         </div>
         <div className="offcanvas-body p-0">
           <ul className="navbar-nav">
             {mobileNavLinks.map((item) => (
               <li className="nav-item" key={item.to}>
-                <Link className="nav-link" to={item.to} data-bs-dismiss="offcanvas">{item.label}</Link>
+                <Link className="nav-link" to={item.to} onClick={() => setIsMobileMenuOpen(false)}>{item.label}</Link>
               </li>
             ))}
 
@@ -991,17 +1034,17 @@ function Header() {
                   <i className="fas fa-chevron-down"></i>
                 </button>
                 <div className={`mobile-submenu ${openMobileGroup === 'shop' ? '' : 'is-collapsed'}`}>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">All Astro Products</Link>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Gemstones</Link>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Rudraksha</Link>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Yantras</Link>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Puja Kits</Link>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Bracelets</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>All Astro Products</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>Gemstones</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>Rudraksha</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>Yantras</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>Puja Kits</Link>
+                  <Link className="dropdown-item" to="/shop" onClick={() => setIsMobileMenuOpen(false)}>Bracelets</Link>
                 </div>
               </div>
             </li>
 
-            <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/astrologer" onClick={() => setIsMobileMenuOpen(false)}>ASTROLOGERS</Link></li>
 
             <li className="nav-item">
               <div className="mobile-menu-group">
@@ -1015,18 +1058,18 @@ function Header() {
                   <i className="fas fa-chevron-down"></i>
                 </button>
                 <div className={`mobile-submenu ${openMobileGroup === 'tools' ? '' : 'is-collapsed'}`}>
-                  <Link className="dropdown-item" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link>
-                  <Link className="dropdown-item" to="/numerology" data-bs-dismiss="offcanvas">Numerology</Link>
-                  <Link className="dropdown-item" to="/tarot" data-bs-dismiss="offcanvas">Tarot Reading</Link>
-                  <Link className="dropdown-item" to="/love" data-bs-dismiss="offcanvas">Love Calculator</Link>
+                  <Link className="dropdown-item" to="/free-tools" onClick={() => setIsMobileMenuOpen(false)}>All Free Tools</Link>
+                  <Link className="dropdown-item" to="/numerology" onClick={() => setIsMobileMenuOpen(false)}>Numerology</Link>
+                  <Link className="dropdown-item" to="/tarot" onClick={() => setIsMobileMenuOpen(false)}>Tarot Reading</Link>
+                  <Link className="dropdown-item" to="/love" onClick={() => setIsMobileMenuOpen(false)}>Love Calculator</Link>
                 </div>
               </div>
             </li>
 
-            <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/about" onClick={() => setIsMobileMenuOpen(false)}>ABOUT</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/blog" onClick={() => setIsMobileMenuOpen(false)}>BLOG</Link></li>
             <li className="nav-item">
-              <Link className="nav-link" to="/careers" data-bs-dismiss="offcanvas">
+              <Link className="nav-link" to="/careers" onClick={() => setIsMobileMenuOpen(false)}>
                 CAREERS
                 <span className="badge bg-danger ms-2" style={{ fontSize: '0.7rem' }}>WE'RE HIRING</span>
               </Link>
@@ -1034,32 +1077,32 @@ function Header() {
             
             <li className="nav-item p-4 d-grid gap-3">
               {authState.isAdmin && (
-                <Link to="/admin" className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+                <Link to="/admin" className="btn btn-mobile-cta ghost-cta" onClick={() => setIsMobileMenuOpen(false)}>
                   <i className="fas fa-user-shield"></i> ADMIN DASHBOARD
                 </Link>
               )}
               {authState.isStudent ? (
                 <>
-                  <Link to="/dashboard" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
+                  <Link to="/dashboard" className="btn btn-mobile-cta secondary-cta" onClick={() => setIsMobileMenuOpen(false)}>
                     <i className="fas fa-graduation-cap"></i> STUDENT DASHBOARD
                   </Link>
-                  <button type="button" onClick={handleStudentLogout} className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+                  <button type="button" onClick={handleStudentLogout} className="btn btn-mobile-cta ghost-cta" onClick={() => setIsMobileMenuOpen(false)}>
                     <i className="fas fa-sign-out-alt"></i> LOGOUT
                   </button>
                 </>
               ) : !isStudentLoginPage ? (
-                <Link to="/login" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
+                <Link to="/login" className="btn btn-mobile-cta secondary-cta" onClick={() => setIsMobileMenuOpen(false)}>
                   <i className="fas fa-user"></i> STUDENT LOGIN
                 </Link>
               ) : null}
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-mobile-cta primary-cta">
                 <i className="fas fa-calendar-check"></i> BOOK CONSULTATION
               </button>
-              <Link to="/live-courses" className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+              <Link to="/live-courses" className="btn btn-mobile-cta ghost-cta" onClick={() => setIsMobileMenuOpen(false)}>
                 <i className="fas fa-graduation-cap"></i> COURSES
               </Link>
               {authState.isAdmin && (
-                <button type="button" onClick={handleAdminLogout} className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+                <button type="button" onClick={handleAdminLogout} className="btn btn-mobile-cta ghost-cta" onClick={() => setIsMobileMenuOpen(false)}>
                   <i className="fas fa-lock"></i> ADMIN LOGOUT
                 </button>
               )}

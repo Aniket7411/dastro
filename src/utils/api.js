@@ -20,7 +20,9 @@ const getApiBase = () => {
     
     // If we are explicitly on a local dev setup
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:5000';
+      // return 'http://localhost:5000';
+          return 'https://dsatro-backend.onrender.com';
+
     }
     
     // For live/production or custom IP accessed via HTTP, 
@@ -30,7 +32,9 @@ const getApiBase = () => {
     return '';
   }
 
-  return 'http://localhost:5000';
+  // return 'http://localhost:5000';
+    return 'https://dsatro-backend.onrender.com';
+
 };
 
 const API_BASE = getApiBase();
