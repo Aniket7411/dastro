@@ -29,5 +29,5 @@ backend/node_modules
 # Claude Code local config
 .claude/
 
-# Development screenshots
-*.png
+# Development screenshots at repo root only (public/ assets must stay tracked)
+/*.png
