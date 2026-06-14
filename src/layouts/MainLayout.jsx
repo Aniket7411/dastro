@@ -6,9 +6,9 @@ import { PageLoader } from '../components/PageLoader';
 
 function MainLayout() {
   return (
-    <div className="site-shell">
+    <div className="min-h-screen w-full overflow-x-clip bg-site-bg font-body text-site-text">
       <Header />
-      <main className="site-main tw-surface w-full max-w-none min-h-[80vh]" style={{ paddingTop: 'var(--header-h)' }}>
+      <main className="min-h-[80vh] w-full bg-site-bg pt-site-header">
         <Suspense fallback={<PageLoader label="Loading…" />}>
           <Outlet />
         </Suspense>

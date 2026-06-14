@@ -9,6 +9,20 @@ export const isValidIndianMobile = (value = '') => /^[6-9]\d{9}$/.test(normalize
 
 export const isValidEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value).trim());
 
+export const MIN_PASSWORD_LENGTH = 6;
+
+export const isValidPassword = (value = '') => String(value).length >= MIN_PASSWORD_LENGTH;
+
+export const getPasswordValidationError = (password, confirmPassword) => {
+  if (!isValidPassword(password)) {
+    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
+  }
+  if (confirmPassword !== undefined && password !== confirmPassword) {
+    return 'Passwords do not match.';
+  }
+  return '';
+};
+
 export const isValidName = (value = '') => String(value).trim().length >= 2;
 
 export const getContactValidationError = ({ name, email, phone, mobile } = {}) => {

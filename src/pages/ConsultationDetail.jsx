@@ -26,6 +26,7 @@ import {
   fetchConsultationPaymentConfig,
   getEmptyConsultationForm,
 } from '../utils/consultationBooking';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 const BADGE_STYLES = {
   purple: 'border-violet-200 bg-violet-50 text-violet-800',
@@ -91,48 +92,74 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
           </div>
           {compact ? (
             <div className="flex flex-1 flex-col gap-2 min-[480px]:max-w-[16rem] min-[480px]:flex-none">
-              <button
-                type="button"
-                onClick={onPayNow}
-                className={`${BTN.primary} w-full !min-h-[2.375rem] !py-2 !text-xs`}
-              >
-                <CreditCard size={14} aria-hidden />
-                Pay &amp; Book
-              </button>
-              <button
-                type="button"
-                onClick={onCallback}
-                className={`${BTN.outline} w-full !min-h-[2.375rem] !py-2 !text-xs`}
-              >
-                <Phone size={14} aria-hidden />
-                Request callback
-              </button>
+              {ONLINE_PAYMENT_ENABLED ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={onPayNow}
+                    className={`${BTN.primary} w-full !min-h-[2.375rem] !py-2 !text-xs`}
+                  >
+                    <CreditCard size={14} aria-hidden />
+                    Pay &amp; Book
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onCallback}
+                    className={`${BTN.outline} w-full !min-h-[2.375rem] !py-2 !text-xs`}
+                  >
+                    <Phone size={14} aria-hidden />
+                    Request callback
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onCallback}
+                  className={`${BTN.primary} w-full !min-h-[2.375rem] !py-2 !text-xs`}
+                >
+                  <Phone size={14} aria-hidden />
+                  Request callback
+                </button>
+              )}
             </div>
           ) : null}
         </div>
 
         {!compact ? (
           <div className="flex flex-col gap-2">
-            <button
-              type="button"
-              onClick={onPayNow}
-              className={`${BTN.primary} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
-            >
-              <CreditCard size={15} aria-hidden />
-              Pay &amp; Book
-            </button>
-            <button
-              type="button"
-              onClick={onCallback}
-              className={`${BTN.outline} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
-            >
-              <Phone size={15} aria-hidden />
-              Request callback
-            </button>
+            {ONLINE_PAYMENT_ENABLED ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onPayNow}
+                  className={`${BTN.primary} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
+                >
+                  <CreditCard size={15} aria-hidden />
+                  Pay &amp; Book
+                </button>
+                <button
+                  type="button"
+                  onClick={onCallback}
+                  className={`${BTN.outline} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
+                >
+                  <Phone size={15} aria-hidden />
+                  Request callback
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={onCallback}
+                className={`${BTN.primary} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
+              >
+                <Phone size={15} aria-hidden />
+                Request callback
+              </button>
+            )}
           </div>
         ) : null}
 
-        {paymentNote ? (
+        {paymentNote && ONLINE_PAYMENT_ENABLED ? (
           <p className={`${TYPE.caption} !flex items-start gap-1.5 !text-[0.6875rem]`}>
             <Info size={12} className="mt-0.5 shrink-0 text-site-accent-dark" aria-hidden />
             {paymentNote}
@@ -149,7 +176,7 @@ function ConsultationDetail() {
   const { service, loading, error } = useConsultationService(serviceId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingMode, setBookingMode] = useState(BOOKING_MODES.PAY_NOW);
+  const [bookingMode, setBookingMode] = useState(BOOKING_MODES.PAY_LATER);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -158,7 +185,9 @@ function ConsultationDetail() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchConsultationPaymentConfig().then(setPaymentConfig);
+    if (ONLINE_PAYMENT_ENABLED) {
+      fetchConsultationPaymentConfig().then(setPaymentConfig);
+    }
   }, [serviceId]);
 
   useEffect(() => {
@@ -202,7 +231,7 @@ function ConsultationDetail() {
   const showFullTitle = service.short && service.short !== service.title;
 
   const openBooking = (mode) => {
-    setBookingMode(mode);
+    setBookingMode(ONLINE_PAYMENT_ENABLED ? mode : BOOKING_MODES.PAY_LATER);
     setIsModalOpen(true);
   };
 
@@ -324,7 +353,7 @@ function ConsultationDetail() {
             </div>
 
             {/* Desktop sidebar — content left, booking right */}
-            <aside className="hidden lg:block lg:sticky lg:top-[calc(var(--header-h)+0.75rem)] lg:self-start">
+            <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <BookingPanel
                 service={service}
                 displayTitle={displayTitle}

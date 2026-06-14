@@ -57,7 +57,7 @@ export default function ShopProductCard({ product, onBuy, onAddToCart, showTag =
           {product.name}
         </h3>
         <div className="m-0 flex items-center justify-between gap-[0.65rem] p-0">
-          <span className="m-0 p-0 text-[1.05rem] font-extrabold text-site-accent-dark">{product.price}</span>
+          <span className="m-0 p-0 font-price text-[1.05rem] font-bold tabular-nums tracking-tight text-site-accent-dark">{product.price}</span>
           <button
             type="button"
             className="m-0 cursor-pointer whitespace-nowrap rounded-lg border-[1.5px] border-site-primary bg-transparent px-3 py-[0.45rem] text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-55"

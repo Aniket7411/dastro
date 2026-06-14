@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
+import {
+  SITE_BTN_PRIMARY,
+  SITE_CONTAINER,
+  SITE_PAGE,
+  SITE_TITLE,
+} from '../utils/siteTokens';
 
 function BlogDetail() {
   const { slug } = useParams();
@@ -31,8 +37,8 @@ function BlogDetail() {
 
   if (isLoading) {
     return (
-      <div className="site-page">
-        <div className="container site-container py-5 text-center">
+      <div className={SITE_PAGE}>
+        <div className={`container ${SITE_CONTAINER} py-5 text-center`}>
           <div className="spinner-border text-primary"></div>
           <p className="mt-3">Loading article...</p>
         </div>
@@ -42,19 +48,19 @@ function BlogDetail() {
 
   if (!blog) {
     return (
-      <div className="site-page">
-        <div className="container site-container py-5 text-center">
-          <h2 className="site-title">Insight Not Found</h2>
+      <div className={SITE_PAGE}>
+        <div className={`container ${SITE_CONTAINER} py-5 text-center`}>
+          <h2 className={SITE_TITLE}>Insight Not Found</h2>
           <p>The requested article could not be found.</p>
-          <Link to="/blog" className="site-btn mt-3">Back to Blogs</Link>
+          <Link to="/blog" className={`${SITE_BTN_PRIMARY} mt-3`}>Back to Blogs</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <article className="blog-detail-section site-page">
-      <div className="container site-container">
+    <article className={`blog-detail-section ${SITE_PAGE}`}>
+      <div className={`container ${SITE_CONTAINER}`}>
         <div className="row justify-content-center">
           <div className="col-lg-8">
             <nav aria-label="breadcrumb" className="mb-4">

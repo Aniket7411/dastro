@@ -13,7 +13,7 @@ import toast from '@/utils/toast';
 import SEO from '../components/SEO';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 
-const WRAP = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8';
+const WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
 const CARD = 'rounded-2xl border border-site-accent-dark/12 bg-white shadow-sm';
 
 const consultInputCls = [
@@ -24,7 +24,7 @@ const consultInputCls = [
 
 function CoursePlayerLoading() {
   return (
-    <div className="tw-surface flex min-h-[60vh] flex-col items-center justify-center gap-3 bg-site-bg py-16">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 bg-site-bg py-16">
       <Loader2 size={32} className="animate-spin text-site-accent" />
       <p className="text-sm font-semibold text-site-muted">Loading course…</p>
     </div>
@@ -302,7 +302,7 @@ function CoursePlayer() {
 
   return (
     <div
-      className="tw-surface min-h-screen w-full select-none bg-site-bg py-8 font-body text-site-text sm:py-10 lg:py-12"
+      className="min-h-screen w-full select-none bg-site-bg py-8 font-body text-site-text sm:py-10 lg:py-12"
       onContextMenu={(e) => e.preventDefault()}
     >
       <SEO

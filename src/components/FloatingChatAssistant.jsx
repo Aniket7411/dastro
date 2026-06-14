@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import { WHATSAPP_NUMBER } from '../utils/contactInfo';
 
-const fallbackWhatsappNumber = '910000000000';
+const fallbackWhatsappNumber = WHATSAPP_NUMBER;
 
 const suggestedQuestions = [
   {

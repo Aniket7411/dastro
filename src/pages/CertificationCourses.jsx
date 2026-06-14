@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import CourseEnrollModal from '../components/CourseEnrollModal';
+import API_BASE from '../utils/api';
+import toast from '@/utils/toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 function CertificationCourses() {
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +34,45 @@ function CertificationCourses() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Enrollment form submitted! Redirecting to payment...');
-  };
-
-  const handlePayment = () => {
-    alert('Redirecting to secure payment gateway...\nProgram Fee: ₹1499');
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (ONLINE_PAYMENT_ENABLED) {
+      toast('Payment gateway will open here once live keys are configured.');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: normalizeIndianMobile(formData.phone),
+          type: 'Course',
+          leadType: 'LIVE COURSE LEAD',
+          status: 'ENQUIRY RECEIVED',
+          paymentStatus: 'NOT REQUIRED',
+          courseName: 'Certification Program',
+          experience: formData.experience,
+          city: formData.city,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Enquiry received! We will call you within 24 hours.');
+        setShowModal(false);
+        setFormData({ name: '', email: '', phone: '', city: '', experience: 'beginner' });
+      } else {
+        toast.error(data.message || 'Could not submit enquiry.');
+      }
+    } catch {
+      toast.error('Could not submit enquiry. Please try again.');
+    }
   };
 
   const highlights = [
@@ -103,7 +140,7 @@ function CertificationCourses() {
 
                 <div className="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
                   <button className="btn-v2-primary" onClick={() => setShowModal(true)}>
-                    Enroll Now for ₹1499
+                    {ONLINE_PAYMENT_ENABLED ? 'Enroll Now for ₹1499' : 'Request callback — ₹1499'}
                   </button>
                   <button className="btn-v2-outline" onClick={() => setShowModal(true)}>
                     <i className="fas fa-play me-2"></i> Watch Program Preview
@@ -277,7 +314,7 @@ function CertificationCourses() {
             <p className="fs-5 mb-4 opacity-75">Reserve your seat in the next certification batch</p>
             <div className="price-tag mb-5">
               <span className="text-muted text-decoration-line-through fs-4 me-2">₹7000</span>
-              <span className="display-4 fw-bold text-gradient">₹1499</span>
+              <span className="display-4 fw-bold text-gradient font-price">₹1499</span>
             </div>
             <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>
               Enroll in Certification
@@ -305,42 +342,15 @@ function CertificationCourses() {
         </div>
       </div>
 
-      {/* Enrollment Modal */}
-      {showModal && (
-        <div className="modal-overlay-v2" onClick={() => setShowModal(false)}>
-          <div className="modal-card-v2" onClick={e => e.stopPropagation()}>
-            <div className="modal-header-v2">
-              <h3>Program Enrollment</h3>
-              <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="modal-body-v2">
-              <div className="mb-3">
-                <label className="form-label">Full Name</label>
-                <input type="text" className="form-control-v2" name="name" value={formData.name} onChange={handleInputChange} required />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input type="email" className="form-control-v2" name="email" value={formData.email} onChange={handleInputChange} required />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Phone</label>
-                <input type="tel" className="form-control-v2" name="phone" value={formData.phone} onChange={handleInputChange} required />
-              </div>
-              <div className="mb-4">
-                <label className="form-label">Experience Level</label>
-                <select className="form-select-v2" name="experience" value={formData.experience} onChange={handleInputChange}>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-              </div>
-              <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
-                Proceed to Payment (₹1499)
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      <CourseEnrollModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        formData={formData}
+        onChange={handleInputChange}
+        onSubmit={handleSubmit}
+        courseName="Certification Program"
+        priceLabel="₹1499"
+      />
 
       <style>{`
         .certification-unique-page {
@@ -359,6 +369,13 @@ function CertificationCourses() {
         h1, h2, h3, .roadmap-text h4, .display-3, .display-4, .display-5 {
           font-family: 'Playfair Display', serif !important;
           color: var(--text-deep);
+        }
+
+        .font-price,
+        .display-4.font-price {
+          font-family: var(--font-price, 'DM Sans', sans-serif) !important;
+          font-variant-numeric: tabular-nums;
+          letter-spacing: -0.02em;
         }
 
         .text-gradient {
@@ -678,67 +695,6 @@ function CertificationCourses() {
           box-shadow: 0 30px 60px rgba(139, 74, 30, 0.1);
         }
 
-        /* Modal V2 */
-        .modal-overlay-v2 {
-          position: fixed;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: rgba(0,0,0,0.7);
-          backdrop-filter: blur(5px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-          padding: 20px;
-        }
-
-        .modal-card-v2 {
-          background: #FFFBF5;
-          width: 100%;
-          max-width: 500px;
-          border-radius: 25px;
-          overflow: hidden;
-          animation: slideUp 0.3s ease-out;
-          border: 1px solid rgba(200, 131, 42, 0.2);
-        }
-
-        @keyframes slideUp {
-          from { transform: translateY(50px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header-v2 {
-          background: #FDF6EE;
-          padding: 25px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid rgba(200, 131, 42, 0.15);
-        }
-
-        .close-btn {
-          background: none;
-          border: none;
-          font-size: 28px;
-          line-height: 1;
-        }
-
-        .modal-body-v2 { padding: 30px; }
-
-        .form-control-v2, .form-select-v2 {
-          width: 100%;
-          padding: 12px 15px;
-          border-radius: 10px;
-          background: #FFFFFF;
-          border: 1.5px solid rgba(200, 131, 42, 0.2);
-          transition: border-color 0.3s;
-          color: #3D1A08;
-        }
-
-        .form-control-v2:focus {
-          border-color: #8B4A1E;
-          outline: none;
-          box-shadow: 0 0 0 4px rgba(139, 74, 30, 0.1);
-        }
 
         /* Responsive Fixes */
         @media (max-width: 991px) {

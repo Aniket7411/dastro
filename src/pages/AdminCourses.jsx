@@ -5,6 +5,29 @@ import { invalidateCoursesCache } from '../hooks/useCourses';
 import AdminCourseCategories from './AdminCourseCategories';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
+import {
+  COURSE_LEVELS,
+  DURATION_UNITS,
+  formatCourseDuration,
+  parseCourseDuration,
+} from '../utils/courseDuration';
+
+const EMPTY_COURSE_FORM = {
+  title: '',
+  slug: '',
+  category: 'Astrology',
+  description: '',
+  longDesc: '',
+  courseType: 'Recorded',
+  level: 'Beginner',
+  durationValue: '',
+  durationUnit: 'weeks',
+  instructor: '',
+  topics: [],
+  price: '',
+  validityDays: '',
+  thumbnailUrl: '',
+};
 
 const COURSE_TYPE_CONFIG = {
   Recorded: {
@@ -60,22 +83,9 @@ function AdminCourses() {
   const [thumbUploading, setThumbUploading] = useState(false);
   const thumbInputRef = useRef(null);
 
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    category: 'Astrology',
-    description: '',
-    longDesc: '',
-    courseType: 'Recorded',
-    level: 'Beginner',
-    duration: '',
-    instructor: '',
-    topics: [],
-    price: '',
-    validityDays: '',
-    thumbnailUrl: ''
-  });
+  const [formData, setFormData] = useState(EMPTY_COURSE_FORM);
   const [topicInput, setTopicInput] = useState('');
+  const [durationLegacy, setDurationLegacy] = useState('');
   const [courseCategories, setCourseCategories] = useState([]);
   const [showCategoryPanel, setShowCategoryPanel] = useState(false);
   
@@ -731,6 +741,7 @@ function AdminCourses() {
     const method = editingCourse ? 'PUT' : 'POST';
 
     try {
+      const { durationValue, durationUnit, ...coursePayload } = formData;
       const res = await fetch(url, {
         method,
         headers: {
@@ -738,7 +749,8 @@ function AdminCourses() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          ...formData,
+          ...coursePayload,
+          duration: formatCourseDuration(durationValue, durationUnit) || durationLegacy || '',
           courseType: formData.courseType === 'Live' ? 'Live' : 'Recorded',
           price: Math.round(parseInt(String(formData.price).replace(/[^0-9]/g, ''), 10)) || 0,
           validityDays: Math.round(parseInt(String(formData.validityDays).replace(/[^0-9]/g, ''), 10)) || 0,
@@ -841,6 +853,8 @@ function AdminCourses() {
       setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
       setVideoFile(null);
       setEditVideoDrafts([]);
+      const parsedDuration = parseCourseDuration(course.duration || '');
+      setDurationLegacy(parsedDuration.legacy);
       setFormData({
         title: course.title,
         slug: course.slug || '',
@@ -848,13 +862,14 @@ function AdminCourses() {
         description: course.description || '',
         longDesc: course.longDesc || '',
         courseType: course.courseType || 'Recorded',
-        level: course.level || 'Beginner',
-        duration: course.duration || '',
-        instructor: course.instructor || '',
+        level: COURSE_LEVELS.includes(course.level) ? course.level : 'Beginner',
+        durationValue: parsedDuration.value,
+        durationUnit: parsedDuration.unit,
+        instructor: typeof course.instructor === 'string' ? course.instructor : course.instructor?.name || '',
         topics: Array.isArray(course.topics) ? course.topics : [],
         price: course.price,
         validityDays: course.validityDays,
-        thumbnailUrl: course.thumbnailUrl || ''
+        thumbnailUrl: course.thumbnailUrl || '',
       });
       setTopicInput('');
       // Fetch videos for this course
@@ -875,7 +890,8 @@ function AdminCourses() {
         });
     } else {
       setEditingCourse(null);
-      setFormData({ title: '', slug: '', category: 'Astrology', description: '', longDesc: '', courseType: 'Recorded', level: 'Beginner', duration: '', instructor: '', topics: [], price: '', validityDays: '', thumbnailUrl: '' });
+      setFormData(EMPTY_COURSE_FORM);
+      setDurationLegacy('');
       setTopicInput('');
       resetInitialVideoForm();
       setInitialVideos([]);
@@ -1116,52 +1132,59 @@ function AdminCourses() {
                       onChange={handleInputChange}
                       className="form-textarea"
                       rows={2}
-                      placeholder="Brief summary shown on course listing cards"
+                      placeholder="Brief summary shown on listing cards and below the course title"
                       required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Course Overview <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(shown on detail page)</span></label>
-                    <textarea
-                      name="longDesc"
-                      value={formData.longDesc}
-                      onChange={handleInputChange}
-                      className="form-textarea"
-                      rows={4}
-                      placeholder="Detailed description of the course, goals, and outcomes…"
                     />
                   </div>
 
                   <div className="form-row">
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">Level</label>
-                        <select name="level" value={formData.level} onChange={handleInputChange} className="form-input">
-                          <option value="Beginner">Beginner</option>
-                          <option value="Intermediate">Intermediate</option>
-                          <option value="Advanced">Advanced</option>
-                          <option value="All Levels">All Levels</option>
-                        </select>
+                        <label className="form-label">Duration</label>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <input
+                            type="number"
+                            name="durationValue"
+                            min={1}
+                            value={formData.durationValue}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            placeholder="e.g. 8"
+                            style={{ flex: '0 0 96px' }}
+                          />
+                          <select
+                            name="durationUnit"
+                            value={formData.durationUnit}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            style={{ flex: 1 }}
+                          >
+                            {DURATION_UNITS.map((unit) => (
+                              <option key={unit.value} value={unit.value}>{unit.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                        {durationLegacy ? (
+                          <p className="form-hint">Current saved value: {durationLegacy}. Set a number above to replace it.</p>
+                        ) : (
+                          <p className="form-hint">Shown on course cards and detail page (e.g. 8 Weeks).</p>
+                        )}
                       </div>
                     </div>
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">Duration</label>
-                        <input
-                          type="text"
-                          name="duration"
-                          value={formData.duration}
-                          onChange={handleInputChange}
-                          className="form-input"
-                          placeholder="e.g. 3 Months, 45 Hours"
-                        />
+                        <label className="form-label">Level</label>
+                        <select name="level" value={formData.level} onChange={handleInputChange} className="form-input">
+                          {COURSE_LEVELS.map((level) => (
+                            <option key={level} value={level}>{level}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Instructor Name <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(optional)</span></label>
+                    <label className="form-label">Instructor Name</label>
                     <input
                       type="text"
                       name="instructor"
@@ -1173,7 +1196,7 @@ function AdminCourses() {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">What You Will Learn <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(array list)</span></label>
+                    <label className="form-label">What You Will Learn</label>
                     <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
                       <input
                         type="text"
@@ -1222,6 +1245,18 @@ function AdminCourses() {
                     {formData.topics.length === 0 && (
                       <p className="form-hint">No topics added yet. Add items students will learn in this course.</p>
                     )}
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Course Overview <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(optional — detail page)</span></label>
+                    <textarea
+                      name="longDesc"
+                      value={formData.longDesc}
+                      onChange={handleInputChange}
+                      className="form-textarea"
+                      rows={4}
+                      placeholder="Longer description for the Overview section on the course detail page"
+                    />
                   </div>
 
                   <div className="form-group">

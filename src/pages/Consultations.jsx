@@ -9,7 +9,7 @@ import ConsultationServiceCard from '../components/ConsultationServiceCard';
 import { ConsultationFilterBar } from '../components/ConsultationFilters';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
-import { PAGE, PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST } from '../components/consultation/tokens';
+import { PAGE, PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST, CARD_FLEX_LIST, CARD_FLEX_ITEM } from '../components/consultation/tokens';
 import { useConsultationCatalog, toggleInList } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
@@ -33,14 +33,11 @@ const SORT_OPTIONS = [
   { value: 'title:asc', label: 'Name: A–Z' },
 ];
 
-const GRID =
-  'm-0 grid list-none grid-cols-1 gap-3 p-0 min-[480px]:grid-cols-2 sm:gap-3.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
-
 function ResultsSkeleton() {
   return (
-    <ul className={GRID}>
+    <ul className={CARD_FLEX_LIST}>
       {Array.from({ length: 8 }).map((_, i) => (
-        <li key={i}>
+        <li key={i} className={CARD_FLEX_ITEM}>
           <div className="animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
             <div className="aspect-[2/1] bg-site-accent-dark/10" />
             <div className="space-y-2 p-3">
@@ -69,9 +66,9 @@ function ActiveChip({ label, onRemove }) {
 
 function CardGrid({ cards }) {
   return (
-    <ul className={GRID}>
+    <ul className={CARD_FLEX_LIST}>
       {cards.map((card, i) => (
-        <li key={card.id ?? i} className="min-w-0">
+        <li key={card.id ?? i} className={CARD_FLEX_ITEM}>
           <ConsultationServiceCard card={card} detailPath="/book-consultation" />
         </li>
       ))}

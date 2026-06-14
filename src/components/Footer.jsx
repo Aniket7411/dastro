@@ -4,6 +4,8 @@ import { useSettings } from '../context/SettingsContext';
 import axios from 'axios';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
+import { CONTACT_PHONE_DISPLAY, WHATSAPP_NUMBER } from '../utils/contactInfo';
+import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -216,7 +218,7 @@ function Footer() {
         <i className="fab fa-whatsapp" style={{ fontSize: '20px' }}></i>
       ),
       color: '#25D366',
-      link: settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : '#'
+      link: settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : `https://wa.me/${WHATSAPP_NUMBER}`
     },
   ];
 
@@ -240,16 +242,16 @@ function Footer() {
         }
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-inner { position: relative; z-index: 1; max-width: var(--container-public); margin: 0 auto; padding: 52px var(--page-pad-x) 34px; }
+        .fb-inner { position: relative; z-index: 1; max-width: 90rem; margin: 0 auto; padding: 52px 1rem 34px; }
         
         /* Desktop Grid */
         .fb-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.35fr; gap: 34px; }
         
         .fb-logo { display: inline-flex; align-items: center; text-decoration: none; margin-bottom: 20px; }
-        .fb-logo-img { display: block; height: clamp(5.4rem, 8vw, 7.4rem); max-width: min(19rem, 76vw); object-fit: contain; }
+        .fb-logo-img { display: block; height: clamp(4.5rem, 7vw, 6rem); max-width: min(16rem, 72vw); object-fit: contain; }
 
         .fb-desc { font-size: 15px; line-height: 1.7; color: #5C3D26; max-width: 320px; margin-bottom: 30px; }
-        .fb-head { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: #2A0F02; margin-bottom: 25px; }
+        .fb-head { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #2A0F02; margin-bottom: 25px; }
         .fb-head::after { content: ''; display: block; width: 30px; height: 3px; background: #8B4A1E; margin-top: 10px; border-radius: 2px; }
 
         .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; }
@@ -272,7 +274,7 @@ function Footer() {
         }
 
         /* Newsletter Desktop */
-        .fb-newsletter-head { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: #2A0F02; margin-bottom: 10px; }
+        .fb-newsletter-head { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #2A0F02; margin-bottom: 10px; }
         .fb-newsletter { margin-top: 10px; max-width: 320px; }
         .fb-email-row { display: flex; }
         .fb-email-input {
@@ -290,9 +292,9 @@ function Footer() {
 
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
-          max-width: var(--container-public);
+          max-width: 90rem;
           margin: 0 auto;
-          padding: 28px var(--page-pad-x) 44px;
+          padding: 28px 1rem 44px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -344,8 +346,8 @@ function Footer() {
         /* Phone Layout — hidden on desktop */
         .fb-phone-section { display: none; }
 
-        .fb-bot-wrap { background: #f7eadb; padding: 18px var(--page-pad-x); border-top: 1px solid rgba(139,74,30,0.14); }
-        .fb-bot { max-width: var(--container-public); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; gap: 1rem; }
+        .fb-bot-wrap { background: #f7eadb; padding: 18px 1rem; border-top: 1px solid rgba(139,74,30,0.14); }
+        .fb-bot { max-width: 90rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; gap: 1rem; }
         .fb-legal a { color: #8B4A1E; text-decoration: none; font-weight: 700; }
         .fb-legal a:hover { color: #2A0F02; }
 
@@ -366,7 +368,7 @@ function Footer() {
 
           /* Logo (reuse desktop classes — ensure they work on mobile) */
           .fb-logo { margin-bottom: 0; }
-          .fb-logo-img { height: 5.4rem; max-width: 15rem; }
+          .fb-logo-img { height: 4.5rem; max-width: 12rem; }
 
           /* Description */
           .phone-desc { font-size: 14px; line-height: 1.7; color: #5C3D26; margin: 0; }
@@ -438,7 +440,7 @@ function Footer() {
           <div className="fb-grid">
             <div>
               <Link to="/" className="fb-logo">
-                <img className="fb-logo-img" src="/newbg.webp" alt="DS Institute" />
+                <img className="fb-logo-img" src={SITE_LOGO} alt={SITE_LOGO_ALT} />
               </Link>
               <p className="fb-desc" style={{ marginBottom: '15px' }}>India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
               
@@ -487,7 +489,7 @@ function Footer() {
               <ul className="fb-nav" style={{ gap: '10px' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#5C3D26', fontSize: '15px' }}>
                   <i className="fas fa-phone-alt" style={{ color: '#8B4A1E' }}></i>
-                  <span>+91 7570972970</span>
+                  <span>{settings?.contactPhone || CONTACT_PHONE_DISPLAY}</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#5C3D26', fontSize: '15px' }}>
                   <i className="fas fa-envelope" style={{ color: '#8B4A1E' }}></i>
@@ -564,7 +566,7 @@ function Footer() {
 
           {/* Logo */}
           <Link to="/" className="fb-logo">
-            <img className="fb-logo-img" src="/newbg.webp" alt="DS Institute" />
+            <img className="fb-logo-img" src={SITE_LOGO} alt={SITE_LOGO_ALT} />
           </Link>
 
           {/* Description */}
@@ -623,7 +625,7 @@ function Footer() {
               <ul className="phone-nav-list" style={{ gap: '12px' }}>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#5C3D26', fontSize: '14px' }}>
                   <i className="fas fa-phone-alt" style={{ color: '#8B4A1E', marginTop: '3px' }}></i>
-                  <span>+91 7570972970</span>
+                  <span>{settings?.contactPhone || CONTACT_PHONE_DISPLAY}</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#5C3D26', fontSize: '14px', wordBreak: 'break-all' }}>
                   <i className="fas fa-envelope" style={{ color: '#8B4A1E', marginTop: '3px' }}></i>

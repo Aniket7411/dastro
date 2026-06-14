@@ -1,5 +1,6 @@
 import API_BASE from './api';
 import toast from '@/utils/toast';
+import { SITE_LOGO } from './brandAssets';
 
 export const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -125,7 +126,7 @@ export const handleRazorpayPayment = async (formData, onSuccess, navigate) => {
       key: data.keyId,
       name: "DS Astro Institute",
       description: `Consultation Booking: ${formData.consultationType}`,
-      image: "/images/logo.png",
+      image: SITE_LOGO,
       order_id: data.orderId,
       handler: async function (response) {
         try {

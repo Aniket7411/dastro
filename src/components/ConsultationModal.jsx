@@ -1,30 +1,37 @@
 import { useState } from 'react';
-import { X, Check, Phone, Lock, CreditCard, Loader2 } from 'lucide-react';
+import { X, Phone, Lock, CreditCard, Loader2 } from 'lucide-react';
 import { BOOKING_MODES } from '../utils/consultationBooking';
-import { BTN, TYPE } from './consultation/tokens';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+import { BTN } from './consultation/tokens';
+import {
+  MODAL_TITLE,
+  MODAL_HINT,
+  MODAL_LABEL,
+  MODAL_SIDEBAR_TITLE,
+  MODAL_SIDEBAR_BODY,
+  MODAL_INPUT,
+  MODAL_INPUT_ERROR,
+} from './modal/modalTypography';
 
-const INPUT =
-  'm-0 w-full rounded-lg border border-site-accent-dark/15 bg-site-bg px-3 py-2.5 font-body text-sm text-site-primary placeholder:text-site-soft outline-none transition focus:border-site-accent focus:bg-white focus:ring-2 focus:ring-site-accent/15 disabled:cursor-not-allowed disabled:bg-site-surface disabled:text-site-muted';
+const REQ = <span className="font-normal text-red-500" aria-hidden="true"> *</span>;
 
-const INPUT_ERROR =
-  '!border-red-400 !bg-red-50 focus:!border-red-400 focus:!ring-red-400/15';
-
-const LABEL =
-  '!mb-1.5 block font-body text-[0.625rem] !font-bold uppercase tracking-wider !text-site-primary';
-
-const SIDE_POINTS = [
-  'Birth chart analysis',
-  'Career & relationship guidance',
-  'Remedies & predictions',
-];
+function FieldLabel({ htmlFor, required, optional, children }) {
+  return (
+    <label htmlFor={htmlFor} className={MODAL_LABEL}>
+      {children}
+      {required ? REQ : null}
+      {optional ? <span className="font-normal text-site-soft"> (optional)</span> : null}
+    </label>
+  );
+}
 
 function fieldClass(hasError) {
-  return hasError ? `${INPUT} ${INPUT_ERROR}` : INPUT;
+  return hasError ? `${MODAL_INPUT} ${MODAL_INPUT_ERROR}` : MODAL_INPUT;
 }
 
 function FieldError({ message }) {
   if (!message) return null;
-  return <p className="!mt-1 font-body text-[0.6875rem] leading-snug text-red-500">{message}</p>;
+  return <p className="mt-0.5 font-body text-xs leading-snug text-red-500">{message}</p>;
 }
 
 function validate(data, isFixedService) {
@@ -65,12 +72,11 @@ function ConsultationModal({
 
   if (!isOpen) return null;
 
-  const isPayNow = bookingMode === BOOKING_MODES.PAY_NOW;
+  const isPayNow = ONLINE_PAYMENT_ENABLED && bookingMode === BOOKING_MODES.PAY_NOW;
 
   const submitLabel = (() => {
     if (isSubmitting) return 'Processing…';
-    if (isPayNow) return priceLabel ? `Pay now · ${priceLabel}` : 'Pay now';
-    if (priceLabel) return `Request callback · ${priceLabel}`;
+    if (isPayNow) return 'Pay now';
     return 'Request callback';
   })();
 
@@ -99,12 +105,12 @@ function ConsultationModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100001] flex items-end justify-center bg-site-primary/55 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-[100001] flex items-end justify-center bg-site-primary/55 p-0 font-body antialiased backdrop-blur-sm sm:items-center sm:p-3"
       onClick={(e) => e.target === e.currentTarget && onClose()}
       role="presentation"
     >
       <div
-        className="relative flex max-h-[94dvh] w-full max-w-[52rem] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_64px_rgba(42,15,2,0.22)] sm:max-h-[92dvh] sm:rounded-2xl"
+        className="relative flex max-h-[92dvh] w-full max-w-[44rem] flex-col overflow-hidden rounded-t-xl bg-white font-body shadow-[0_20px_48px_rgba(42,15,2,0.2)] sm:max-h-[90dvh] sm:rounded-xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="consultation-modal-title"
@@ -113,71 +119,89 @@ function ConsultationModal({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-20 m-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-site-primary text-white shadow-sm transition hover:bg-site-accent-dark sm:right-3.5 sm:top-3.5"
+          className="absolute right-2.5 top-2.5 z-20 m-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-site-primary font-body text-white shadow-sm transition hover:bg-site-accent-dark sm:right-3 sm:top-3"
         >
-          <X size={15} strokeWidth={2.5} aria-hidden />
+          <X size={14} strokeWidth={2.5} aria-hidden />
         </button>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,13.5rem)_minmax(0,1fr)] xl:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
-            <aside className="relative overflow-hidden bg-site-primary text-white lg:min-h-full">
-              <img
-                src="/images/premium_tarot.png"
-                alt=""
-                className="hidden h-28 w-full object-cover object-[center_30%] lg:block xl:h-32"
-                aria-hidden
-              />
-
-              <div className="relative z-10 space-y-3 p-4 sm:p-5 lg:p-5 lg:pt-4 xl:p-6">
-                <span className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-wider text-white/90">
-                  {isPayNow ? 'Secure checkout' : 'Book a session'}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,12.5rem)_minmax(0,1fr)]">
+            <aside className="relative overflow-hidden bg-[#2a0f02] font-body text-white lg:flex lg:min-h-full lg:flex-col">
+              <div className="flex items-center gap-2.5 border-b border-white/10 px-3 py-2.5 lg:hidden">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-site-accent/20 ring-1 ring-site-accent/35">
+                  <Phone size={14} className="text-site-accent" aria-hidden />
                 </span>
-
-                <div>
-                  <h4 className="!m-0 font-heading text-lg font-bold leading-tight text-white sm:text-xl">
-                    {isPayNow ? 'Complete booking' : 'Request consultation'}
-                  </h4>
-                  <p className="!mt-1.5 font-body text-xs leading-relaxed text-white/75">
-                    Share your birth details for an accurate chart reading.
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold tracking-normal text-white">
+                    {isPayNow ? 'Complete booking' : 'Request a callback'}
                   </p>
+                  <p className="text-[0.6875rem] font-normal text-white/60">We&apos;ll call within 24 hours</p>
+                </div>
+                {priceLabel ? (
+                  <span className="shrink-0 font-price text-sm font-semibold tabular-nums text-site-accent">
+                    {priceLabel}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="relative hidden flex-1 flex-col lg:flex">
+                <div className="pointer-events-none absolute inset-0" aria-hidden>
+                  <img
+                    src="/images/premium_tarot.png"
+                    alt=""
+                    className="h-full w-full object-cover object-[center_20%] opacity-30"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#2a0f02]/90 via-[#2a0f02]/75 to-[#1a0800]" />
                 </div>
 
-                <ul className="m-0 hidden list-none space-y-2 p-0 lg:block">
-                  {SIDE_POINTS.map((item) => (
-                    <li key={item} className="flex items-start gap-2 font-body text-xs font-medium text-white/90">
-                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-site-accent/25">
-                        <Check size={9} className="text-site-accent" strokeWidth={3} aria-hidden />
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <div className="relative flex flex-1 flex-col justify-center gap-4 p-4">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-site-accent/15 ring-1 ring-site-accent/30">
+                    <Phone size={18} className="text-site-accent" strokeWidth={2.25} aria-hidden />
+                  </span>
 
-                {!isPayNow && (
-                  <p className="!m-0 flex items-start gap-2 rounded-lg bg-white/10 p-2.5 font-body text-[0.6875rem] leading-relaxed text-white/75">
-                    <Phone size={13} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
-                    We will call within 24 hours to confirm your slot. Pay online anytime before the session.
+                  <div>
+                    <h4 className={MODAL_SIDEBAR_TITLE}>
+                      {isPayNow ? 'Secure booking' : 'Request a callback'}
+                    </h4>
+                    <p className={MODAL_SIDEBAR_BODY}>
+                      Submit your details and our astrologer will reach out to confirm your session.
+                    </p>
+                  </div>
+
+                  {priceLabel ? (
+                    <div className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5 backdrop-blur-sm">
+                      <p className="m-0 text-[0.6875rem] font-medium text-white/50">Session fee</p>
+                      <p className="mb-0 mt-1 font-price text-[1.375rem] font-semibold tabular-nums leading-none text-site-accent">
+                        {priceLabel}
+                      </p>
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="relative border-t border-white/10 px-4 py-3">
+                  <p className="m-0 text-[0.6875rem] font-normal leading-snug text-white/50">
+                    {isPayNow ? 'Encrypted checkout' : 'Callback within 24 hours · No payment now'}
                   </p>
-                )}
+                </div>
               </div>
             </aside>
 
-            <div className="flex flex-col bg-white p-4 sm:p-5 lg:p-6">
-              <header className="mb-4 pr-8 sm:mb-5">
-                <h3 id="consultation-modal-title" className={`${TYPE.h2} !text-base sm:!text-lg`}>
+            <div className="flex flex-col bg-white px-3 py-3 sm:px-4 sm:py-3.5">
+              <header className="mb-2.5 pr-7">
+                <h3 id="consultation-modal-title" className={MODAL_TITLE}>
                   Consultation details
                 </h3>
-                <p className={`${TYPE.caption} !mt-1 !text-[0.6875rem] !font-semibold uppercase !tracking-wider !text-site-accent-dark`}>
-                  Birth details required for analysis
+                <p className={MODAL_HINT}>
+                  Fields marked <span className="text-red-500">*</span> are required
                 </p>
               </header>
 
-              <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3.5 sm:gap-4">
-                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-3">
+              <form onSubmit={onSubmit} noValidate className="flex flex-col gap-2.5 sm:gap-3">
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-2.5">
                   <div>
-                    <label htmlFor="consult-name" className={LABEL}>
+                    <FieldLabel htmlFor="consult-name" required>
                       Full name
-                    </label>
+                    </FieldLabel>
                     <input
                       id="consult-name"
                       type="text"
@@ -191,9 +215,9 @@ function ConsultationModal({
                     <FieldError message={errors.name} />
                   </div>
                   <div>
-                    <label htmlFor="consult-phone" className={LABEL}>
+                    <FieldLabel htmlFor="consult-phone" required>
                       Phone
-                    </label>
+                    </FieldLabel>
                     <input
                       id="consult-phone"
                       type="tel"
@@ -210,9 +234,9 @@ function ConsultationModal({
                 </div>
 
                 <div>
-                  <label htmlFor="consult-email" className={LABEL}>
+                  <FieldLabel htmlFor="consult-email" required>
                     Email
-                  </label>
+                  </FieldLabel>
                   <input
                     id="consult-email"
                     type="email"
@@ -226,11 +250,11 @@ function ConsultationModal({
                   <FieldError message={errors.email} />
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-2.5">
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-2">
                   <div>
-                    <label htmlFor="consult-dob" className={LABEL}>
+                    <FieldLabel htmlFor="consult-dob" required>
                       Date of birth
-                    </label>
+                    </FieldLabel>
                     <input
                       id="consult-dob"
                       type="date"
@@ -242,9 +266,9 @@ function ConsultationModal({
                     <FieldError message={errors.dob} />
                   </div>
                   <div>
-                    <label htmlFor="consult-tob" className={LABEL}>
+                    <FieldLabel htmlFor="consult-tob" required>
                       Time of birth
-                    </label>
+                    </FieldLabel>
                     <input
                       id="consult-tob"
                       type="time"
@@ -256,9 +280,9 @@ function ConsultationModal({
                     <FieldError message={errors.tob} />
                   </div>
                   <div>
-                    <label htmlFor="consult-pob" className={LABEL}>
+                    <FieldLabel htmlFor="consult-pob" required>
                       Place of birth
-                    </label>
+                    </FieldLabel>
                     <input
                       id="consult-pob"
                       type="text"
@@ -273,9 +297,9 @@ function ConsultationModal({
                 </div>
 
                 <div>
-                  <label htmlFor="consult-type" className={LABEL}>
+                  <FieldLabel htmlFor="consult-type" required>
                     Consultation type
-                  </label>
+                  </FieldLabel>
                   {isFixedService ? (
                     <input
                       id="consult-type"
@@ -283,7 +307,7 @@ function ConsultationModal({
                       name="consultationType"
                       value={formData.consultationType}
                       readOnly
-                      className={`${INPUT} cursor-not-allowed !bg-site-surface !text-site-muted`}
+                      className={`${MODAL_INPUT} cursor-not-allowed !bg-site-surface !text-site-muted`}
                     />
                   ) : (
                     <>
@@ -302,10 +326,9 @@ function ConsultationModal({
                 </div>
 
                 <div>
-                  <label htmlFor="consult-message" className={LABEL}>
-                    Message{' '}
-                    <span className="normal-case font-normal tracking-normal text-site-soft">(optional)</span>
-                  </label>
+                  <FieldLabel htmlFor="consult-message" optional>
+                    Message
+                  </FieldLabel>
                   <textarea
                     id="consult-message"
                     name="message"
@@ -313,11 +336,11 @@ function ConsultationModal({
                     onChange={onChange}
                     placeholder="Briefly describe your concern…"
                     rows={2}
-                    className={`${INPUT} resize-none`}
+                    className={`${MODAL_INPUT} resize-none`}
                   />
                 </div>
 
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2">
                   <input
                     type="checkbox"
                     id="consent-consultation"
@@ -327,8 +350,11 @@ function ConsultationModal({
                   />
                   <label
                     htmlFor="consent-consultation"
-                    className="cursor-pointer font-body text-xs leading-relaxed text-site-muted"
+                    className="cursor-pointer text-xs font-normal leading-snug text-site-muted"
                   >
+                    <span className="text-red-500" aria-hidden="true">
+                      *{' '}
+                    </span>
                     I agree to the{' '}
                     <a
                       href="/privacy-policy"
@@ -340,25 +366,38 @@ function ConsultationModal({
                   </label>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`${BTN.primary} w-full !min-h-[2.625rem] disabled:!translate-y-0`}
-                >
-                  {isSubmitting ? (
-                    <Loader2 size={16} className="animate-spin" aria-hidden />
-                  ) : isPayNow ? (
-                    <CreditCard size={16} aria-hidden />
-                  ) : (
-                    <Phone size={16} aria-hidden />
-                  )}
-                  {submitLabel}
-                </button>
+                <div className="space-y-2 border-t border-site-accent-dark/8 pt-2.5">
+                  {priceLabel ? (
+                    <div className="flex items-center justify-between rounded-lg border border-site-accent-dark/10 bg-site-bg/80 px-2.5 py-1.5">
+                      <span className="text-xs font-medium text-site-soft">
+                        {isPayNow ? 'Amount due' : 'Session fee'}
+                      </span>
+                      <span className="font-price text-base font-semibold tabular-nums tracking-tight text-site-accent-dark">
+                        {priceLabel}
+                      </span>
+                    </div>
+                  ) : null}
 
-                <p className="!m-0 flex items-center justify-center gap-1.5 text-center font-body text-[0.6875rem] font-medium text-site-soft">
-                  <Lock size={11} className="text-site-accent-dark" aria-hidden />
-                  Private &amp; encrypted
-                </p>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`${BTN.primary} w-full !min-h-[2.375rem] !py-2 !text-sm !font-semibold !tracking-normal disabled:!translate-y-0`}
+                  >
+                    {isSubmitting ? (
+                      <Loader2 size={15} className="animate-spin" aria-hidden />
+                    ) : isPayNow ? (
+                      <CreditCard size={15} aria-hidden />
+                    ) : (
+                      <Phone size={15} aria-hidden />
+                    )}
+                    {submitLabel}
+                  </button>
+
+                  <p className="m-0 flex items-center justify-center gap-1 text-center text-xs font-normal text-site-soft">
+                    <Lock size={10} className="text-site-accent-dark" aria-hidden />
+                    Private &amp; encrypted
+                  </p>
+                </div>
               </form>
             </div>
           </div>

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import API_BASE from '../utils/api';
+import toast from '@/utils/toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 function PredictiveAstrology() {
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +33,45 @@ function PredictiveAstrology() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Enrollment form submitted! Redirecting to payment...');
-  };
-
-  const handlePayment = () => {
-    alert('Redirecting to secure payment gateway...\nCourse Fee: ₹1299');
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (ONLINE_PAYMENT_ENABLED) {
+      toast('Payment gateway will open here once live keys are configured.');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: normalizeIndianMobile(formData.phone),
+          type: 'Course',
+          leadType: 'LIVE COURSE LEAD',
+          status: 'ENQUIRY RECEIVED',
+          paymentStatus: 'NOT REQUIRED',
+          courseName: 'Predictive Astrology Course',
+          experience: formData.experience,
+          city: formData.city,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Enquiry received! We will call you within 24 hours.');
+        setShowModal(false);
+        setFormData({ name: '', email: '', phone: '', city: '', experience: 'intermediate' });
+      } else {
+        toast.error(data.message || 'Could not submit enquiry.');
+      }
+    } catch {
+      toast.error('Could not submit enquiry. Please try again.');
+    }
   };
 
   const highlights = [
@@ -103,7 +139,7 @@ function PredictiveAstrology() {
 
                 <div className="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
                   <button className="btn-v2-primary" onClick={() => setShowModal(true)}>
-                    Enroll Now for ₹1299
+                    {ONLINE_PAYMENT_ENABLED ? 'Enroll Now for ₹1299' : 'Request callback — ₹1299'}
                   </button>
                   <button className="btn-v2-outline" onClick={() => setShowModal(true)}>
                     <i className="fas fa-play me-2"></i> Watch Preview
@@ -277,7 +313,7 @@ function PredictiveAstrology() {
             <p className="fs-5 mb-4 opacity-75">Join the next batch of professional forecasters</p>
             <div className="price-tag mb-5">
               <span className="text-muted text-decoration-line-through fs-4 me-2">₹6500</span>
-              <span className="display-4 fw-bold text-gradient">₹1299</span>
+              <span className="display-4 fw-bold text-gradient font-price">₹1299</span>
             </div>
             <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>
               Enroll and Start Predicting
@@ -335,10 +371,14 @@ function PredictiveAstrology() {
                 </select>
               </div>
               <div className="policy-notice mb-3" style={{ fontSize: '12px', color: '#6b6b8a', lineHeight: '1.4', textAlign: 'center' }}>
-                By proceeding with the payment, you agree to our <a href="/terms-and-conditions" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Terms &amp; Conditions</a> and <a href="/refund-policy" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Refund &amp; Cancellation Policy</a>.
+                {ONLINE_PAYMENT_ENABLED ? (
+                  <>By proceeding with the payment, you agree to our <a href="/terms-and-conditions" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Terms &amp; Conditions</a> and <a href="/refund-policy" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Refund &amp; Cancellation Policy</a>.</>
+                ) : (
+                  <>By submitting, you agree to our <a href="/terms-and-conditions" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Terms &amp; Conditions</a>. Our team will call you within 24 hours.</>
+                )}
               </div>
-              <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
-                Proceed to Payment (₹1299)
+              <button type="submit" className="btn-v2-primary w-100">
+                {ONLINE_PAYMENT_ENABLED ? 'Proceed to Payment (₹1299)' : 'Request callback (₹1299)'}
               </button>
             </form>
           </div>
@@ -362,6 +402,13 @@ function PredictiveAstrology() {
         h1, h2, h3, .roadmap-text h4, .display-3, .display-4, .display-5 {
           font-family: 'Playfair Display', serif !important;
           color: var(--text-deep);
+        }
+
+        .font-price,
+        .display-4.font-price {
+          font-family: var(--font-price, 'DM Sans', sans-serif) !important;
+          font-variant-numeric: tabular-nums;
+          letter-spacing: -0.02em;
         }
 
         .text-gradient {

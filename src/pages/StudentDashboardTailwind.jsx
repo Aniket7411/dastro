@@ -11,6 +11,7 @@ import {
   FolderOpen,
   GraduationCap,
   Loader2,
+  Lock,
   LogOut,
   Package,
   PenLine,
@@ -29,15 +30,29 @@ import useStudentDashboard, {
 } from '../hooks/useStudentDashboard';
 import SEO from '../components/SEO';
 
-const WRAP = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8';
+const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 const CARD =
-  'rounded-2xl border border-site-accent-dark/12 bg-white shadow-[0_2px_12px_rgba(42,15,2,0.06)]';
+  'rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_1px_8px_rgba(42,15,2,0.05)]';
+const STAT_CARD =
+  'flex min-h-0 items-center gap-3 rounded-xl border border-site-accent-dark/10 bg-white px-3.5 py-3 shadow-[0_1px_6px_rgba(42,15,2,0.04)] transition hover:border-site-accent/25 hover:shadow-[0_4px_14px_rgba(42,15,2,0.07)] sm:gap-3.5 sm:px-4 sm:py-3.5';
 
 const inputCls = [
   'w-full rounded-xl border border-site-accent-dark/20 bg-[#fffcf8] px-4 py-2.5',
   'text-sm font-semibold text-site-primary outline-none transition',
   'focus:border-site-accent focus:bg-white focus:ring-2 focus:ring-site-accent/20',
 ].join(' ');
+
+const BTN_BASE =
+  'sd-btn m-0 inline-flex w-auto max-w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 !rounded-full px-4 py-2 text-sm font-bold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100';
+
+const BTN = {
+  primary: `${BTN_BASE} border-0 bg-site-primary text-white shadow-sm hover:bg-site-accent-dark hover:shadow-md`,
+  outline: `${BTN_BASE} border border-site-accent-dark/25 bg-white text-site-primary hover:border-site-accent hover:bg-site-bg`,
+  hero: `${BTN_BASE} border border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20`,
+  heroGhost: `${BTN_BASE} border border-white/15 bg-white/5 text-white/85 hover:bg-white/15 hover:text-white`,
+  sm: `${BTN_BASE} px-3 py-1.5 text-xs`,
+  link: `${BTN_BASE} no-underline`,
+};
 
 function initials(name = '') {
   return name
@@ -61,20 +76,22 @@ function Skel({ className = '' }) {
 
 function DashboardLoading() {
   return (
-    <div className="tw-surface min-h-screen w-full bg-site-bg">
-      <div className="bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark px-4 py-10 sm:px-6 lg:px-8">
-        <Skel className="mb-3 h-3 w-24 bg-white/10" />
-        <Skel className="mb-2 h-9 w-72 max-w-full bg-white/10" />
-        <Skel className="h-4 w-96 max-w-full bg-white/10" />
+    <div className="student-dashboard-ui min-h-screen w-full bg-site-bg font-body text-site-text">
+      <div className="bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark px-4 pb-10 pt-7 sm:px-6 sm:pb-12 sm:pt-8">
+        <Skel className="mb-2 h-3 w-24 bg-white/10" />
+        <Skel className="mb-2 h-8 w-72 max-w-full bg-white/10" />
+        <Skel className="h-3.5 w-96 max-w-full bg-white/10" />
       </div>
       <div className={WRAP}>
-        <div className="py-8">
-          <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="-mt-1 pb-5">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`${CARD} p-5`}>
-                <Skel className="mb-3 h-10 w-10 rounded-xl" />
-                <Skel className="mb-2 h-3 w-20" />
-                <Skel className="h-7 w-10" />
+              <div key={i} className={`${STAT_CARD}`}>
+                <Skel className="h-9 w-9 shrink-0 rounded-lg" />
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <Skel className="h-2.5 w-16" />
+                  <Skel className="h-5 w-8" />
+                </div>
               </div>
             ))}
           </div>
@@ -90,14 +107,20 @@ function DashboardLoading() {
 
 function StatCard({ label, value, icon: Icon, iconBg }) {
   return (
-    <div className={`${CARD} p-5 transition hover:shadow-md sm:p-6`}>
-      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${iconBg}`}>
-        <Icon size={18} />
+    <div className={STAT_CARD}>
+      <div
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${iconBg}`}
+      >
+        <Icon size={17} strokeWidth={2.25} />
       </div>
-      <p className="text-[11px] font-bold uppercase tracking-wide text-site-muted">{label}</p>
-      <p className="mt-1 font-heading text-2xl font-extrabold leading-none text-site-primary sm:text-3xl">
-        {value}
-      </p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-[10px] font-bold uppercase tracking-wide text-site-muted sm:text-[11px]">
+          {label}
+        </p>
+        <p className="mt-0.5 font-heading text-lg font-extrabold leading-none text-site-primary sm:text-xl">
+          {value}
+        </p>
+      </div>
     </div>
   );
 }
@@ -116,7 +139,7 @@ function ProgressBar({ value, thin = false }) {
 
 function SectionHead({ icon: Icon, title, badge }) {
   return (
-    <div className="mb-3 flex items-center justify-between gap-3">
+    <div className="mb-2.5 flex items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-site-accent/10">
           <Icon size={15} className="text-site-accent-dark" />
@@ -144,11 +167,7 @@ function Pill({ children, active }) {
 
 function BtnPrimary({ children, className = '', ...rest }) {
   return (
-    <button
-      type="button"
-      className={`inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl bg-site-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-black active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
-      {...rest}
-    >
+    <button type="button" className={`${BTN.primary} ${className}`} {...rest}>
       {children}
     </button>
   );
@@ -156,11 +175,7 @@ function BtnPrimary({ children, className = '', ...rest }) {
 
 function BtnOutline({ children, className = '', ...rest }) {
   return (
-    <button
-      type="button"
-      className={`inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-site-accent-dark/20 bg-white px-4 py-2 text-sm font-bold text-site-primary transition hover:border-site-accent hover:bg-site-bg active:scale-95 ${className}`}
-      {...rest}
-    >
+    <button type="button" className={`${BTN.outline} ${className}`} {...rest}>
       {children}
     </button>
   );
@@ -172,7 +187,11 @@ export default function StudentDashboardTailwind() {
     profileForm,
     profileEditMode,
     setProfileEditMode,
+    passwordEditMode,
+    setPasswordEditMode,
+    passwordForm,
     savingProfile,
+    savingPassword,
     enrolledCourses,
     courseValidity,
     banners,
@@ -186,7 +205,10 @@ export default function StudentDashboardTailwind() {
     studentName,
     handleLogout,
     handleProfileChange,
+    handlePasswordChange,
     saveProfile,
+    savePassword,
+    resetPasswordForm,
     loadMaterials,
   } = useStudentDashboard();
 
@@ -243,11 +265,11 @@ export default function StudentDashboardTailwind() {
   const hasPromotions = banners.length > 0 || promoItems.length > 0 || newCourses.length > 0;
 
   return (
-    <div className="tw-surface min-h-screen w-full bg-site-bg font-body text-site-text">
+    <div className="student-dashboard-ui min-h-screen w-full bg-site-bg font-body text-site-text">
       <SEO title="Student Dashboard" description="Your courses, materials, and account." url="/dashboard" />
 
       {/* Hero */}
-      <header className="relative w-full overflow-hidden bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark">
+      <header className="relative w-full overflow-hidden bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark pb-10 sm:pb-12">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
@@ -256,37 +278,30 @@ export default function StudentDashboardTailwind() {
             backgroundSize: '22px 22px',
           }}
         />
-        <div className={`relative z-10 flex flex-col gap-4 py-10 sm:py-12 lg:flex-row lg:items-end lg:justify-between lg:py-14 ${WRAP}`}>
+        <div className={`relative z-10 flex flex-col gap-3 py-7 sm:gap-4 sm:py-8 lg:flex-row lg:items-end lg:justify-between lg:py-9 ${WRAP}`}>
           <div className="min-w-0 flex-1">
-            <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[#f5c98d] backdrop-blur-sm">
+            <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#f5c98d] backdrop-blur-sm sm:mb-2 sm:px-3 sm:py-1 sm:text-[11px]">
               <Sparkles size={11} />
               {greeting}
             </span>
-            <h1 className="font-heading text-2xl font-extrabold text-white sm:text-3xl lg:text-4xl">
+            <h1 className="font-heading text-xl font-extrabold text-white sm:text-2xl lg:text-3xl">
               Welcome back,{' '}
               <span className="bg-gradient-to-r from-[#f5c98d] to-[#e8a855] bg-clip-text text-transparent">
                 {studentName}
               </span>
             </h1>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#f5d9b8]/85 sm:text-base">
+            <p className="mt-1.5 max-w-xl text-sm leading-snug text-[#f5d9b8]/85 sm:mt-2">
               {enrolledCourses.length > 0
-                ? `Track progress, download materials, and continue learning.`
+                ? 'Track progress, download materials, and continue learning.'
                 : 'Browse recorded courses to start your Vedic astrology journey.'}
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Link
-              to="/recorded-courses"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
-            >
+            <Link to="/recorded-courses" className={BTN.hero}>
               <Plus size={15} />
               Explore Courses
             </Link>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white/80 backdrop-blur-sm transition hover:bg-white/15 hover:text-white lg:hidden"
-            >
+            <button type="button" onClick={handleLogout} className={`${BTN.heroGhost} lg:hidden`}>
               <LogOut size={15} />
               Logout
             </button>
@@ -294,23 +309,23 @@ export default function StudentDashboardTailwind() {
         </div>
       </header>
 
-      {/* Stats */}
-      <div className={`py-8 sm:py-10 ${WRAP}`}>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+      {/* Stats — overlap hero for tighter layout */}
+      <div className={`relative z-20 -mt-5 sm:-mt-6 ${WRAP}`}>
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
           ))}
         </div>
       </div>
 
-      <main className={`pb-14 sm:pb-16 ${WRAP}`}>
-        <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start lg:gap-10">
+      <main className={`pb-10 pt-5 sm:pb-12 sm:pt-6 ${WRAP}`}>
+        <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start lg:gap-6 xl:grid-cols-[272px_minmax(0,1fr)] xl:gap-7">
 
           {/* Sidebar */}
-          <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
-            <div className={`${CARD} p-5 sm:p-6`}>
-              <div className="mb-4 flex items-center gap-3 border-b border-site-accent-dark/10 pb-4 sm:pb-5">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-site-accent-dark to-site-accent text-sm font-black text-white ring-4 ring-site-bg">
+          <aside className="flex flex-col gap-3 lg:sticky lg:top-[9rem]">
+            <div className={`${CARD} p-4 sm:p-5`}>
+              <div className="mb-3 flex items-center gap-3 border-b border-site-accent-dark/10 pb-3 sm:pb-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-site-accent-dark to-site-accent text-sm font-black text-white ring-2 ring-site-bg">
                   {initials(studentName) || <UserRound size={20} />}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -322,7 +337,7 @@ export default function StudentDashboardTailwind() {
                 <Pill active>Active</Pill>
               </div>
 
-              <dl className="space-y-3">
+              <dl className="space-y-2.5">
                 {[
                   ['Name', profile?.name || '—'],
                   ['Email', profile?.email || '—'],
@@ -337,20 +352,84 @@ export default function StudentDashboardTailwind() {
                 ))}
               </dl>
 
-              <div className="mt-5 flex flex-col gap-2 border-t border-site-accent-dark/10 pt-4">
-                <BtnOutline className="w-full" onClick={() => setProfileEditMode((o) => !o)}>
+              <div className="mt-4 flex flex-wrap gap-2 border-t border-site-accent-dark/10 pt-3">
+                <BtnOutline onClick={() => setProfileEditMode((o) => !o)}>
                   <PenLine size={14} />
                   {profileEditMode ? 'Cancel Edit' : 'Edit Profile'}
                 </BtnOutline>
-                <BtnPrimary className="hidden w-full lg:inline-flex" onClick={handleLogout}>
+                <BtnOutline
+                  onClick={() => {
+                    setPasswordEditMode((open) => {
+                      if (open) resetPasswordForm();
+                      return !open;
+                    });
+                    setProfileEditMode(false);
+                  }}
+                >
+                  <Lock size={14} />
+                  {passwordEditMode ? 'Cancel' : 'Change Password'}
+                </BtnOutline>
+                <BtnPrimary className="hidden lg:inline-flex" onClick={handleLogout}>
                   <LogOut size={14} />
                   Logout
                 </BtnPrimary>
               </div>
             </div>
 
+            {passwordEditMode && (
+              <div className={`${CARD} p-4 sm:p-5`}>
+                <h3 className="font-heading text-sm font-extrabold text-site-primary">Change password</h3>
+                <p className="mb-4 mt-1 text-xs font-semibold text-site-muted">
+                  Use at least 6 characters. You&apos;ll stay signed in after updating.
+                </p>
+                <form onSubmit={savePassword} className="space-y-3">
+                  {[
+                    ['currentPassword', 'Current password'],
+                    ['newPassword', 'New password'],
+                    ['confirmPassword', 'Confirm new password'],
+                  ].map(([field, label]) => (
+                    <label key={field} className="block">
+                      <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-site-accent">
+                        {label}
+                      </span>
+                      <input
+                        type="password"
+                        value={passwordForm[field]}
+                        onChange={handlePasswordChange(field)}
+                        className={inputCls}
+                        autoComplete={
+                          field === 'currentPassword' ? 'current-password' : 'new-password'
+                        }
+                        required
+                      />
+                    </label>
+                  ))}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <BtnPrimary type="submit" disabled={savingPassword}>
+                      {savingPassword ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <Lock size={14} />
+                      )}
+                      {savingPassword ? 'Updating…' : 'Update password'}
+                    </BtnPrimary>
+                    <BtnOutline
+                      type="button"
+                      onClick={() => {
+                        resetPasswordForm();
+                        setPasswordEditMode(false);
+                      }}
+                    >
+                      <X size={14} />
+                      Cancel
+                    </BtnOutline>
+                  </div>
+                </form>
+              </div>
+            )}
+
             {profileEditMode && (
-              <div className={`${CARD} p-5 sm:p-6`}>
+              <div className={`${CARD} p-4 sm:p-5`}>
                 <h3 className="font-heading text-sm font-extrabold text-site-primary">Edit profile</h3>
                 <p className="mb-4 mt-1 text-xs font-semibold text-site-muted">
                   Update your account details.
@@ -377,8 +456,8 @@ export default function StudentDashboardTailwind() {
                       />
                     </label>
                   ))}
-                  <div className="flex gap-2 pt-1">
-                    <BtnPrimary type="submit" disabled={savingProfile} className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <BtnPrimary type="submit" disabled={savingProfile}>
                       {savingProfile ? (
                         <Loader2 size={14} className="animate-spin" />
                       ) : (
@@ -388,6 +467,7 @@ export default function StudentDashboardTailwind() {
                     </BtnPrimary>
                     <BtnOutline type="button" onClick={() => setProfileEditMode(false)}>
                       <X size={14} />
+                      Cancel
                     </BtnOutline>
                   </div>
                 </form>
@@ -395,12 +475,12 @@ export default function StudentDashboardTailwind() {
             )}
 
             {enrolledCourses.length > 0 && (
-              <div className={`${CARD} p-5 sm:p-6`}>
+              <div className={`${CARD} p-4 sm:p-5`}>
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="font-heading text-sm font-extrabold text-site-primary">
                     Overall progress
                   </h3>
-                  <span className="font-heading text-2xl font-extrabold text-site-accent">
+                  <span className="font-price text-2xl font-bold tabular-nums tracking-tight text-site-accent">
                     {avgProgress}%
                   </span>
                 </div>
@@ -414,7 +494,7 @@ export default function StudentDashboardTailwind() {
           </aside>
 
           {/* Main */}
-          <div className="flex min-w-0 flex-col gap-8">
+          <div className="flex min-w-0 flex-col gap-5 sm:gap-6">
             {/* Courses */}
             <section>
               <SectionHead
@@ -434,10 +514,7 @@ export default function StudentDashboardTailwind() {
                     <p className="mt-2 max-w-xs text-sm text-site-muted">
                       Purchase a recorded course to unlock lessons and materials.
                     </p>
-                    <Link
-                      to="/recorded-courses"
-                      className="mt-6 inline-flex items-center gap-2 rounded-xl bg-site-primary px-5 py-2.5 text-sm font-bold text-white transition hover:bg-black"
-                    >
+                    <Link to="/recorded-courses" className={`${BTN.link} ${BTN.primary} mt-6`}>
                       Browse courses
                       <ChevronRight size={15} />
                     </Link>
@@ -451,12 +528,12 @@ export default function StudentDashboardTailwind() {
                       return (
                         <article
                           key={course.id}
-                          className="flex flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:px-6 sm:py-6"
+                          className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-5 sm:py-5"
                         >
                           <img
                             src={course.thumbnail}
                             alt={course.title}
-                            className="h-24 w-full shrink-0 rounded-xl object-cover sm:h-24 sm:w-36"
+                            className="h-20 w-full shrink-0 rounded-lg object-cover sm:h-[5.5rem] sm:w-32"
                           />
                           <div className="min-w-0 flex-1">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-site-accent">
@@ -485,7 +562,7 @@ export default function StudentDashboardTailwind() {
                           </div>
                           <Link
                             to={`/student/course/${course.id}`}
-                            className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-xl bg-site-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-black sm:self-center"
+                            className={`${BTN.link} ${BTN.primary} self-start sm:self-center`}
                           >
                             Continue
                             <ChevronRight size={14} />
@@ -499,7 +576,7 @@ export default function StudentDashboardTailwind() {
             </section>
 
             {/* Materials + Offers */}
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
               <section className="flex flex-col">
                 <SectionHead icon={FolderOpen} title="Course materials" />
                 <div className={`flex flex-1 flex-col ${CARD} overflow-hidden`}>
@@ -513,7 +590,7 @@ export default function StudentDashboardTailwind() {
                             key={course.id}
                             type="button"
                             onClick={() => loadMaterials(course.id)}
-                            className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                            className={`sd-btn shrink-0 whitespace-nowrap !rounded-full px-3 py-1.5 text-xs font-bold transition ${
                               selectedCourseForMaterials === course.id
                                 ? 'bg-site-primary text-white shadow-sm'
                                 : 'bg-site-bg text-site-muted hover:bg-site-accent-dark/10'
@@ -554,7 +631,7 @@ export default function StudentDashboardTailwind() {
                                   href={item.fileUrl}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-site-primary px-3 py-1.5 text-xs font-bold text-white transition hover:bg-black"
+                                  className={`${BTN.link} ${BTN.sm} ${BTN.primary}`}
                                 >
                                   <Download size={13} />
                                   <span className="hidden sm:inline">Download</span>

@@ -13,6 +13,7 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import PageBanner from '../components/PageBanner';
 import { PAGE_BANNERS } from '../data/pageBanners';
 import SEO from '../components/SEO';
+import { BANNER_CONTENT_GAP, SITE_CONTAINER, SITE_PAGE } from '../utils/siteTokens';
 
 /* ─── Inline styles (no Tailwind dependency) ─── */
 const S = {
@@ -447,7 +448,7 @@ export default function Careers() {
   const salaryLabel = getJobSalaryLabel(selectedJob);
 
   return (
-    <div className="careers-page site-page w-full overflow-x-hidden">
+    <div className={`careers-page ${SITE_PAGE} w-full overflow-x-hidden`}>
       <SEO title="Careers" description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams." url="/careers" />
       <PageBanner {...PAGE_BANNERS.careers} />
       <style>{`
@@ -508,7 +509,7 @@ export default function Careers() {
         }
       `}</style>
 
-      <div className="site-container site-banner-content-gap">
+      <div className={`${SITE_CONTAINER} ${BANNER_CONTENT_GAP}`}>
         <div className="careers-layout">
           {/* ── LEFT: Job List ── */}
           <div className="careers-sidebar">

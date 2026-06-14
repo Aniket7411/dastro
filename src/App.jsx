@@ -111,6 +111,7 @@ function App() {
                 <Route path="shop/:category" element={<ShopCategory />} />
                 <Route path="careers" element={<Careers />} />
                 <Route path="login" element={<StudentLogin />} />
+                <Route path="admin/login" element={<AdminLogin />} />
                 <Route path="dashboard" element={<StudentDashboard />} />
                 <Route path="student/course/:id" element={<CoursePlayer />} />
               </Route>
@@ -125,7 +126,6 @@ function App() {
               </Route>
 
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

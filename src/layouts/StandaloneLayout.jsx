@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 
 const pageMeta = [
   {
@@ -122,8 +123,8 @@ function StandaloneLayout() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3 no-underline">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2a0f02] text-white shadow-lg shadow-[#8b4a1e]/20">
-              <i className="fas fa-moon text-sm"></i>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-[#8b4a1e]/20 sm:h-10 sm:w-10">
+              <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-full w-full object-contain p-0.5" />
             </span>
             <span className="min-w-0">
               <span className="block truncate text-[10px] font-black uppercase tracking-[0.24em] text-[#c8832a]">

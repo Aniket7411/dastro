@@ -631,7 +631,14 @@ function AdminLeads({ activeFilter }) {
                     </div>
                   </div>
                   <div className="p-3 rounded bg-light border text-secondary" style={{ fontSize: '14px', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
-                    {messageModal.data?.message}
+                    {(messageModal.data?.city || messageModal.data?.age || messageModal.data?.interest) ? (
+                      <div className="mb-3 pb-3 border-bottom">
+                        {messageModal.data?.city ? <div><strong>City:</strong> {messageModal.data.city}</div> : null}
+                        {messageModal.data?.age ? <div><strong>Age:</strong> {messageModal.data.age}</div> : null}
+                        {messageModal.data?.interest ? <div><strong>Interest:</strong> {messageModal.data.interest}</div> : null}
+                      </div>
+                    ) : null}
+                    {messageModal.data?.message || 'No message provided.'}
                   </div>
                 </div>
                 <div className="modal-footer border-top-0 pt-0">

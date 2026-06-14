@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
-import { isValidEmail } from '../utils/validation';
+import { isValidEmail, getPasswordValidationError } from '../utils/validation';
+import { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
 
 const inputClass =
   'box-border min-h-11 w-full rounded-[0.625rem] border border-[#ead8c6] bg-white py-2.5 pl-9 pr-9 text-sm text-site-primary outline-none focus:border-site-accent focus:ring-[3px] focus:ring-site-accent/20';
@@ -23,6 +24,7 @@ function StudentLogin() {
   const [viewState, setViewState] = useState('LOGIN');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigate = useNavigate();
 
@@ -70,11 +72,10 @@ function StudentLogin() {
     }
   };
 
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
+  const requestPasswordResetOtp = async () => {
     if (!isValidEmail(email)) {
       toast.error('Please enter your registered email address');
-      return;
+      return false;
     }
 
     setIsLoading(true);
@@ -90,15 +91,27 @@ function StudentLogin() {
 
       if (data.success) {
         toast.success('OTP sent to your email (if registered)');
-        setViewState('RESET');
-      } else {
-        toast.error(data.message || 'Failed to process request');
+        return true;
       }
+
+      toast.error(data.message || 'Failed to process request');
+      return false;
     } catch {
       toast.error('Network error. Please try again.');
+      return false;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    const sent = await requestPasswordResetOtp();
+    if (sent) setViewState('RESET');
+  };
+
+  const handleResendOtp = async () => {
+    await requestPasswordResetOtp();
   };
 
   const handleResetPassword = async (e) => {
@@ -107,8 +120,14 @@ function StudentLogin() {
       toast.error('Please enter a valid email address.');
       return;
     }
-    if (!otp || !newPassword) {
-      toast.error('Please fill all fields');
+    if (!otp) {
+      toast.error('Please enter the 6-digit OTP from your email');
+      return;
+    }
+
+    const passwordError = getPasswordValidationError(newPassword, confirmPassword);
+    if (passwordError) {
+      toast.error(passwordError);
       return;
     }
 
@@ -117,7 +136,7 @@ function StudentLogin() {
       const response = await fetch(`${API_BASE}/api/student/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), otp, newPassword }),
+        body: JSON.stringify({ email: email.trim(), otp: otp.trim(), newPassword }),
       });
       const data = await response.json();
 
@@ -127,6 +146,7 @@ function StudentLogin() {
         setPassword('');
         setOtp('');
         setNewPassword('');
+        setConfirmPassword('');
       } else {
         toast.error(data.message || 'Invalid OTP or expired');
       }
@@ -137,11 +157,11 @@ function StudentLogin() {
     }
   };
 
-  const renderPasswordField = (value, onChange, id) => (
+  const renderPasswordField = (value, onChange, id, label = 'Password') => (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-2">
         <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor={id}>
-          Password
+          {label}
         </label>
         {viewState === 'LOGIN' ? (
           <button
@@ -187,7 +207,7 @@ function StudentLogin() {
   );
 
   return (
-    <div className="relative flex min-h-[calc(100vh-5rem)] w-full items-center justify-center overflow-hidden px-[clamp(1rem,3.2vw,3rem)] pb-[clamp(2rem,4vw,3rem)] pt-[clamp(1.25rem,3vw,2.25rem)] font-body bg-[radial-gradient(circle_at_12%_12%,rgba(200,131,42,0.14),transparent_28%),radial-gradient(circle_at_88%_0%,rgba(42,15,2,0.08),transparent_30%),linear-gradient(135deg,#fffaf3_0%,#f8ead8_100%)]">
+    <div className={LOGIN_PAGE_WRAP}>
       <span
         className="pointer-events-none absolute -right-16 -top-16 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(200,131,42,0.18),transparent_70%)]"
         aria-hidden="true"
@@ -197,43 +217,12 @@ function StudentLogin() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="flex w-full max-w-md flex-col overflow-hidden rounded-2xl border border-site-accent-dark/10 bg-white shadow-[0_24px_64px_rgba(73,39,15,0.14)] min-[860px]:max-h-[calc(100vh-7rem)] min-[860px]:min-h-[34rem] min-[860px]:max-w-[920px] min-[860px]:flex-row"
+        className={LOGIN_CARD_CLASS}
       >
-        <div className="flex flex-none flex-col overflow-y-auto border-b border-site-accent-dark/10 px-5 py-6 min-[860px]:flex-[0_0_46%] min-[860px]:basis-1/2 min-[860px]:border-b-0 min-[860px]:border-r min-[860px]:px-[1.85rem] min-[860px]:pb-6 min-[860px]:pt-7 lg:flex-[0_0_50%]">
-          <button
-            type="button"
-            className="mb-5 inline-flex items-center gap-2 rounded-lg border border-site-accent-dark/15 bg-[#fffbf5] px-3 py-2 text-[0.8125rem] font-bold text-site-muted transition hover:border-site-accent/35 hover:bg-[#fff7ed] hover:text-site-accent-dark"
-            onClick={() => navigate('/')}
-          >
-            <i className="fas fa-arrow-left" aria-hidden="true" />
-            Back to website
-          </button>
-
-          <div className="mb-[1.35rem] flex items-center gap-3">
-            <span
-              className="flex h-9 w-9 items-center justify-center rounded-[0.625rem] bg-gradient-to-br from-site-accent-dark to-site-accent text-sm text-white shadow-[0_10px_24px_rgba(200,131,42,0.28)]"
-              aria-hidden="true"
-            >
-              <i className="fas fa-user-graduate" />
-            </span>
-            <p className="m-0 font-heading text-[1.15rem] font-bold text-site-primary">
-              DS Astro <em className="not-italic text-site-accent">Institute</em>
-            </p>
-          </div>
-
+        <div className={LOGIN_PANEL_CLASS}>
           {viewState === 'LOGIN' && (
             <>
-              <span className="mb-2 inline-block text-[0.6875rem] font-extrabold uppercase tracking-[0.14em] text-site-accent">
-                Student access
-              </span>
-              <h1 className="mb-2 font-heading text-[clamp(1.65rem,3vw,2rem)] font-extrabold leading-[1.1] text-site-primary">
-                Student Portal
-              </h1>
-              <p className="mb-5 max-w-[22rem] text-sm leading-relaxed text-[#714626]">
-                Continue your courses, class videos, and learning progress.
-              </p>
-
-              <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+              <form className="flex flex-col gap-4" onSubmit={handleLogin} aria-label="Student sign in">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="login-email">
                     Email address
@@ -274,38 +263,20 @@ function StudentLogin() {
                     spinner
                   ) : (
                     <>
-                      Enter portal
+                      Sign in
                       <i className="fas fa-arrow-right" aria-hidden="true" />
                     </>
                   )}
                 </button>
               </form>
-
-              <ul className="mt-4 grid list-none grid-cols-1 gap-1.5 p-0 min-[860px]:grid-cols-3">
-                <li className="flex min-h-8 items-center justify-start gap-1.5 rounded-[0.625rem] border border-[#f0dfcf] bg-[#fffaf4] px-1.5 py-2 text-center text-[0.6875rem] font-bold leading-tight text-[#70401d] min-[860px]:justify-center">
-                  <i className="fas fa-play-circle text-xs text-site-accent" aria-hidden="true" /> Course videos
-                </li>
-                <li className="flex min-h-8 items-center justify-start gap-1.5 rounded-[0.625rem] border border-[#f0dfcf] bg-[#fffaf4] px-1.5 py-2 text-center text-[0.6875rem] font-bold leading-tight text-[#70401d] min-[860px]:justify-center">
-                  <i className="fas fa-clock text-xs text-site-accent" aria-hidden="true" /> Validity tracking
-                </li>
-                <li className="flex min-h-8 items-center justify-start gap-1.5 rounded-[0.625rem] border border-[#f0dfcf] bg-[#fffaf4] px-1.5 py-2 text-center text-[0.6875rem] font-bold leading-tight text-[#70401d] min-[860px]:justify-center">
-                  <i className="fas fa-lock text-xs text-site-accent" aria-hidden="true" /> Secure access
-                </li>
-              </ul>
             </>
           )}
 
           {viewState === 'FORGOT' && (
             <>
-              <span className="mb-2 inline-block text-[0.6875rem] font-extrabold uppercase tracking-[0.14em] text-site-accent">
-                Account help
-              </span>
-              <h1 className="mb-2 font-heading text-[clamp(1.65rem,3vw,2rem)] font-extrabold leading-[1.1] text-site-primary">
+              <h1 className="mb-5 font-heading text-xl font-bold text-site-primary sm:text-2xl">
                 Reset password
               </h1>
-              <p className="mb-5 max-w-[22rem] text-sm leading-relaxed text-[#714626]">
-                Enter your registered email to receive a one-time password.
-              </p>
 
               <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
                 <div className="flex flex-col gap-1.5">
@@ -346,14 +317,12 @@ function StudentLogin() {
 
           {viewState === 'RESET' && (
             <>
-              <span className="mb-2 inline-block text-[0.6875rem] font-extrabold uppercase tracking-[0.14em] text-site-accent">
-                Verify OTP
-              </span>
-              <h1 className="mb-2 font-heading text-[clamp(1.65rem,3vw,2rem)] font-extrabold leading-[1.1] text-site-primary">
+              <h1 className="mb-2 font-heading text-xl font-bold text-site-primary sm:text-2xl">
                 Set new password
               </h1>
-              <p className="mb-5 max-w-[22rem] text-sm leading-relaxed text-[#714626]">
-                Enter the 6-digit OTP sent to {email}
+              <p className="mb-5 text-sm text-site-muted">
+                Enter the 6-digit OTP sent to{' '}
+                <span className="font-semibold text-site-primary">{email}</span>
               </p>
 
               <form className="flex flex-col gap-4" onSubmit={handleResetPassword}>
@@ -366,24 +335,45 @@ function StudentLogin() {
                     <input
                       id="reset-otp"
                       type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       className={inputClass}
                       placeholder="123456"
                       value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                       required
                       maxLength={6}
                       autoFocus
                     />
                   </div>
+                  <button
+                    type="button"
+                    className="self-start border-0 bg-transparent p-0 text-xs font-bold text-site-accent-dark hover:text-site-primary disabled:opacity-60"
+                    onClick={handleResendOtp}
+                    disabled={isLoading}
+                  >
+                    Resend OTP
+                  </button>
                 </div>
 
-                {renderPasswordField(newPassword, (e) => setNewPassword(e.target.value), 'reset-password')}
+                {renderPasswordField(newPassword, (e) => setNewPassword(e.target.value), 'reset-password', 'New password')}
+                {renderPasswordField(
+                  confirmPassword,
+                  (e) => setConfirmPassword(e.target.value),
+                  'reset-confirm-password',
+                  'Confirm password',
+                )}
 
                 <div className="mt-2 flex gap-3">
                   <button
                     type="button"
                     className={submitSecondaryClass}
-                    onClick={() => setViewState('LOGIN')}
+                    onClick={() => {
+                      setViewState('LOGIN');
+                      setOtp('');
+                      setNewPassword('');
+                      setConfirmPassword('');
+                    }}
                     disabled={isLoading}
                   >
                     Cancel

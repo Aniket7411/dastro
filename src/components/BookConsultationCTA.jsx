@@ -1,5 +1,6 @@
-import { Send } from 'lucide-react';
+import { Phone, Send } from 'lucide-react';
 import { TYPE, BTN } from './consultation/tokens';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 const REQUIRED_FIELDS = ['Name', 'Date of Birth', 'Time of Birth', 'Place of Birth', 'Consultation Type'];
 
@@ -32,8 +33,8 @@ export default function BookConsultationCTA({ onBookClick }) {
         </div>
         <div className="flex justify-center lg:justify-end">
           <button type="button" onClick={onBookClick} className={`${BTN.primary} ${BTN.static} min-w-[14rem]`}>
-            Book Your Session
-            <Send size={16} aria-hidden />
+            {ONLINE_PAYMENT_ENABLED ? 'Book Your Session' : 'Request callback'}
+            {ONLINE_PAYMENT_ENABLED ? <Send size={16} aria-hidden /> : <Phone size={16} aria-hidden />}
           </button>
         </div>
       </div>

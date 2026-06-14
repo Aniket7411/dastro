@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 
-const WRAP = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
+const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 
 const expertiseTags = ['Vedic Astrology', 'Tarot Reading', 'Numerology', 'Spiritual Guidance'];
 
@@ -42,13 +42,13 @@ function About() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-site-accent-dark/10 bg-site-bg py-12 sm:py-16 lg:py-20">
+      <section className="relative overflow-hidden border-b border-site-accent-dark/10 bg-site-bg py-8 sm:py-10 lg:py-12">
         <span
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(200,131,42,0.12),transparent_55%)]"
           aria-hidden="true"
         />
         <div className={`${WRAP} relative z-10`}>
-          <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+          <div className="grid items-center gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8">
             <div data-aos="fade-right" data-aos-duration="700">
               <span className="mb-3 inline-block text-xs font-extrabold uppercase tracking-[0.14em] text-site-accent">
                 About Us
@@ -67,10 +67,10 @@ function About() {
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-xl border border-site-accent-dark/12 bg-white px-5 py-4 shadow-sm"
+                    className="rounded-xl border border-site-accent-dark/12 bg-white px-4 py-2.5 shadow-sm"
                   >
-                    <p className="font-heading text-2xl font-bold text-site-primary">{stat.value}</p>
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-site-soft">{stat.label}</p>
+                    <p className="font-heading text-xl font-bold text-site-primary">{stat.value}</p>
+                    <p className="mt-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-site-soft">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -104,9 +104,9 @@ function About() {
       </section>
 
       {/* Who we are */}
-      <section className="bg-white py-12 sm:py-16 lg:py-20">
+      <section className="bg-white py-8 sm:py-10 lg:py-12">
         <div className={WRAP}>
-          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-8">
             <div data-aos="fade-up" data-aos-duration="700">
               <span className="mb-3 inline-block text-xs font-extrabold uppercase tracking-[0.14em] text-site-accent">
                 Who we are
@@ -137,7 +137,7 @@ function About() {
             </div>
 
             <div data-aos="zoom-in" data-aos-duration="700" data-aos-delay="80">
-              <div className="rounded-2xl border border-site-accent-dark/12 bg-site-bg p-5 shadow-sm">
+              <div className="rounded-xl border border-site-accent-dark/12 bg-site-bg p-3.5 shadow-sm">
                 <div className="relative h-0 w-full overflow-hidden rounded-xl border border-site-accent-dark/12 bg-black pb-[56.25%]">
                   <iframe
                     src="https://www.youtube.com/embed/dQw4w9WgXcQ"
@@ -157,9 +157,9 @@ function About() {
       </section>
 
       {/* What makes us different */}
-      <section className="bg-site-bg py-12 sm:py-16 lg:py-20">
+      <section className="bg-site-bg py-8 sm:py-10 lg:py-12">
         <div className={WRAP}>
-          <div className="mx-auto mb-10 max-w-xl text-center" data-aos="fade-up">
+          <div className="mx-auto mb-6 max-w-xl text-center" data-aos="fade-up">
             <h2 className="font-heading text-3xl font-extrabold text-site-primary sm:text-4xl">
               What makes us <span className="text-site-accent">different</span>
             </h2>
@@ -167,18 +167,18 @@ function About() {
               Education, ethics, and real-world application — not vague predictions or fear-based advice.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {uniquePoints.map((item, idx) => (
               <div
                 key={item.text}
-                className="flex h-full flex-col items-center rounded-2xl border border-site-accent-dark/12 bg-white px-4 py-5 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-md"
+                className="flex h-full flex-col items-center rounded-xl border border-site-accent-dark/12 bg-white px-3 py-3.5 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-md"
                 data-aos="fade-up"
                 data-aos-delay={idx * 80}
               >
-                <span className="mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-site-accent/10 text-xl text-site-accent" aria-hidden="true">
+                <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-site-accent/10 text-base text-site-accent" aria-hidden="true">
                   <i className={`fas ${item.icon}`} />
                 </span>
-                <p className="text-sm leading-relaxed text-site-muted">{item.text}</p>
+                <p className="text-xs leading-relaxed text-site-muted sm:text-sm">{item.text}</p>
               </div>
             ))}
           </div>
@@ -186,9 +186,9 @@ function About() {
       </section>
 
       {/* Mission */}
-      <section className="bg-white py-12 sm:py-16 lg:py-20">
+      <section className="bg-white py-8 sm:py-10 lg:py-12">
         <div className={WRAP}>
-          <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+          <div className="grid items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
             <div data-aos="fade-right" data-aos-duration="700">
               <h2 className="font-heading text-3xl font-extrabold text-site-primary sm:text-4xl">
                 Our mission & <span className="text-site-accent">objectives</span>
@@ -197,8 +197,8 @@ function About() {
                 In a fast-changing world, astrology remains a bridge between timeless wisdom and everyday decisions.
                 Our goal is to teach it clearly, responsibly, and with outcomes students can trust.
               </p>
-              <blockquote className="mt-6 rounded-2xl border border-site-accent-dark/12 border-l-4 border-l-site-accent bg-site-bg p-5">
-                <p className="text-[0.9375rem] italic leading-relaxed text-site-primary">
+              <blockquote className="mt-5 rounded-xl border border-site-accent-dark/12 border-l-4 border-l-site-accent bg-site-bg p-4">
+                <p className="text-sm italic leading-relaxed text-site-primary">
                   &ldquo;Our mission is to simplify astrology and make it practical, accessible, and
                   result-oriented for every sincere learner.&rdquo;
                 </p>
@@ -207,9 +207,9 @@ function About() {
 
             <ul className="flex flex-col" data-aos="fade-left" data-aos-duration="700" data-aos-delay="80">
               {aims.map((aim) => (
-                <li key={aim} className="flex gap-3 border-b border-site-accent-dark/10 py-3.5 last:border-b-0">
-                  <i className="fas fa-check-circle mt-0.5 shrink-0 text-lg text-site-accent" aria-hidden="true" />
-                  <p className="text-[0.9375rem] leading-relaxed text-site-muted">{aim}</p>
+                <li key={aim} className="flex gap-2.5 border-b border-site-accent-dark/10 py-2.5 last:border-b-0">
+                  <i className="fas fa-check-circle mt-0.5 shrink-0 text-base text-site-accent" aria-hidden="true" />
+                  <p className="text-sm leading-relaxed text-site-muted">{aim}</p>
                 </li>
               ))}
             </ul>
@@ -218,16 +218,16 @@ function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-site-bg py-10 sm:py-12">
+      <section className="bg-site-bg py-8 sm:py-10">
         <div className={WRAP}>
-          <div className="mx-auto max-w-3xl rounded-2xl border border-site-accent-dark/12 bg-white px-6 py-8 text-center shadow-sm sm:px-8" data-aos="zoom-in">
-            <h2 className="font-heading text-2xl font-extrabold text-site-primary sm:text-3xl">
+          <div className="mx-auto max-w-3xl rounded-xl border border-site-accent-dark/12 bg-white px-5 py-5 text-center shadow-sm sm:px-6" data-aos="zoom-in">
+            <h2 className="font-heading text-xl font-extrabold text-site-primary sm:text-2xl">
               Ready to learn or consult with us?
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-base text-site-muted">
+            <p className="mx-auto mt-2 max-w-lg text-sm text-site-muted sm:text-base">
               Browse live batches, recorded courses, or book a one-to-one session with our team.
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
               <Link to="/recorded-courses" className={btnPrimary}>
                 <i className="fas fa-play-circle" aria-hidden="true" />
                 View recorded courses

@@ -1,6 +1,8 @@
 import API_BASE from './api';
 import toast from '@/utils/toast';
 import { loadRazorpayScript, reportPaymentFailure, buildPaymentSuccessPath } from './paymentUtils';
+import { SITE_LOGO } from './brandAssets';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 export const BOOKING_MODES = {
   PAY_NOW: 'pay_now',
@@ -84,7 +86,7 @@ const openRazorpayCheckout = async ({
       currency: data.currency,
       name: 'DS Astro Institute',
       description: `Consultation: ${formData.consultationType}`,
-      image: '/images/logo.png',
+      image: SITE_LOGO,
       order_id: data.orderId,
       handler: async (response) => {
         try {
@@ -203,7 +205,12 @@ export async function submitConsultationBooking({
     return false;
   }
 
-  if (bookingMode === BOOKING_MODES.PAY_NOW && data.orderId) {
+  const effectiveMode =
+    !ONLINE_PAYMENT_ENABLED && bookingMode === BOOKING_MODES.PAY_NOW
+      ? BOOKING_MODES.PAY_LATER
+      : bookingMode;
+
+  if (effectiveMode === BOOKING_MODES.PAY_NOW && data.orderId) {
     return openRazorpayCheckout({ data, formData, service, onSuccess, onDismiss, navigate });
   }
 

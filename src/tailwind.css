@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-price: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+
+  --color-site-bg: #fdf6ee;
+  --color-site-surface: #ffffff;
+  --color-site-text: #2a0f02;
+  --color-site-muted: #5c3d26;
+  --color-site-soft: #7b6254;
+  --color-site-primary: #2a0f02;
+  --color-site-accent: #c8832a;
+  --color-site-accent-dark: #8b4a1e;
+
+  --spacing-site-header: 6.5rem;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/Playfair_Display/PlayfairDisplay-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply m-0 bg-site-bg font-body text-site-text antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  .font-price {
+    font-family: var(--font-price);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+    letter-spacing: -0.02em;
+  }
+
+  .animate-marquee {
+    animation: marquee 38s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -96,7 +96,7 @@ export default function StudentDashboard() {
       
       {/* 1. STUDENT HEADER */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)] h-16 flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded">
@@ -114,7 +114,7 @@ export default function StudentDashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)] py-8 space-y-8">
         
         {/* TOP ROW: Profile Details & Stats Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

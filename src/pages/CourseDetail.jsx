@@ -5,9 +5,7 @@ import {
   BookOpen,
   Calendar,
   CheckCircle2,
-  Clock,
   Layers,
-  User,
 } from 'lucide-react';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
@@ -19,13 +17,13 @@ import {
   EnquiryModal,
   CouponControls,
 } from '../components/CourseDetailModals';
-import { BTN, TYPE } from '../components/consultation/tokens';
+import { BTN, TYPE, PAGE_WRAP } from '../components/consultation/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
 import CourseTimer from '../components/CourseTimer';
+import { SITE_LOGO } from '../utils/brandAssets';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
-const RECORDED_PAYMENT_ENABLED = true;
-const PAGE_WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
 const PAGE = 'min-h-screen w-full bg-site-bg font-body text-site-text antialiased';
 
 function MetaChip({ children }) {
@@ -39,10 +37,31 @@ function MetaChip({ children }) {
 function Section({ title, children }) {
   if (!children) return null;
   return (
-    <section className="border-t border-site-accent-dark/8 pt-5 first:border-t-0 first:pt-0 sm:pt-6">
-      <h2 className={`${TYPE.h2} !mb-3 !text-base sm:!text-lg`}>{title}</h2>
+    <section className="border-t border-site-accent-dark/8 pt-3.5 first:border-t-0 first:pt-0 sm:pt-4">
+      <h2 className={`${TYPE.h2} !mb-2 !text-base sm:!text-lg`}>{title}</h2>
       {children}
     </section>
+  );
+}
+
+function CourseFacts({ course }) {
+  const items = [
+    course.instructor ? { label: 'Instructor', value: course.instructor } : null,
+    course.duration ? { label: 'Duration', value: course.duration } : null,
+    course.level ? { label: 'Level', value: course.level } : null,
+  ].filter(Boolean);
+
+  if (!items.length) return null;
+
+  return (
+    <dl className="!m-0 !mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">
+      {items.map(({ label, value }) => (
+        <div key={label} className="inline-flex min-w-0 items-baseline gap-1.5">
+          <dt className="font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">{label}</dt>
+          <dd className="!m-0 font-body text-sm font-semibold text-site-primary">{value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -64,7 +83,7 @@ function mapDetailCourse(dbCourse) {
     instructor: instructorName,
     instructorBio: typeof dbCourse.instructor === 'object' ? dbCourse.instructor?.bio || '' : '',
     instructorImage: typeof dbCourse.instructor === 'object' ? dbCourse.instructor?.image || '' : '',
-    topics: dbCourse.learningOutcomes?.length ? dbCourse.learningOutcomes : dbCourse.topics || [],
+    topics: dbCourse.topics?.length ? dbCourse.topics : dbCourse.learningOutcomes || [],
     curriculum: dbCourse.curriculum || [],
     batchDetails: dbCourse.batchDetails || null,
     faqs: dbCourse.faqs || [],
@@ -100,12 +119,12 @@ function CourseDetail() {
   const isLiveCourse = course?.courseType === 'Live';
   const isRecordedCourse = course?.courseType === 'Recorded';
   const canPayOnline =
-    RECORDED_PAYMENT_ENABLED && isRecordedCourse && paymentEnabled && Number(course?.price) > 0;
+    ONLINE_PAYMENT_ENABLED && isRecordedCourse && paymentEnabled && Number(course?.price) > 0;
   const hasAvailableCoupons = availableCoupons.length > 0;
   const listPath = isLiveCourse ? '/live-courses' : '/recorded-courses';
 
   useEffect(() => {
-    if (!RECORDED_PAYMENT_ENABLED) return;
+    if (!ONLINE_PAYMENT_ENABLED) return;
     fetch(`${API_BASE}/api/payment/status`)
       .then((res) => res.json())
       .then((data) => {
@@ -185,7 +204,7 @@ function CourseDetail() {
 
   const openEnquiryModal = () => setShowEnquiryModal(true);
   const initiateCheckout = () => {
-    if (!RECORDED_PAYMENT_ENABLED || !canPayOnline) {
+    if (!ONLINE_PAYMENT_ENABLED || !canPayOnline) {
       openEnquiryModal();
       return;
     }
@@ -265,7 +284,7 @@ function CourseDetail() {
 
   const handlePayment = async (e) => {
     if (e) e.preventDefault();
-    if (!RECORDED_PAYMENT_ENABLED) {
+    if (!ONLINE_PAYMENT_ENABLED) {
       openEnquiryModal();
       return;
     }
@@ -331,7 +350,7 @@ function CourseDetail() {
         currency: orderData.currency || 'INR',
         name: 'DS Institute',
         description: `Course: ${course.title}`,
-        image: '/images/logo.png',
+        image: SITE_LOGO,
         order_id: orderData.orderId,
         handler: async (response) => {
           try {
@@ -480,25 +499,18 @@ function CourseDetail() {
     <div className={PAGE}>
       <SEO title={course.title} description={course.shortDesc} url={`/courses/${course.slug || course.id}`} />
 
-      <section className="border-b border-site-accent-dark/8 py-5 sm:py-6">
+      <section className="border-b border-site-accent-dark/8 py-4 pb-8 sm:py-5 sm:pb-10">
         <div className={PAGE_WRAP}>
-          <Link to={listPath} className={`${TYPE.backLink} !mb-4 sm:!mb-5`}>
+          <Link to={listPath} className={`${TYPE.backLink} !mb-3 sm:!mb-4`}>
             <ArrowLeft size={15} aria-hidden />
             {isLiveCourse ? 'All live classes' : 'All recorded courses'}
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_19rem]">
+          <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_19rem]">
             <div className="min-w-0">
-              <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <div className="mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
                 <MetaChip>{isLiveCourse ? 'Live batch' : 'Recorded'}</MetaChip>
-                {course.level ? <MetaChip>{course.level}</MetaChip> : null}
-                {course.duration ? (
-                  <MetaChip>
-                    <Clock size={11} className="text-site-accent" aria-hidden />
-                    {course.duration}
-                  </MetaChip>
-                ) : null}
                 {course.schedule ? (
                   <MetaChip>
                     <Calendar size={11} className="text-site-accent" aria-hidden />
@@ -511,20 +523,15 @@ function CourseDetail() {
                     {course.modulesCount} modules
                   </MetaChip>
                 ) : null}
-                {course.instructor ? (
-                  <MetaChip>
-                    <User size={11} className="text-site-accent" aria-hidden />
-                    {course.instructor}
-                  </MetaChip>
-                ) : null}
               </div>
 
               <h1 className={TYPE.h1}>{course.title}</h1>
               {course.shortDesc ? (
-                <p className={`${TYPE.bodySm} !mt-3 max-w-2xl !text-sm`}>{course.shortDesc}</p>
+                <p className={`${TYPE.bodySm} !mt-2 max-w-2xl !text-sm`}>{course.shortDesc}</p>
               ) : null}
+              <CourseFacts course={course} />
 
-              <div className="mt-5 lg:hidden">
+              <div className="mt-4 lg:hidden">
                 <EnrollPanel
                   course={course}
                   canPayOnline={canPayOnline}
@@ -540,7 +547,7 @@ function CourseDetail() {
                 />
               </div>
 
-              <div className="mt-6 space-y-5 sm:mt-8 sm:space-y-6">
+              <div className="mt-4 space-y-4 sm:mt-5">
                 {course.longDesc && course.longDesc !== course.shortDesc ? (
                   <Section title="Overview">
                     <p className={`${TYPE.bodySm} whitespace-pre-line !text-sm leading-relaxed`}>{course.longDesc}</p>
@@ -549,10 +556,10 @@ function CourseDetail() {
 
                 {course.topics?.length > 0 ? (
                   <Section title="What you will learn">
-                    <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">
+                    <ul className="m-0 grid list-none gap-1.5 p-0 sm:grid-cols-2 sm:gap-2">
                       {course.topics.map((topic) => (
                         <li key={topic} className="flex items-start gap-2 font-body text-sm text-site-primary">
-                          <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
+                          <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
                           {topic}
                         </li>
                       ))}
@@ -616,8 +623,8 @@ function CourseDetail() {
                   </Section>
                 ) : null}
 
-                {course.instructor ? (
-                  <Section title="Instructor">
+                {course.instructor && course.instructorBio ? (
+                  <Section title="About the instructor">
                     <div className="flex items-start gap-3">
                       {course.instructorImage ? (
                         <img
@@ -673,7 +680,7 @@ function CourseDetail() {
               </div>
             </div>
 
-            <aside className="hidden lg:block lg:sticky lg:top-[calc(var(--header-h)+0.75rem)] lg:self-start">
+            <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
@@ -703,7 +710,7 @@ function CourseDetail() {
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="!m-0 truncate font-body text-xs text-white/70">{course.title}</p>
-            <p className="!m-0 font-heading text-base font-bold text-white">
+            <p className="!m-0 font-price text-base font-bold tabular-nums tracking-tight text-white">
               {canPayOnline ? `₹${getPayableAmount()}` : course.price ? `₹${Number(course.price).toLocaleString('en-IN')}` : 'Enquire'}
             </p>
           </div>
@@ -711,7 +718,7 @@ function CourseDetail() {
             type="button"
             onClick={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
             disabled={isProcessingPayment}
-            className={`${BTN.primary} ${BTN.static} !min-h-[2.375rem] shrink-0 !bg-white !text-site-primary hover:!bg-site-bg`}
+            className={`${BTN.cta} ${BTN.static} !min-h-[2.375rem] !w-auto shrink-0 !px-5 !py-2 !text-xs sm:!text-sm`}
           >
             {ctaLabel}
           </button>
@@ -722,7 +729,7 @@ function CourseDetail() {
 
       <OverlayLoader visible={isProcessingPayment} label="Processing payment…" />
 
-      {RECORDED_PAYMENT_ENABLED && (
+      {ONLINE_PAYMENT_ENABLED && (
         <CheckoutModal
           open={showCheckoutModal}
           onClose={() => setShowCheckoutModal(false)}
@@ -797,7 +804,7 @@ function EnrollPanel({
         type="button"
         onClick={onCta}
         disabled={isProcessingPayment}
-        className={`${BTN.primary} w-full !min-h-[2.5rem]`}
+        className={BTN.cta}
       >
         {ctaLabel}
       </button>

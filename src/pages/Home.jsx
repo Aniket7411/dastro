@@ -9,7 +9,9 @@ import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
+import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
 
 /* Legacy AstrologyCourses — inline styles replaced by Tailwind component
 const AstrologyCourses = ({ onEnroll }) => {
@@ -251,8 +253,8 @@ const AstrologyCourses = ({ onEnroll }) => {
         .clvl { font-size: .65rem; letter-spacing: .18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .4rem; font-family: var(--font-sans); font-weight: 600; }
         .ctitle { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-card-heading); margin: 0 0 .4rem; font-weight: 600; line-height: 1.3; }
         .cdesc { font-size: .9rem; color: var(--text-content); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
-        .price-hero { font-family: var(--font-serif); font-size: 1.6rem; color: var(--text-heading); font-weight: 700; margin: .2rem 0 .8rem; }
-        .price-hero span { font-size: .9rem; color: var(--text-muted); text-decoration: line-through; font-family: var(--font-sans); font-weight: 400; margin-left: 8px; }
+        .price-hero { font-family: var(--font-price); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; font-size: 1.6rem; color: var(--text-heading); font-weight: 700; margin: .2rem 0 .8rem; }
+        .price-hero span { font-size: .9rem; color: var(--text-muted); text-decoration: line-through; font-family: var(--font-body); font-weight: 500; margin-left: 8px; letter-spacing: 0; }
         .divr { height: 1px; background: var(--glass-border); margin: .5rem 0 1rem; }
         .cinstr { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; justify-content: center; }
         .iavt { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color); border: 2px solid var(--accent-color); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-family: var(--font-serif); flex-shrink: 0; }
@@ -481,8 +483,28 @@ const preloadImages = (urls) =>
   );
 
 const BANNER_SLIDE_COUNT = BANNER_SLIDES.length;
-const BANNER_FADE_MS = 550;
+const BANNER_SLIDE_MS = 520;
 const BANNER_AUTO_MS = 6500;
+
+const BannerChevron = ({ direction = 'left' }) => (
+  <svg
+    aria-hidden="true"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.25"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {direction === 'left' ? (
+      <path d="M15 18l-6-6 6-6" />
+    ) : (
+      <path d="M9 18l6-6-6-6" />
+    )}
+  </svg>
+);
 
 function Home() {
 
@@ -559,8 +581,8 @@ function Home() {
     setIsSubmitting(true);
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
 
-    // Use Razorpay Flow if price is present
-    if (formData.price) {
+    // Use Razorpay Flow if price is present and online payments are enabled
+    if (ONLINE_PAYMENT_ENABLED && formData.price) {
       const onSuccess = () => {
         setIsModalOpen(false);
         setIsSuccessOpen(true);
@@ -613,6 +635,8 @@ function Home() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [contentHidden, setContentHidden] = useState(false);
+  const [slideDirection, setSlideDirection] = useState(1);
+  const [slideAnimating, setSlideAnimating] = useState(false);
   const [bannerReady, setBannerReady] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
   const slideIndexRef = useRef(0);
@@ -622,32 +646,43 @@ function Home() {
     (activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan) && !activeSlide.bgImage,
   );
 
-  const goToSlide = useCallback((targetIndex) => {
+  const goToSlide = useCallback((targetIndex, forcedDirection) => {
+    const from = slideIndexRef.current;
     const next =
       ((targetIndex % BANNER_SLIDE_COUNT) + BANNER_SLIDE_COUNT) % BANNER_SLIDE_COUNT;
-    if (transitioningRef.current || next === slideIndexRef.current) return;
+    if (transitioningRef.current || next === from) return;
+
+    let direction = forcedDirection;
+    if (direction == null) {
+      const forward = (next - from + BANNER_SLIDE_COUNT) % BANNER_SLIDE_COUNT;
+      const backward = (from - next + BANNER_SLIDE_COUNT) % BANNER_SLIDE_COUNT;
+      direction = forward <= backward ? 1 : -1;
+    }
 
     transitioningRef.current = true;
+    setSlideDirection(direction);
     setContentHidden(true);
 
     window.setTimeout(() => {
       slideIndexRef.current = next;
       setCurrentSlide(next);
+      setSlideAnimating(true);
       window.requestAnimationFrame(() => {
         setContentHidden(false);
         window.setTimeout(() => {
+          setSlideAnimating(false);
           transitioningRef.current = false;
-        }, BANNER_FADE_MS);
+        }, BANNER_SLIDE_MS);
       });
-    }, BANNER_FADE_MS);
+    }, BANNER_SLIDE_MS);
   }, []);
 
   const nextSlide = useCallback(() => {
-    goToSlide(slideIndexRef.current + 1);
+    goToSlide(slideIndexRef.current + 1, 1);
   }, [goToSlide]);
 
   const prevSlide = useCallback(() => {
-    goToSlide(slideIndexRef.current - 1);
+    goToSlide(slideIndexRef.current - 1, -1);
   }, [goToSlide]);
 
   useEffect(() => {
@@ -711,7 +746,8 @@ function Home() {
       <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
       <section
-        className={`banner-section w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}`}
+        className={`banner-section w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
+        data-slide-dir={slideDirection === 1 ? 'next' : 'prev'}
         aria-busy={!bannerReady}
         aria-roledescription="carousel"
         aria-label="Featured highlights"
@@ -743,22 +779,22 @@ function Home() {
             <div className="row align-items-center g-5 banner-hero-row">
               <div className={`position-relative z-1 ${activeSlide.bgImage ? 'col-lg-7 col-xl-6' : 'col-lg-6'}`}>
                 <div
-                  className={`banner-copy${activeSlide.overlayGlass ? ' banner-copy--glass' : ''}${contentHidden ? ' banner-copy--hidden' : ''}`}
+                  className={`banner-copy${activeSlide.overlayGlass ? ' banner-copy--glass' : ''}${contentHidden ? ` banner-copy--hidden banner-copy--exit-${slideDirection === 1 ? 'next' : 'prev'}` : slideAnimating ? ` banner-copy--enter-${slideDirection === 1 ? 'next' : 'prev'}` : ''}`}
                 >
                   <div className="ethereal-sparkle s-1">✦</div>
                   <div className="ethereal-sparkle s-2">✧</div>
 
-                  <div className="cosmic-badge">
+                  {/* <div className="cosmic-badge">
                     <span className="badge-glow"></span>
                     <i className="fas fa-moon me-2"></i> {activeSlide.badge}
-                  </div>
+                  </div> */}
 
-                  <h1 className="banner-title my-4">
+                  <h1 className="banner-title my-2">
                     {activeSlide.title1}<br />
                     <span className="text-gradient drop-glow">{activeSlide.title2}</span>
                   </h1>
 
-                  <p className="banner-desc mb-4">{activeSlide.desc}</p>
+                  <p className="banner-desc mb-2">{activeSlide.desc}</p>
 
                   {/* <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
                     <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
@@ -766,7 +802,7 @@ function Home() {
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
                   </ul> */}
 
-                  <div className="banner-btn-row mt-5">
+                  <div className="banner-btn-row mt-2">
                     {activeSlide.primaryCta?.action === 'consultation' ? (
                       <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
                         <i className={activeSlide.primaryCta.icon}></i>
@@ -795,7 +831,7 @@ function Home() {
                     </Link>
                   </div>
 
-                  <div className="trust-indicator mt-5">
+                  <div className="trust-indicator mt-3">
                     <div className="trust-avatars">
                       <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" decoding="async" />
                       <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" decoding="async" />
@@ -812,7 +848,7 @@ function Home() {
                 </div>
               </div>
               {!activeSlide.bgImage && (
-              <div className={`col-lg-6 d-none d-lg-flex banner-graphic-col position-relative${contentHidden ? ' banner-graphic-col--hidden' : ''}`}>
+              <div className={`col-lg-6 d-none d-lg-flex banner-graphic-col position-relative${contentHidden ? ` banner-graphic-col--hidden banner-graphic-col--exit-${slideDirection === 1 ? 'next' : 'prev'}` : slideAnimating ? ` banner-graphic-col--enter-${slideDirection === 1 ? 'next' : 'prev'}` : ''}`}>
                 <div className="banner-graphic-stage">
                   <div className={`banner-graphic-layer ${!isThemedSlide ? 'is-active' : ''}`} aria-hidden={isThemedSlide}>
                     <div className="cosmic-orbit-container">
@@ -910,36 +946,34 @@ function Home() {
           </div>
         </div>
 
-        <div className="banner-carousel-controls">
-          <button
-            type="button"
-            className="banner-carousel-arrow banner-carousel-arrow--prev"
-            onClick={prevSlide}
-            aria-label="Previous slide"
-          >
-            <i className="fas fa-chevron-left" aria-hidden="true" />
-          </button>
-          <div className="banner-carousel-dots" role="tablist" aria-label="Choose slide">
-            {BANNER_SLIDES.map((slide, index) => (
-              <button
-                key={slide.title1}
-                type="button"
-                role="tab"
-                aria-selected={index === currentSlide}
-                aria-label={`Slide ${index + 1} of ${BANNER_SLIDE_COUNT}`}
-                className={`banner-carousel-dot${index === currentSlide ? ' is-active' : ''}`}
-                onClick={() => goToSlide(index)}
-              />
-            ))}
-          </div>
-          <button
-            type="button"
-            className="banner-carousel-arrow banner-carousel-arrow--next"
-            onClick={nextSlide}
-            aria-label="Next slide"
-          >
-            <i className="fas fa-chevron-right" aria-hidden="true" />
-          </button>
+        <button
+          type="button"
+          className="banner-carousel-arrow banner-carousel-arrow--prev"
+          onClick={prevSlide}
+          aria-label="Previous slide"
+        >
+          <BannerChevron direction="left" />
+        </button>
+        <button
+          type="button"
+          className="banner-carousel-arrow banner-carousel-arrow--next"
+          onClick={nextSlide}
+          aria-label="Next slide"
+        >
+          <BannerChevron direction="right" />
+        </button>
+        <div className="banner-carousel-dots" role="tablist" aria-label="Choose slide">
+          {BANNER_SLIDES.map((slide, index) => (
+            <button
+              key={slide.title1}
+              type="button"
+              role="tab"
+              aria-selected={index === currentSlide}
+              aria-label={`Slide ${index + 1} of ${BANNER_SLIDE_COUNT}`}
+              className={`banner-carousel-dot${index === currentSlide ? ' is-active' : ''}`}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
         </div>
       </section>
 
@@ -1255,6 +1289,8 @@ function Home() {
               <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
             </div>
 
+            <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
+
             <div className="row g-4">
               {/* Consultation Cards Mapping */}
               {[
@@ -1315,7 +1351,7 @@ function Home() {
                       <p>{item.desc}</p>
                       <div className="consult-btn-group">
                         <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(e, item); }}>Book Now</button>
+                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(e, item); }}>Request callback</button>
                       </div>
                     </div>
                   </div>
@@ -1492,8 +1528,8 @@ function Home() {
         /* Banner Section */
         .banner-section {
           position: relative;
-          padding: clamp(2rem, 3vw, 3.5rem) 0 clamp(5rem, 10vw, 8rem);
-          min-height: clamp(70vh, 90vh, 95vh);
+          padding: clamp(1rem, 2vw, 2rem) 0 clamp(2.5rem, 5vw, 4rem);
+          min-height: clamp(52vh, 65vh, 75vh);
           display: flex;
           align-items: flex-start;
           overflow: hidden;
@@ -1505,19 +1541,71 @@ function Home() {
           background: transparent !important;
         }
 
-        .banner-bg-image {
+        .banner-bg-layers {
           position: absolute;
           inset: 0;
           z-index: 0;
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
+          overflow: hidden;
+          pointer-events: none;
+        }
+
+        .banner-bg-layer {
+          position: absolute;
+          inset: 0;
           opacity: 0;
-          transition: opacity 0.7s ease;
+          transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+          will-change: opacity, transform;
+        }
+
+        .banner-bg-layer.is-active {
+          opacity: 1;
+        }
+
+        .banner-bg-layer--gradient {
+          background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
+        }
+
+        .banner-section.banner-bg-slide-next .banner-bg-layer.is-active {
+          animation: bannerBgEnterFromRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .banner-section.banner-bg-slide-prev .banner-bg-layer.is-active {
+          animation: bannerBgEnterFromLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes bannerBgEnterFromRight {
+          from {
+            opacity: 0.35;
+            transform: translateX(6%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes bannerBgEnterFromLeft {
+          from {
+            opacity: 0.35;
+            transform: translateX(-6%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .banner-bg-image {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center top;
+          background-repeat: no-repeat;
+          transform: scale(1.03);
         }
 
         .banner-bg-image.is-active {
-          opacity: 1;
+          transform: scale(1);
         }
 
         .banner-bg-overlay {
@@ -1529,13 +1617,11 @@ function Home() {
 
         .banner-bg-overlay--glass-overall {
           background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.14) 0%,
-            rgba(255, 252, 248, 0.08) 45%,
-            rgba(255, 255, 255, 0.12) 100%
+            to right,
+            rgba(8, 3, 0, 0.52) 0%,
+            rgba(8, 3, 0, 0.28) 55%,
+            rgba(8, 3, 0, 0.10) 100%
           );
-          backdrop-filter: blur(10px) saturate(130%);
-          -webkit-backdrop-filter: blur(10px) saturate(130%);
         }
 
         .banner-section.banner-has-bg .container {
@@ -1546,13 +1632,13 @@ function Home() {
         .banner-copy--glass {
           padding: clamp(1.25rem, 3vw, 2rem);
           border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          background: rgba(255, 255, 255, 0.12);
-          backdrop-filter: blur(16px) saturate(140%);
-          -webkit-backdrop-filter: blur(16px) saturate(140%);
+          border: 1px solid rgba(255, 255, 255, 0.28);
+          background: rgba(12, 5, 0, 0.42);
+          backdrop-filter: blur(18px) saturate(140%);
+          -webkit-backdrop-filter: blur(18px) saturate(140%);
           box-shadow:
-            0 8px 32px rgba(0, 0, 0, 0.18),
-            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            0 8px 40px rgba(0, 0, 0, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
 
         .banner-section.banner-glass-overlay .banner-title,
@@ -1612,11 +1698,6 @@ function Home() {
         }
 
         @media (max-width: 991px) {
-          .banner-bg-overlay--glass-overall {
-            backdrop-filter: blur(8px) saturate(120%);
-            -webkit-backdrop-filter: blur(8px) saturate(120%);
-          }
-
           .banner-copy--glass {
             border-radius: 16px;
             padding: 1.25rem;
@@ -1637,7 +1718,7 @@ function Home() {
         .banner-section.banner-ready .banner-graphic-stage {
           opacity: 1;
           visibility: visible;
-          transition: opacity 0.45s ease;
+          transition: opacity 0.55s ease 0.1s, transform 0.55s ease 0.1s;
         }
 
         .banner-preloader {
@@ -1663,7 +1744,181 @@ function Home() {
 
         .banner-copy {
           will-change: opacity, transform;
-          animation: bannerContentIn 0.65s ease both;
+          transition: opacity 0.48s cubic-bezier(0.4, 0, 0.2, 1), transform 0.48s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .banner-copy--hidden.banner-copy--exit-next {
+          opacity: 0 !important;
+          transform: translateX(-3.5rem) !important;
+          pointer-events: none;
+        }
+
+        .banner-copy--hidden.banner-copy--exit-prev {
+          opacity: 0 !important;
+          transform: translateX(3.5rem) !important;
+          pointer-events: none;
+        }
+
+        .banner-copy--enter-next {
+          animation: bannerCopyEnterFromRight 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .banner-copy--enter-prev {
+          animation: bannerCopyEnterFromLeft 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes bannerCopyEnterFromRight {
+          from {
+            opacity: 0;
+            transform: translateX(3.5rem);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes bannerCopyEnterFromLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-3.5rem);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .banner-graphic-col--hidden.banner-graphic-col--exit-next {
+          opacity: 0 !important;
+          transform: translateX(-3.5rem);
+          transition: opacity 0.48s cubic-bezier(0.4, 0, 0.2, 1), transform 0.48s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          pointer-events: none;
+        }
+
+        .banner-graphic-col--hidden.banner-graphic-col--exit-prev {
+          opacity: 0 !important;
+          transform: translateX(3.5rem);
+          transition: opacity 0.48s cubic-bezier(0.4, 0, 0.2, 1), transform 0.48s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          pointer-events: none;
+        }
+
+        .banner-graphic-col--enter-next {
+          animation: bannerCopyEnterFromRight 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .banner-graphic-col--enter-prev {
+          animation: bannerCopyEnterFromLeft 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .banner-carousel-arrow {
+          position: absolute;
+          top: 50%;
+          z-index: 5;
+          width: 2.75rem;
+          height: 2.75rem;
+          margin: 0;
+          padding: 0;
+          border: 1px solid rgba(58, 25, 0, 0.14);
+          border-radius: 50%;
+          background: rgba(255, 253, 248, 0.94);
+          color: #3A1900;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transform: translateY(-50%);
+          box-shadow: 0 4px 16px rgba(42, 15, 2, 0.1);
+          transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        .banner-carousel-arrow:hover {
+          background: #ffffff;
+          border-color: rgba(200, 131, 42, 0.4);
+          box-shadow: 0 6px 20px rgba(42, 15, 2, 0.14);
+          transform: translateY(calc(-50% - 1px));
+        }
+
+        .banner-carousel-arrow:focus-visible {
+          outline: 2px solid rgba(200, 131, 42, 0.55);
+          outline-offset: 2px;
+        }
+
+        .banner-carousel-arrow--prev {
+          left: clamp(0.65rem, 2vw, 1.35rem);
+        }
+
+        .banner-carousel-arrow--next {
+          right: clamp(0.65rem, 2vw, 1.35rem);
+        }
+
+        .banner-carousel-dots {
+          position: absolute;
+          left: 50%;
+          bottom: clamp(1.15rem, 2.5vw, 1.85rem);
+          z-index: 5;
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          transform: translateX(-50%);
+        }
+
+        .banner-carousel-dot {
+          width: 0.5rem;
+          height: 0.5rem;
+          padding: 0;
+          border: none;
+          border-radius: 999px;
+          background: rgba(58, 25, 0, 0.24);
+          cursor: pointer;
+          transition: width 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+        }
+
+        .banner-carousel-dot.is-active {
+          width: 1.45rem;
+          background: var(--accent-color, #C8832A);
+        }
+
+        .banner-carousel-dot:hover {
+          opacity: 0.85;
+        }
+
+        .banner-section.banner-glass-overlay .banner-carousel-arrow {
+          background: rgba(12, 5, 0, 0.42);
+          border-color: rgba(255, 255, 255, 0.32);
+          color: #ffffff;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        .banner-section.banner-glass-overlay .banner-carousel-arrow:hover {
+          background: rgba(12, 5, 0, 0.58);
+          border-color: rgba(245, 201, 141, 0.45);
+        }
+
+        .banner-section.banner-glass-overlay .banner-carousel-dot {
+          background: rgba(255, 255, 255, 0.38);
+        }
+
+        .banner-section.banner-glass-overlay .banner-carousel-dot.is-active {
+          background: #f5c98d;
+        }
+
+        @media (max-width: 575px) {
+          .banner-carousel-arrow {
+            width: 2.35rem;
+            height: 2.35rem;
+          }
+
+          .banner-carousel-arrow--prev {
+            left: 0.4rem;
+          }
+
+          .banner-carousel-arrow--next {
+            right: 0.4rem;
+          }
         }
 
         @keyframes bannerContentIn {
@@ -1757,8 +2012,9 @@ function Home() {
 
         .banner-title {
           font-family: var(--font-serif) !important;
+          font-size: clamp(1.65rem, 3.5vw, 2.75rem);
           font-weight: 700;
-          line-height: 1.1;
+          line-height: 1.15;
           color: #3A1900;
         }
 
@@ -1770,13 +2026,13 @@ function Home() {
         }
 
         .banner-desc {
-          font-size: 1.1rem;
+          font-size: 1rem;
           color: #5C3D26 !important;
-          line-height: 1.8;
+          line-height: 1.7;
           max-width: 42rem;
           font-weight: 500;
           font-family: var(--font-sans);
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.75rem;
         }
 
         .cosmic-badge {
@@ -1868,10 +2124,10 @@ function Home() {
 
         .banner-btn-row {
           display: flex;
-          gap: 0.75rem;
+          gap: 0.65rem;
           align-items: center;
           flex-wrap: wrap;
-          margin-top: 1.75rem;
+          margin-top: 0.75rem;
         }
 
         .focus-70,
@@ -2006,18 +2262,18 @@ function Home() {
         }
 
         .trust-avatars img {
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           border: 2px solid #fff;
-          margin-left: -12px;
+          margin-left: -10px;
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .trust-avatars img:first-child { margin-left: 0; }
 
         .avatar-plus {
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           background: var(--bg-color);
           border: 2px solid var(--accent-color);
@@ -3663,8 +3919,11 @@ function Home() {
           color: #2A0F02;
           padding: 8px 20px;
           border-radius: 50px;
+          font-family: var(--font-price);
           font-size: 1.05rem;
-          font-weight: 900;
+          font-weight: 800;
+          font-variant-numeric: tabular-nums;
+          letter-spacing: -0.02em;
           box-shadow: 0 10px 25px rgba(0,0,0,0.2);
           z-index: 2;
           border: 1px solid rgba(42, 15, 2, 0.05);
@@ -3803,9 +4062,11 @@ function Home() {
 
         .professional-price {
           font-size: 1.1rem;
-          font-weight: 900;
+          font-weight: 800;
           color: #2A0F02;
-          font-family: var(--font-serif);
+          font-family: var(--font-price);
+          font-variant-numeric: tabular-nums;
+          letter-spacing: -0.02em;
         }
 
         .btn-view-elite {

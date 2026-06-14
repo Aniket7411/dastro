@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
-import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { getContactValidationError, getPasswordValidationError, normalizeIndianMobile } from '../utils/validation';
 
 export function normalizeCourse(entry) {
   if (!entry) return null;
@@ -52,7 +52,14 @@ export default function useStudentDashboard() {
   const [profile, setProfile] = useState(null);
   const [profileForm, setProfileForm] = useState({ name: '', email: '', mobile: '' });
   const [profileEditMode, setProfileEditMode] = useState(false);
+  const [passwordEditMode, setPasswordEditMode] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
   const [courses, setCourses] = useState([]);
   const [courseValidity, setCourseValidity] = useState({});
   const [banners, setBanners] = useState([]);
@@ -168,6 +175,57 @@ export default function useStudentDashboard() {
     setProfileForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
 
+  const handlePasswordChange = (field) => (event) => {
+    setPasswordForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const resetPasswordForm = () => {
+    setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  };
+
+  const savePassword = async (event) => {
+    event.preventDefault();
+    const validationError = getPasswordValidationError(
+      passwordForm.newPassword,
+      passwordForm.confirmPassword,
+    );
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (!passwordForm.currentPassword) {
+      toast.error('Please enter your current password.');
+      return;
+    }
+
+    setSavingPassword(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/student/change-password`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) {
+        throw new Error(data.message || 'Unable to update password');
+      }
+
+      resetPasswordForm();
+      setPasswordEditMode(false);
+      toast.success('Password updated successfully');
+    } catch (error) {
+      toast.error(error.message || 'Password update failed');
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
   const saveProfile = async (event) => {
     event.preventDefault();
     const validationError = getContactValidationError(profileForm);
@@ -236,7 +294,11 @@ export default function useStudentDashboard() {
     profileForm,
     profileEditMode,
     setProfileEditMode,
+    passwordEditMode,
+    setPasswordEditMode,
+    passwordForm,
     savingProfile,
+    savingPassword,
     enrolledCourses,
     courseValidity,
     banners,
@@ -250,7 +312,10 @@ export default function useStudentDashboard() {
     studentName,
     handleLogout,
     handleProfileChange,
+    handlePasswordChange,
     saveProfile,
+    savePassword,
+    resetPasswordForm,
     loadMaterials,
   };
 }

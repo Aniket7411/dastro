@@ -1,5 +1,6 @@
 import LegalPolicyLayout from '../components/LegalPolicyLayout';
 import { PAGE_BANNERS } from '../data/pageBanners';
+import { CONTACT_PHONE_DISPLAY } from '../utils/contactInfo';
 
 const sections = [
     { id: 'online-courses', label: '1. Online Courses' },
@@ -236,7 +237,7 @@ function Cancellation() {
             </p>
             <ul className="content-list">
               <li><strong>Email:</strong> help@dsastroinstitute.com</li>
-              <li><strong>Phone / WhatsApp:</strong> +91 7570972970</li>
+              <li><strong>Phone / WhatsApp:</strong> {CONTACT_PHONE_DISPLAY}</li>
               <li><strong>Website:</strong> https://dsastroinstitute.com/</li>
             </ul>
             <p>
@@ -281,7 +282,7 @@ function Cancellation() {
               <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Support Email:</strong> help@dsastroinstitute.com</p>
-              <p><strong>Phone / WhatsApp:</strong> +91 7570972970</p>
+              <p><strong>Phone / WhatsApp:</strong> {CONTACT_PHONE_DISPLAY}</p>
               <p><strong>Website:</strong> https://dsastroinstitute.com/</p>
             </div>
             <a href="mailto:help@dsastroinstitute.com" className="contact-button">Contact Support</a>

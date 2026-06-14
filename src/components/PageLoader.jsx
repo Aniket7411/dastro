@@ -1,54 +1,30 @@
-import { useEffect } from 'react';
+import { Loader2, Stars } from 'lucide-react';
 
-/* Spin keyframe injected once */
-const SPIN_STYLE = `
-@keyframes ds-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-.ds-loader-spin {
-  animation: ds-spin 1s linear infinite;
-  display: block;
-}
-`;
-
-function injectStyle() {
-  if (document.getElementById('ds-loader-style')) return;
-  const el = document.createElement('style');
-  el.id = 'ds-loader-style';
-  el.textContent = SPIN_STYLE;
-  document.head.appendChild(el);
-}
-
-/* ── Spinner image ── */
-function SpinnerImg({ size = 72 }) {
+function RingSpinner({ ringClass = 'h-14 w-14', iconSize = 24 }) {
   return (
-    <img
-      src="/loader.png"
-      alt=""
-      aria-hidden="true"
-      className="ds-loader-spin"
-      style={{ width: size, height: size, objectFit: 'contain' }}
-    />
+    <div className={`relative flex ${ringClass} items-center justify-center`}>
+      <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-site-accent-dark/12 border-t-site-accent-dark/65" />
+      <Stars size={iconSize} className="text-site-accent-dark/55" aria-hidden />
+    </div>
   );
 }
 
 /* ── Full page / section loader ── */
 export function PageLoader({ label = 'Loading…', compact = false }) {
-  useEffect(() => { injectStyle(); }, []);
-
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-5 bg-[#FDF6EE] ${
+      className={`flex flex-col items-center justify-center gap-4 bg-site-bg ${
         compact ? 'py-16' : 'min-h-[60vh]'
       }`}
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
-      <SpinnerImg size={140} />
+      <RingSpinner ringClass="h-14 w-14" iconSize={24} />
       {label && (
-        <p className="m-0 text-sm font-semibold tracking-wide text-[#8B4A1E]/75">{label}</p>
+        <p className="m-0 font-body text-[13px] font-semibold tracking-wide text-site-accent-dark/70">
+          {label}
+        </p>
       )}
     </div>
   );
@@ -56,38 +32,18 @@ export function PageLoader({ label = 'Loading…', compact = false }) {
 
 /* ── Full-screen overlay loader (for API calls) ── */
 export function OverlayLoader({ label = 'Please wait…', visible = true }) {
-  useEffect(() => { injectStyle(); }, []);
-
   if (!visible) return null;
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 99999,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 20,
-        background: 'rgba(253,246,238,0.85)',
-        backdropFilter: 'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)',
-      }}
+      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center gap-5 bg-site-bg/85 backdrop-blur-md"
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
-      <SpinnerImg size={80} />
+      <RingSpinner ringClass="h-12 w-12" iconSize={20} />
       {label && (
-        <p style={{
-          margin: 0,
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          letterSpacing: '0.04em',
-          color: 'rgba(139,74,30,0.8)',
-        }}>
+        <p className="m-0 font-body text-[13px] font-semibold tracking-[0.04em] text-site-accent-dark/80">
           {label}
         </p>
       )}
@@ -96,29 +52,35 @@ export function OverlayLoader({ label = 'Please wait…', visible = true }) {
 }
 
 /* ── Inline compact spinner (for buttons / inline use) ── */
-export function InlineLoader({ size = 28 }) {
-  useEffect(() => { injectStyle(); }, []);
-  return <SpinnerImg size={size} />;
+export function InlineLoader({ size = 24 }) {
+  return <Loader2 size={size} className="animate-spin text-site-accent-dark" aria-hidden />;
 }
 
 /* ── Skeleton grid for course cards ── */
+import { CARD_FLEX_LIST, CARD_FLEX_ITEM } from './consultation/tokens';
+
 export function CourseGridSkeleton({ count = 6 }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className={CARD_FLEX_LIST}>
       {Array.from({ length: count }).map((_, i) => (
-        <div
+        <li
           key={i}
-          className="animate-pulse overflow-hidden rounded-2xl border border-[#8B4A1E]/10 bg-white"
+          className={`${CARD_FLEX_ITEM} animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm`}
         >
-          <div className="h-40 bg-[#8B4A1E]/10" />
-          <div className="space-y-3 p-4">
-            <div className="h-4 w-3/4 rounded bg-[#8B4A1E]/10" />
-            <div className="h-3 w-full rounded bg-[#8B4A1E]/8" />
-            <div className="h-3 w-5/6 rounded bg-[#8B4A1E]/8" />
+          <div className="aspect-[2/1] bg-site-accent-dark/10" />
+          <div className="space-y-2 p-3">
+            <div className="h-2 w-14 rounded bg-site-accent-dark/10" />
+            <div className="h-4 w-4/5 rounded bg-site-accent-dark/10" />
+            <div className="h-2.5 w-full rounded bg-site-accent-dark/8" />
+            <div className="h-2.5 w-11/12 rounded bg-site-accent-dark/8" />
+            <div className="flex items-center justify-between border-t border-site-accent-dark/10 pt-2.5">
+              <div className="h-5 w-20 rounded bg-site-accent-dark/10" />
+              <div className="h-7 w-20 rounded-full bg-site-accent-dark/10" />
+            </div>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 

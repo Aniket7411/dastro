@@ -1,52 +1,28 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 function NotFound() {
   return (
-    <div className="not-found-page site-page">
-      <div className="container site-container">
-        <div className="not-found-card">
-          <span className="site-kicker">404</span>
-          <h1>Page Not Found</h1>
-          <p>The page you are trying to open is not available. You can return to the website and continue from there.</p>
-          <Link to="/" className="site-btn">
+    <div className="flex min-h-[70vh] w-full items-center bg-site-bg font-body text-site-text">
+      <div className="mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12">
+        <div className="mx-auto max-w-[34rem] rounded-[14px] border border-site-accent-dark/14 bg-white p-6 text-center shadow-[0_10px_24px_rgba(42,15,2,0.06)] sm:p-8 lg:p-10">
+          <span className="mb-3 inline-block font-body text-xs font-extrabold uppercase tracking-[0.12em] text-site-accent-dark">
+            404
+          </span>
+          <h1 className="mb-3 font-heading text-3xl font-extrabold text-site-primary sm:text-4xl">
+            Page Not Found
+          </h1>
+          <p className="mb-6 leading-relaxed text-site-muted">
+            The page you are trying to open is not available. You can return to the website and
+            continue from there.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex min-h-10 items-center justify-center rounded-[9px] border border-site-primary bg-site-primary px-5 py-2.5 text-[0.9375rem] font-bold text-white no-underline transition hover:border-[#6b3514] hover:bg-[#6b3514]"
+          >
             Back to Website
           </Link>
         </div>
       </div>
-
-      <style>{`
-        .not-found-page {
-          min-height: 70vh;
-          display: flex;
-          align-items: center;
-          background: var(--site-bg);
-        }
-
-        .not-found-card {
-          max-width: 34rem;
-          margin: 0 auto;
-          text-align: center;
-          background: var(--site-surface);
-          border: 1px solid var(--site-border);
-          border-radius: var(--radius-card);
-          box-shadow: var(--shadow-card);
-          padding: clamp(1.5rem, 5vw, 2.5rem);
-        }
-
-        .not-found-card h1 {
-          font-family: var(--font-heading);
-          color: var(--site-text);
-          font-size: var(--h1-size);
-          margin-bottom: 0.8rem;
-        }
-
-        .not-found-card p {
-          color: var(--site-muted);
-          line-height: 1.7;
-          margin-bottom: 1.5rem;
-        }
-      `}</style>
     </div>
   );
 }

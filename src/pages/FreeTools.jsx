@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  SITE_BTN_OUTLINE,
+  SITE_CARD,
+  SITE_CONTAINER,
+  SITE_KICKER,
+  SITE_PAGE,
+  SITE_SUBTITLE,
+  SITE_TITLE_LG,
+} from '../utils/siteTokens';
 import KundaliTool from '../components/tools/KundaliTool';
 import HoroscopeTool from '../components/tools/HoroscopeTool';
 import MoonTool from '../components/tools/MoonTool';
@@ -30,20 +39,20 @@ function FreeTools() {
   if (activeTool === 'zodiac') return <section className="tools-container"><ZodiacFinder onBack={handleBack} /></section>;
 
   return (
-    <section className="freetools-section site-page">
-      <div className="site-container">
+    <section className={`freetools-section ${SITE_PAGE}`}>
+      <div className={SITE_CONTAINER}>
         <div className="row justify-content-center">
           <div className="col-lg-8 text-center mb-4 fade-in">
-            <span className="site-kicker">Explore The Cosmos</span>
-            <h1 className="site-title site-title-lg mt-1 mb-3">Free Astrology Tools</h1>
-            <p className="site-subtitle mx-auto">Use simple astrology calculators and guidance tools to understand your chart, signs, compatibility, and daily direction.</p>
+            <span className={SITE_KICKER}>Explore The Cosmos</span>
+            <h1 className={`${SITE_TITLE_LG} mt-1 mb-3`}>Free Astrology Tools</h1>
+            <p className={`${SITE_SUBTITLE} mx-auto`}>Use simple astrology calculators and guidance tools to understand your chart, signs, compatibility, and daily direction.</p>
           </div>
         </div>
         
         <div className="row g-3 g-lg-4 justify-content-center">
           {tools.map((tool, idx) => (
             <div key={idx} className="col-12 col-md-6 col-lg-4 fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
-              <div className="tool-card site-card h-100 d-flex flex-column">
+              <div className={`tool-card ${SITE_CARD} h-100 d-flex flex-column`}>
                 <div className="tool-icon-wrapper mx-auto">
                   <i className={`fas ${tool.icon}`}></i>
                 </div>
@@ -52,10 +61,10 @@ function FreeTools() {
                 
                 <div className="mt-3">
                   {tool.link ? (
-                    <Link to={tool.link} className="site-btn site-btn-outline tool-action w-100">Access Tool <i className="fas fa-arrow-right ms-2"></i></Link>
+                    <Link to={tool.link} className={`${SITE_BTN_OUTLINE} tool-action w-100`}>Access Tool <i className="fas fa-arrow-right ms-2"></i></Link>
                   ) : (
                     <button 
-                      className="site-btn site-btn-outline tool-action w-100"
+                      className={`${SITE_BTN_OUTLINE} tool-action w-100`}
                       onClick={() => setActiveTool(tool.id)}
                     >
                       Access Tool <i className="fas fa-arrow-right ms-2"></i>

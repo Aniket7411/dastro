@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import API_BASE from '../utils/api';
+import { resolveCourseDuration } from '../utils/courseDuration';
 
 const CACHE_TTL_MS = 60_000;
 let sharedCache = {
@@ -31,7 +32,8 @@ export function mapCourseFromApi(course) {
     shortDesc: course.description || '',
     longDesc: course.longDesc || course.description || '',
     image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
-    duration: course.duration || `${course.validityDays || 0} Days`,
+    duration: resolveCourseDuration(course),
+    topics: Array.isArray(course.topics) ? course.topics : [],
     schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
     level: course.level || 'Beginner',
     instructor: instructorName,

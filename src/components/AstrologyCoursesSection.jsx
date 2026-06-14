@@ -91,7 +91,7 @@ function CourseCard({ course, index }) {
 
         <div className="mb-4 flex items-end justify-between gap-2 border-t border-dashed border-site-accent-dark/15 pt-3">
           {course.price ? (
-            <p className="m-0 font-heading text-2xl font-extrabold leading-none text-site-accent-dark">
+            <p className="m-0 font-price text-2xl font-bold leading-none tracking-tight text-site-accent-dark tabular-nums">
               ₹{Number(course.price).toLocaleString('en-IN')}
             </p>
           ) : (

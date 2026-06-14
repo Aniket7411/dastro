@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
+import API_BASE from '../utils/api';
+import toast from '@/utils/toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 
 const highlights = [
   { num: '40+', label: 'Hours Content', icon: '⏱️' },
@@ -79,13 +83,45 @@ function AdvancedAstrology() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Enrollment form submitted! Redirecting to payment...');
-  };
-
-  const handlePayment = () => {
-    alert('Redirecting to secure payment gateway...\nCourse Fee: ₹999');
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (ONLINE_PAYMENT_ENABLED) {
+      toast('Payment gateway will open here once live keys are configured.');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: normalizeIndianMobile(formData.phone),
+          type: 'Course',
+          leadType: 'LIVE COURSE LEAD',
+          status: 'ENQUIRY RECEIVED',
+          paymentStatus: 'NOT REQUIRED',
+          courseName: 'Advanced Predictive Astrology',
+          experience: formData.experience,
+          city: formData.city,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Enquiry received! We will call you within 24 hours.');
+        setShowModal(false);
+        setFormData({ name: '', email: '', phone: '', city: '', experience: 'intermediate' });
+      } else {
+        toast.error(data.message || 'Could not submit enquiry.');
+      }
+    } catch {
+      toast.error('Could not submit enquiry. Please try again.');
+    }
   };
 
   return (
@@ -135,7 +171,7 @@ function AdvancedAstrology() {
                 onClick={() => setShowModal(true)}
                 className="rounded-xl bg-[#2a0f02] px-6 py-3 text-sm font-extrabold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-black"
               >
-                Enroll Now for ₹999
+                {ONLINE_PAYMENT_ENABLED ? 'Enroll Now for ₹999' : 'Request callback — ₹999'}
               </button>
               <button
                 type="button"
@@ -316,7 +352,7 @@ function AdvancedAstrology() {
             <p className="mt-2 text-base text-[#714626] sm:text-lg">Limited seats available for the advanced batch</p>
             <div className="mt-4 flex items-baseline justify-center gap-2">
               <span className="text-xl text-[#9b6640] line-through">₹5100</span>
-              <span className="font-heading text-4xl font-extrabold bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-transparent sm:text-5xl">
+              <span className="font-price text-4xl font-bold tabular-nums tracking-tight bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-transparent sm:text-5xl">
                 ₹999
               </span>
             </div>
@@ -416,10 +452,9 @@ function AdvancedAstrology() {
                 </div>
                 <button
                   type="submit"
-                  onClick={handlePayment}
                   className="w-full rounded-xl bg-[#2a0f02] py-3 text-sm font-extrabold text-white transition hover:bg-black"
                 >
-                  Proceed to Payment (₹999)
+                  {ONLINE_PAYMENT_ENABLED ? 'Proceed to Payment (₹999)' : 'Request callback (₹999)'}
                 </button>
               </form>
             </motion.div>

@@ -1,5 +1,6 @@
 import LegalPolicyLayout from '../components/LegalPolicyLayout';
 import { PAGE_BANNERS } from '../data/pageBanners';
+import { CONTACT_PHONE_DISPLAY } from '../utils/contactInfo';
 
 const sections = [
     { id: 'definitions', label: '1. Definitions' },
@@ -339,7 +340,7 @@ function Terms() {
               <p><strong>Name:</strong> Ananya Singh</p>
               <p><strong>Designation:</strong> Grievance Officer</p>
               <p><strong>Email:</strong> help@dsastroinstitute.com</p>
-              <p><strong>Phone:</strong> +91 7570972970</p>
+              <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
               <p><strong>Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Response Time:</strong> Within 7 working days of receipt of complaint</p>
             </div>
@@ -354,7 +355,7 @@ function Terms() {
               <p><strong>Company Name:</strong> DS ASTRO INSTITUTE LLP</p>
               <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
-              <p><strong>Phone:</strong> +91 7570972970</p>
+              <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
               <p><strong>Website:</strong> https://dsastroinstitute.com/</p>
             </div>
             <a href="mailto:info@dsastroinstitute.com" className="contact-button">Contact Support</a>
