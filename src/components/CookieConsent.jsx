@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const CookieConsent = () => {
+export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -23,103 +24,42 @@ const CookieConsent = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="cookie-banner">
-      <div className="cookie-content">
-        <p>
-          We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. 
-          By clicking "Accept All", you consent to our use of non-essential cookies in accordance with our <a href="/privacy-policy" style={{color: '#C8832A', textDecoration: 'underline'}}>Privacy Policy</a>.
+    <div
+      className="fixed bottom-3 left-1/2 z-[99999] w-[calc(100%-1.25rem)] max-w-[62.5rem] -translate-x-1/2 rounded-lg border border-site-accent/25 bg-[#1a1a1a] px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)] sm:bottom-5 sm:w-[calc(100%-2rem)] sm:rounded-xl sm:px-5 sm:py-4 md:px-6"
+      role="dialog"
+      aria-labelledby="cookie-consent-title"
+      aria-live="polite"
+    >
+      <div className="flex flex-col items-stretch gap-2.5 sm:gap-3 md:flex-row md:items-center md:justify-between md:gap-5">
+        <p
+          id="cookie-consent-title"
+          className="m-0 text-center text-[0.6875rem] leading-snug text-white/90 sm:text-left sm:text-sm sm:leading-relaxed md:flex-1"
+        >
+          We use cookies to improve your experience and analyze traffic. By clicking &quot;Accept All&quot;, you agree to
+          non-essential cookies per our{' '}
+          <Link to="/privacy-policy" className="font-semibold text-site-accent underline-offset-2 hover:underline">
+            Privacy Policy
+          </Link>
+          .
         </p>
-        <div className="cookie-buttons">
-          <button className="btn-reject" onClick={handleReject}>Reject Non-Essential</button>
-          <button className="btn-accept" onClick={handleAccept}>Accept All</button>
+
+        <div className="flex shrink-0 gap-2 sm:gap-2.5 md:w-auto">
+          <button
+            type="button"
+            onClick={handleReject}
+            className="min-h-8 flex-1 rounded-md border border-white/20 bg-transparent px-2.5 py-1.5 text-[0.6875rem] font-semibold leading-none text-white/75 transition hover:border-white/35 hover:bg-white/10 hover:text-white sm:min-h-9 sm:px-3.5 sm:py-2 sm:text-xs md:flex-none md:px-4"
+          >
+            Reject
+          </button>
+          <button
+            type="button"
+            onClick={handleAccept}
+            className="min-h-8 flex-1 rounded-md border border-site-accent-dark bg-site-accent-dark px-2.5 py-1.5 text-[0.6875rem] font-semibold leading-none text-white transition hover:bg-[#6b340e] sm:min-h-9 sm:px-3.5 sm:py-2 sm:text-xs md:flex-none md:px-4"
+          >
+            Accept All
+          </button>
         </div>
       </div>
-      <style>{`
-        .cookie-banner {
-          position: fixed;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: calc(100% - 40px);
-          max-width: 1000px;
-          background-color: #1a1a1a;
-          color: #f1f1f1;
-          padding: 20px 25px;
-          z-index: 99999;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          border: 1px solid rgba(200, 131, 42, 0.2);
-          animation: slideUp 0.5s ease-out forwards;
-        }
-        @keyframes slideUp {
-          from { bottom: -100px; opacity: 0; }
-          to { bottom: 20px; opacity: 1; }
-        }
-        .cookie-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 20px;
-        }
-        .cookie-content p {
-          margin: 0;
-          font-size: 0.95rem;
-          text-align: center;
-          line-height: 1.6;
-          color: #ffffff !important;
-        }
-        .cookie-buttons {
-          display: flex;
-          gap: 12px;
-          width: 100%;
-        }
-        .cookie-buttons button {
-          flex: 1;
-          padding: 12px;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 0.95rem;
-        }
-        .btn-reject {
-          background: transparent;
-          border: 1px solid #555;
-          color: #ccc;
-        }
-        .btn-reject:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: #fff;
-        }
-        .btn-accept {
-          background: #8b4513;
-          border: 1px solid #8b4513;
-          color: #ffffff;
-        }
-        .btn-accept:hover {
-          background: #6b340e;
-          border-color: #6b340e;
-        }
-        @media (min-width: 768px) {
-          .cookie-content {
-            flex-direction: row;
-            justify-content: space-between;
-          }
-          .cookie-content p {
-            text-align: left;
-            flex: 1;
-          }
-          .cookie-buttons {
-            width: auto;
-            flex-shrink: 0;
-          }
-          .cookie-buttons button {
-            padding: 10px 24px;
-          }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default CookieConsent;
+}

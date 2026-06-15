@@ -14,7 +14,25 @@
   --color-site-accent: #c8832a;
   --color-site-accent-dark: #8b4a1e;
 
-  --spacing-site-header: 6.5rem;
+  --spacing-site-header: calc(2.25rem + 4rem);
+}
+
+@media (min-width: 40rem) {
+  @theme {
+    --spacing-site-header: calc(2rem + 4.25rem);
+  }
+}
+
+@utility top-site-header-sticky {
+  top: var(--spacing-site-header);
+}
+
+@utility pt-site-header {
+  padding-top: var(--spacing-site-header);
+}
+
+@utility -mt-site-header {
+  margin-top: calc(-1 * var(--spacing-site-header));
 }
 
 @font-face {
@@ -34,6 +52,10 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: var(--spacing-site-header);
+  }
+
   body {
     @apply m-0 bg-site-bg font-body text-site-text antialiased;
     font-feature-settings: 'kern' 1, 'liga' 1;

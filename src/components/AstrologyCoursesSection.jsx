@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { fetchCourses } from '../hooks/useCourses';
 import { CourseGridSkeleton } from './PageLoader';
+import { PAGE_WRAP, COURSE_GRID } from './consultation/tokens';
 
 const FEATURES = [
   { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
@@ -21,8 +22,6 @@ const FEATURES = [
   { icon: Award, title: 'Certification', sub: 'Boost your credibility' },
   { icon: Headphones, title: 'Lifetime Support', sub: "We're here for you" },
 ];
-
-const WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 28 },
@@ -45,9 +44,9 @@ function CourseCard({ course, index }) {
       whileInView="show"
       viewport={{ once: true, margin: '-40px' }}
       whileHover={{ y: -6 }}
-      className="group m-0 flex h-full flex-col overflow-hidden rounded-2xl border border-site-accent-dark/10 bg-site-surface shadow-[0_8px_24px_rgba(42,15,2,0.06)] transition-shadow duration-300 hover:border-site-accent/35 hover:shadow-[0_20px_40px_rgba(139,74,30,0.14)]"
+      className="group m-0 flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/10 bg-site-surface shadow-[0_8px_24px_rgba(42,15,2,0.06)] transition-shadow duration-300 hover:border-site-accent/35 hover:shadow-[0_20px_40px_rgba(139,74,30,0.14)] sm:rounded-2xl"
     >
-      <Link to={detailPath} className="relative m-0 block h-[11.5rem] shrink-0 overflow-hidden p-0 no-underline">
+      <Link to={detailPath} className="relative m-0 block aspect-[2/1] shrink-0 overflow-hidden p-0 no-underline sm:h-[11.5rem] sm:aspect-auto">
         <img
           src={course.image}
           alt={course.title}
@@ -56,17 +55,17 @@ function CourseCard({ course, index }) {
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2a0f02]/65 via-transparent to-transparent" />
 
-        <span className={`absolute left-3 top-3 m-0 rounded-full px-2.5 py-1 text-[0.65rem] font-extrabold uppercase tracking-wide text-white shadow-md ${
+        <span className={`absolute left-1.5 top-1.5 m-0 rounded-full px-1.5 py-0.5 text-[0.55rem] font-extrabold uppercase tracking-wide text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[0.65rem] ${
           isLive ? 'bg-gradient-to-r from-[#8B4A1E] to-[#C8832A]' : 'bg-gradient-to-r from-red-600 to-rose-500'
         }`}>
-          {isLive ? 'Live' : 'Recorded'}
+          {isLive ? 'Live' : 'Rec'}
         </span>
 
-        <span className="absolute right-3 top-3 m-0 rounded-full bg-white/90 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-wider text-site-primary ring-1 ring-site-accent/20">
+        <span className="absolute right-1.5 top-1.5 m-0 hidden rounded-full bg-white/90 px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-site-primary ring-1 ring-site-accent/20 sm:right-3 sm:top-3 sm:block sm:px-2.5 sm:py-1">
           {course.level}
         </span>
 
-        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+        <div className="absolute bottom-1.5 left-1.5 hidden flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:flex sm:gap-1.5">
           <span className="inline-flex items-center gap-1 rounded-md bg-black/35 px-2 py-0.5 text-[0.68rem] font-semibold text-white backdrop-blur-sm">
             <Clock size={11} />
             {course.duration}
@@ -78,33 +77,34 @@ function CourseCard({ course, index }) {
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col px-4 pb-4 pt-4">
-        <p className="m-0 mb-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-site-soft">
+      <div className="flex flex-1 flex-col px-2 pb-2 pt-2 sm:px-4 sm:pb-4 sm:pt-4">
+        <p className="m-0 mb-0.5 truncate text-[0.55rem] font-bold uppercase tracking-[0.12em] text-site-soft sm:mb-1 sm:text-[0.65rem]">
           {course.category}
         </p>
-        <h3 className="m-0 mb-2 font-heading text-[1.15rem] font-bold leading-snug text-site-primary transition group-hover:text-site-accent-dark">
+        <h3 className="m-0 mb-1 line-clamp-2 font-heading text-xs font-bold leading-snug text-site-primary transition group-hover:text-site-accent-dark sm:mb-2 sm:text-[1.15rem]">
           {course.title}
         </h3>
-        <p className="m-0 mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-site-muted">
+        <p className="m-0 mb-2 line-clamp-2 flex-1 text-[10px] leading-snug text-site-muted sm:mb-4 sm:line-clamp-3 sm:text-sm sm:leading-relaxed">
           {course.shortDesc}
         </p>
 
-        <div className="mb-4 flex items-end justify-between gap-2 border-t border-dashed border-site-accent-dark/15 pt-3">
+        <div className="mb-2 flex items-end justify-between gap-2 border-t border-dashed border-site-accent-dark/15 pt-2 sm:mb-4 sm:pt-3">
           {course.price ? (
-            <p className="m-0 font-price text-2xl font-bold leading-none tracking-tight text-site-accent-dark tabular-nums">
+            <p className="m-0 font-price text-sm font-bold leading-none tracking-tight text-site-accent-dark tabular-nums sm:text-2xl">
               ₹{Number(course.price).toLocaleString('en-IN')}
             </p>
           ) : (
-            <p className="m-0 text-sm font-semibold text-site-muted">Enquire for pricing</p>
+            <p className="m-0 text-[10px] font-semibold text-site-muted sm:text-sm">Enquire</p>
           )}
         </div>
 
         <Link
           to={detailPath}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-site-primary px-4 py-2.5 text-sm font-bold text-white no-underline transition hover:bg-black active:scale-[0.99]"
+          className="inline-flex w-full items-center justify-center gap-1 rounded-lg bg-site-primary px-2 py-1.5 text-[10px] font-bold text-white no-underline transition hover:bg-black active:scale-[0.99] sm:gap-2 sm:rounded-xl sm:px-4 sm:py-2.5 sm:text-sm"
         >
-          Explore Course
-          <ChevronRight size={16} className="transition group-hover:translate-x-0.5" />
+          <span className="sm:hidden">Explore</span>
+          <span className="hidden sm:inline">Explore Course</span>
+          <ChevronRight size={14} className="transition group-hover:translate-x-0.5 sm:size-4" />
         </Link>
       </div>
     </motion.article>
@@ -134,7 +134,7 @@ export default function AstrologyCoursesSection() {
         ☽
       </div>
 
-      <div className={WRAP}>
+      <div className={PAGE_WRAP}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -162,11 +162,13 @@ export default function AstrologyCoursesSection() {
         {loading ? (
           <CourseGridSkeleton count={4} />
         ) : courses.length > 0 ? (
-          <div className="m-0 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <ul className={COURSE_GRID}>
             {courses.map((course, index) => (
-              <CourseCard key={course.id} course={course} index={index} />
+              <li key={course.id} className="min-w-0">
+                <CourseCard course={course} index={index} />
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
           <p className="m-0 text-center text-sm text-site-muted">
             New courses are on the way. Browse live and recorded programs below.
