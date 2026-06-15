@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Briefcase, MapPin, Clock, IndianRupee, ChevronRight,
-  Upload, CheckCircle2, Star, Sparkles, Send,
-  User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter, X, RefreshCw
+  Upload, CheckCircle2, Star, Send,
+  User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter, X, RefreshCw,
 } from 'lucide-react';
 import axios from 'axios';
 import toast from '@/utils/toast';
@@ -14,218 +14,20 @@ import PageBanner from '../components/PageBanner';
 import { PAGE_BANNERS } from '../data/pageBanners';
 import SEO from '../components/SEO';
 import { BANNER_CONTENT_GAP, SITE_CONTAINER, SITE_PAGE } from '../utils/siteTokens';
+import { BTN } from '../components/consultation/tokens';
+import { MODAL_INPUT, MODAL_LABEL } from '../components/modal/modalTypography';
 
-/* ─── Inline styles (no Tailwind dependency) ─── */
-const S = {
-  root: {
-    minHeight: '100vh',
-    background: 'var(--site-bg)',
-    fontFamily: 'var(--font-body)',
-    paddingTop: 0,
-    paddingBottom: 'clamp(2.5rem, 6vw, 4rem)',
-    color: 'var(--site-text)',
-    width: '100%',
-    overflowX: 'hidden',
-    boxSizing: 'border-box',
-  },
-  inner: { 
-    maxWidth: 'var(--container-public)', 
-    width: '100%', 
-    margin: '0 auto', 
-    padding: '0 var(--page-pad-x)',
-    boxSizing: 'border-box',
-  },
+const INPUT = `${MODAL_INPUT} !mb-0`;
 
-  /* Header */
-  pageHeader: { textAlign: 'center', marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)' },
-  pageTitle: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--h1-size)', fontWeight: 800,
-    color: 'var(--site-text)', letterSpacing: 0,
-    marginBottom: 10,
-  },
-  pageSub: { fontSize: 'var(--body-size)', color: 'var(--site-text-muted)', maxWidth: 620, margin: '0 auto', lineHeight: 1.65 },
+const FILTER_INPUT = `${INPUT} !pl-9`;
 
-  /* Layout */
-  layout: { display: 'grid', gridTemplateColumns: 'minmax(240px, 300px) minmax(0, 1fr)', gap: 'clamp(1rem, 3vw, 1.75rem)', alignItems: 'start' },
+const FIELD_LABEL = `${MODAL_LABEL} !m-0 !mb-0.5 !flex !flex-row !items-center !gap-1 !leading-none [&_svg]:!m-0 [&_svg]:!inline-block [&_svg]:!shrink-0`;
 
-  /* Panel label */
-  panelLabel: {
-    fontSize: 10, fontWeight: 500, letterSpacing: '0.12em',
-    textTransform: 'uppercase', color: '#9a8f85',
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  rolesBadge: {
-    background: '#C9A84C22', color: '#8a6e1e', fontSize: 10,
-    padding: '2px 8px', borderRadius: 20, border: '0.5px solid #C9A84C55',
-  },
+const CARD =
+  'rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)]';
 
-  /* Job list card */
-  jobItem: (active) => ({
-    background: active ? '#FFFDF5' : 'var(--site-surface)',
-    border: active ? '1px solid var(--site-accent)' : '1px solid var(--site-border)',
-    boxShadow: active ? '0 0 0 2px rgba(200, 131, 42, 0.12)' : 'var(--shadow-card)',
-    borderRadius: 'var(--radius-card)', padding: '14px 16px', marginBottom: 10,
-    cursor: 'pointer', transition: 'all 0.15s',
-  }),
-  jobItemTitle: (active) => ({
-    fontSize: 13.5, fontWeight: 500,
-    color: active ? '#8a6e1e' : '#1a1714',
-    marginBottom: 8, lineHeight: 1.3,
-  }),
-  jobItemTags: { display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 },
-  tagDept: {
-    fontSize: 10, padding: '2px 7px', borderRadius: 4,
-    background: '#f0ede9', color: '#6b6560', border: '0.5px solid #e0d9d1',
-  },
-  tagType: {
-    fontSize: 10, padding: '2px 7px', borderRadius: 4,
-    background: '#FFF8E6', color: '#8a6e1e', border: '0.5px solid #C9A84C44',
-  },
-  jobItemMeta: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 },
-  metaItem: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#9a8f85' },
-
-  /* Detail card */
-  detailCard: {
-    background: 'var(--site-surface)', border: '1px solid var(--site-border)',
-    borderRadius: 'var(--radius-card)', padding: 'clamp(1.2rem, 4vw, 2rem)', marginBottom: 20,
-    boxShadow: 'var(--shadow-card)',
-  },
-  detailTitle: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--h2-size)', fontWeight: 700, color: 'var(--site-text)', marginBottom: 12,
-  },
-  badgeRow: { display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 },
-  badge: (variant) => {
-    const map = {
-      purple: { bg: '#F0EFFE', color: '#5b4ec9', border: '#AFA9EC' },
-      blue:   { bg: '#E6F1FB', color: '#185FA5', border: '#85B7EB' },
-      green:  { bg: '#EAF3DE', color: '#3B6D11', border: '#97C459' },
-    };
-    const v = map[variant];
-    return { fontSize: 11, padding: '3px 10px', borderRadius: 6, background: v.bg, color: v.color, border: `0.5px solid ${v.border}` };
-  },
-  detailGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 28 },
-  sectionLabel: {
-    fontSize: 10.5, fontWeight: 500, letterSpacing: '0.08em',
-    textTransform: 'uppercase', color: '#C9A84C',
-    display: 'flex', alignItems: 'center', gap: 5, marginBottom: 10,
-  },
-  desc: { fontSize: 13, color: '#4a4440', lineHeight: 1.65, marginBottom: 18 },
-  listItem: { display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12.5, color: '#4a4440', lineHeight: 1.5, marginBottom: 6 },
-  bullet: { width: 5, height: 5, borderRadius: '50%', background: '#C9A84C', marginTop: 5, flexShrink: 0 },
-  skillChip: {
-    fontSize: 11.5, padding: '4px 10px', borderRadius: 6,
-    background: '#f7f4ee', color: '#4a4440', border: '0.5px solid #e0d9d1',
-    margin: '0 4px 4px 0', display: 'inline-block',
-  },
-
-  /* Form card */
-  formCard: { background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 'var(--radius-card)', padding: 'clamp(1.2rem, 4vw, 2rem)', boxShadow: 'var(--shadow-card)' },
-  formHeader: {
-    display: 'flex', alignItems: 'center', gap: 12,
-    marginBottom: 24, paddingBottom: 16, borderBottom: '0.5px solid #f0ebe3',
-  },
-  formIconBox: {
-    width: 38, height: 38, borderRadius: 8,
-    background: '#FFF8E6', border: '0.5px solid #C9A84C44',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8a6e1e',
-    flexShrink: 0,
-  },
-  formTitle: { fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: 'var(--site-text)' },
-  formSub: { fontSize: 12, color: '#9a8f85', marginTop: 2 },
-  formGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 16 },
-  fieldWrap: { display: 'flex', flexDirection: 'column', gap: 5 },
-  fieldLabel: {
-    fontSize: 10.5, fontWeight: 500, letterSpacing: '0.07em',
-    textTransform: 'uppercase', color: '#9a8f85',
-    display: 'flex', alignItems: 'center', gap: 4,
-  },
-  input: {
-    width: '100%', background: '#FAFAF8',
-    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
-    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
-    color: '#1a1714', outline: 'none',
-  },
-  select: {
-    width: '100%', background: '#FAFAF8',
-    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
-    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
-    color: '#1a1714', outline: 'none', cursor: 'pointer',
-  },
-  textarea: {
-    width: '100%', background: '#FAFAF8',
-    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
-    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
-    color: '#1a1714', outline: 'none', resize: 'vertical', lineHeight: 1.55,
-  },
-  uploadZone: {
-    background: '#FAFAF8', border: '1px dashed var(--site-border-strong)',
-    borderRadius: 'var(--radius-control)', padding: '20px', textAlign: 'center', cursor: 'pointer',
-  },
-  uploadText: { fontSize: 12.5, color: '#9a8f85', marginTop: 4 },
-  resumeUploaded: {
-    background: '#f4faf0',
-    border: '1px solid #b8ddb0',
-    borderRadius: 'var(--radius-control)',
-    padding: '14px 16px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    flexWrap: 'wrap',
-  },
-  resumeFileName: {
-    flex: '1 1 180px',
-    fontSize: 13,
-    fontWeight: 600,
-    color: '#3B6D11',
-    wordBreak: 'break-all',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-  },
-  resumeActions: {
-    display: 'flex',
-    gap: 8,
-    flexWrap: 'wrap',
-  },
-  resumeActionBtn: (variant = 'outline') => ({
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    padding: '8px 12px',
-    borderRadius: 8,
-    fontSize: 12,
-    fontWeight: 700,
-    cursor: 'pointer',
-    border: variant === 'danger' ? '1px solid #f5c2c2' : '1px solid var(--site-border-strong)',
-    background: variant === 'danger' ? '#fef2f2' : '#fff',
-    color: variant === 'danger' ? '#b91c1c' : '#5C3D26',
-  }),
-  submitBtn: {
-    width: '100%', background: 'var(--site-primary)', color: '#fff',
-    border: 'none', borderRadius: 'var(--radius-control)', padding: '13px',
-    fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-body)',
-    cursor: 'pointer', display: 'flex', alignItems: 'center',
-    justifyContent: 'center', gap: 8, marginTop: 20, letterSpacing: '0.02em',
-  },
-  divider: { height: '0.5px', background: '#f0ebe3', margin: '24px 0' },
-  spinner: {
-    width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)',
-    borderTop: '2px solid #fff', borderRadius: '50%',
-    animation: 'spin 0.8s linear infinite',
-  },
-  loader: {
-    minHeight: '100vh', background: '#F7F4EE',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-  },
-  loaderSpinner: {
-    width: 40, height: 40, border: '2px solid #e0d9d1',
-    borderTop: '2px solid #C9A84C', borderRadius: '50%',
-    animation: 'spin 0.8s linear infinite',
-  },
-};
+const SECTION_LABEL =
+  'mb-2.5 flex items-center gap-1.5 font-body text-[0.6875rem] font-bold uppercase tracking-wider text-site-accent-dark';
 
 const FALLBACK_JOBS = [
   {
@@ -281,6 +83,44 @@ function getJobSalaryLabel(job) {
   return salary || null;
 }
 
+function Field({ id, label, icon, children }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-0">
+      <label htmlFor={id} className={FIELD_LABEL}>
+        {icon}
+        <span>{label}</span>
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function JobTag({ children, variant = 'dept' }) {
+  const tones =
+    variant === 'type'
+      ? 'border-site-accent/30 bg-site-accent/10 text-site-accent-dark'
+      : 'border-site-accent-dark/12 bg-site-surface text-site-muted';
+  return (
+    <span className={`inline-flex rounded-md border px-2 py-0.5 font-body text-[0.625rem] font-semibold leading-tight sm:text-[0.6875rem] ${tones}`}>
+      {children}
+    </span>
+  );
+}
+
+function DetailBadge({ children, tone = 'dept' }) {
+  const map = {
+    dept: 'border-violet-200 bg-violet-50 text-violet-800',
+    location: 'border-sky-200 bg-sky-50 text-sky-800',
+    type: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+    salary: 'border-amber-200 bg-amber-50 text-amber-900',
+  };
+  return (
+    <span className={`inline-flex rounded-md border px-2.5 py-1 font-body text-xs font-semibold ${map[tone]}`}>
+      {children}
+    </span>
+  );
+}
+
 export default function Careers() {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -297,15 +137,16 @@ export default function Careers() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterDept, setFilterDept] = useState('All');
 
-  // Debounce search input for performance
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const departments = ['All', ...new Set(jobs.map(j => j.department))];
-  const filteredJobs = jobs.filter(j => {
-    const matchSearch = j.title?.toLowerCase().includes(debouncedSearch.toLowerCase()) || j.location?.toLowerCase().includes(debouncedSearch.toLowerCase());
+  const departments = ['All', ...new Set(jobs.map((j) => j.department).filter(Boolean))];
+  const filteredJobs = jobs.filter((j) => {
+    const matchSearch =
+      j.title?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+      j.location?.toLowerCase().includes(debouncedSearch.toLowerCase());
     const matchDept = filterDept === 'All' || j.department === filterDept;
     return matchSearch && matchDept;
   });
@@ -324,7 +165,6 @@ export default function Careers() {
     document.title = 'Careers | DS Astro';
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.content = 'Join India\'s leading astrology platform. Explore cosmic careers at DS Astro.';
-
     fetchJobs();
   }, []);
 
@@ -406,11 +246,9 @@ export default function Careers() {
     const validationError = getContactValidationError({
       name: formData.fullName,
       email: formData.email,
-      phone: formData.phone
+      phone: formData.phone,
     });
-    if (validationError) {
-      return toast.error(validationError);
-    }
+    if (validationError) return toast.error(validationError);
 
     setSubmitting(true);
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
@@ -438,173 +276,149 @@ export default function Careers() {
     }
   };
 
-  if (loading) return (
-    <div style={S.loader}>
-      <div style={S.loaderSpinner} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className={`${SITE_PAGE} flex min-h-[50vh] items-center justify-center`}>
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent" />
+      </div>
+    );
+  }
 
   const salaryLabel = getJobSalaryLabel(selectedJob);
 
   return (
-    <div className={`careers-page ${SITE_PAGE} w-full overflow-x-hidden`}>
-      <SEO title="Careers" description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams." url="/careers" />
+    <div className={`${SITE_PAGE} w-full overflow-x-hidden antialiased`}>
+      <SEO
+        title="Careers"
+        description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams."
+        url="/careers"
+      />
       <PageBanner {...PAGE_BANNERS.careers} />
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .careers-input:focus { border-color: #C9A84C !important; }
-        .careers-upload:hover { border-color: #C9A84C !important; background: #FFFDF5 !important; }
-        .careers-job-card:hover { border-color: rgba(200, 131, 42, 0.45) !important; }
-        .submit-btn-inner:hover { background: #b8943d !important; }
-        .submit-btn-inner:active { transform: scale(0.99); }
 
-        /* Responsive Layout Overrides */
-        @media (max-width: 991px) {
-          .careers-layout {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-          }
-          .careers-inner {
-            padding: 0 16px !important;
-          }
-          .careers-detail-grid {
-            grid-template-columns: 1fr !important;
-            gap: 20px !important;
-          }
-          .careers-form-grid {
-            grid-template-columns: 1fr !important;
-            gap: 12px !important;
-          }
-          .careers-title {
-            font-size: 24px !important;
-            line-height: 1.2 !important;
-            text-align: center !important;
-            word-wrap: break-word !important;
-          }
-          .page-sub-text {
-            font-size: 13px !important;
-            line-height: 1.5 !important;
-            padding: 0 10px !important;
-          }
-          .careers-sidebar {
-            order: 1;
-          }
-          .careers-content {
-            order: 2;
-          }
-          .careers-job-list {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 12px !important;
-            max-height: none !important;
-          }
-          .job-item-card {
-            width: 100% !important;
-            margin-bottom: 0 !important;
-          }
-          .careers-detail-card, .careers-form-card {
-            padding: 20px !important;
-          }
-        }
-      `}</style>
-
-      <div className={`${SITE_CONTAINER} ${BANNER_CONTENT_GAP}`}>
-        <div className="careers-layout">
-          {/* ── LEFT: Job List ── */}
-          <div className="careers-sidebar">
-            <div className="careers-panel-label">
-              <span className="flex items-center gap-1.5">
-                <Briefcase size={14} aria-hidden="true" /> Open Positions
+      <div className={`${SITE_CONTAINER} ${BANNER_CONTENT_GAP} pb-10 sm:pb-14`}>
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(240px,300px)_minmax(0,1fr)] lg:gap-8">
+          {/* ── Sidebar: job list ── */}
+          <aside className="min-w-0 lg:sticky lg:top-[calc(var(--spacing-site-header)+1rem)]">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="flex items-center gap-1.5 font-body text-[0.6875rem] font-bold uppercase tracking-wider text-site-muted">
+                <Briefcase size={14} className="text-site-accent-dark" aria-hidden="true" />
+                Open Positions
               </span>
-              <span className="careers-roles-badge">{filteredJobs.length} Roles</span>
+              <span className="rounded-full border border-site-accent/35 bg-site-accent/10 px-2 py-0.5 font-body text-[0.625rem] font-bold text-site-accent-dark">
+                {filteredJobs.length} Roles
+              </span>
             </div>
 
-            <div className="site-mb-3 flex flex-col gap-2">
-              <div className="relative">
-                <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-site-text-soft" aria-hidden="true" />
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row lg:flex-col">
+              <div className="relative min-w-0 flex-1">
+                <Search
+                  size={14}
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-soft"
+                  aria-hidden="true"
+                />
                 <input
-                  type="text"
-                  placeholder="Search roles or locations..."
+                  type="search"
+                  placeholder="Search roles or locations…"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="careers-filter-input careers-input"
+                  className={FILTER_INPUT}
                 />
               </div>
-              <div className="relative">
-                <Filter size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-site-text-soft" aria-hidden="true" />
+              <div className="relative min-w-0 sm:max-w-[9rem] lg:max-w-none">
+                <Filter
+                  size={14}
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-soft"
+                  aria-hidden="true"
+                />
                 <select
                   value={filterDept}
                   onChange={(e) => setFilterDept(e.target.value)}
-                  className="careers-filter-input careers-input"
+                  className={`${FILTER_INPUT} cursor-pointer`}
                 >
                   {departments.map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
 
-            <div className="careers-job-list">
-              {filteredJobs.length === 0 && (
-                <p className="careers-empty">No jobs found matching your criteria.</p>
+            <div className="flex max-h-[min(70vh,520px)] flex-col gap-2.5 overflow-y-auto pr-0.5 lg:max-h-[calc(100vh-var(--spacing-site-header)-12rem)]">
+              {filteredJobs.length === 0 ? (
+                <p className="rounded-lg border border-dashed border-site-accent-dark/15 bg-white/60 px-4 py-6 text-center text-sm text-site-muted">
+                  No jobs found matching your criteria.
+                </p>
+              ) : (
+                filteredJobs.map((job) => {
+                  const active = selectedJob?._id === job._id;
+                  const cardSalary = getJobSalaryLabel(job);
+                  return (
+                    <motion.button
+                      key={job._id}
+                      type="button"
+                      className={[
+                        CARD,
+                        'm-0 w-full cursor-pointer p-3.5 text-left transition duration-200 sm:p-4',
+                        active
+                          ? 'border-site-accent bg-[#fffdf5] shadow-[0_0_0_2px_rgba(200,131,42,0.12)]'
+                          : 'hover:border-site-accent/40 hover:shadow-[0_6px_20px_rgba(42,15,2,0.08)]',
+                      ].join(' ')}
+                      whileHover={{ scale: 1.005 }}
+                      whileTap={{ scale: 0.995 }}
+                      onClick={() => handleJobClick(job)}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <h3
+                          className={`m-0 font-heading text-sm font-bold leading-snug sm:text-[0.9375rem] ${
+                            active ? 'text-site-accent-dark' : 'text-site-primary'
+                          }`}
+                        >
+                          {job.title}
+                        </h3>
+                        <ChevronRight
+                          size={16}
+                          className={`mt-0.5 shrink-0 transition-transform ${active ? 'rotate-90 text-site-accent' : 'text-site-soft'}`}
+                          aria-hidden="true"
+                        />
+                      </div>
+
+                      {(job.department || job.type) ? (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {job.department ? <JobTag>{job.department}</JobTag> : null}
+                          {job.type ? <JobTag variant="type">{job.type}</JobTag> : null}
+                        </div>
+                      ) : null}
+
+                      <div className="mt-2.5 grid grid-cols-1 gap-1.5 text-[0.6875rem] text-site-muted sm:grid-cols-2 sm:text-xs">
+                        {job.location ? (
+                          <span className="flex items-center gap-1.5 min-w-0">
+                            <MapPin size={13} className="shrink-0 text-site-soft" aria-hidden="true" />
+                            <span className="truncate">{job.location}</span>
+                          </span>
+                        ) : null}
+                        {job.experience ? (
+                          <span className="flex items-center gap-1.5 min-w-0">
+                            <Clock size={13} className="shrink-0 text-site-soft" aria-hidden="true" />
+                            <span className="truncate">{job.experience}</span>
+                          </span>
+                        ) : null}
+                        {cardSalary ? (
+                          <span className="col-span-full flex items-center gap-1.5 font-semibold text-site-accent-dark">
+                            <IndianRupee size={13} className="shrink-0" aria-hidden="true" />
+                            <span>{cardSalary}</span>
+                          </span>
+                        ) : null}
+                      </div>
+                    </motion.button>
+                  );
+                })
               )}
-              {filteredJobs.map((job) => {
-                const active = selectedJob?._id === job._id;
-                const cardSalary = getJobSalaryLabel(job);
-                return (
-                  <motion.div
-                    key={job._id}
-                    role="button"
-                    tabIndex={0}
-                    className={`careers-job-card job-item-card${active ? ' careers-job-card--active' : ''}`}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    onClick={() => handleJobClick(job)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleJobClick(job)}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="careers-job-card__title">{job.title}</h3>
-                      <ChevronRight
-                        size={16}
-                        className={`mt-0.5 shrink-0 transition-transform ${active ? 'rotate-90 text-site-accent' : 'text-site-text-soft'}`}
-                        aria-hidden="true"
-                      />
-                    </div>
-
-                    <div className="careers-job-card__tags">
-                      {job.department ? <span className="careers-job-tag careers-job-tag--dept">{job.department}</span> : null}
-                      {job.type ? <span className="careers-job-tag careers-job-tag--type">{job.type}</span> : null}
-                    </div>
-
-                    <div className="careers-job-card__meta">
-                      {job.location ? (
-                        <div className="careers-job-card__meta-item">
-                          <MapPin size={13} aria-hidden="true" />
-                          <span>{job.location}</span>
-                        </div>
-                      ) : null}
-                      {job.experience ? (
-                        <div className="careers-job-card__meta-item">
-                          <Clock size={13} aria-hidden="true" />
-                          <span>{job.experience}</span>
-                        </div>
-                      ) : null}
-                      {cardSalary ? (
-                        <div className="careers-job-card__meta-item careers-job-card__meta-item--salary">
-                          <IndianRupee size={13} aria-hidden="true" />
-                          <span>{cardSalary}</span>
-                        </div>
-                      ) : null}
-                    </div>
-                  </motion.div>
-                );
-              })}
             </div>
-          </div>
+          </aside>
 
-          {/* ── RIGHT: Detail + Form ── */}
-          <div className="careers-content" ref={detailRef}>
+          {/* ── Main: detail + application ── */}
+          <div className="min-w-0" ref={detailRef}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedJob?._id}
@@ -612,126 +426,203 @@ export default function Careers() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2 }}
+                className="flex flex-col gap-5"
               >
-                {/* Job Detail Card */}
-                <div className="careers-detail-card">
-                  <h2 className="careers-detail-card__title">{selectedJob?.title}</h2>
-                  <div className="careers-detail-badges">
+                {/* Job detail */}
+                <article className={`${CARD} p-4 sm:p-6`}>
+                  <h2 className="m-0 font-heading text-xl font-bold leading-tight text-site-primary sm:text-2xl">
+                    {selectedJob?.title}
+                  </h2>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
                     {selectedJob?.department ? (
-                      <span className="careers-detail-badge careers-detail-badge--dept">{selectedJob.department}</span>
+                      <DetailBadge tone="dept">{selectedJob.department}</DetailBadge>
                     ) : null}
                     {selectedJob?.location ? (
-                      <span className="careers-detail-badge careers-detail-badge--location">{selectedJob.location}</span>
+                      <DetailBadge tone="location">{selectedJob.location}</DetailBadge>
                     ) : null}
                     {selectedJob?.type ? (
-                      <span className="careers-detail-badge careers-detail-badge--type">{selectedJob.type}</span>
+                      <DetailBadge tone="type">{selectedJob.type}</DetailBadge>
                     ) : null}
                     {salaryLabel ? (
-                      <span className="careers-detail-badge careers-detail-badge--salary">{salaryLabel}</span>
+                      <DetailBadge tone="salary">{salaryLabel}</DetailBadge>
                     ) : null}
                   </div>
 
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
+                  <div className="mt-6 grid gap-6 md:grid-cols-2 md:gap-8">
                     <div>
-                      <div className="careers-section-label">
-                        <Star size={13} aria-hidden="true" /> Description
+                      <div className={SECTION_LABEL}>
+                        <Star size={13} aria-hidden="true" />
+                        Description
                       </div>
-                      <p className="careers-prose">{selectedJob?.description}</p>
+                      <p className="m-0 text-sm leading-relaxed text-site-muted sm:text-[0.9375rem]">
+                        {selectedJob?.description}
+                      </p>
 
                       {selectedJob?.requirements?.length > 0 ? (
-                        <>
-                          <div className="careers-section-label careers-section-label--spaced">
-                            <CheckCircle2 size={13} aria-hidden="true" /> Requirements
+                        <div className="mt-5">
+                          <div className={SECTION_LABEL}>
+                            <CheckCircle2 size={13} aria-hidden="true" />
+                            Requirements
                           </div>
-                          {selectedJob.requirements.map((item) => (
-                            <div key={item} className="careers-list-item">
-                              <span className="careers-list-bullet" aria-hidden="true" />
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </>
+                          <ul className="m-0 list-none space-y-2 p-0">
+                            {selectedJob.requirements.map((item) => (
+                              <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-site-muted">
+                                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-site-accent" aria-hidden="true" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       ) : null}
 
                       {selectedJob?.responsibilities?.length > 0 ? (
-                        <>
-                          <div className="careers-section-label careers-section-label--spaced">
-                            <CheckCircle2 size={13} aria-hidden="true" /> Responsibilities
+                        <div className="mt-5">
+                          <div className={SECTION_LABEL}>
+                            <CheckCircle2 size={13} aria-hidden="true" />
+                            Responsibilities
                           </div>
-                          {selectedJob.responsibilities.map((item) => (
-                            <div key={item} className="careers-list-item">
-                              <span className="careers-list-bullet" aria-hidden="true" />
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </>
+                          <ul className="m-0 list-none space-y-2 p-0">
+                            {selectedJob.responsibilities.map((item) => (
+                              <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-site-muted">
+                                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-site-accent" aria-hidden="true" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       ) : null}
                     </div>
 
                     <div>
                       {selectedJob?.skills?.length > 0 ? (
-                        <>
-                          <div className="careers-section-label">
-                            <Zap size={13} aria-hidden="true" /> Required Skills
+                        <div>
+                          <div className={SECTION_LABEL}>
+                            <Zap size={13} aria-hidden="true" />
+                            Required Skills
                           </div>
-                          <div className="site-mb-3">
+                          <div className="flex flex-wrap gap-1.5">
                             {selectedJob.skills.map((skill) => (
-                              <span key={skill} className="careers-skill-chip">{skill}</span>
+                              <span
+                                key={skill}
+                                className="inline-flex rounded-md border border-site-accent-dark/12 bg-site-surface px-2.5 py-1 font-body text-xs font-medium text-site-text"
+                              >
+                                {skill}
+                              </span>
                             ))}
                           </div>
-                        </>
+                        </div>
                       ) : null}
 
                       {selectedJob?.qualifications?.length > 0 ? (
-                        <>
-                          <div className={`careers-section-label${selectedJob?.skills?.length ? ' careers-section-label--spaced' : ''}`}>
-                            <BookOpen size={13} aria-hidden="true" /> Qualifications
+                        <div className={selectedJob?.skills?.length ? 'mt-5' : ''}>
+                          <div className={SECTION_LABEL}>
+                            <BookOpen size={13} aria-hidden="true" />
+                            Qualifications
                           </div>
-                          {selectedJob.qualifications.map((item) => (
-                            <div key={item} className="careers-list-item">
-                              <span className="careers-list-bullet" aria-hidden="true" />
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </>
+                          <ul className="m-0 list-none space-y-2 p-0">
+                            {selectedJob.qualifications.map((item) => (
+                              <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-site-muted">
+                                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-site-accent" aria-hidden="true" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       ) : null}
                     </div>
                   </div>
-                </div>
+                </article>
 
-                {/* Application Form */}
-                <div className="careers-form-card" style={S.formCard}>
-                  <div style={S.formHeader}>
-                    <div style={S.formIconBox}><Send size={16} /></div>
-                    <div>
-                      <div style={S.formTitle}>Apply for this role</div>
-                      <div style={S.formSub}>{selectedJob?.title}</div>
+                {/* Application form */}
+                <section
+                  className={`${CARD} careers-apply-form p-3 sm:p-4 [&_input]:!mb-0 [&_select]:!mb-0 [&_textarea]:!mb-0`}
+                >
+                  <div className="mb-3 flex items-center gap-2.5 border-b border-site-accent-dark/10 pb-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-site-accent/30 bg-site-accent/10 text-site-accent-dark">
+                      <Send size={15} aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="!m-0 font-heading text-sm font-bold leading-tight text-site-primary sm:text-base">
+                        Apply for this role
+                      </h3>
+                      <p className="!m-0 mt-0.5 truncate text-[11px] text-site-muted sm:text-xs">{selectedJob?.title}</p>
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit}>
-                    <div className="careers-form-grid" style={S.formGrid}>
-                      {/* Row 1 */}
-                      <Field label="Full Name" icon={<User size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="fullName" required value={formData.fullName} onChange={handleChange} placeholder="Your full name" />
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-3 [&_label]:!block [&_label]:!w-auto"
+                  >
+                    <div className="grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+                      <Field id="career-fullName" label="Full name" icon={<User size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-fullName"
+                          className={INPUT}
+                          type="text"
+                          name="fullName"
+                          required
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          placeholder="Your full name"
+                        />
                       </Field>
-                      <Field label="Email Address" icon={<Mail size={11} />}>
-                        <input className="careers-input" style={S.input} type="email" name="email" required value={formData.email} onChange={handleChange} placeholder="you@example.com" />
+                      <Field id="career-email" label="Email" icon={<Mail size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-email"
+                          className={INPUT}
+                          type="email"
+                          name="email"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="you@example.com"
+                        />
                       </Field>
-
-                      {/* Row 2 */}
-                      <Field label="Phone Number" icon={<Phone size={11} />}>
-                        <input className="careers-input" style={S.input} type="tel" name="phone" required value={formData.phone} onChange={handleChange} placeholder="+91 XXXXX XXXXX" />
+                      <Field id="career-phone" label="Phone" icon={<Phone size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-phone"
+                          className={INPUT}
+                          type="tel"
+                          name="phone"
+                          required
+                          value={formData.phone}
+                          onChange={handleChange}
+                          placeholder="+91 XXXXX XXXXX"
+                        />
                       </Field>
-                      <Field label="City" icon={<Home size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="city" required value={formData.city} onChange={handleChange} placeholder="e.g. Mumbai" />
+                      <Field id="career-city" label="City" icon={<Home size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-city"
+                          className={INPUT}
+                          type="text"
+                          name="city"
+                          required
+                          value={formData.city}
+                          onChange={handleChange}
+                          placeholder="e.g. Mumbai"
+                        />
                       </Field>
-
-                      {/* Row 3 */}
-                      <Field label="Total Experience" icon={<Briefcase size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="totalExperience" required value={formData.totalExperience} onChange={handleChange} placeholder="e.g. 5 Years" />
+                      <Field id="career-experience" label="Experience" icon={<Briefcase size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-experience"
+                          className={INPUT}
+                          type="text"
+                          name="totalExperience"
+                          required
+                          value={formData.totalExperience}
+                          onChange={handleChange}
+                          placeholder="e.g. 5 years"
+                        />
                       </Field>
-                      <Field label="Specialization" icon={<Globe size={11} />}>
-                        <select className="careers-input" style={S.select} name="specialization" value={formData.specialization} onChange={handleChange}>
+                      <Field id="career-specialization" label="Specialization" icon={<Globe size={11} aria-hidden="true" />}>
+                        <select
+                          id="career-specialization"
+                          className={`${INPUT} cursor-pointer`}
+                          name="specialization"
+                          value={formData.specialization}
+                          onChange={handleChange}
+                        >
                           <option>Vedic Astrology</option>
                           <option>Tarot</option>
                           <option>Numerology</option>
@@ -741,69 +632,70 @@ export default function Careers() {
                           <option>Other</option>
                         </select>
                       </Field>
-
-                      {/* Row 4 */}
-                      <Field label="Languages Known" icon={<Globe size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="languages" value={formData.languages} onChange={handleChange} placeholder="English, Hindi…" />
+                      <Field id="career-languages" label="Languages" icon={<Globe size={11} aria-hidden="true" />}>
+                        <input
+                          id="career-languages"
+                          className={INPUT}
+                          type="text"
+                          name="languages"
+                          value={formData.languages}
+                          onChange={handleChange}
+                          placeholder="English, Hindi…"
+                        />
                       </Field>
-                      <div></div>
                     </div>
 
-                    {/* Resume Upload */}
-                    <div style={{ ...S.fieldWrap, marginBottom: 16 }}>
-                      <label style={S.fieldLabel}>
-                        <Upload size={11} /> Resume / CV
-                        <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: '#c4bbb4', marginLeft: 4 }}>
-                          (PDF, DOC, DOCX – max 5MB)
+                    <div>
+                      <span className={FIELD_LABEL}>
+                        <Upload size={11} aria-hidden="true" />
+                        <span>
+                          Resume
+                          <span className="normal-case font-normal text-site-soft"> (PDF, DOC — 5MB)</span>
                         </span>
-                      </label>
+                      </span>
 
                       {resumeUploading ? (
-                        <div style={S.uploadZone}>
-                          <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
-                          <div style={S.uploadText}>
-                            <span style={{ color: '#8a6e1e', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ ...S.spinner, border: '2px solid #e0d9d1', borderTop: '2px solid #C9A84C' }} />
-                              Uploading {resume?.name ? `"${resume.name}"` : 'resume'}…
-                            </span>
-                          </div>
+                        <div className="mt-1 flex flex-col items-center justify-center rounded-lg border border-dashed border-site-accent-dark/20 bg-[#fffcf8] px-3 py-4 text-center">
+                          <span className="inline-flex items-center gap-2 text-xs font-medium text-site-accent-dark">
+                            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-site-accent/25 border-t-site-accent" />
+                            Uploading…
+                          </span>
                         </div>
                       ) : resumeUrl && resume ? (
-                        <div style={S.resumeUploaded}>
-                          <div style={S.resumeFileName}>
-                            <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
-                            <span>{resume.name}</span>
+                        <div className="mt-1 flex flex-wrap items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/80 px-3 py-2">
+                          <div className="flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold text-emerald-800">
+                            <CheckCircle2 size={18} className="shrink-0" aria-hidden="true" />
+                            <span className="break-all">{resume.name}</span>
                           </div>
-                          <div style={S.resumeActions}>
+                          <div className="flex flex-wrap gap-2">
                             <button
                               type="button"
-                              style={S.resumeActionBtn('outline')}
                               onClick={triggerReplaceResume}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-site-accent-dark/15 bg-white px-3 py-1.5 text-xs font-bold text-site-primary transition hover:border-site-accent/40"
                             >
-                              <RefreshCw size={14} />
+                              <RefreshCw size={14} aria-hidden="true" />
                               Replace
                             </button>
                             <button
                               type="button"
-                              style={S.resumeActionBtn('danger')}
                               onClick={() => {
                                 clearResume();
                                 toast.success('Resume removed');
                               }}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 transition hover:bg-red-100"
                             >
-                              <X size={14} />
+                              <X size={14} aria-hidden="true" />
                               Remove
                             </button>
                           </div>
                         </div>
                       ) : (
                         <label
-                          className="careers-upload"
-                          style={S.uploadZone}
                           htmlFor="resume-upload"
+                          className="mt-1 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-site-accent-dark/20 bg-[#fffcf8] px-3 py-3.5 text-center transition hover:border-site-accent hover:bg-[#fffdf5]"
                         >
-                          <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
-                          <div style={S.uploadText}>Click to upload or drag & drop</div>
+                          <Upload size={18} className="mb-1 text-site-accent" aria-hidden="true" />
+                          <span className="text-xs text-site-muted">Click to upload resume</span>
                         </label>
                       )}
 
@@ -812,48 +704,34 @@ export default function Careers() {
                         id="resume-upload"
                         type="file"
                         accept=".pdf,.doc,.docx"
-                        style={{ display: 'none' }}
+                        className="sr-only"
                         disabled={resumeUploading}
                         onChange={handleResumeFileChange}
                       />
                     </div>
 
                     <motion.button
-                      className="submit-btn-inner"
                       type="submit"
                       disabled={submitting || resumeUploading || !resumeUrl}
-                      style={S.submitBtn}
+                      className={`${BTN.cta} !mt-1`}
                       whileTap={{ scale: 0.99 }}
                     >
                       {submitting ? (
-                        <div style={S.spinner} />
+                        <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                       ) : (
-                        <><Send size={16} /> Submit Application</>
+                        <>
+                          <Send size={16} aria-hidden="true" />
+                          Submit Application
+                        </>
                       )}
                     </motion.button>
                   </form>
-                </div>
+                </section>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* Small helper component */
-function Field({ label, icon, children }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <label style={{
-        fontSize: 10.5, fontWeight: 500, letterSpacing: '0.07em',
-        textTransform: 'uppercase', color: '#9a8f85',
-        display: 'flex', alignItems: 'center', gap: 4,
-      }}>
-        {icon}{label}
-      </label>
-      {children}
     </div>
   );
 }
