@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { fetchCourses } from '../hooks/useCourses';
 import { CourseGridSkeleton } from './PageLoader';
-import { PAGE_WRAP } from './consultation/tokens';
+import { COURSE_GRID, COURSE_GRID_ITEM, PAGE_WRAP } from './consultation/tokens';
 
 const FEATURES = [
   { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
@@ -179,9 +179,9 @@ export default function AstrologyCoursesSection() {
         {loading ? (
           <CourseGridSkeleton count={4} />
         ) : courses.length > 0 ? (
-          <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 min-[520px]:grid-cols-2 xl:grid-cols-4 xl:gap-4">
+          <ul className={COURSE_GRID}>
             {courses.map((course) => (
-              <li key={course.id} className="min-w-0">
+              <li key={course.id} className={COURSE_GRID_ITEM}>
                 <CourseCard course={course} />
               </li>
             ))}

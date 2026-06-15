@@ -14,6 +14,7 @@ import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
 import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
 import HomeConsultationCard from '../components/HomeConsultationCard';
 import HomeBannerCTAs from '../components/HomeBannerCTAs';
+import { COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
 
 const HOME_FEATURED_CONSULTATIONS = [
   {
@@ -1078,7 +1079,7 @@ function Home() {
               </div>
 
               {/* Center image — visible on mobile between card stacks */}
-              <div className="col-12 col-lg-4 order-2 text-center d-flex align-items-center justify-content-center my-1 my-lg-0" data-aos="zoom-in">
+              <div className="col-12 col-lg-4 order-2 service-center-col text-center d-flex align-items-center justify-content-center my-4 py-2 my-lg-0 py-lg-0" data-aos="zoom-in">
                 <div className="service-center-img position-relative w-100">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
                   <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
@@ -1316,16 +1317,13 @@ function Home() {
 
             <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
 
-            <div
-              className="grid grid-cols-1 gap-3 min-[520px]:grid-cols-2 xl:grid-cols-4 sm:gap-4"
-              data-aos="fade-up"
-            >
+            <ul className={COURSE_GRID} data-aos="fade-up">
               {HOME_FEATURED_CONSULTATIONS.map((item, idx) => (
-                <div key={item.link} data-aos="fade-up" data-aos-delay={idx * 100}>
+                <li key={item.link} className={COURSE_GRID_ITEM} data-aos="fade-up" data-aos-delay={idx * 100}>
                   <HomeConsultationCard item={item} onBook={handleOpenModal} />
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
             <div className="text-center mt-5" data-aos="fade-up">
               <Link
@@ -2928,6 +2926,18 @@ function Home() {
           width: 100%;
           max-width: 360px;
           margin: 0 auto;
+          overflow: hidden;
+          isolation: isolate;
+        }
+
+        .services-section .service-card {
+          position: relative;
+          z-index: 2;
+        }
+
+        .services-section .service-center-col {
+          position: relative;
+          z-index: 1;
         }
 
         .service-center-img .img-anim {
@@ -3001,12 +3011,53 @@ function Home() {
             font-size: 1.65rem !important;
           }
 
+          .services-section .service-center-col {
+            margin-top: 1.25rem !important;
+            margin-bottom: 1.25rem !important;
+          }
+
+          .service-center-img {
+            min-height: 0;
+            height: clamp(200px, 52vw, 260px);
+            max-width: min(280px, 88vw);
+          }
+
+          .service-center-img .img-anim {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 260px;
+            z-index: 1;
+          }
+
+          .service-center-img .img-anim img {
+            max-height: 240px;
+            width: auto;
+            max-width: 100%;
+            margin-inline: auto;
+          }
+
+          .service-center-img .center-overlay {
+            width: 52%;
+            max-width: 140px;
+          }
+
           .service-card {
             padding: 0.9rem 0.9rem 0.85rem;
           }
 
           .service-card h4 {
             font-size: 0.9375rem;
+          }
+        }
+
+        @media (max-width: 991px) {
+          .banner-section .banner-graphic-col,
+          .banner-section .rotating-zodiac-mandala,
+          .banner-section .zodiac-hero-graphic {
+            display: none !important;
           }
         }
 
