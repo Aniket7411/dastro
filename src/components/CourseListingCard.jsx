@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Clock, Radio, User, Video } from 'lucide-react';
-import { TYPE } from './consultation/tokens';
 
 function formatPrice(price) {
   if (price == null || price === '') return null;
@@ -13,8 +12,8 @@ function formatPrice(price) {
 function MetaChip({ icon: Icon, children }) {
   if (!children) return null;
   return (
-    <span className="inline-flex max-w-full items-center gap-1 truncate rounded-md bg-site-bg px-1.5 py-0.5 text-[10px] font-medium text-site-muted">
-      <Icon size={9} className="shrink-0 text-site-accent" aria-hidden />
+    <span className="inline-flex max-w-full items-center gap-0.5 truncate rounded-md bg-site-bg px-1 py-0.5 text-[9px] font-medium text-site-muted sm:gap-1 sm:px-1.5 sm:text-[10px]">
+      <Icon size={8} className="shrink-0 text-site-accent sm:size-[9px]" aria-hidden />
       <span className="truncate">{children}</span>
     </span>
   );
@@ -55,46 +54,47 @@ export default function CourseListingCard({ course }) {
         )}
 
         <span
-          className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm ${
+          className={`absolute left-1.5 top-1.5 inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white shadow-sm sm:left-2 sm:top-2 sm:gap-1 sm:px-2 sm:text-[10px] ${
             isLive ? 'bg-site-primary' : 'bg-site-accent-dark'
           }`}
         >
-          {isLive ? <Radio size={9} aria-hidden /> : <Video size={9} aria-hidden />}
-          {isLive ? 'Live' : 'Recorded'}
+          {isLive ? <Radio size={8} aria-hidden className="sm:size-[9px]" /> : <Video size={8} aria-hidden className="sm:size-[9px]" />}
+          <span className="sm:hidden">{isLive ? 'Live' : 'Rec'}</span>
+          <span className="hidden sm:inline">{isLive ? 'Live' : 'Recorded'}</span>
         </span>
 
         {course.duration ? (
-          <span className="absolute bottom-2 right-2 inline-flex items-center gap-0.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
-            <Clock size={9} aria-hidden />
+          <span className="absolute bottom-1.5 right-1.5 inline-flex items-center gap-0.5 rounded-full bg-black/55 px-1 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm sm:bottom-2 sm:right-2 sm:px-1.5 sm:text-[10px]">
+            <Clock size={8} aria-hidden className="sm:size-[9px]" />
             {course.duration}
           </span>
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col p-3">
+      <div className="flex flex-1 flex-col p-2 sm:p-3">
         {course.category ? (
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-site-accent-dark">
+          <p className="mb-0.5 truncate text-[9px] font-bold uppercase tracking-wider text-site-accent-dark sm:mb-1 sm:text-[10px]">
             {course.category}
           </p>
         ) : null}
 
         <Link
           to={detailPath}
-          className="mb-1 line-clamp-2 font-body text-sm font-bold leading-snug text-site-primary no-underline transition group-hover:text-site-accent-dark"
+          className="mb-0.5 line-clamp-2 font-body text-xs font-bold leading-snug text-site-primary no-underline transition group-hover:text-site-accent-dark sm:mb-1 sm:text-sm"
         >
           {course.title}
         </Link>
 
         {course.shortDesc ? (
-          <p className="mb-2 line-clamp-2 flex-1 text-xs leading-relaxed text-site-muted">
+          <p className="mb-1.5 line-clamp-2 flex-1 text-[10px] leading-snug text-site-muted sm:mb-2 sm:text-xs sm:leading-relaxed">
             {course.shortDesc}
           </p>
         ) : (
-          <div className="mb-2 flex-1" />
+          <div className="mb-1.5 flex-1 sm:mb-2" />
         )}
 
         {(course.instructor || (!isLive && course.modulesCount > 0) || (isLive && course.schedule)) && (
-          <div className="mb-2.5 flex flex-wrap gap-1">
+          <div className="mb-2 hidden flex-wrap gap-1 sm:flex sm:mb-2.5">
             {course.instructor ? <MetaChip icon={User}>{course.instructor}</MetaChip> : null}
             {!isLive && course.modulesCount > 0 ? (
               <MetaChip icon={BookOpen}>{course.modulesCount} modules</MetaChip>
@@ -103,32 +103,33 @@ export default function CourseListingCard({ course }) {
           </div>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-2 border-t border-site-accent-dark/10 pt-2.5">
+        <div className="mt-auto flex flex-col gap-1.5 border-t border-site-accent-dark/10 pt-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:pt-2.5">
           <div className="min-w-0">
             {priceLabel ? (
               <div className="leading-none">
                 {isLive ? (
-                  <p className="mb-0.5 font-body text-[10px] font-medium tracking-wide text-site-soft">
+                  <p className="mb-0.5 hidden font-body text-[10px] font-medium tracking-wide text-site-soft sm:block">
                     From
                   </p>
                 ) : null}
-                <p className={`${TYPE.priceCard}`}>
+                <p className="font-price text-sm font-bold leading-none tracking-tight text-site-primary tabular-nums sm:text-[1.0625rem]">
                   ₹{priceLabel}
                 </p>
               </div>
             ) : (
-              <p className="font-body text-xs font-semibold text-site-primary">
-                {isLive ? 'Enquire for fees' : 'Free preview'}
+              <p className="font-body text-[10px] font-semibold text-site-primary sm:text-xs">
+                {isLive ? 'Enquire' : 'Preview'}
               </p>
             )}
           </div>
 
           <Link
             to={detailPath}
-            className="inline-flex shrink-0 items-center gap-1 rounded-full bg-site-primary px-3 py-1.5 text-[11px] font-bold text-white no-underline transition hover:bg-site-accent-dark"
+            className="inline-flex w-full shrink-0 items-center justify-center gap-0.5 rounded-full bg-site-primary px-2 py-1 text-[10px] font-bold text-white no-underline transition hover:bg-site-accent-dark sm:w-auto sm:gap-1 sm:px-3 sm:py-1.5 sm:text-[11px]"
           >
-            {ctaLabel}
-            <ArrowRight size={11} strokeWidth={2.5} aria-hidden />
+            <span className="sm:hidden">{isLive ? 'Ask' : 'View'}</span>
+            <span className="hidden sm:inline">{ctaLabel}</span>
+            <ArrowRight size={10} strokeWidth={2.5} aria-hidden className="sm:size-[11px]" />
           </Link>
         </div>
       </div>

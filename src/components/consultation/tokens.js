@@ -2,6 +2,12 @@
 
 export const PAGE_WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 
+/** Course listing grid: 2 columns on mobile with edge padding via PAGE_WRAP parent */
+export const COURSE_GRID =
+  'm-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-4 lg:gap-4';
+
+export const COURSE_GRID_ITEM = 'min-w-0';
+
 export const PAGE = 'min-h-screen w-full bg-site-bg font-body text-site-text antialiased';
 
 export const TYPE = {
@@ -36,22 +42,22 @@ export const BTN = {
 };
 
 export const TAB =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-site-accent-dark/12 bg-site-bg px-2.5 py-1.5 font-body text-xs font-semibold text-site-muted transition hover:border-site-accent/40 hover:bg-site-surface hover:text-site-primary sm:px-3 sm:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap !rounded-full border border-site-accent-dark/12 bg-site-bg px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/40 hover:bg-site-surface hover:text-site-primary sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const TAB_ACTIVE =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-site-primary bg-site-primary px-2.5 py-1.5 font-body text-xs font-semibold text-white shadow-sm transition sm:px-3 sm:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap !rounded-full border border-site-primary bg-site-primary px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-white shadow-sm antialiased transition sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const TAB_COUNT =
-  'inline-flex min-w-[1rem] items-center justify-center rounded bg-site-accent-dark/10 px-1 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-site-accent-dark';
+  'inline-flex min-w-[1rem] items-center justify-center rounded-full bg-site-accent-dark/10 px-1.5 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-site-accent-dark';
 
 export const TAB_COUNT_ACTIVE =
-  'inline-flex min-w-[1rem] items-center justify-center rounded bg-white/20 px-1 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-white/95';
+  'inline-flex min-w-[1rem] items-center justify-center rounded-full bg-white/20 px-1.5 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-white/95';
 
 export const CHIP =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-lg border border-site-accent-dark/15 bg-site-bg px-2.5 py-1.5 font-body text-[0.6875rem] font-semibold text-site-muted transition hover:border-site-accent/45 hover:bg-site-surface hover:text-site-primary sm:px-3 sm:py-2 sm:text-xs';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark/15 bg-site-bg px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/45 hover:bg-site-surface hover:text-site-primary sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const CHIP_ACTIVE =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-lg border border-site-accent-dark bg-site-accent-dark px-2.5 py-1.5 font-body text-[0.6875rem] font-semibold text-white shadow-sm sm:px-3 sm:py-2 sm:text-xs';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark bg-site-accent-dark px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-white shadow-sm antialiased sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const CHIP_GHOST =
   'm-0 cursor-pointer border-0 bg-transparent p-0 font-body text-xs font-bold text-site-accent-dark underline-offset-2 hover:underline';
@@ -60,7 +66,7 @@ export const CARD =
   'group m-0 flex h-full flex-col overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_1px_8px_rgba(74,44,42,0.05)] transition duration-200 hover:border-site-accent/25 hover:shadow-[0_4px_16px_rgba(74,44,42,0.08)]';
 
 export const FILTER_BAR =
-  'sticky top-site-header z-[1010] border-b border-site-accent-dark/10 bg-site-bg pt-2 pb-3 shadow-[0_4px_14px_rgba(139,74,30,0.08)]';
+  'sticky top-site-header-sticky z-[1010] border-b border-site-accent-dark/10 bg-site-bg pb-2 shadow-[0_4px_14px_rgba(139,74,30,0.08)] sm:pb-3';
 
 /** Responsive card row: 1 → 2 (480px+) → 4 (1024px+) */
 export const CARD_FLEX_LIST = 'm-0 flex list-none flex-wrap gap-3 p-0 sm:gap-4';
@@ -69,4 +75,4 @@ export const CARD_FLEX_ITEM =
   'flex w-full min-w-0 min-[480px]:w-[calc(50%-0.5rem)] min-[480px]:max-w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] lg:max-w-[calc(25%-0.75rem)]';
 
 export const SELECT =
-  'm-0 cursor-pointer appearance-none rounded-lg border border-site-accent-dark/15 bg-site-bg py-1.5 pl-2.5 pr-8 font-body text-[0.6875rem] font-semibold text-site-muted outline-none transition hover:border-site-accent/40 focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:py-2 sm:pl-3 sm:text-xs';
+  'm-0 cursor-pointer appearance-none !rounded-full border border-site-accent-dark/15 bg-site-bg py-1.5 pl-3 pr-8 font-body text-[0.8125rem] font-semibold leading-none text-site-muted antialiased outline-none transition hover:border-site-accent/40 focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:py-2 sm:pl-3.5 sm:text-xs';

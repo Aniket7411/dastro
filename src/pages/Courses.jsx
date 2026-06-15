@@ -6,7 +6,7 @@ import CourseHero from '../components/courses/CourseHero';
 import CourseFilterBar from '../components/courses/CourseFilterBar';
 import CourseEmptyState from '../components/courses/CourseEmptyState';
 import { useCourses, useCourseCategories } from '../hooks/useCourses';
-import { PAGE_WRAP, CARD_FLEX_LIST, CARD_FLEX_ITEM } from '../components/consultation/tokens';
+import { PAGE_WRAP, COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
 import toast from '@/utils/toast';
 
 const PAGE_META = {
@@ -137,9 +137,9 @@ function Courses({ mode = 'all' }) {
         {loading ? (
           <CourseGridSkeleton count={mode === 'all' ? 8 : 6} />
         ) : filteredCourses.length > 0 ? (
-          <ul className={CARD_FLEX_LIST}>
+          <ul className={COURSE_GRID}>
             {filteredCourses.map((course) => (
-              <li key={course.id} className={CARD_FLEX_ITEM}>
+              <li key={course.id} className={COURSE_GRID_ITEM}>
                 <CourseListingCard course={course} />
               </li>
             ))}

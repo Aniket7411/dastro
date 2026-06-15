@@ -160,7 +160,7 @@ function AdvancedFiltersSheet({
 function ResultsCount({ total, loading, hasActiveFilters }) {
   if (loading) {
     return (
-      <span className="inline-flex items-center gap-1.5 font-body text-[0.6875rem] font-medium text-site-muted">
+      <span className="inline-flex items-center gap-1.5 font-body text-[0.8125rem] font-medium leading-none text-site-muted antialiased">
         <span className="h-2.5 w-2.5 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent-dark" />
         Loading…
       </span>
@@ -170,7 +170,7 @@ function ResultsCount({ total, loading, hasActiveFilters }) {
   const label = total === 1 ? 'consultation' : 'consultations';
 
   return (
-    <span className="font-body text-[0.6875rem] font-medium text-site-muted">
+    <span className="font-body text-[0.8125rem] font-medium leading-none text-site-muted antialiased">
       <strong className="font-bold tabular-nums text-site-primary">{total}</strong>
       {' '}
       {hasActiveFilters ? `${label} matched` : `${label} available`}
@@ -214,7 +214,7 @@ export function ConsultationFilterBar({
       <div className={FILTER_BAR}>
         <div className={PAGE_WRAP}>
           <div className="flex flex-col gap-2.5 py-2.5 sm:gap-3 lg:flex-row lg:items-center lg:justify-between lg:py-3">
-            <div className={`flex min-w-0 items-center gap-1.5 overflow-x-auto sm:gap-2 ${SCROLL_HIDE}`}>
+            <div className={`flex min-w-0 flex-wrap items-center gap-1.5 sm:flex-nowrap sm:gap-2 sm:overflow-x-auto ${SCROLL_HIDE}`}>
               <button type="button" onClick={onClearCategories} className={tabClass(allCategoriesActive)}>
                 {!loading && total > 0 && (
                   <span className={allCategoriesActive ? TAB_COUNT_ACTIVE : TAB_COUNT}>{total}</span>
@@ -232,12 +232,12 @@ export function ConsultationFilterBar({
               })}
               {!filterMeta?.categories?.length &&
                 ['w-12', 'w-24', 'w-20', 'w-28', 'w-16'].map((w, i) => (
-                  <div key={i} className={`${w} h-8 shrink-0 animate-pulse rounded-lg bg-site-accent-dark/10`} />
+                  <div key={i} className={`${w} h-8 shrink-0 animate-pulse rounded-full bg-site-accent-dark/10`} />
                 ))}
             </div>
 
-            <div className="flex shrink-0 items-center justify-between gap-2 sm:justify-end sm:gap-3">
-              <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:justify-end sm:gap-3">
+              <div className="flex min-w-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2.5">
                 <button type="button" onClick={() => setSheetOpen(true)} className={chipClass(advancedCount > 0)}>
                   <SlidersHorizontal size={12} aria-hidden />
                   Filters

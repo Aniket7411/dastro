@@ -57,18 +57,18 @@ export function InlineLoader({ size = 24 }) {
 }
 
 /* ── Skeleton grid for course cards ── */
-import { CARD_FLEX_LIST, CARD_FLEX_ITEM } from './consultation/tokens';
+import { COURSE_GRID, COURSE_GRID_ITEM } from './consultation/tokens';
 
 export function CourseGridSkeleton({ count = 6 }) {
   return (
-    <ul className={CARD_FLEX_LIST}>
+    <ul className={COURSE_GRID}>
       {Array.from({ length: count }).map((_, i) => (
         <li
           key={i}
-          className={`${CARD_FLEX_ITEM} animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm`}
+          className={`${COURSE_GRID_ITEM} animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm`}
         >
           <div className="aspect-[2/1] bg-site-accent-dark/10" />
-          <div className="space-y-2 p-3">
+          <div className="space-y-1.5 p-2 sm:space-y-2 sm:p-3">
             <div className="h-2 w-14 rounded bg-site-accent-dark/10" />
             <div className="h-4 w-4/5 rounded bg-site-accent-dark/10" />
             <div className="h-2.5 w-full rounded bg-site-accent-dark/8" />

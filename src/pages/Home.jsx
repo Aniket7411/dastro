@@ -3617,7 +3617,8 @@ function Home() {
         .consultation-home-section {
           background: #FFFBF5;
           position: relative;
-          overflow: hidden;
+          overflow-x: clip;
+          overflow-y: visible;
           background: radial-gradient(circle at 10% 10%, rgba(200, 131, 42, 0.05) 0%, transparent 40%),
                       radial-gradient(circle at 90% 90%, rgba(139, 74, 30, 0.05) 0%, transparent 40%);
         }
