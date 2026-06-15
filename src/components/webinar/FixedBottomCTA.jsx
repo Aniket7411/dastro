@@ -181,7 +181,7 @@ function OfferBadge({ compact }) {
 
 function PriceBlock({ compact }) {
   return (
-    <div className={`flex items-baseline gap-1.5 ${compact ? 'mt-1' : 'gap-2 sm:gap-2.5'}`}>
+    <div className={`flex items-center justify-center gap-1.5 ${compact ? '' : 'gap-2 sm:gap-2.5'}`}>
       <span
         className={`!m-0 font-body font-semibold uppercase !text-white ${
           compact ? 'text-xs tracking-wide' : 'text-sm tracking-wide sm:text-base'
@@ -247,40 +247,56 @@ function useIsMobile(breakpoint = 640) {
   return mobile;
 }
 
+function OfferPriceGroup({ compact }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-1 text-center">
+      <OfferBadge compact={compact} />
+      <PriceBlock compact={compact} />
+    </div>
+  );
+}
+
 export default function FixedBottomCTA({ onJoinNow }) {
   const isMobile = useIsMobile(640);
 
   return (
     <div
-      className="wb-fixed-cta wb-fixed-cta__bar fixed bottom-0 left-0 z-[9999] w-full overflow-hidden rounded-t-2xl border border-b-0 border-orange-500/20 bg-[#0c0c0c]/95 px-3 py-2 backdrop-blur-md sm:rounded-t-[1.125rem] sm:px-6 sm:py-2.5 lg:px-10"
+      className="wb-fixed-cta wb-fixed-cta__bar fixed bottom-0 left-0 z-[9999] w-full overflow-hidden rounded-t-2xl border border-b-0 border-orange-500/20 bg-[#0c0c0c]/95 px-3 py-2 backdrop-blur-md sm:rounded-t-[1.125rem] sm:px-4 sm:py-2.5"
       style={{
         backgroundImage:
           'radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.06) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.04) 0%, transparent 55%)',
       }}
     >
-      {isMobile ? (
-        <div className="relative z-[1] flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1">
-              <OfferBadge compact />
-              <PriceBlock compact />
+      <div className="relative z-[1] mx-auto w-full justify-around">
+        {isMobile ? (
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex w-full items-center justify-between gap-2">
+              <div className="flex min-w-0 flex-1 items-center justify-center">
+                <OfferPriceGroup compact />
+              </div>
+              <Divider />
+              <div className="flex min-w-0 flex-1 items-center justify-center">
+                <DigitalTimer />
+              </div>
             </div>
-            <Divider />
-            <div className="flex flex-1 items-center justify-center">
-              <DigitalTimer />
+            <div className="flex w-full items-center justify-center">
+              <EnrollButton onClick={onJoinNow} fullWidth />
             </div>
           </div>
-          <EnrollButton onClick={onJoinNow} fullWidth />
-        </div>
-      ) : (
-        <div className="relative z-[1] mx-auto flex max-w-5xl items-center justify-center gap-5 lg:gap-8">
-          <OfferBadge />
-          <PriceBlock />
-          <Divider />
-          <DigitalTimer />
-          <EnrollButton onClick={onJoinNow} />
-        </div>
-      )}
+        ) : (
+          <div className="flex w-full items-center justify-between gap-4 lg:gap-6">
+            <div className="flex shrink-0 items-center justify-center">
+              <OfferPriceGroup />
+            </div>
+            <div className="flex shrink-0 items-center justify-center">
+              <DigitalTimer />
+            </div>
+            <div className="flex shrink-0 items-center justify-center">
+              <EnrollButton onClick={onJoinNow} />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

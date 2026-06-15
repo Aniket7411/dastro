@@ -20,6 +20,15 @@
   font-family: inherit;
 }
 
+.tw-page .wb-hero-title {
+  display: block !important;
+  width: 100% !important;
+  max-width: 48rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
 .tw-page :where(a) {
   color: inherit;
   text-decoration: none;

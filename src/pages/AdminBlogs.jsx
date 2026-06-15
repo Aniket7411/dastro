@@ -8,7 +8,7 @@ function AdminBlogs() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentBlog, setCurrentBlog] = useState({
-    title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false
+    title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: true
   });
 
   const fetchBlogs = async () => {
@@ -45,6 +45,12 @@ function AdminBlogs() {
     const url = currentBlog._id 
       ? `${API_BASE}/api/blogs/${currentBlog._id}` 
       : `${API_BASE}/api/blogs`;
+    const payload = {
+      ...currentBlog,
+      tags: typeof currentBlog.tags === 'string' ? currentBlog.tags.split(',').map(t => t.trim()).filter(Boolean) : currentBlog.tags,
+      // "Publish Article" should go live unless admin explicitly left Draft toggled off for edits
+      isPublished: currentBlog._id ? currentBlog.isPublished : true,
+    };
     try {
       const token = localStorage.getItem('adminToken');
       const res = await fetch(url, {
@@ -53,16 +59,17 @@ function AdminBlogs() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          ...currentBlog,
-          tags: typeof currentBlog.tags === 'string' ? currentBlog.tags.split(',').map(t => t.trim()) : currentBlog.tags
-        })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (data.success) {
-        toast.success(currentBlog._id ? 'Article Updated' : 'Article Published');
+        toast.success(
+          currentBlog._id
+            ? (payload.isPublished ? 'Article updated and live' : 'Draft updated')
+            : 'Article published'
+        );
         setIsEditing(false);
-        setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false });
+        setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: true });
         fetchBlogs();
       } else {
         toast.error(data.message);
@@ -120,7 +127,7 @@ function AdminBlogs() {
         </div>
         <button 
           className="lf-btn py-2 px-4 m-0" 
-          onClick={() => { setIsEditing(!isEditing); if(!isEditing) setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false }); }}
+          onClick={() => { setIsEditing(!isEditing); if(!isEditing) setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: true }); }}
         >
           {isEditing ? (
             <><i className="fas fa-arrow-left me-2"></i> Back to Catalog</>
@@ -164,6 +171,7 @@ function AdminBlogs() {
                 />
                 <span className="fw-bold small">{currentBlog.isPublished ? 'Published' : 'Draft'}</span>
               </label>
+              <span className="text-muted small d-none d-md-inline">Drafts are hidden on the public blog page</span>
             </div>
           </div>
           

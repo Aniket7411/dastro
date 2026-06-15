@@ -20,9 +20,18 @@ function Blog() {
     setIsLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/blogs`);
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok) {
+        toast.error('Failed to fetch blogs');
+        return;
+      }
+      if (!contentType.includes('application/json')) {
+        toast.error('Could not load articles — server returned an invalid response');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
-        setBlogs(data.blogs);
+        setBlogs(Array.isArray(data.blogs) ? data.blogs : []);
       } else {
         toast.error(data.message || 'Failed to fetch blogs');
       }
@@ -34,10 +43,14 @@ function Blog() {
     }
   };
 
-  const filteredPosts = blogs.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || post.category.toLowerCase().includes(selectedCategory.toLowerCase());
+  const filteredPosts = blogs.filter((post) => {
+    const query = searchQuery.trim().toLowerCase();
+    const title = (post.title || '').toLowerCase();
+    const excerpt = (post.excerpt || '').toLowerCase();
+    const category = (post.category || '').toLowerCase();
+    const matchesSearch = !query || title.includes(query) || excerpt.includes(query);
+    const matchesCategory =
+      selectedCategory === 'All' || category.includes(selectedCategory.toLowerCase());
     return matchesSearch && matchesCategory;
   });
 
@@ -152,9 +165,18 @@ function Blog() {
                 ) : (
                   <div className="no-results-blog text-center py-5" data-aos="zoom-in">
                     <i className="fas fa-search-minus mb-3" style={{fontSize: '4rem', color: '#FF8C42', opacity: 0.5}}></i>
-                    <h3>No articles found for "{searchQuery}"</h3>
-                    <p className="text-muted">Try searching with different keywords or browse our categories.</p>
-                    <button className="btn mystic-btn-outline mt-3" onClick={() => setSearchQuery('')}>Clear Search</button>
+                    {blogs.length === 0 && !searchQuery ? (
+                      <>
+                        <h3>No published articles yet</h3>
+                        <p className="text-muted">New posts appear here once they are published from the admin dashboard (not saved as drafts).</p>
+                      </>
+                    ) : (
+                      <>
+                        <h3>No articles found for &ldquo;{searchQuery}&rdquo;</h3>
+                        <p className="text-muted">Try searching with different keywords or browse our categories.</p>
+                        <button className="btn mystic-btn-outline mt-3" onClick={() => setSearchQuery('')}>Clear Search</button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -195,14 +217,18 @@ function Blog() {
                 <div className="sidebar-card mb-4" data-aos="fade-left" data-aos-delay="200">
                   <h4 className="sidebar-title">🕒 Recent Posts</h4>
                   <div className="recent-list">
-                    {recentPosts.map((post, idx) => (
-                      <a href="#" key={idx} className="recent-item">
+                    {recentPosts.map((post) => (
+                      <a href={`/blog/${post.slug}`} key={post._id || post.slug} className="recent-item">
                         <div className="recent-img">
-                          <img src={post.image} alt={post.title} />
+                          <img src={post.image || 'https://via.placeholder.com/80'} alt={post.title} />
                         </div>
                         <div className="recent-info">
                           <h6 className="recent-title">{post.title}</h6>
-                          <span className="recent-date">{post.date}</span>
+                          <span className="recent-date">
+                            {post.createdAt
+                              ? new Date(post.createdAt).toLocaleDateString()
+                              : ''}
+                          </span>
                         </div>
                       </a>
                     ))}

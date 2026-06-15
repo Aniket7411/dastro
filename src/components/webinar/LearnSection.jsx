@@ -4,8 +4,10 @@ import {
   WB_CTA,
   WB_SECTION,
   WB_TITLE_CENTER,
-  WB_STACK,
   WB_CTA_ROW,
+  WB_LEARN_GRID,
+  WB_LEARN_CARD,
+  WB_LEARN_ICON,
   TYPE,
 } from './tokens';
 
@@ -59,18 +61,14 @@ function LearnSection({ onJoinNow }) {
         <h2 className={WB_TITLE_CENTER}>
           What <span className={WB_HIGHLIGHT}>You Will Learn</span> In 2 Days
         </h2>
-        <div className={`${WB_STACK} grid gap-4 sm:grid-cols-2 sm:gap-5`}>
+        <div className={WB_LEARN_GRID}>
           {learningPoints.map((item) => (
-            <div
-              key={item.title}
-              className="flex gap-4 rounded-xl border border-violet-100 bg-[#FDF4FF] p-5 sm:p-6"
-              data-aos="fade-up"
-            >
-              <div className="shrink-0 text-2xl text-[#3B2261] opacity-80">
+            <div key={item.title} className={WB_LEARN_CARD} data-aos="fade-up">
+              <div className={WB_LEARN_ICON}>
                 <i className={`fas ${item.icon}`} aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <h4 className={`${TYPE.h3} mb-1.5`}>{item.title}</h4>
+                <h4 className={`${TYPE.h3} !mb-1`}>{item.title}</h4>
                 <p className={TYPE.bodySm}>{item.desc}</p>
               </div>
             </div>

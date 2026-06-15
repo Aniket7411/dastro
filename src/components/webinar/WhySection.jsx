@@ -2,10 +2,14 @@ import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_CTA,
-  WB_SECTION,
-  WB_TITLE_LG,
-  WB_STACK,
-  WB_CTA_ROW,
+  WB_SECTION_WHY,
+  WB_SECTION_INTRO,
+  WB_TITLE_CENTER,
+  WB_WHY_GRID,
+  WB_WHY_CARD,
+  WB_WHY_ICON,
+  WB_WHY_FOOTER,
+  WB_BRIDGE_LINE,
   TYPE,
 } from './tokens';
 
@@ -19,29 +23,28 @@ function WhySection({ onJoinNow }) {
   ];
 
   return (
-    <section className={`${WB_SECTION} bg-white`}>
+    <section className={`${WB_SECTION_WHY} bg-white`}>
       <div className={WB_WRAP}>
-        <h2 className={`${WB_TITLE_LG} mb-6 sm:mb-8`} data-aos="fade-up">
-          Kabhi socha hai{' '}
-          <span className={WB_HIGHLIGHT}>&ldquo;Why does this keep happening to me?&rdquo;</span>
-        </h2>
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4" data-aos="fade-up">
+        <div className={WB_SECTION_INTRO} data-aos="fade-up">
+          <h2 className={WB_TITLE_CENTER}>
+            Kabhi socha hai{' '}
+            <span className={WB_HIGHLIGHT}>&ldquo;Why does this keep happening to me?&rdquo;</span>
+          </h2>
+        </div>
+
+        <div className={WB_WHY_GRID} data-aos="fade-up">
           {struggles.map((text) => (
-            <div
-              key={text}
-              className="flex w-full items-center gap-3 rounded-xl border border-violet-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#EE6662] hover:shadow-md sm:w-[calc(50%-0.5rem)] sm:gap-4 sm:p-5"
-            >
-              <span className="shrink-0 text-lg text-[#EE6662] sm:text-xl">
+            <div key={text} className={WB_WHY_CARD}>
+              <span className={WB_WHY_ICON}>
                 <i className="fas fa-question-circle" aria-hidden="true" />
               </span>
               <p className={TYPE.lead}>{text}</p>
             </div>
           ))}
         </div>
-        <p className={`${TYPE.leadBold} ${WB_STACK} text-center`}>
-          The answer lies in your kundli 👇
-        </p>
-        <div className={WB_CTA_ROW}>
+
+        <div className={WB_WHY_FOOTER} data-aos="fade-up">
+          <p className={WB_BRIDGE_LINE}>The answer lies in your kundli 👇</p>
           <button type="button" onClick={onJoinNow} className={WB_CTA}>
             Uncover Life&apos;s Secrets – Join Now
           </button>

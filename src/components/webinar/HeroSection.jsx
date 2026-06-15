@@ -35,11 +35,13 @@ function HeroSection({ onJoinNow }) {
           </div>
         </div>
 
-        <h1 className={WB_TITLE_HERO} data-aos="fade-up">
-          Remove <span className={WB_HIGHLIGHT}>Uncertainty</span> from Your{' '}
-          <span className={WB_HIGHLIGHT}>Career, Relationships and Finances</span> using{' '}
-          <span className={WB_PURPLE}>Astrology</span>
-        </h1>
+        <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
+          <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
+            Remove <span className={WB_HIGHLIGHT}>Uncertainty</span> from Your{' '}
+            <span className={WB_HIGHLIGHT}>Career, Relationships and Finances</span> using{' '}
+            <span className={WB_PURPLE}>Astrology</span>
+          </h1>
+        </div>
 
         <div className={`${WB_STACK} grid items-start gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8`}>
           <div
