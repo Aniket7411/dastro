@@ -11,6 +11,11 @@ export const SettingsProvider = ({ children }) => {
   const fetchSettings = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/settings`);
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok || !contentType.includes('application/json')) {
+        console.warn('Settings API unavailable; using defaults.');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setSettings(data.settings);
