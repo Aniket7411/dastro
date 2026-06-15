@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 import { isValidEmail } from '../utils/validation';
-import { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
+import LoginBrandMark, { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
 
 const adminInputClass =
   'box-border min-h-11 w-full rounded-[0.625rem] border border-[#ead8c6] bg-white py-2.5 pl-9 pr-9 text-sm text-site-primary outline-none focus:border-site-accent focus:ring-[3px] focus:ring-site-accent/20';
@@ -79,6 +79,15 @@ function AdminLogin() {
         className={LOGIN_CARD_CLASS}
       >
         <div className={LOGIN_PANEL_CLASS}>
+          <div className="mb-8">
+            <LoginBrandMark badge="Admin Portal" />
+            <h1 className="mt-3 font-heading text-[1.65rem] font-bold leading-tight text-site-primary">
+              Welcome back, Admin!
+            </h1>
+            <p className="mt-1.5 text-sm text-site-muted">
+              Securely sign in to manage the platform.
+            </p>
+          </div>
           <form className="flex flex-col gap-4" onSubmit={handleLogin} aria-label="Admin sign in">
             <div className="flex flex-col gap-1.5">
               <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-email">

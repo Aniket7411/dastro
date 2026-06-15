@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 import { isValidEmail, getPasswordValidationError } from '../utils/validation';
-import { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
+import LoginBrandMark, { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
 
 const inputClass =
   'box-border min-h-11 w-full rounded-[0.625rem] border border-[#ead8c6] bg-white py-2.5 pl-9 pr-9 text-sm text-site-primary outline-none focus:border-site-accent focus:ring-[3px] focus:ring-site-accent/20';
@@ -222,6 +222,15 @@ function StudentLogin() {
         <div className={LOGIN_PANEL_CLASS}>
           {viewState === 'LOGIN' && (
             <>
+              <div className="mb-8">
+                <LoginBrandMark badge="Student Portal" />
+                <h1 className="mt-3 font-heading text-[1.65rem] font-bold leading-tight text-site-primary">
+                  Welcome back!
+                </h1>
+                <p className="mt-1.5 text-sm text-site-muted">
+                  Sign in to access your guided lessons and materials.
+                </p>
+              </div>
               <form className="flex flex-col gap-4" onSubmit={handleLogin} aria-label="Student sign in">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="login-email">
@@ -274,9 +283,15 @@ function StudentLogin() {
 
           {viewState === 'FORGOT' && (
             <>
-              <h1 className="mb-5 font-heading text-xl font-bold text-site-primary sm:text-2xl">
-                Reset password
-              </h1>
+              <div className="mb-6">
+                <LoginBrandMark badge="Recovery" />
+                <h1 className="mt-3 font-heading text-xl font-bold text-site-primary sm:text-2xl">
+                  Reset password
+                </h1>
+                <p className="mt-1 text-sm text-site-muted">
+                  Enter your registered email to receive an OTP.
+                </p>
+              </div>
 
               <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
                 <div className="flex flex-col gap-1.5">
@@ -317,13 +332,16 @@ function StudentLogin() {
 
           {viewState === 'RESET' && (
             <>
-              <h1 className="mb-2 font-heading text-xl font-bold text-site-primary sm:text-2xl">
-                Set new password
-              </h1>
-              <p className="mb-5 text-sm text-site-muted">
-                Enter the 6-digit OTP sent to{' '}
-                <span className="font-semibold text-site-primary">{email}</span>
-              </p>
+              <div className="mb-6">
+                <LoginBrandMark badge="Secure Reset" />
+                <h1 className="mt-3 font-heading text-xl font-bold text-site-primary sm:text-2xl">
+                  Set new password
+                </h1>
+                <p className="mt-1 text-sm text-site-muted">
+                  Enter the 6-digit OTP sent to{' '}
+                  <span className="font-semibold text-site-primary">{email}</span>
+                </p>
+              </div>
 
               <form className="flex flex-col gap-4" onSubmit={handleResetPassword}>
                 <div className="flex flex-col gap-1.5">
