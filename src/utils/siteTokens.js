@@ -4,6 +4,16 @@ export const PAGE_WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 
 export const SITE_PAGE = 'min-h-screen w-full bg-site-bg font-body text-site-text';
 
+/** Use on new/migrated pages — pairs with <TailwindPage> and tw-page.css Bootstrap isolation */
+export const TAILWIND_PAGE =
+  'tw-page min-h-screen w-full overflow-x-hidden bg-site-bg font-body text-site-text antialiased';
+
+/** Standard form field wrappers (styles live in src/styles/tw-page.css) */
+export const TW_FIELD = 'tw-field';
+export const TW_FIELD_LABEL = 'tw-field__label';
+export const TW_FIELD_INPUT = 'tw-field__input';
+export const TW_FIELD_INPUT_FILTER = 'tw-field__input tw-field__input--filter';
+
 export const SITE_SHELL =
   'min-h-screen w-full overflow-x-clip bg-site-bg font-body text-site-text';
 

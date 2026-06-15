@@ -13,15 +13,16 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import PageBanner from '../components/PageBanner';
 import { PAGE_BANNERS } from '../data/pageBanners';
 import SEO from '../components/SEO';
-import { BANNER_CONTENT_GAP, SITE_CONTAINER, SITE_PAGE } from '../utils/siteTokens';
+import TailwindPage from '../components/layout/TailwindPage';
+import {
+  BANNER_CONTENT_GAP,
+  SITE_CONTAINER,
+  TW_FIELD,
+  TW_FIELD_INPUT,
+  TW_FIELD_INPUT_FILTER,
+  TW_FIELD_LABEL,
+} from '../utils/siteTokens';
 import { BTN } from '../components/consultation/tokens';
-import { MODAL_INPUT, MODAL_LABEL } from '../components/modal/modalTypography';
-
-const INPUT = `${MODAL_INPUT} !mb-0`;
-
-const FILTER_INPUT = `${INPUT} !pl-9`;
-
-const FIELD_LABEL = `${MODAL_LABEL} !m-0 !mb-0.5 !flex !flex-row !items-center !gap-1 !leading-none [&_svg]:!m-0 [&_svg]:!inline-block [&_svg]:!shrink-0`;
 
 const CARD =
   'rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)]';
@@ -85,8 +86,8 @@ function getJobSalaryLabel(job) {
 
 function Field({ id, label, icon, children }) {
   return (
-    <div className="flex min-w-0 flex-col gap-0">
-      <label htmlFor={id} className={FIELD_LABEL}>
+    <div className={TW_FIELD}>
+      <label htmlFor={id} className={TW_FIELD_LABEL}>
         {icon}
         <span>{label}</span>
       </label>
@@ -278,16 +279,16 @@ export default function Careers() {
 
   if (loading) {
     return (
-      <div className={`${SITE_PAGE} flex min-h-[50vh] items-center justify-center`}>
+      <TailwindPage className="flex min-h-[50vh] items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent" />
-      </div>
+      </TailwindPage>
     );
   }
 
   const salaryLabel = getJobSalaryLabel(selectedJob);
 
   return (
-    <div className={`${SITE_PAGE} w-full overflow-x-hidden antialiased`}>
+    <TailwindPage>
       <SEO
         title="Careers"
         description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams."
@@ -321,7 +322,7 @@ export default function Careers() {
                   placeholder="Search roles or locations…"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={FILTER_INPUT}
+                  className={TW_FIELD_INPUT_FILTER}
                 />
               </div>
               <div className="relative min-w-0 sm:max-w-[9rem] lg:max-w-none">
@@ -333,7 +334,7 @@ export default function Careers() {
                 <select
                   value={filterDept}
                   onChange={(e) => setFilterDept(e.target.value)}
-                  className={`${FILTER_INPUT} cursor-pointer`}
+                  className={`${TW_FIELD_INPUT_FILTER} cursor-pointer`}
                 >
                   {departments.map((dept) => (
                     <option key={dept} value={dept}>
@@ -535,9 +536,7 @@ export default function Careers() {
                 </article>
 
                 {/* Application form */}
-                <section
-                  className={`${CARD} careers-apply-form p-3 sm:p-4 [&_input]:!mb-0 [&_select]:!mb-0 [&_textarea]:!mb-0`}
-                >
+                <section className={`${CARD} p-3 sm:p-4`}>
                   <div className="mb-3 flex items-center gap-2.5 border-b border-site-accent-dark/10 pb-3">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-site-accent/30 bg-site-accent/10 text-site-accent-dark">
                       <Send size={15} aria-hidden="true" />
@@ -550,15 +549,12 @@ export default function Careers() {
                     </div>
                   </div>
 
-                  <form
-                    onSubmit={handleSubmit}
-                    className="space-y-3 [&_label]:!block [&_label]:!w-auto"
-                  >
-                    <div className="grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="grid gap-x-3 gap-y-3 sm:grid-cols-2">
                       <Field id="career-fullName" label="Full name" icon={<User size={11} aria-hidden="true" />}>
                         <input
                           id="career-fullName"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="text"
                           name="fullName"
                           required
@@ -570,7 +566,7 @@ export default function Careers() {
                       <Field id="career-email" label="Email" icon={<Mail size={11} aria-hidden="true" />}>
                         <input
                           id="career-email"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="email"
                           name="email"
                           required
@@ -582,7 +578,7 @@ export default function Careers() {
                       <Field id="career-phone" label="Phone" icon={<Phone size={11} aria-hidden="true" />}>
                         <input
                           id="career-phone"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="tel"
                           name="phone"
                           required
@@ -594,7 +590,7 @@ export default function Careers() {
                       <Field id="career-city" label="City" icon={<Home size={11} aria-hidden="true" />}>
                         <input
                           id="career-city"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="text"
                           name="city"
                           required
@@ -606,7 +602,7 @@ export default function Careers() {
                       <Field id="career-experience" label="Experience" icon={<Briefcase size={11} aria-hidden="true" />}>
                         <input
                           id="career-experience"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="text"
                           name="totalExperience"
                           required
@@ -618,7 +614,7 @@ export default function Careers() {
                       <Field id="career-specialization" label="Specialization" icon={<Globe size={11} aria-hidden="true" />}>
                         <select
                           id="career-specialization"
-                          className={`${INPUT} cursor-pointer`}
+                          className={`${TW_FIELD_INPUT} cursor-pointer`}
                           name="specialization"
                           value={formData.specialization}
                           onChange={handleChange}
@@ -635,7 +631,7 @@ export default function Careers() {
                       <Field id="career-languages" label="Languages" icon={<Globe size={11} aria-hidden="true" />}>
                         <input
                           id="career-languages"
-                          className={INPUT}
+                          className={TW_FIELD_INPUT}
                           type="text"
                           name="languages"
                           value={formData.languages}
@@ -645,8 +641,8 @@ export default function Careers() {
                       </Field>
                     </div>
 
-                    <div>
-                      <span className={FIELD_LABEL}>
+                    <div className={TW_FIELD}>
+                      <span className={TW_FIELD_LABEL}>
                         <Upload size={11} aria-hidden="true" />
                         <span>
                           Resume
@@ -732,6 +728,6 @@ export default function Careers() {
           </div>
         </div>
       </div>
-    </div>
+    </TailwindPage>
   );
 }

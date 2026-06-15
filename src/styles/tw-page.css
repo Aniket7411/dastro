@@ -1,0 +1,115 @@
+/**
+ * Tailwind-only pages — opt in with <TailwindPage> or class "tw-page".
+ * Neutralizes global Bootstrap Reboot / legacy CSS inside the subtree.
+ */
+
+.tw-page {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: var(--color-site-bg) !important;
+  color: var(--color-site-text) !important;
+  font-family: var(--font-body) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tw-page :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote) {
+  margin: 0;
+  font-family: inherit;
+}
+
+.tw-page :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tw-page :where(button, input, select, textarea) {
+  font-family: var(--font-body) !important;
+}
+
+.tw-page :where(label) {
+  margin: 0 !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+.tw-page :where(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  margin: 0 !important;
+}
+
+.tw-page :where(button) {
+  margin: 0;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Form field pattern — label + input with consistent rhythm */
+.tw-page .tw-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tw-page .tw-field__label {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
+  margin: 0 !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--color-site-primary) !important;
+}
+
+.tw-page .tw-field__label svg {
+  display: inline-block !important;
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+
+.tw-page .tw-field__input {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  appearance: none !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid color-mix(in srgb, var(--color-site-accent-dark) 15%, transparent) !important;
+  background-color: #fffcf8 !important;
+  padding: 0.5rem 0.75rem !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  color: var(--color-site-text) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.tw-page .tw-field__input::placeholder {
+  color: var(--color-site-soft) !important;
+  opacity: 0.85;
+}
+
+.tw-page .tw-field__input:focus {
+  border-color: var(--color-site-accent) !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-site-accent) 15%, transparent) !important;
+}
+
+.tw-page .tw-field__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: var(--color-site-surface) !important;
+}
+
+.tw-page .tw-field__input--filter {
+  padding-left: 2.25rem !important;
+}
