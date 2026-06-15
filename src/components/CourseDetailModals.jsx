@@ -1,47 +1,47 @@
-import { motion } from 'framer-motion';
-import { Check, CheckCircle2, CreditCard, Loader2, Lock, Percent, Phone, Tag, X } from 'lucide-react';
+import { Check, CheckCircle2, CreditCard, Loader2, Percent, Phone, Tag, X } from 'lucide-react';
 import { BTN, TYPE } from './consultation/tokens';
+import { ModalPortal, ModalOverlay, useModalLock } from './modal/ModalLayer';
+import { MODAL_INPUT, MODAL_SUBMIT } from './modal/modalTypography';
 
-// Shared by CheckoutModal / CouponControls (uses rem — fine for those compact panels)
-const INPUT =
-  'm-0 w-full rounded-lg border border-site-accent-dark/15 bg-site-bg px-3 py-2.5 font-body text-sm text-site-primary placeholder:text-site-soft outline-none transition focus:border-site-accent focus:bg-white focus:ring-2 focus:ring-site-accent/15 disabled:cursor-not-allowed disabled:bg-site-surface disabled:text-site-muted';
+// Shared by CheckoutModal / CouponControls
+const INPUT = MODAL_INPUT;
 
 const LABEL =
   '!mb-1 block font-body text-[0.625rem] !font-bold uppercase tracking-wider !text-site-primary';
 
 function ModalShell({ open, onClose, title, subtitle, children }) {
+  useModalLock(open, onClose);
   if (!open) return null;
+
   return (
-    <div
-      className="fixed inset-0 z-[100002] flex items-end justify-center bg-site-primary/55 p-0 backdrop-blur-sm sm:items-center sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-      role="presentation"
-    >
-      <div
-        className="relative flex max-h-[94dvh] w-full max-w-md flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90dvh] sm:rounded-2xl"
-        role="dialog"
-        aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-3 top-3 z-10 m-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-site-accent-dark/12 bg-site-surface text-site-primary transition hover:bg-site-bg"
+    <ModalPortal open={open}>
+      <ModalOverlay onClose={onClose}>
+        <div
+          className="relative flex h-[min(92dvh,100dvh)] w-full max-w-md flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:h-[min(88dvh,40rem)] sm:rounded-2xl"
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => e.stopPropagation()}
         >
-          <X size={15} strokeWidth={2.5} aria-hidden />
-        </button>
-        <div className="overflow-y-auto overscroll-contain p-5 pt-12 sm:p-6 sm:pt-12">
-          <header className="mb-4">
-            <h3 className="!m-0 font-heading text-lg font-bold text-site-primary">{title}</h3>
-            {subtitle ? (
-              <p className="!mt-1 font-body text-xs leading-relaxed text-site-muted">{subtitle}</p>
-            ) : null}
-          </header>
-          {children}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute right-2.5 top-2.5 z-20 m-0 flex h-7 w-7 cursor-pointer select-none appearance-none items-center justify-center !rounded-full border border-site-accent-dark/12 bg-site-surface text-site-primary outline-none transition hover:bg-site-bg"
+          >
+            <X size={14} strokeWidth={2.5} aria-hidden />
+          </button>
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-4 py-4 pt-11 [-webkit-overflow-scrolling:touch] sm:px-5 sm:py-5 sm:pt-12">
+            <header className="mb-3">
+              <h3 className="!m-0 font-heading text-base font-bold text-site-primary sm:text-lg">{title}</h3>
+              {subtitle ? (
+                <p className="!mt-1 font-body text-xs leading-snug text-site-muted">{subtitle}</p>
+              ) : null}
+            </header>
+            {children}
+          </div>
         </div>
-      </div>
-    </div>
+      </ModalOverlay>
+    </ModalPortal>
   );
 }
 
@@ -242,233 +242,227 @@ const ENQ_POINTS = [
 ];
 
 export function EnquiryModal({ open, onClose, course, enquiryData, onChange, onSubmit }) {
+  useModalLock(open, onClose);
   if (!open) return null;
 
   const courseImage = course?.image || '/live.jpg';
 
   return (
-    <motion.div
-      className="fixed inset-0 z-[100002] flex items-end justify-center bg-site-primary/40 p-0 backdrop-blur-sm sm:items-center sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-      role="presentation"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.18 }}
-    >
-      <motion.div
-        className="relative flex max-h-[94dvh] w-full max-w-[40rem] flex-col overflow-hidden rounded-t-2xl border border-site-accent-dark/10 bg-white shadow-[0_20px_48px_rgba(42,15,2,0.16)] sm:max-h-[90dvh] sm:rounded-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="enq-modal-title"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-3 top-3 z-20 m-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-site-accent-dark/12 bg-site-surface text-site-primary transition hover:bg-site-bg sm:right-3.5 sm:top-3.5"
+    <ModalPortal open={open}>
+      <ModalOverlay onClose={onClose}>
+        <div
+          className="relative grid h-[min(92dvh,100dvh)] w-full max-w-lg grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-t-2xl border border-site-accent-dark/10 bg-white shadow-[0_20px_48px_rgba(42,15,2,0.16)] sm:h-[min(88dvh,42rem)] sm:rounded-2xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="enq-modal-title"
+          onClick={(e) => e.stopPropagation()}
         >
-          <X size={15} strokeWidth={2.5} aria-hidden />
-        </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute right-2.5 top-2.5 z-20 m-0 flex h-7 w-7 cursor-pointer select-none appearance-none items-center justify-center !rounded-full border border-site-accent-dark/12 bg-site-surface text-site-primary outline-none transition hover:bg-site-bg"
+          >
+            <X size={14} strokeWidth={2.5} aria-hidden />
+          </button>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 pt-11 sm:p-5 sm:pt-12">
-          <div className="mb-4 flex gap-3 rounded-lg border border-site-accent-dark/10 bg-site-bg/70 p-3 sm:mb-5 sm:gap-3.5 sm:p-3.5">
-            <img
-              src={courseImage}
-              alt=""
-              className="h-14 w-14 shrink-0 rounded-lg object-cover sm:h-16 sm:w-16"
-              aria-hidden
-            />
-            <div className="min-w-0 flex-1 pr-6">
-              <span className={TYPE.kicker}>Course Enquiry</span>
-              <h4 className="!mt-1.5 !mb-0 font-heading text-base font-bold leading-snug text-site-primary sm:text-lg">
-                {course?.title ?? 'Ask about this course'}
-              </h4>
-              <p className="!mt-1 !mb-0 font-body text-xs leading-relaxed text-site-muted">
-                We'll get back to you with batch timings, syllabus, and fees.
-              </p>
+          <div className="shrink-0 border-b border-site-accent-dark/8 bg-site-bg/80 px-3 py-3 pr-11 sm:px-4 sm:py-3.5">
+            <div className="flex gap-2.5 sm:gap-3">
+              <img
+                src={courseImage}
+                alt=""
+                className="h-12 w-12 shrink-0 rounded-lg object-cover sm:h-14 sm:w-14"
+                aria-hidden
+              />
+              <div className="min-w-0 flex-1">
+                <span className={TYPE.kicker}>Course enquiry</span>
+                <h4 className="!mt-1 !mb-0 line-clamp-2 font-heading text-sm font-bold leading-snug text-site-primary sm:text-base">
+                  {course?.title ?? 'Ask about this course'}
+                </h4>
+                <p className="!mt-0.5 !mb-0 font-body text-[11px] leading-snug text-site-muted">
+                  We&apos;ll share batch timings, syllabus, and fees.
+                </p>
+              </div>
             </div>
           </div>
 
-          <ul className="!m-0 !mb-4 flex list-none flex-wrap gap-2 !p-0 sm:mb-5">
-            {ENQ_POINTS.map((item) => (
-              <li
-                key={item}
-                className="inline-flex items-center gap-1.5 rounded-full border border-site-accent-dark/10 bg-site-surface-soft px-2.5 py-1 font-body text-[0.6875rem] font-medium text-site-muted"
-              >
-                <Check size={10} className="shrink-0 text-site-accent" strokeWidth={3} aria-hidden />
-                {item}
-              </li>
-            ))}
-          </ul>
+          <form
+            onSubmit={onSubmit}
+            noValidate
+            className="flex min-h-0 flex-col overflow-hidden"
+          >
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-3 py-3 [-webkit-overflow-scrolling:touch] sm:px-4 sm:py-3.5">
+              <ul className="!m-0 !mb-3 flex list-none flex-wrap gap-1.5 !p-0">
+                {ENQ_POINTS.map((item) => (
+                  <li
+                    key={item}
+                    className="inline-flex items-center gap-1 rounded-full border border-site-accent-dark/10 bg-site-bg px-2 py-0.5 font-body text-[10px] font-medium text-site-muted sm:text-[11px]"
+                  >
+                    <Check size={9} className="shrink-0 text-site-accent" strokeWidth={3} aria-hidden />
+                    {item}
+                  </li>
+                ))}
+              </ul>
 
-          <header className="mb-3 sm:mb-4">
-            <h3 id="enq-modal-title" className={`${TYPE.h2} !text-base sm:!text-lg`}>
-              Enquiry details
-            </h3>
-            <p
-              className={`${TYPE.caption} !mt-1 !text-[0.6875rem] !font-semibold uppercase !tracking-wider !text-site-accent-dark`}
-            >
-              Fill in your details below
-            </p>
-          </header>
+              <header className="mb-2">
+                <h3 id="enq-modal-title" className={`${TYPE.h3} !text-sm`}>
+                  Your details
+                </h3>
+                <p className={`${TYPE.caption} !mt-0.5 !text-[11px]`}>
+                  <span className="text-red-500">*</span> Required fields
+                </p>
+              </header>
 
-          <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3">
-            <div>
-              <label className={LABEL}>Course</label>
-              <input
-                type="text"
-                value={course?.title ?? ''}
-                readOnly
-                disabled
-                className={`${INPUT} cursor-not-allowed !bg-site-surface !text-site-muted`}
-              />
-            </div>
+              <div className="flex flex-col gap-2">
+                <div>
+                  <label className={LABEL}>Course</label>
+                  <input
+                    type="text"
+                    value={course?.title ?? ''}
+                    readOnly
+                    disabled
+                    className={`${INPUT} cursor-not-allowed !bg-site-surface !text-site-muted`}
+                  />
+                </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-2.5">
-              <div>
-                <label htmlFor="enq-name" className={LABEL}>
-                  Full name
-                </label>
-                <input
-                  id="enq-name"
-                  type="text"
-                  name="name"
-                  value={enquiryData.name}
-                  onChange={onChange}
-                  placeholder="Your full name"
-                  autoComplete="name"
-                  required
-                  className={INPUT}
-                />
+                <div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
+                  <div>
+                    <label htmlFor="enq-name" className={LABEL}>
+                      Full name
+                    </label>
+                    <input
+                      id="enq-name"
+                      type="text"
+                      name="name"
+                      value={enquiryData.name}
+                      onChange={onChange}
+                      placeholder="Your full name"
+                      autoComplete="name"
+                      required
+                      className={INPUT}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="enq-phone" className={LABEL}>
+                      Phone
+                    </label>
+                    <input
+                      id="enq-phone"
+                      type="tel"
+                      name="phone"
+                      value={enquiryData.phone}
+                      onChange={onChange}
+                      placeholder="10-digit mobile"
+                      inputMode="numeric"
+                      maxLength={10}
+                      pattern="[6-9][0-9]{9}"
+                      autoComplete="tel"
+                      required
+                      className={INPUT}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="enq-email" className={LABEL}>
+                    Email
+                  </label>
+                  <input
+                    id="enq-email"
+                    type="email"
+                    name="email"
+                    value={enquiryData.email}
+                    onChange={onChange}
+                    placeholder="you@email.com"
+                    autoComplete="email"
+                    required
+                    className={INPUT}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
+                  <div>
+                    <label htmlFor="enq-age" className={LABEL}>
+                      Age
+                    </label>
+                    <input
+                      id="enq-age"
+                      type="number"
+                      name="age"
+                      value={enquiryData.age}
+                      onChange={onChange}
+                      placeholder="Your age"
+                      min={10}
+                      max={100}
+                      required
+                      className={INPUT}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="enq-city" className={LABEL}>
+                      City
+                    </label>
+                    <input
+                      id="enq-city"
+                      type="text"
+                      name="city"
+                      value={enquiryData.city}
+                      onChange={onChange}
+                      placeholder="Your city"
+                      required
+                      className={INPUT}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="enq-interest" className={LABEL}>
+                    Area of interest
+                  </label>
+                  <input
+                    id="enq-interest"
+                    type="text"
+                    name="interest"
+                    value={enquiryData.interest}
+                    onChange={onChange}
+                    placeholder="e.g. career, marriage, spirituality"
+                    required
+                    className={INPUT}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="enq-message" className={LABEL}>
+                    Notes{' '}
+                    <span className="normal-case font-normal tracking-normal text-site-soft">(optional)</span>
+                  </label>
+                  <textarea
+                    id="enq-message"
+                    name="message"
+                    value={enquiryData.message}
+                    onChange={onChange}
+                    placeholder="Any specific questions…"
+                    rows={2}
+                    className={`${INPUT} resize-none`}
+                  />
+                </div>
+
+                <p className="!m-0 flex items-start gap-1.5 rounded-lg border border-site-accent-dark/10 bg-site-bg/60 px-2.5 py-2 font-body text-[10px] leading-snug text-site-muted sm:text-[11px]">
+                  <Phone size={12} className="mt-0.5 shrink-0 text-site-accent-dark" aria-hidden />
+                  Our team will call you within 24 hours.
+                </p>
               </div>
-              <div>
-                <label htmlFor="enq-phone" className={LABEL}>
-                  Phone
-                </label>
-                <input
-                  id="enq-phone"
-                  type="tel"
-                  name="phone"
-                  value={enquiryData.phone}
-                  onChange={onChange}
-                  placeholder="10-digit mobile"
-                  inputMode="numeric"
-                  maxLength={10}
-                  pattern="[6-9][0-9]{9}"
-                  autoComplete="tel"
-                  required
-                  className={INPUT}
-                />
-              </div>
             </div>
 
-            <div>
-              <label htmlFor="enq-email" className={LABEL}>
-                Email
-              </label>
-              <input
-                id="enq-email"
-                type="email"
-                name="email"
-                value={enquiryData.email}
-                onChange={onChange}
-                placeholder="you@email.com"
-                autoComplete="email"
-                required
-                className={INPUT}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-2.5">
-              <div>
-                <label htmlFor="enq-age" className={LABEL}>
-                  Age
-                </label>
-                <input
-                  id="enq-age"
-                  type="number"
-                  name="age"
-                  value={enquiryData.age}
-                  onChange={onChange}
-                  placeholder="Your age"
-                  min={10}
-                  max={100}
-                  required
-                  className={INPUT}
-                />
-              </div>
-              <div>
-                <label htmlFor="enq-city" className={LABEL}>
-                  City
-                </label>
-                <input
-                  id="enq-city"
-                  type="text"
-                  name="city"
-                  value={enquiryData.city}
-                  onChange={onChange}
-                  placeholder="Your city"
-                  required
-                  className={INPUT}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="enq-interest" className={LABEL}>
-                Area of interest
-              </label>
-              <input
-                id="enq-interest"
-                type="text"
-                name="interest"
-                value={enquiryData.interest}
-                onChange={onChange}
-                placeholder="e.g. career, marriage, spirituality"
-                required
-                className={INPUT}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="enq-message" className={LABEL}>
-                Notes{' '}
-                <span className="normal-case font-normal tracking-normal text-site-soft">(optional)</span>
-              </label>
-              <textarea
-                id="enq-message"
-                name="message"
-                value={enquiryData.message}
-                onChange={onChange}
-                placeholder="Any specific questions or requirements…"
-                rows={2}
-                className={`${INPUT} resize-none`}
-              />
-            </div>
-
-            <p className="!m-0 flex items-start gap-2 rounded-lg border border-site-accent-dark/10 bg-site-bg/60 px-3 py-2 font-body text-[0.6875rem] leading-relaxed text-site-muted">
-              <Phone size={13} className="mt-0.5 shrink-0 text-site-accent-dark" aria-hidden />
-              Our team will call you within 24 hours to discuss further.
-            </p>
-
-            <div className="flex justify-center pt-0.5">
-              <button type="submit" className={`${BTN.cta} ${BTN.static} min-w-[11rem]`}>
-                <Phone size={15} aria-hidden />
+            <div className="shrink-0 border-t border-site-accent-dark/8 bg-white px-3 py-2.5 sm:px-4 sm:py-3">
+              <button type="submit" className={MODAL_SUBMIT}>
+                <Phone size={14} aria-hidden />
                 Submit enquiry
               </button>
             </div>
-
-            <p className="!m-0 flex items-center justify-center gap-1.5 text-center font-body text-[0.6875rem] font-medium text-site-soft">
-              <Lock size={11} className="text-site-accent-dark" aria-hidden />
-              Your information is private &amp; secure
-            </p>
           </form>
         </div>
-      </motion.div>
-    </motion.div>
+      </ModalOverlay>
+    </ModalPortal>
   );
 }

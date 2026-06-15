@@ -13,6 +13,7 @@ import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
 import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
 import HomeConsultationCard from '../components/HomeConsultationCard';
+import HomeBannerCTAs from '../components/HomeBannerCTAs';
 
 const HOME_FEATURED_CONSULTATIONS = [
   {
@@ -791,7 +792,7 @@ function Home() {
       <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
       <section
-        className={`banner-section w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
+        className={`banner-section banner-hero-full w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
         data-slide-dir={slideDirection === 1 ? 'next' : 'prev'}
         aria-busy={!bannerReady}
         aria-roledescription="carousel"
@@ -814,6 +815,9 @@ function Home() {
               />
             ) : null,
           )}
+          {activeSlide.bgImage ? (
+            <div className="banner-bg-overlay banner-bg-overlay--shade is-active" />
+          ) : null}
           {activeSlide.glassOverall ? (
             <div className="banner-bg-overlay banner-bg-overlay--glass-overall is-active" />
           ) : null}
@@ -847,34 +851,11 @@ function Home() {
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
                   </ul> */}
 
-                  <div className="banner-btn-row mt-2">
-                    {activeSlide.primaryCta?.action === 'consultation' ? (
-                      <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
-                        <i className={activeSlide.primaryCta.icon}></i>
-                        {activeSlide.primaryCta.label}
-                      </button>
-                    ) : (
-                      <Link to={activeSlide.primaryCta?.path || '/courses'} className="btn mystic-btn-primary focus-70">
-                        <i className={activeSlide.primaryCta?.icon || 'fas fa-graduation-cap'}></i>
-                        {activeSlide.primaryCta?.label || 'Enroll in Live Course'}
-                      </Link>
-                    )}
-                    {activeSlide.primaryCta?.action === 'consultation' ? (
-                      <Link to="/courses" className="btn mystic-btn-outline focus-20">
-                        <i className="fas fa-graduation-cap"></i>
-                        View Courses
-                      </Link>
-                    ) : (
-                      <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
-                        <i className="fas fa-calendar-check"></i>
-                        Book Consultation
-                      </button>
-                    )}
-                    <Link to="/shop" className="btn mystic-btn-ghost focus-10">
-                      <i className="fas fa-store"></i>
-                      Astro Shop
-                    </Link>
-                  </div>
+                  <HomeBannerCTAs
+                    primaryCta={activeSlide.primaryCta}
+                    onConsultation={handleOpenModal}
+                    onDark={Boolean(activeSlide.bgImage || activeSlide.overlayGlass)}
+                  />
 
                   <div className="trust-indicator mt-3">
                     <div className="trust-avatars">
@@ -1519,13 +1500,17 @@ function Home() {
         /* Banner Section */
         .banner-section {
           position: relative;
-          padding: clamp(1rem, 2vw, 2rem) 0 clamp(2.5rem, 5vw, 4rem);
-          min-height: clamp(52vh, 65vh, 75vh);
+          padding: clamp(1.25rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem);
+          min-height: clamp(520px, calc(100svh - var(--spacing-site-header)), 900px);
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           overflow: hidden;
           background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
           transition: background 0.55s ease, background-color 0.55s ease;
+        }
+
+        .banner-section.banner-hero-full {
+          width: 100%;
         }
 
         .banner-section.banner-has-bg {
@@ -1590,9 +1575,9 @@ function Home() {
           position: absolute;
           inset: 0;
           background-size: cover;
-          background-position: center top;
+          background-position: center center;
           background-repeat: no-repeat;
-          transform: scale(1.03);
+          transform: scale(1.02);
         }
 
         .banner-bg-image.is-active {
@@ -1612,6 +1597,16 @@ function Home() {
             rgba(8, 3, 0, 0.52) 0%,
             rgba(8, 3, 0, 0.28) 55%,
             rgba(8, 3, 0, 0.10) 100%
+          );
+        }
+
+        .banner-bg-overlay--shade {
+          background: linear-gradient(
+            105deg,
+            rgba(8, 3, 0, 0.78) 0%,
+            rgba(8, 3, 0, 0.52) 40%,
+            rgba(8, 3, 0, 0.3) 68%,
+            rgba(8, 3, 0, 0.14) 100%
           );
         }
 
@@ -2201,8 +2196,8 @@ function Home() {
 
         @media (max-width: 768px) {
           .banner-section {
-            padding-top: clamp(0.75rem, 3vw, 1.25rem);
-            min-height: auto;
+            padding-top: clamp(1rem, 3vw, 1.5rem);
+            min-height: clamp(480px, calc(100svh - var(--spacing-site-header)), 820px);
           }
           .banner-section .row.align-items-center {
             margin-top: 0 !important;
@@ -3286,7 +3281,11 @@ function Home() {
         }
 
         @media (max-width: 767px) {
-          .banner-section { padding-top: 100px; min-height: auto; }
+          .banner-section {
+            padding-top: clamp(0.85rem, 2.5vw, 1.25rem) !important;
+            padding-bottom: clamp(3.5rem, 10vw, 4.5rem) !important;
+            min-height: clamp(460px, calc(100svh - var(--spacing-site-header)), 780px) !important;
+          }
           .about-part-section, .services-section, .testimonial-section { padding: 60px 0; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
@@ -3393,8 +3392,9 @@ function Home() {
 
         @media (max-width: 991px) {
           .banner-section {
-            padding-top: 110px !important;
-            padding-bottom: 96px !important;
+            padding-top: clamp(1rem, 3vw, 1.75rem) !important;
+            padding-bottom: clamp(3.25rem, 8vw, 4.25rem) !important;
+            min-height: clamp(500px, calc(100svh - var(--spacing-site-header)), 860px) !important;
           }
 
           .banner-title {
@@ -3420,8 +3420,7 @@ function Home() {
 
         @media (max-width: 767px) {
           .banner-section {
-            padding-top: 96px !important;
-            padding-bottom: 84px !important;
+            padding-bottom: clamp(3.25rem, 9vw, 4rem) !important;
           }
 
           .cosmic-badge {

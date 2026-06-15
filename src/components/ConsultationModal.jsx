@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Phone, CreditCard, Loader2 } from 'lucide-react';
 import { BOOKING_MODES } from '../utils/consultationBooking';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+import { ModalPortal, ModalOverlay, useModalLock } from './modal/ModalLayer';
 import {
   MODAL_TITLE,
   MODAL_HINT,
@@ -60,32 +60,6 @@ function validate(data, isFixedService) {
   return e;
 }
 
-function useModalLock(isOpen, onClose) {
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const prevOverflow = document.body.style.overflow;
-    const prevPaddingRight = document.body.style.paddingRight;
-    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
-
-    document.body.style.overflow = 'hidden';
-    if (scrollbar > 0) {
-      document.body.style.paddingRight = `${scrollbar}px`;
-    }
-
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      document.body.style.paddingRight = prevPaddingRight;
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [isOpen, onClose]);
-}
-
 function ConsultationModal({
   isOpen,
   onClose,
@@ -136,19 +110,16 @@ function ConsultationModal({
     handleSubmit(e);
   };
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-[100001] flex items-end justify-center bg-[#2a0f02]/60 p-0 sm:items-center sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-      role="presentation"
-    >
-      <div
-        className="relative grid h-[min(92dvh,100dvh)] w-full max-w-md grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-t-2xl bg-white shadow-[0_20px_48px_rgba(42,15,2,0.25)] sm:h-[min(88dvh,40rem)] sm:rounded-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="consultation-modal-title"
-        onClick={(e) => e.stopPropagation()}
-      >
+  return (
+    <ModalPortal open={isOpen}>
+      <ModalOverlay onClose={onClose}>
+        <div
+          className="relative grid h-[min(92dvh,100dvh)] w-full max-w-md grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-t-2xl bg-white shadow-[0_20px_48px_rgba(42,15,2,0.25)] sm:h-[min(88dvh,40rem)] sm:rounded-2xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="consultation-modal-title"
+          onClick={(e) => e.stopPropagation()}
+        >
         <button
           type="button"
           onClick={onClose}
@@ -378,8 +349,8 @@ function ConsultationModal({
           </div>
         </form>
       </div>
-    </div>,
-    document.body
+      </ModalOverlay>
+    </ModalPortal>
   );
 }
 

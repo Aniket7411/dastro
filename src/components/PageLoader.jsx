@@ -1,4 +1,6 @@
 import { Loader2, Stars } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { MODAL_LOADER_Z } from './modal/ModalLayer';
 
 function RingSpinner({ ringClass = 'h-14 w-14', iconSize = 24 }) {
   return (
@@ -34,9 +36,9 @@ export function PageLoader({ label = 'Loading…', compact = false }) {
 export function OverlayLoader({ label = 'Please wait…', visible = true }) {
   if (!visible) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center gap-5 bg-site-bg/85 backdrop-blur-md"
+      className={`fixed inset-0 ${MODAL_LOADER_Z} flex flex-col items-center justify-center gap-5 bg-site-bg/85 backdrop-blur-md`}
       role="status"
       aria-live="polite"
       aria-busy="true"
@@ -47,7 +49,8 @@ export function OverlayLoader({ label = 'Please wait…', visible = true }) {
           {label}
         </p>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 

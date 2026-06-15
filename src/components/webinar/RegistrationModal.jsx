@@ -1,10 +1,13 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
+import { useModalLock } from './modal/ModalLayer';
 import './RegistrationModal.css';
 
 function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting }) {
+  useModalLock(isOpen, onClose);
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
       <div className="modal-container">
         <button className="modal-close" onClick={onClose} aria-label="Close">
@@ -48,7 +51,8 @@ function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubm
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
