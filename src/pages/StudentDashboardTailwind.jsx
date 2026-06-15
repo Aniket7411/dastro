@@ -34,7 +34,7 @@ const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 const CARD =
   'rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_1px_8px_rgba(42,15,2,0.05)]';
 const STAT_CARD =
-  'flex min-h-0 items-center gap-3 rounded-xl border border-site-accent-dark/10 bg-white px-3.5 py-3 shadow-[0_1px_6px_rgba(42,15,2,0.04)] transition hover:border-site-accent/25 hover:shadow-[0_4px_14px_rgba(42,15,2,0.07)] sm:gap-3.5 sm:px-4 sm:py-3.5';
+  'flex min-h-0 items-center gap-3 rounded-xl border border-site-accent-dark/10 px-3.5 py-3 shadow-[0_1px_6px_rgba(42,15,2,0.04)] transition hover:border-site-accent/25 hover:shadow-[0_4px_14px_rgba(42,15,2,0.07)] sm:gap-3.5 sm:px-4 sm:py-3.5';
 
 const inputCls = [
   'w-full rounded-xl border border-site-accent-dark/20 bg-[#fffcf8] px-4 py-2.5',
@@ -86,7 +86,7 @@ function DashboardLoading() {
         <div className="-mt-1 pb-5">
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`${STAT_CARD}`}>
+              <div key={i} className={`${STAT_CARD} bg-white`}>
                 <Skel className="h-9 w-9 shrink-0 rounded-lg" />
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <Skel className="h-2.5 w-16" />
@@ -105,9 +105,9 @@ function DashboardLoading() {
   );
 }
 
-function StatCard({ label, value, icon: Icon, iconBg }) {
+function StatCard({ label, value, icon: Icon, iconBg, cardBg }) {
   return (
-    <div className={STAT_CARD}>
+    <div className={`${STAT_CARD} ${cardBg || 'bg-white'}`}>
       <div
         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${iconBg}`}
       >
@@ -238,25 +238,29 @@ export default function StudentDashboardTailwind() {
       label: 'Enrolled',
       value: enrolledCourses.length,
       icon: BookOpen,
-      iconBg: 'bg-site-accent/10 text-site-accent-dark',
+      iconBg: 'bg-pink-200 text-pink-800',
+      cardBg: 'bg-pink-100',
     },
     {
       label: 'Active',
       value: activeCourses,
       icon: GraduationCap,
-      iconBg: 'bg-green-50 text-green-700',
+      iconBg: 'bg-blue-100 text-blue-700',
+      cardBg: 'bg-blue-50',
     },
     {
       label: 'Completed',
       value: completedCourses,
       icon: Sparkles,
-      iconBg: 'bg-site-accent/15 text-site-accent',
+      iconBg: 'bg-purple-200 text-purple-800',
+      cardBg: 'bg-purple-100',
     },
     {
       label: 'Avg Progress',
       value: `${avgProgress}%`,
       icon: TrendingUp,
-      iconBg: 'bg-orange-50 text-orange-700',
+      iconBg: 'bg-orange-200 text-orange-800',
+      cardBg: 'bg-orange-100',
     },
   ];
 
@@ -309,8 +313,8 @@ export default function StudentDashboardTailwind() {
         </div>
       </header>
 
-      {/* Stats — overlap hero for tighter layout */}
-      <div className={`relative z-20 -mt-5 sm:-mt-6 ${WRAP}`}>
+      {/* Stats */}
+      <div className={`relative z-20 mt-2 sm:mt-4 ${WRAP}`}>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
