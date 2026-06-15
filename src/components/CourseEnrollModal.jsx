@@ -266,3 +266,5 @@ function CourseEnrollModal({
 }
 
 export default CourseEnrollModal;
+
+export default CourseEnrollModal;

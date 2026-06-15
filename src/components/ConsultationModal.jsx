@@ -335,7 +335,7 @@ function ConsultationModal({
                     value={formData.message}
                     onChange={onChange}
                     placeholder="Briefly describe your concern…"
-                    rows={2}
+                    rows={1}
                     className={`${MODAL_INPUT} resize-none`}
                   />
                 </div>
