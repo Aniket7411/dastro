@@ -23,10 +23,10 @@ const REPORT_ITEMS = [
 ];
 
 const mobileNavItemClass =
-  'block px-4 py-3.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] !text-site-text !no-underline transition hover:!text-site-accent-dark hover:!no-underline';
+  'flex w-full items-center px-4 py-3.5 !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text !no-underline transition hover:!text-site-accent-dark hover:!no-underline';
 
 const NAV_LINK_BASE =
-  'relative inline-flex items-center gap-1 px-2.5 py-2 text-[0.6875rem] font-bold uppercase tracking-[0.08em] !no-underline decoration-transparent transition-colors hover:!no-underline hover:!text-site-accent-dark sm:px-3 sm:text-xs';
+  'relative inline-flex items-center gap-1 px-2.5 py-2 !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !no-underline decoration-transparent transition-colors hover:!no-underline hover:!text-site-accent-dark sm:px-3 sm:!text-xs';
 
 const NAV_LINK_ACTIVE =
   '!text-site-accent-dark visited:!text-site-accent-dark after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[70%] after:-translate-x-1/2 after:rounded-full after:bg-site-accent-dark';
@@ -188,9 +188,9 @@ export default function SiteNavbar({
       <li className="flex list-none items-center">
         <NavLink to="/" match="/">Home</NavLink>
       </li>
-      <li className="flex list-none items-center">
+      {/* <li className="flex list-none items-center">
         <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
-      </li>
+      </li> */}
       <CoursesDropdown coursesActive={coursesActive} />
       <li className="flex list-none items-center">
         <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
@@ -253,7 +253,7 @@ export default function SiteNavbar({
   const mobilePrimaryLinks = authState.isStudent
     ? [
         { label: 'Home', to: '/', match: '/' },
-        { label: 'My Courses', to: '/dashboard', match: '/dashboard' },
+        /* { label: 'My Courses', to: '/dashboard', match: '/dashboard' }, */
         { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
         { label: 'Contact', to: '/contact', match: '/contact' },
       ]
@@ -366,18 +366,25 @@ export default function SiteNavbar({
 
         <nav className="flex-1 overflow-y-auto" aria-label="Mobile navigation">
           <ul className="m-0 list-none p-0">
-            {mobilePrimaryLinks.map((item) => (
-              <li key={item.to} className="border-b border-site-accent-dark/10">
-                <NavLink to={item.to} match={item.match} onClick={closeMobile} className="block px-4 py-3.5">
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
+            {mobilePrimaryLinks.map((item) => {
+              const isActive = item.match === '/' ? location.pathname === '/' : location.pathname.startsWith(item.match);
+              return (
+                <li key={item.to} className="border-b border-site-accent-dark/10">
+                  <Link 
+                    to={item.to} 
+                    onClick={closeMobile} 
+                    className={`${mobileNavItemClass} ${isActive ? '!text-site-accent-dark' : ''}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
 
             <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
-                className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold !uppercase tracking-[0.08em] text-site-text"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
                 onClick={() => setMobileCoursesOpen((open) => !open)}
                 aria-expanded={mobileCoursesOpen}
               >
@@ -418,7 +425,7 @@ export default function SiteNavbar({
             <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
-                className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
                 onClick={() => setMobileToolsOpen((open) => !open)}
                 aria-expanded={mobileToolsOpen}
               >
@@ -447,8 +454,6 @@ export default function SiteNavbar({
               )}
             </li>
 
-            {!authState.isStudent && (
-              <>
                 <li className="border-b border-site-accent-dark/10">
                   <Link
                     to="/blog"
@@ -462,7 +467,7 @@ export default function SiteNavbar({
                   <Link
                     to="/careers"
                     onClick={closeMobile}
-                    className={`flex items-center gap-2 ${mobileNavItemClass.replace('block ', '')}`}
+                    className={`gap-2 ${mobileNavItemClass}`}
                   >
                     Careers
                     <span className="rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-bold normal-case tracking-normal text-white">
@@ -470,8 +475,6 @@ export default function SiteNavbar({
                     </span>
                   </Link>
                 </li>
-              </>
-            )}
           </ul>
 
           <div className="grid gap-2.5 p-4">
