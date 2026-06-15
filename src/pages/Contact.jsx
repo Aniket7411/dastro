@@ -8,6 +8,7 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import { CONTACT_PHONE_DISPLAY } from '../utils/contactInfo';
 import {
   CONTACT_CONTAINER,
+  CONTACT_LINK,
   ContactChannelCard,
   ContactForm,
   ContactHero,
@@ -44,11 +45,11 @@ const supportHighlights = [
 ];
 
 const grievanceDetails = [
-  ['Name', 'Ananya Singh'],
-  ['Email', 'help@dsastroinstitute.com'],
-  ['Phone', CONTACT_PHONE_DISPLAY],
-  ['Address', 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010'],
-  ['Response time', 'Within 7 working days'],
+  { label: 'Name', value: 'Ananya Singh' },
+  { label: 'Email', value: 'help@dsastroinstitute.com', href: 'mailto:help@dsastroinstitute.com' },
+  { label: 'Phone', value: CONTACT_PHONE_DISPLAY, href: `tel:${CONTACT_PHONE_DISPLAY.replace(/[\s-]/g, '')}` },
+  { label: 'Address', value: 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010' },
+  { label: 'Response time', value: 'Within 7 working days' },
 ];
 
 function Contact() {
@@ -103,7 +104,7 @@ function Contact() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-site-bg font-body text-site-text">
+    <div className="contact-page min-h-screen w-full bg-site-bg font-body text-site-text [&_a]:decoration-transparent [&_a]:no-underline [&_a:visited]:text-inherit">
       <SEO
         title="Contact Us"
         description="Get in touch with DS Institute for astrology consultations and courses."
@@ -112,9 +113,9 @@ function Contact() {
 
       <ContactHero />
 
-      <section className="py-8 sm:py-10 lg:py-12">
+      <section className="py-6 sm:py-8 lg:py-10">
         <div className={CONTACT_CONTAINER}>
-          <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+          <div className="mb-5 grid gap-2 sm:grid-cols-2 sm:gap-2.5 lg:grid-cols-3 lg:gap-3">
             {contactChannels.map((channel) => (
               <ContactChannelCard
                 key={channel.title}
@@ -124,52 +125,64 @@ function Contact() {
             ))}
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr] lg:gap-8">
-            <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ead8c6] bg-[#fff7ed] px-2.5 py-1 text-[0.6875rem] font-bold text-site-accent-dark">
+          <div className="grid gap-5 lg:grid-cols-[1fr_1.1fr] lg:gap-6">
+            <div className="min-w-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ead8c6] bg-[#fff7ed] px-2 py-0.5 text-[0.625rem] font-bold text-site-accent-dark sm:px-2.5 sm:py-1 sm:text-[0.6875rem]">
                 <i className="fas fa-heart" aria-hidden="true" />
                 Why Choose Us
               </span>
-              <h2 className="mt-3 font-heading text-2xl font-extrabold leading-tight text-site-primary sm:text-3xl">
+              <h2 className="mt-2 font-heading text-xl font-extrabold leading-tight text-site-primary sm:mt-3 sm:text-2xl lg:text-3xl">
                 We&apos;re Here to
                 <br />
                 Support You
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-site-muted sm:text-base">
+              <p className="mt-2 text-sm leading-relaxed text-site-muted">
                 Whether you need help choosing a course, booking a consultation, or understanding a
                 remedy — our dedicated advisors are ready to assist you with personalized guidance.
               </p>
 
               <ul className="mt-4 space-y-2">
                 {supportHighlights.map((item) => (
-                  <li key={item.text} className="flex items-start gap-2.5">
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#fff7ed] text-sm text-site-accent">
+                  <li key={item.text} className="flex items-start gap-2">
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#fff7ed] text-xs text-site-accent">
                       <i className={`fas ${item.icon}`} aria-hidden="true" />
                     </span>
-                    <p className="text-sm font-medium leading-snug text-site-muted">{item.text}</p>
+                    <p className="text-xs font-medium leading-snug text-site-muted sm:text-sm">{item.text}</p>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-5 rounded-xl border border-[#ead8c6] bg-white p-4 shadow-sm">
-                <div className="mb-3 flex items-center gap-2.5">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fff7ed] text-sm text-site-accent">
+              <div className="mt-4 rounded-lg border border-[#ead8c6] bg-white p-3 shadow-sm sm:mt-5">
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#fff7ed] text-xs text-site-accent">
                     <i className="fas fa-user-shield" aria-hidden="true" />
                   </span>
-                  <h3 className="font-heading text-base font-bold text-site-primary">Grievance Officer</h3>
+                  <h3 className="font-heading text-sm font-bold text-site-primary sm:text-base">Grievance Officer</h3>
                 </div>
-                <div className="space-y-1.5">
-                  {grievanceDetails.map(([label, value]) => (
-                    <div key={label} className="flex flex-col gap-0.5 text-xs sm:flex-row sm:gap-2 sm:text-sm">
-                      <span className="font-bold text-site-primary">{label}:</span>
-                      <span className="text-site-muted">{value}</span>
+                <dl className="space-y-1.5">
+                  {grievanceDetails.map(({ label, value, href }) => (
+                    <div key={label} className="grid gap-0.5 text-[0.6875rem] sm:grid-cols-[6.5rem_1fr] sm:gap-2 sm:text-xs">
+                      <dt className="font-bold text-site-primary">{label}</dt>
+                      <dd className="m-0 text-site-muted">
+                        {href ? (
+                          <a href={href} className={CONTACT_LINK}>
+                            {value}
+                          </a>
+                        ) : (
+                          value
+                        )}
+                      </dd>
                     </div>
                   ))}
-                </div>
+                </dl>
               </div>
 
-              <Link to="/book-consultation" className="mt-4 inline-block text-sm font-semibold text-site-accent hover:text-site-accent-dark">
-                Prefer a consultation instead? Book a session →
+              <Link
+                to="/book-consultation"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-site-accent-dark/20 bg-white px-3 py-1.5 text-xs font-bold text-site-accent-dark !no-underline shadow-sm transition hover:border-site-accent hover:bg-[#fffaf4] hover:!text-site-accent-dark sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
+              >
+                Prefer a consultation instead?
+                <span className="text-site-accent">Book a session →</span>
               </Link>
             </div>
 

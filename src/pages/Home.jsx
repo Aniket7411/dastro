@@ -12,6 +12,51 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
 import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
+import HomeConsultationCard from '../components/HomeConsultationCard';
+
+const HOME_FEATURED_CONSULTATIONS = [
+  {
+    title: 'Tarot Card Reading',
+    img: '/images/tarot_thumbnail.png',
+    desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
+    duration: '45 Minutes',
+    icon: 'magic',
+    price: '₹5400',
+    badge: 'INTUITION EXPERT',
+    link: '/consultations/phone-session',
+  },
+  {
+    title: 'Career Consultation',
+    img: '/images/consultations/career.png',
+    desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
+    duration: '30-40 Min',
+    icon: 'briefcase',
+    price: '₹3600',
+    badge: 'CAREER EXPERT',
+    link: '/consultations/career',
+  },
+  {
+    title: 'Divorce Consultation',
+    img: '/images/consultations/health.png',
+    desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
+    duration: '30-40 Min',
+    icon: 'heart-broken',
+    price: '₹3400',
+    badge: 'RECOVERY EXPERT',
+    link: '/consultations/divorce',
+  },
+  {
+    title: 'Affair & Relationship',
+    img: '/images/consultations/love.png',
+    desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
+    duration: '30-40 Min',
+    icon: 'heart',
+    price: '₹3400',
+    badge: 'RELATIONSHIP EXPERT',
+    popular: true,
+    link: '/consultations/relationship',
+  },
+];
 
 /* Legacy AstrologyCourses — inline styles replaced by Tailwind component
 const AstrologyCourses = ({ onEnroll }) => {
@@ -1027,14 +1072,14 @@ function Home() {
               </p>
             </div>
 
-            <div className="row g-4 align-items-center mt-4">
+            <div className="row g-3 g-lg-4 align-items-center mt-3 mt-lg-4">
 
               {/* Left 2 cards */}
-              <div className="col-md-6 col-lg-4">
+              <div className="col-md-6 col-lg-4 order-1">
                 {SERVICE_CARDS.slice(0, 2).map((card, i) => (
                   <div
                     key={card.title}
-                    className={`service-card${i > 0 ? ' mt-4' : ''}`}
+                    className={`service-card${i > 0 ? ' mt-3 mt-lg-4' : ''}`}
                     data-aos="fade-up"
                     data-aos-delay={`${(i + 1) * 100}`}
                   >
@@ -1045,15 +1090,15 @@ function Home() {
                     <p className="service-card-desc">{card.desc}</p>
                     <ul className="service-card-features">
                       {card.features.map((f) => (
-                        <li key={f}><i className="fas fa-circle-check" />{f}</li>
+                        <li key={f}><i className="fas fa-circle-check" aria-hidden="true" />{f}</li>
                       ))}
                     </ul>
                   </div>
                 ))}
               </div>
 
-              {/* Center image — DOM order puts it between the two card columns */}
-              <div className="col-lg-4 text-center d-none d-lg-flex align-items-center justify-content-center" data-aos="zoom-in">
+              {/* Center image — visible on mobile between card stacks */}
+              <div className="col-12 col-lg-4 order-2 text-center d-flex align-items-center justify-content-center my-1 my-lg-0" data-aos="zoom-in">
                 <div className="service-center-img position-relative w-100">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
                   <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
@@ -1061,11 +1106,11 @@ function Home() {
               </div>
 
               {/* Right 2 cards */}
-              <div className="col-md-6 col-lg-4">
+              <div className="col-md-6 col-lg-4 order-3">
                 {SERVICE_CARDS.slice(2, 4).map((card, i) => (
                   <div
                     key={card.title}
-                    className={`service-card${i > 0 ? ' mt-4' : ''}`}
+                    className={`service-card${i > 0 ? ' mt-3 mt-lg-4' : ''}`}
                     data-aos="fade-up"
                     data-aos-delay={`${(i + 3) * 100}`}
                   >
@@ -1076,7 +1121,7 @@ function Home() {
                     <p className="service-card-desc">{card.desc}</p>
                     <ul className="service-card-features">
                       {card.features.map((f) => (
-                        <li key={f}><i className="fas fa-circle-check" />{f}</li>
+                        <li key={f}><i className="fas fa-circle-check" aria-hidden="true" />{f}</li>
                       ))}
                     </ul>
                   </div>
@@ -1291,76 +1336,22 @@ function Home() {
 
             <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
 
-            <div className="row g-4">
-              {/* Consultation Cards Mapping */}
-              {[
-                {
-                  title: 'Tarot Card Reading',
-                  img: '/images/tarot_thumbnail.png',
-                  desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
-                  duration: '45 Minutes',
-                  icon: 'magic',
-                  price: '₹5400',
-                  badge: 'INTUITION EXPERT',
-                  link: '/consultations/phone-session'
-                },
-                {
-                  title: 'Career Consultation',
-                  img: '/images/consultations/career.png',
-                  desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
-                  duration: '30-40 Min',
-                  icon: 'briefcase',
-                  price: '₹3600',
-                  badge: 'CAREER EXPERT',
-                  link: '/consultations/career'
-                },
-                {
-                  title: 'Divorce Consultation',
-                  img: '/images/consultations/health.png',
-                  desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
-                  duration: '30-40 Min',
-                  icon: 'heart-broken',
-                  price: '₹3400',
-                  badge: 'RECOVERY EXPERT',
-                  link: '/consultations/divorce'
-                },
-                {
-                  title: 'Affair & Relationship',
-                  img: '/images/consultations/love.png',
-                  desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
-                  duration: '30-40 Min',
-                  icon: 'heart',
-                  price: '₹3400',
-                  badge: 'RELATIONSHIP EXPERT',
-                  popular: true,
-                  link: '/consultations/relationship'
-                }
-              ].map((item, idx) => (
-                <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 150}>
-                  <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
-                    <div className="consult-img-v2">
-                      <img src={item.img} alt={item.title} />
-                      {item.badge && <div className="expert-badge">{item.badge}</div>}
-                      {item.price && <div className="price-tag-v2">{item.price}</div>}
-                    </div>
-                    <div className="consult-content-v2">
-                      <div className="consult-icon-v2">
-                        <i className={`fas fa-${item.icon}`}></i>
-                      </div>
-                      <h3>{item.title}</h3>
-                      <p>{item.desc}</p>
-                      <div className="consult-btn-group">
-                        <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(e, item); }}>Request callback</button>
-                      </div>
-                    </div>
-                  </div>
+            <div
+              className="grid grid-cols-1 gap-3 min-[520px]:grid-cols-2 xl:grid-cols-4 sm:gap-4"
+              data-aos="fade-up"
+            >
+              {HOME_FEATURED_CONSULTATIONS.map((item, idx) => (
+                <div key={item.link} data-aos="fade-up" data-aos-delay={idx * 100}>
+                  <HomeConsultationCard item={item} onBook={handleOpenModal} />
                 </div>
               ))}
             </div>
 
             <div className="text-center mt-5" data-aos="fade-up">
-              <Link to="/consultations" className="btn mystic-btn-outline px-5">
+              <Link
+                to="/consultations"
+                className="btn mystic-btn-outline px-5 !no-underline visited:!no-underline hover:!no-underline"
+              >
                 View All Consultations
               </Link>
             </div>
@@ -2797,21 +2788,28 @@ function Home() {
 
         /* Services */
         .services-section {
-          padding: clamp(3rem, 6vw, 5rem) 0;
+          padding: clamp(2.5rem, 5vw, 4.5rem) 0;
           background: var(--bg-color);
         }
 
+        .services-section .section-desc {
+          font-size: 0.9375rem;
+          line-height: 1.65;
+          color: #5C3D26 !important;
+        }
+
         .service-card {
-          background: var(--card-color);
-          padding: 1.1rem 1rem 1rem;
-          border-radius: 16px;
-          border: 1px solid var(--glass-border);
-          box-shadow: 0 8px 25px rgba(139, 74, 30, 0.05);
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          background: #FFFFFF;
+          padding: 1rem 1rem 0.9rem;
+          border-radius: 14px;
+          border: 1px solid rgba(200, 131, 42, 0.22);
+          box-shadow: 0 6px 20px rgba(139, 74, 30, 0.07);
+          transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
           display: flex;
           flex-direction: column;
           position: relative;
           overflow: hidden;
+          text-align: left;
         }
 
         /* Top accent line — fades in on hover */
@@ -2847,10 +2845,12 @@ function Home() {
         }
 
         .service-card-desc {
-          font-size: var(--text-body-sm);
-          color: var(--text-content);
+          font-family: var(--font-body);
+          font-size: 0.8125rem;
+          color: #5C3D26;
           line-height: 1.55;
-          margin: 0.5rem 0 0.75rem;
+          margin: 0.4rem 0 0.65rem;
+          font-weight: 500;
         }
 
         .service-card-features {
@@ -2859,57 +2859,59 @@ function Home() {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.4rem;
+          gap: 0.35rem;
         }
 
         .service-card-features li {
           display: flex;
           align-items: flex-start;
-          gap: 0.45rem;
-          font-size: var(--text-caption);
-          color: var(--text-muted);
-          font-weight: 500;
+          gap: 0.5rem;
+          font-family: var(--font-body);
+          font-size: 0.75rem;
+          color: #3D1A08;
+          font-weight: 600;
           line-height: 1.45;
         }
 
         .service-card-features li i {
-          color: var(--accent-color);
-          font-size: 0.65rem;
-          margin-top: 0.2rem;
+          color: #C8832A;
+          font-size: 0.7rem;
+          margin-top: 0.15rem;
           flex-shrink: 0;
         }
 
         .service-card-header {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.65rem;
           margin-bottom: 0;
         }
 
         .icon-wrapper {
-          width: 2.75rem;
-          height: 2.75rem;
-          background: linear-gradient(135deg, rgba(200, 131, 42, 0.15), rgba(139, 74, 30, 0.05));
+          width: 2.5rem;
+          height: 2.5rem;
+          background: linear-gradient(145deg, #FFF3E4 0%, #FFE4C4 100%);
           border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          border: 1px solid var(--glass-border);
-          transition: 0.4s ease;
+          border: 1px solid rgba(200, 131, 42, 0.38);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+          transition: 0.35s ease;
         }
 
         .service-card:hover .icon-wrapper {
-          background: var(--primary-color);
-          border-color: var(--primary-color);
+          background: linear-gradient(145deg, #8B4A1E 0%, #C8832A 100%);
+          border-color: #8B4A1E;
         }
 
         .icon-wrapper img {
-          width: 1.5rem;
-          height: 1.5rem;
+          width: 1.35rem;
+          height: 1.35rem;
           object-fit: contain;
-          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%);
-          transition: 0.4s;
+          filter: brightness(0) saturate(100%) invert(36%) sepia(72%) saturate(650%) hue-rotate(350deg) brightness(92%) contrast(92%);
+          transition: 0.35s;
         }
 
         .service-card:hover .icon-wrapper img {
@@ -2917,47 +2919,101 @@ function Home() {
         }
 
         .service-card h4 {
-          font-family: var(--font-serif);
-          font-size: var(--h4-size);
-          font-weight: 600;
-          color: var(--text-card-heading);
-          line-height: 1.3;
+          font-family: var(--font-heading);
+          font-size: 1rem;
+          font-weight: 700;
+          color: #2A0F02;
+          line-height: 1.25;
           margin: 0;
         }
 
-        /* Services center — zodiac wheel + portrait overlay (was in legacy style.min.css) */
+        /* Services center — zodiac wheel + portrait overlay */
         .service-center-img {
           position: relative;
-          min-height: 500px;
+          min-height: 280px;
           width: 100%;
+          max-width: 360px;
+          margin: 0 auto;
         }
 
         .service-center-img .img-anim {
           position: absolute;
           left: 50%;
-          top: 0;
-          transform: translateX(-50%);
-          width: 72%;
-          max-width: 380px;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 96%;
+          max-width: 440px;
           z-index: 1;
           margin: 0;
           text-align: center;
         }
 
         .service-center-img .img-anim img {
-          animation: serviceWheelSpin 7s linear infinite;
+          animation: serviceWheelSpin 14s linear infinite;
+          opacity: 0.95;
+          filter: drop-shadow(0 8px 24px rgba(139, 74, 30, 0.18));
         }
 
         .service-center-img .center-overlay {
           position: absolute;
           left: 50%;
-          top: 0;
-          transform: translateX(-50%);
-          width: 80%;
-          max-width: 330px;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 62%;
+          max-width: 260px;
           z-index: 2;
           margin: 0;
           pointer-events: none;
+          filter: drop-shadow(0 10px 28px rgba(42, 15, 2, 0.12));
+        }
+
+        @media (min-width: 992px) {
+          .service-center-img {
+            min-height: 520px;
+            max-width: none;
+          }
+
+          .service-center-img .img-anim {
+            width: 100%;
+            max-width: 460px;
+            top: 48%;
+          }
+
+          .service-center-img .center-overlay {
+            width: 58%;
+            max-width: 300px;
+            top: 48%;
+          }
+
+          .service-card {
+            padding: 1.15rem 1.1rem 1rem;
+          }
+
+          .service-card h4 {
+            font-size: 1.0625rem;
+          }
+
+          .service-card-desc {
+            font-size: 0.875rem;
+          }
+
+          .service-card-features li {
+            font-size: 0.8125rem;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .services-section .section-title {
+            font-size: 1.65rem !important;
+          }
+
+          .service-card {
+            padding: 0.9rem 0.9rem 0.85rem;
+          }
+
+          .service-card h4 {
+            font-size: 0.9375rem;
+          }
         }
 
         @keyframes serviceWheelSpin {

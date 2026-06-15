@@ -67,7 +67,7 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
       className={`overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_2px_12px_rgba(74,44,42,0.06)] ${className}`}
     >
       {!compact ? (
-        <div className="relative h-28 overflow-hidden xl:h-32">
+        <div className="relative h-24 overflow-hidden xl:h-28">
           <img src={service.img} alt={displayTitle} className="block h-full w-full object-cover" />
           {service.badge ? (
             <span
@@ -79,7 +79,7 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
         </div>
       ) : null}
 
-      <div className={`space-y-2.5 ${compact ? 'p-3.5 sm:p-4' : 'p-4'}`}>
+      <div className={`space-y-2 ${compact ? 'p-3 sm:p-3.5' : 'p-3.5'}`}>
         <div className={compact ? 'flex flex-wrap items-end justify-between gap-3' : ''}>
           <div>
             <p className="!m-0 font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">
@@ -288,24 +288,23 @@ function ConsultationDetail() {
         url={`/book-consultation/${service.id}`}
       />
 
-      <section className="border-b border-site-accent-dark/8 py-5 sm:py-6">
+      <section className="border-b border-site-accent-dark/8 py-4 sm:py-5">
         <div className={PAGE_WRAP}>
-          <Link to="/book-consultation" className={`${TYPE.backLink} !mb-4 sm:!mb-5`}>
-            <ArrowLeft size={15} aria-hidden />
+          <Link to="/book-consultation" className={`${TYPE.backLink} !mb-3 sm:!mb-3.5`}>
+            <ArrowLeft size={14} aria-hidden />
             All consultations
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_19rem] xl:gap-10">
-            {/* Main content — always first column on desktop */}
+          <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_16.5rem] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_18rem]">
             <div className="min-w-0">
-              <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <div className="mb-2 flex flex-wrap items-center gap-1.5">
                 {service.category ? <span className={TYPE.kicker}>{service.category}</span> : null}
                 {service.badge ? (
                   <MetaChip className={`!border ${badgeStyle}`}>{service.badge}</MetaChip>
                 ) : null}
                 {service.duration ? (
                   <MetaChip>
-                    <Clock size={11} className="text-site-accent" aria-hidden />
+                    <Clock size={10} className="text-site-accent" aria-hidden />
                     {service.duration}
                   </MetaChip>
                 ) : null}
@@ -313,14 +312,15 @@ function ConsultationDetail() {
 
               <h1 className={TYPE.h1}>{displayTitle}</h1>
               {showFullTitle ? (
-                <p className={`${TYPE.caption} !mt-1.5 !text-[0.8125rem] !text-site-muted`}>{service.title}</p>
+                <p className={`${TYPE.caption} !mt-1 !text-[0.75rem] !text-site-muted`}>{service.title}</p>
               ) : null}
 
-              <p className={`${TYPE.bodySm} !mt-3 max-w-2xl !text-[0.8125rem] sm:!text-sm`}>{service.desc}</p>
+              <p className="!m-0 !mt-2 max-w-2xl font-body text-[0.8125rem] leading-snug text-site-muted sm:text-sm">
+                {service.desc}
+              </p>
 
-              {/* Mobile / tablet booking — visible without scrolling past a large image */}
               <BookingPanel
-                className="mt-5 lg:hidden"
+                className="mt-4 lg:hidden"
                 service={service}
                 displayTitle={displayTitle}
                 paymentNote={paymentNote}
@@ -330,16 +330,16 @@ function ConsultationDetail() {
               />
 
               {service.highlights?.length > 0 ? (
-                <div className="mt-5 sm:mt-6">
-                  <h2 className={`${TYPE.h3} !mb-2.5 !text-sm sm:!text-base`}>This session covers</h2>
-                  <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-2">
+                <div className="mt-4 sm:mt-4">
+                  <h2 className={`${TYPE.h3} !mb-2 !text-sm`}>This session covers</h2>
+                  <ul className="m-0 grid list-none gap-1.5 p-0 sm:grid-cols-2 sm:gap-x-3 sm:gap-y-1.5">
                     {service.highlights.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2 font-body text-[0.8125rem] leading-snug text-site-primary sm:text-sm"
+                        className="flex items-start gap-1.5 font-body text-[0.8125rem] leading-snug text-site-primary"
                       >
                         <CheckCircle2
-                          size={15}
+                          size={14}
                           className="mt-0.5 shrink-0 text-site-accent"
                           strokeWidth={2.25}
                           aria-hidden
@@ -366,20 +366,22 @@ function ConsultationDetail() {
         </div>
       </section>
 
-      <section className="bg-site-surface/60 py-6 sm:py-8">
+      <section className="bg-site-surface/60 py-4 sm:py-5">
         <div className={PAGE_WRAP}>
-          <h2 className={`${TYPE.h2} !mb-4 sm:!mb-5`}>Every session includes</h2>
-          <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-3.5">
+          <h2 className={`${TYPE.h2} !mb-3 !text-[clamp(1rem,2vw,1.25rem)]`}>Every session includes</h2>
+          <div className="grid grid-cols-1 gap-2.5 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-3">
             {TRUST_POINTS.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="rounded-xl border border-site-accent-dark/10 bg-white p-3.5 sm:p-4"
+                className="rounded-xl border border-site-accent-dark/10 bg-white p-3"
               >
-                <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-site-accent/12 text-site-accent-dark">
-                  <Icon size={16} strokeWidth={2} aria-hidden />
+                <div className="mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg bg-site-accent/12 text-site-accent-dark">
+                  <Icon size={15} strokeWidth={2} aria-hidden />
                 </div>
-                <h3 className={`${TYPE.h3} !text-sm`}>{title}</h3>
-                <p className={`${TYPE.bodySm} !mt-1 !text-[0.75rem] !leading-snug sm:!text-xs`}>{desc}</p>
+                <h3 className={`${TYPE.h3} !text-[0.8125rem]`}>{title}</h3>
+                <p className="!m-0 !mt-0.5 font-body text-[0.6875rem] leading-snug text-site-muted sm:text-xs">
+                  {desc}
+                </p>
               </div>
             ))}
           </div>

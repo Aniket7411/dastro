@@ -26,16 +26,16 @@ export const TYPE = {
   priceCard:
     '!m-0 font-price !text-[1.0625rem] !font-bold !leading-none !tracking-tight !text-site-primary tabular-nums',
   backLink:
-    '!m-0 !mb-7 inline-flex items-center gap-2 !p-0 font-body !text-sm !font-semibold !text-site-accent-dark no-underline transition hover:!text-site-accent',
+    '!m-0 !mb-5 inline-flex items-center gap-1.5 !p-0 font-body !text-xs !font-semibold !text-site-accent-dark no-underline transition hover:!text-site-accent sm:!text-sm',
 };
 
 export const BTN = {
   primary:
-    'm-0 inline-flex min-h-[2.375rem] w-auto cursor-pointer items-center justify-center gap-2 rounded-lg border-0 bg-site-primary px-5 py-2 font-body text-sm font-bold text-white shadow-sm transition hover:-translate-y-px hover:bg-site-accent-dark hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:!translate-y-0',
+    'm-0 inline-flex min-h-[2.25rem] w-auto cursor-pointer select-none appearance-none items-center justify-center gap-1.5 !rounded-full border-0 bg-site-primary px-4 py-2 font-body text-xs font-bold text-white shadow-sm outline-none transition hover:-translate-y-px hover:bg-site-accent-dark hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:!translate-y-0 sm:min-h-[2.375rem] sm:gap-2 sm:px-5 sm:text-sm',
   cta:
-    'm-0 inline-flex min-h-[2.75rem] w-full cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-gradient-to-r from-site-accent to-[#d4922e] px-6 py-2.5 font-body text-sm font-bold tracking-wide text-white shadow-[0_4px_16px_rgba(200,131,42,0.32)] transition hover:-translate-y-0.5 hover:from-[#d4922e] hover:to-site-accent-dark hover:shadow-[0_6px_22px_rgba(200,131,42,0.42)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:!translate-y-0 disabled:shadow-sm',
+    'm-0 inline-flex min-h-[2.75rem] w-full cursor-pointer select-none appearance-none items-center justify-center gap-2 rounded-full border-0 bg-gradient-to-r from-site-accent to-[#d4922e] px-6 py-2.5 font-body text-sm font-bold tracking-wide text-white shadow-[0_4px_16px_rgba(200,131,42,0.32)] outline-none transition hover:-translate-y-0.5 hover:from-[#d4922e] hover:to-site-accent-dark hover:shadow-[0_6px_22px_rgba(200,131,42,0.42)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:!translate-y-0 disabled:shadow-sm',
   outline:
-    'm-0 inline-flex min-h-[2.375rem] w-auto cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-site-primary bg-transparent px-5 py-2 font-body text-sm font-bold text-site-primary transition hover:bg-site-primary hover:text-white',
+    'm-0 inline-flex min-h-[2.25rem] w-auto cursor-pointer select-none appearance-none items-center justify-center gap-1.5 !rounded-full border-2 border-site-primary bg-transparent px-4 py-2 font-body text-xs font-bold text-site-primary outline-none transition hover:!bg-site-primary hover:!text-white sm:min-h-[2.375rem] sm:gap-2 sm:px-5 sm:text-sm',
   pill: 'm-0 inline-flex min-h-[2rem] cursor-pointer items-center justify-center gap-1 rounded-full border-0 bg-site-accent-dark px-3 py-1.5 font-body text-[13px] font-bold text-white no-underline shadow-sm transition hover:bg-site-primary sm:min-h-[2.125rem] sm:px-3.5',
   grow: 'flex-1 min-w-0',
   static: 'flex-none w-auto',

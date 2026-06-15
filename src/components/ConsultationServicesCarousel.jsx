@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const CONSULTATION_SERVICE_SLIDES = [
@@ -44,29 +44,19 @@ export const CONSULTATION_SERVICE_SLIDES = [
   },
 ];
 
-const TOUCH_CAROUSEL_QUERY = '(max-width: 767px), (hover: none) and (pointer: coarse)';
-
-function useTouchCarousel() {
-  const [touchMode, setTouchMode] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia(TOUCH_CAROUSEL_QUERY).matches;
-  });
-
-  useEffect(() => {
-    const mq = window.matchMedia(TOUCH_CAROUSEL_QUERY);
-    const update = () => setTouchMode(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-
-  return touchMode;
+function stopCarouselPointer(e) {
+  e.stopPropagation();
 }
 
 function ServiceSlide({ item, onBook }) {
   return (
     <article className="csc-card">
-      <Link to={item.link} className="csc-img-link" tabIndex={-1} aria-hidden>
+      <Link
+        to={item.link}
+        className="csc-img-link"
+        tabIndex={-1}
+        aria-hidden
+      >
         <div className="csc-img-wrap">
           <img src={item.img} alt="" loading="lazy" decoding="async" draggable={false} />
           <span className="csc-duration">{item.duration}</span>
@@ -77,10 +67,15 @@ function ServiceSlide({ item, onBook }) {
         <h3 className="csc-title">{item.title}</h3>
         <p className="csc-desc">{item.desc}</p>
         <div className="csc-actions">
-          <Link to={item.link} className="csc-btn csc-btn--outline">
+          <Link to={item.link} className="csc-btn csc-btn--outline" onPointerDown={stopCarouselPointer}>
             View
           </Link>
-          <button type="button" className="csc-btn csc-btn--primary" onClick={() => onBook?.(item)}>
+          <button
+            type="button"
+            className="csc-btn csc-btn--primary"
+            onPointerDown={stopCarouselPointer}
+            onClick={() => onBook?.(item)}
+          >
             Request callback
           </button>
         </div>
@@ -90,17 +85,41 @@ function ServiceSlide({ item, onBook }) {
 }
 
 export default function ConsultationServicesCarousel({ onBook }) {
-  const touchMode = useTouchCarousel();
-  const slides = touchMode
-    ? CONSULTATION_SERVICE_SLIDES
-    : [...CONSULTATION_SERVICE_SLIDES, ...CONSULTATION_SERVICE_SLIDES];
+  const [held, setHeld] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const slides = [...CONSULTATION_SERVICE_SLIDES, ...CONSULTATION_SERVICE_SLIDES];
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  const pauseOnHold = useCallback((e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.target.closest('a, button')) return;
+    setHeld(true);
+  }, []);
+
+  const resume = useCallback(() => {
+    setHeld(false);
+  }, []);
 
   return (
     <div
-      className={`csc-section${touchMode ? ' csc-section--touch' : ''}`}
+      className={`csc-section${held ? ' csc-section--held' : ''}${reduceMotion ? ' csc-section--static' : ''}`}
       aria-label="Consultation services carousel"
     >
-      <div className="csc-viewport">
+      <div
+        className="csc-viewport"
+        onPointerDown={pauseOnHold}
+        onPointerUp={resume}
+        onPointerCancel={resume}
+        onPointerLeave={resume}
+      >
         <div className="csc-track">
           {slides.map((item, index) => (
             <ServiceSlide key={`${item.title}-${index}`} item={item} onBook={onBook} />
@@ -119,6 +138,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           overflow: hidden;
           position: relative;
           touch-action: pan-y;
+          cursor: grab;
           mask-image: linear-gradient(
             to right,
             transparent 0%,
@@ -133,6 +153,10 @@ export default function ConsultationServicesCarousel({ onBook }) {
             #000 94%,
             transparent 100%
           );
+        }
+
+        .csc-section--held .csc-viewport {
+          cursor: grabbing;
         }
 
         .csc-viewport::before,
@@ -161,8 +185,12 @@ export default function ConsultationServicesCarousel({ onBook }) {
           gap: 1.25rem;
           width: max-content;
           padding: 0.35rem 0 0.75rem;
-          animation: csc-marquee 42s linear infinite;
+          animation: csc-marquee-rtl 42s linear infinite;
           will-change: transform;
+        }
+
+        .csc-section--held .csc-track {
+          animation-play-state: paused;
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -181,7 +209,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           }
         }
 
-        @keyframes csc-marquee {
+        @keyframes csc-marquee-rtl {
           from { transform: translateX(0); }
           to { transform: translateX(-50%); }
         }
@@ -197,6 +225,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           display: flex;
           flex-direction: column;
           transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+          touch-action: manipulation;
         }
 
         .csc-img-link {
@@ -218,6 +247,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           transition: transform 0.7s ease;
           -webkit-user-drag: none;
           user-select: none;
+          pointer-events: none;
         }
 
         .csc-duration,
@@ -233,6 +263,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           backdrop-filter: blur(6px);
           padding: 0.3rem 0.65rem;
           border-radius: 999px;
+          pointer-events: none;
         }
 
         .csc-duration {
@@ -292,6 +323,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          touch-action: manipulation;
         }
 
         .csc-btn--outline {
@@ -316,42 +348,6 @@ export default function ConsultationServicesCarousel({ onBook }) {
           background: linear-gradient(135deg, #d4922e, #8b4a1e);
         }
 
-        /* Touch / mobile: manual horizontal scroll — avoids iOS scroll-lock from CSS transform animation */
-        .csc-section--touch .csc-viewport {
-          overflow-x: auto;
-          overflow-y: visible;
-          -webkit-overflow-scrolling: touch;
-          overscroll-behavior-x: contain;
-          overscroll-behavior-y: auto;
-          mask-image: none;
-          -webkit-mask-image: none;
-          scrollbar-width: none;
-          touch-action: pan-x pan-y;
-        }
-
-        .csc-section--touch .csc-viewport::-webkit-scrollbar {
-          display: none;
-        }
-
-        .csc-section--touch .csc-viewport::before,
-        .csc-section--touch .csc-viewport::after {
-          display: none;
-        }
-
-        .csc-section--touch .csc-track {
-          animation: none !important;
-          transform: none !important;
-          will-change: auto;
-          scroll-snap-type: x proximity;
-          padding-left: 0.25rem;
-          padding-right: 0.25rem;
-        }
-
-        .csc-section--touch .csc-card {
-          scroll-snap-align: start;
-          width: 16.5rem;
-        }
-
         @media (max-width: 767px) {
           .csc-section {
             margin-bottom: 2rem;
@@ -359,31 +355,38 @@ export default function ConsultationServicesCarousel({ onBook }) {
 
           .csc-track {
             gap: 1rem;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .csc-track {
-            animation: none;
-            transform: none;
-            will-change: auto;
-          }
-
-          .csc-viewport {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            mask-image: none;
-            -webkit-mask-image: none;
-            scrollbar-width: none;
-          }
-
-          .csc-viewport::-webkit-scrollbar {
-            display: none;
+            animation-duration: 32s;
           }
 
           .csc-card {
-            scroll-snap-align: start;
+            width: 16.5rem;
           }
+        }
+
+        .csc-section--static .csc-track {
+          animation: none;
+          transform: none;
+          will-change: auto;
+          overflow-x: auto;
+          scroll-snap-type: x proximity;
+          scrollbar-width: none;
+          max-width: 100%;
+        }
+
+        .csc-section--static .csc-viewport {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          mask-image: none;
+          -webkit-mask-image: none;
+          cursor: auto;
+        }
+
+        .csc-section--static .csc-viewport::-webkit-scrollbar {
+          display: none;
+        }
+
+        .csc-section--static .csc-card {
+          scroll-snap-align: start;
         }
       `}</style>
     </div>

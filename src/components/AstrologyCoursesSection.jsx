@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   Award,
+  ArrowRight,
   BookOpen,
   ChevronRight,
   Clock,
   GraduationCap,
   Headphones,
+  Radio,
   Sparkles,
   Users,
   Video,
 } from 'lucide-react';
 import { fetchCourses } from '../hooks/useCourses';
 import { CourseGridSkeleton } from './PageLoader';
-import { PAGE_WRAP, COURSE_GRID } from './consultation/tokens';
+import { PAGE_WRAP } from './consultation/tokens';
 
 const FEATURES = [
   { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
@@ -23,91 +24,115 @@ const FEATURES = [
   { icon: Headphones, title: 'Lifetime Support', sub: "We're here for you" },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.45, ease: 'easeOut' },
-  }),
-};
+const CARD_LINK =
+  '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
 
-function CourseCard({ course, index }) {
+const TITLE_LINK = `${CARD_LINK} !text-site-primary visited:!text-site-primary transition-colors hover:!text-site-accent-dark`;
+
+const BTN_LINK = `${CARD_LINK} !text-white visited:!text-white`;
+
+/** Collapse obvious duplicate placeholder descriptions from the API */
+function cleanShortDesc(text = '') {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+
+  const words = trimmed.split(/\s+/);
+  if (words.length >= 4) {
+    const half = Math.floor(words.length / 2);
+    const first = words.slice(0, half).join(' ');
+    const second = words.slice(half).join(' ');
+    if (first === second) return first;
+  }
+
+  const sentence = trimmed.split(/(?<=[.!?])\s+/)[0];
+  if (sentence && sentence.length < trimmed.length * 0.85) return sentence;
+
+  return trimmed.length > 110 ? `${trimmed.slice(0, 107).trim()}…` : trimmed;
+}
+
+function CourseCard({ course }) {
   const isLive = course.courseType === 'Live';
   const detailPath = `/courses/${course.slug || course.id}`;
+  const description = cleanShortDesc(course.shortDesc);
+  const price =
+    course.price && Number(course.price) > 0
+      ? Number(course.price).toLocaleString('en-IN')
+      : null;
 
   return (
-    <motion.article
-      custom={index}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: '-40px' }}
-      whileHover={{ y: -6 }}
-      className="group m-0 flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/10 bg-site-surface shadow-[0_8px_24px_rgba(42,15,2,0.06)] transition-shadow duration-300 hover:border-site-accent/35 hover:shadow-[0_20px_40px_rgba(139,74,30,0.14)] sm:rounded-2xl"
-    >
-      <Link to={detailPath} className="relative m-0 block aspect-[2/1] shrink-0 overflow-hidden p-0 no-underline sm:h-[11.5rem] sm:aspect-auto">
+    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-[0_10px_28px_rgba(139,74,30,0.12)]">
+      <Link to={detailPath} className={`${CARD_LINK} relative block aspect-[2/1] overflow-hidden`} tabIndex={-1} aria-hidden>
         <img
           src={course.image}
-          alt={course.title}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          alt=""
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
           loading="lazy"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2a0f02]/65 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2a0f02]/50 via-transparent to-transparent opacity-80" />
 
-        <span className={`absolute left-1.5 top-1.5 m-0 rounded-full px-1.5 py-0.5 text-[0.55rem] font-extrabold uppercase tracking-wide text-white shadow-md sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[0.65rem] ${
-          isLive ? 'bg-gradient-to-r from-[#8B4A1E] to-[#C8832A]' : 'bg-gradient-to-r from-red-600 to-rose-500'
-        }`}>
-          {isLive ? 'Live' : 'Rec'}
+        <span
+          className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm ${
+            isLive ? 'bg-site-primary' : 'bg-site-accent-dark'
+          }`}
+        >
+          {isLive ? <Radio size={9} aria-hidden /> : <Video size={9} aria-hidden />}
+          {isLive ? 'Live' : 'Recorded'}
         </span>
 
-        <span className="absolute right-1.5 top-1.5 m-0 hidden rounded-full bg-white/90 px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-site-primary ring-1 ring-site-accent/20 sm:right-3 sm:top-3 sm:block sm:px-2.5 sm:py-1">
-          {course.level}
-        </span>
+        {course.level ? (
+          <span className="absolute right-2 top-2 rounded-full bg-white/95 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-site-primary ring-1 ring-site-accent/25">
+            {course.level}
+          </span>
+        ) : null}
 
-        <div className="absolute bottom-1.5 left-1.5 hidden flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:flex sm:gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-md bg-black/35 px-2 py-0.5 text-[0.68rem] font-semibold text-white backdrop-blur-sm">
-            <Clock size={11} />
+        {course.duration ? (
+          <span className="absolute bottom-2 right-2 inline-flex items-center gap-0.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm">
+            <Clock size={9} aria-hidden />
             {course.duration}
           </span>
-          <span className="inline-flex items-center gap-1 rounded-md bg-black/35 px-2 py-0.5 text-[0.68rem] font-semibold text-white backdrop-blur-sm">
-            <BookOpen size={11} />
-            {course.schedule}
-          </span>
-        </div>
+        ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col px-2 pb-2 pt-2 sm:px-4 sm:pb-4 sm:pt-4">
-        <p className="m-0 mb-0.5 truncate text-[0.55rem] font-bold uppercase tracking-[0.12em] text-site-soft sm:mb-1 sm:text-[0.65rem]">
-          {course.category}
-        </p>
-        <h3 className="m-0 mb-1 line-clamp-2 font-heading text-xs font-bold leading-snug text-site-primary transition group-hover:text-site-accent-dark sm:mb-2 sm:text-[1.15rem]">
+      <div className="flex flex-1 flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
+        {course.category ? (
+          <p className="mb-1 truncate text-[10px] font-bold uppercase tracking-wider text-site-accent-dark">
+            {course.category}
+          </p>
+        ) : null}
+
+        <Link to={detailPath} className={`${TITLE_LINK} mb-1 line-clamp-2 font-heading text-sm font-bold leading-snug sm:text-[0.9375rem]`}>
           {course.title}
-        </h3>
-        <p className="m-0 mb-2 line-clamp-2 flex-1 text-[10px] leading-snug text-site-muted sm:mb-4 sm:line-clamp-3 sm:text-sm sm:leading-relaxed">
-          {course.shortDesc}
-        </p>
-
-        <div className="mb-2 flex items-end justify-between gap-2 border-t border-dashed border-site-accent-dark/15 pt-2 sm:mb-4 sm:pt-3">
-          {course.price ? (
-            <p className="m-0 font-price text-sm font-bold leading-none tracking-tight text-site-accent-dark tabular-nums sm:text-2xl">
-              ₹{Number(course.price).toLocaleString('en-IN')}
-            </p>
-          ) : (
-            <p className="m-0 text-[10px] font-semibold text-site-muted sm:text-sm">Enquire</p>
-          )}
-        </div>
-
-        <Link
-          to={detailPath}
-          className="inline-flex w-full items-center justify-center gap-1 rounded-lg bg-site-primary px-2 py-1.5 text-[10px] font-bold text-white no-underline transition hover:bg-black active:scale-[0.99] sm:gap-2 sm:rounded-xl sm:px-4 sm:py-2.5 sm:text-sm"
-        >
-          <span className="sm:hidden">Explore</span>
-          <span className="hidden sm:inline">Explore Course</span>
-          <ChevronRight size={14} className="transition group-hover:translate-x-0.5 sm:size-4" />
         </Link>
+
+        {description ? (
+          <p className="mb-2 line-clamp-2 flex-1 text-xs leading-relaxed text-site-muted">
+            {description}
+          </p>
+        ) : (
+          <div className="mb-2 flex-1" />
+        )}
+
+        <div className="mt-auto flex flex-col gap-2 border-t border-site-accent-dark/10 pt-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 leading-none">
+            {price ? (
+              <p className="font-price text-base font-bold tracking-tight text-site-accent-dark tabular-nums sm:text-lg">
+                ₹{price}
+              </p>
+            ) : (
+              <p className="text-xs font-semibold text-site-primary">Enquire for pricing</p>
+            )}
+          </div>
+
+          <Link
+            to={detailPath}
+            className={`${BTN_LINK} inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-full bg-site-primary px-3 py-1.5 text-[11px] font-bold shadow-sm transition hover:bg-site-accent-dark group-hover:bg-site-accent-dark sm:w-auto`}
+          >
+            Explore
+            <ArrowRight size={11} strokeWidth={2.5} className="transition group-hover:translate-x-0.5" aria-hidden />
+          </Link>
+        </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -124,7 +149,7 @@ export default function AstrologyCoursesSection() {
 
   return (
     <section
-      className="relative m-0 overflow-hidden bg-site-bg py-[clamp(2.5rem,6vw,4rem)] font-body text-site-text"
+      className="relative m-0 overflow-hidden bg-site-bg py-[clamp(2rem,5vw,3.5rem)] font-body text-site-text [&_a]:decoration-transparent"
       aria-labelledby="astro-courses-heading"
     >
       <div className="pointer-events-none absolute -left-8 top-8 text-[4.5rem] text-site-accent-dark/5" aria-hidden>
@@ -135,37 +160,29 @@ export default function AstrologyCoursesSection() {
       </div>
 
       <div className={PAGE_WRAP}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
-          className="mx-auto mb-10 max-w-2xl text-center"
-        >
-          <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-site-accent-dark/15 bg-white/70 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-site-accent-dark">
-            <Sparkles size={12} />
+        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
+          <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-site-accent-dark/15 bg-white px-2.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-site-accent-dark sm:mb-3 sm:px-3 sm:py-1 sm:text-[0.6875rem]">
+            <Sparkles size={11} />
             Featured Programs
           </span>
-          <h2 id="astro-courses-heading" className="m-0 font-heading text-[clamp(1.75rem,4vw,2.5rem)] font-extrabold text-site-primary">
-            Astrology <span className="bg-gradient-to-r from-site-accent-dark to-site-accent bg-clip-text text-transparent">Courses</span>
+          <h2 id="astro-courses-heading" className="m-0 font-heading text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-tight text-site-primary">
+            Astrology{' '}
+            <span className="bg-gradient-to-r from-site-accent-dark to-site-accent bg-clip-text text-transparent">
+              Courses
+            </span>
           </h2>
-          <div className="mx-auto my-4 flex w-24 items-center gap-2" aria-hidden>
-            <span className="h-px flex-1 bg-site-accent/40" />
-            <span className="h-1.5 w-1.5 rounded-full bg-site-accent" />
-            <span className="h-px flex-1 bg-site-accent/40" />
-          </div>
-          <p className="m-0 text-sm leading-relaxed text-site-muted sm:text-base">
-            Ancient wisdom, modern teaching — programs managed live from the admin panel.
+          <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-site-muted sm:mt-3">
+            Ancient wisdom, modern teaching — live batches and self-paced programs for every level.
           </p>
-        </motion.div>
+        </div>
 
         {loading ? (
           <CourseGridSkeleton count={4} />
         ) : courses.length > 0 ? (
-          <ul className={COURSE_GRID}>
-            {courses.map((course, index) => (
+          <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 min-[520px]:grid-cols-2 xl:grid-cols-4 xl:gap-4">
+            {courses.map((course) => (
               <li key={course.id} className="min-w-0">
-                <CourseCard course={course} index={index} />
+                <CourseCard course={course} />
               </li>
             ))}
           </ul>
@@ -175,31 +192,31 @@ export default function AstrologyCoursesSection() {
           </p>
         )}
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-6 flex flex-col items-stretch justify-center gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
           <Link
             to="/live-courses"
-            className="inline-flex items-center gap-2 rounded-full border border-site-accent-dark/20 bg-white px-5 py-2.5 text-sm font-bold text-site-primary no-underline transition hover:border-site-accent hover:bg-[#fffaf4]"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-site-accent-dark/25 bg-white px-4 py-2 text-sm font-bold !text-site-primary !no-underline shadow-sm transition visited:!text-site-primary hover:border-site-accent hover:bg-[#fffaf4] hover:!text-site-accent-dark"
           >
             <GraduationCap size={16} />
             Live Classes
           </Link>
           <Link
             to="/recorded-courses"
-            className="inline-flex items-center gap-2 rounded-full bg-site-primary px-5 py-2.5 text-sm font-bold text-white no-underline transition hover:bg-black"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-site-primary px-4 py-2 text-sm font-bold !text-white !no-underline shadow-sm transition visited:!text-white hover:bg-site-accent-dark"
           >
             Browse All Courses
             <ChevronRight size={16} />
           </Link>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 border-t border-site-accent-dark/10 pt-8 md:grid-cols-4 md:gap-6">
+        <div className="mt-8 grid grid-cols-2 gap-3 border-t border-site-accent-dark/10 pt-6 sm:gap-4 md:grid-cols-4 md:pt-8">
           {FEATURES.map(({ icon: Icon, title, sub }) => (
-            <div key={title} className="flex flex-col items-center gap-2 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-site-accent/10 text-site-accent-dark ring-1 ring-site-accent/20">
-                <Icon size={22} strokeWidth={1.75} />
+            <div key={title} className="flex flex-col items-center gap-1.5 text-center sm:gap-2">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-site-accent/10 text-site-accent-dark ring-1 ring-site-accent/20 sm:h-12 sm:w-12 sm:rounded-2xl">
+                <Icon size={20} strokeWidth={1.75} />
               </div>
-              <p className="m-0 text-sm font-bold text-site-primary">{title}</p>
-              <p className="m-0 text-xs text-site-soft">{sub}</p>
+              <p className="m-0 text-xs font-bold text-site-primary sm:text-sm">{title}</p>
+              <p className="m-0 text-[10px] leading-snug text-site-muted sm:text-xs">{sub}</p>
             </div>
           ))}
         </div>
