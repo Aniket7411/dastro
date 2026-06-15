@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Calendar, User, ChevronRight } from 'lucide-react';
 import toast from '@/utils/toast';
-import API_BASE from '../utils/api';
+import SEO from '../components/SEO';
+import TailwindPage from '../components/layout/TailwindPage';
 import {
   SITE_BTN_PRIMARY,
   SITE_CONTAINER,
-  SITE_PAGE,
   SITE_TITLE,
 } from '../utils/siteTokens';
+import { fetchBlogBySlug, formatBlogDate } from '../utils/blogApi';
+import { BLOG_CHIP } from '../components/blog/tokens';
 
 function BlogDetail() {
   const { slug } = useParams();
@@ -15,249 +18,130 @@ function BlogDetail() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    let cancelled = false;
+
+    const load = async () => {
+      setIsLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/api/blogs/${slug}`);
-        const data = await res.json();
-        if (data.success) {
-          setBlog(data.blog);
-        } else {
-          toast.error('Blog not found');
-        }
+        const data = await fetchBlogBySlug(slug);
+        if (!cancelled) setBlog(data);
       } catch (err) {
-        toast.error('Error fetching blog');
+        if (!cancelled) {
+          toast.error(err.message || 'Blog not found');
+          setBlog(null);
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
-    fetchBlog();
+    load();
     window.scrollTo(0, 0);
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (isLoading) {
     return (
-      <div className={SITE_PAGE}>
-        <div className={`container ${SITE_CONTAINER} py-5 text-center`}>
-          <div className="spinner-border text-primary"></div>
-          <p className="mt-3">Loading article...</p>
+      <TailwindPage>
+        <div className={`${SITE_CONTAINER} py-16 text-center`}>
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-site-accent border-t-transparent" />
+          <p className="mt-3 text-sm text-site-muted">Loading article…</p>
         </div>
-      </div>
+      </TailwindPage>
     );
   }
 
   if (!blog) {
     return (
-      <div className={SITE_PAGE}>
-        <div className={`container ${SITE_CONTAINER} py-5 text-center`}>
+      <TailwindPage>
+        <div className={`${SITE_CONTAINER} py-16 text-center`}>
           <h2 className={SITE_TITLE}>Insight Not Found</h2>
-          <p>The requested article could not be found.</p>
-          <Link to="/blog" className={`${SITE_BTN_PRIMARY} mt-3`}>Back to Blogs</Link>
+          <p className="mt-2 text-site-muted">The requested article could not be found.</p>
+          <Link to="/blog" className={`${SITE_BTN_PRIMARY} mt-4 inline-flex`}>
+            Back to Blogs
+          </Link>
         </div>
-      </div>
+      </TailwindPage>
     );
   }
 
   return (
-    <article className={`blog-detail-section ${SITE_PAGE}`}>
-      <div className={`container ${SITE_CONTAINER}`}>
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
-            <nav aria-label="breadcrumb" className="mb-4">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                <li className="breadcrumb-item"><Link to="/blog">Blog</Link></li>
-                <li className="breadcrumb-item active">{blog.title}</li>
-              </ol>
-            </nav>
+    <TailwindPage>
+      <SEO title={`${blog.title} | DS Institute Blog`} description={blog.excerpt || blog.title} />
 
-            <header className="blog-detail-head">
-              <span className="blog-detail-kicker">{blog.category}</span>
-              <h1>{blog.title}</h1>
-              <div className="blog-detail-meta">
-                <div className="d-flex align-items-center">
-                  <div className="blog-author-icon">
-                    <i className="fas fa-user"></i>
-                  </div>
-                  <span>Astro Expert</span>
-                </div>
-                <span className="meta-dot">•</span>
-                <span>{new Date(blog.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-              </div>
-            </header>
+      <article className={`${SITE_CONTAINER} py-8 sm:py-10`}>
+        <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-1 text-sm text-site-muted">
+          <Link to="/" className="text-site-accent-dark no-underline hover:underline">
+            Home
+          </Link>
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          <Link to="/blog" className="text-site-accent-dark no-underline hover:underline">
+            Blog
+          </Link>
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          <span className="text-site-muted">{blog.title}</span>
+        </nav>
 
-            {blog.image && (
-              <figure className="blog-detail-image">
-                <img src={blog.image} alt={blog.title} />
-              </figure>
-            )}
-
-            <div
-              className="blog-rich-content"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
-            />
-
-            <footer className="blog-detail-footer">
-              {blog.tags?.length > 0 && (
-                <div className="tags mb-4">
-                  <span className="me-2 fw-bold">Tags:</span>
-                  {blog.tags.map(tag => (
-                    <span key={tag} className="blog-tag">#{tag}</span>
-                  ))}
-                </div>
-              )}
-
-              <div className="author-card">
-                <div className="author-card-icon">
-                  <i className="fas fa-user-tie"></i>
-                </div>
-                <div>
-                  <h5 className="mb-1">About the Author</h5>
-                  <p className="mb-0 text-muted">Our Astro Experts have decades of experience in Vedic sciences, helping students and seekers understand practical astrology.</p>
-                </div>
-              </div>
-            </footer>
+        <header className="mb-6 border-b border-site-accent-dark/12 pb-5">
+          <span className={`${BLOG_CHIP} mb-3`}>{blog.category}</span>
+          <h1 className="m-0 mb-3 font-heading text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-tight text-site-primary">
+            {blog.title}
+          </h1>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-site-muted">
+            <span className="inline-flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-site-accent/12 text-site-primary">
+                <User className="h-4 w-4" aria-hidden="true" />
+              </span>
+              {blog.author || 'Admin'}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Calendar className="h-4 w-4" aria-hidden="true" />
+              {formatBlogDate(blog.createdAt, 'long')}
+            </span>
           </div>
-        </div>
-      </div>
+        </header>
 
-      <style>{`
-        .blog-detail-section {
-          background: var(--site-bg);
-        }
+        {blog.image && (
+          <figure className="mb-6 overflow-hidden rounded-xl border border-site-accent-dark/12 shadow-sm">
+            <img src={blog.image} alt={blog.title} className="block max-h-[28rem] w-full object-cover" />
+          </figure>
+        )}
 
-        .blog-detail-head {
-          border-bottom: 1px solid var(--site-border);
-          padding-bottom: 1.5rem;
-          margin-bottom: 2rem;
-        }
+        <div
+          className="blog-rich-content"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
 
-        .blog-detail-kicker,
-        .blog-tag {
-          display: inline-flex;
-          align-items: center;
-          border-radius: var(--radius-control);
-          background: rgba(156, 83, 33, 0.08);
-          color: var(--site-primary);
-          font-weight: 700;
-        }
+        <footer className="mt-8 border-t border-site-accent-dark/12 pt-6">
+          {blog.tags?.length > 0 && (
+            <div className="mb-5 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-bold text-site-primary">Tags:</span>
+              {blog.tags.map((tag) => (
+                <span key={tag} className={BLOG_CHIP}>
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
 
-        .blog-detail-kicker {
-          padding: 0.45rem 0.8rem;
-          margin-bottom: 0.9rem;
-          font-size: var(--kicker-size);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-        }
-
-        .blog-detail-head h1 {
-          font-family: var(--font-heading);
-          color: var(--site-text);
-          font-size: var(--h1-size);
-          line-height: 1.15;
-          margin-bottom: 1rem;
-        }
-
-        .blog-detail-meta {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          flex-wrap: wrap;
-          color: var(--site-muted);
-        }
-
-        .blog-author-icon {
-          width: 2.25rem;
-          height: 2.25rem;
-          border-radius: 50%;
-          background: #fff7ee;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: 0.55rem;
-          color: var(--site-primary);
-        }
-
-        .blog-detail-image {
-          border-radius: var(--radius-card);
-          overflow: hidden;
-          box-shadow: var(--shadow-card);
-          margin: 0 0 2rem;
-          border: 1px solid var(--site-border);
-        }
-
-        .blog-detail-image img {
-          width: 100%;
-          max-height: 28rem;
-          object-fit: cover;
-          display: block;
-        }
-
-        .blog-rich-content {
-          font-size: var(--body-size);
-          line-height: 1.75;
-          color: var(--site-muted);
-        }
-
-        .blog-rich-content h1,
-        .blog-rich-content h2,
-        .blog-rich-content h3 {
-          font-family: var(--font-heading);
-          color: var(--site-text);
-          margin-top: 1.8rem;
-        }
-
-        .blog-rich-content img {
-          max-width: 100%;
-          border-radius: var(--radius-card);
-        }
-
-        .blog-detail-footer {
-          margin-top: 2.5rem;
-          padding-top: 2rem;
-          border-top: 1px solid var(--site-border);
-        }
-
-        .blog-tag {
-          padding: 0.35rem 0.7rem;
-          margin: 0 0.35rem 0.35rem 0;
-          font-size: 0.86rem;
-        }
-
-        .author-card {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          background: var(--site-surface);
-          border: 1px solid var(--site-border);
-          border-radius: var(--radius-card);
-          padding: 1.1rem;
-          box-shadow: var(--shadow-card);
-        }
-
-        .author-card-icon {
-          width: 3rem;
-          height: 3rem;
-          border-radius: 50%;
-          background: #fff7ee;
-          color: var(--site-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex: 0 0 auto;
-        }
-
-        @media (max-width: 575px) {
-          .author-card {
-            align-items: flex-start;
-          }
-
-          .meta-dot {
-            display: none;
-          }
-        }
-      `}</style>
-    </article>
+          <div className="flex items-start gap-3 rounded-xl border border-site-accent-dark/12 bg-white p-4 shadow-sm sm:items-center sm:p-5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-site-accent/12 text-site-primary">
+              <User className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <div>
+              <h2 className="m-0 mb-1 font-heading text-base font-bold text-site-primary">
+                About {blog.author || 'the Author'}
+              </h2>
+              <p className="m-0 text-sm leading-relaxed text-site-muted">
+                Insights from DS Institute on practical astrology, spiritual growth, and everyday guidance.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </article>
+    </TailwindPage>
   );
 }
 

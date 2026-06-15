@@ -199,3 +199,34 @@
 .wb-fixed-cta__arrow {
   animation: wb-cta-arrow 1s ease-in-out infinite;
 }
+
+/* Blog detail — HTML body from admin editor */
+.tw-page .blog-rich-content {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-site-muted);
+}
+
+.tw-page .blog-rich-content :where(h1, h2, h3, h4) {
+  font-family: var(--font-heading);
+  color: var(--color-site-text);
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.tw-page .blog-rich-content :where(p, ul, ol) {
+  margin-bottom: 1rem;
+}
+
+.tw-page .blog-rich-content a {
+  color: var(--color-site-accent-dark);
+  text-decoration: underline;
+}
+
+.tw-page .blog-rich-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
