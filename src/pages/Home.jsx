@@ -457,7 +457,7 @@ const BANNER_SLIDES = [
     title1: 'Unlock The Secrets Of',
     title2: 'Your Celestial Destiny',
     desc: 'Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.',
-    primaryCta: { label: 'Book Consultation', action: 'consultation', icon: 'fas fa-calendar-check' },
+    primaryCta: { label: 'Explore Consultations', path: '/consultations', icon: 'fas fa-calendar-check' },
     bgImage: '/banner.jpg',
     overlayGlass: true,
   },
@@ -853,7 +853,6 @@ function Home() {
 
                   <HomeBannerCTAs
                     primaryCta={activeSlide.primaryCta}
-                    onConsultation={handleOpenModal}
                     onDark={Boolean(activeSlide.bgImage || activeSlide.overlayGlass)}
                   />
 
