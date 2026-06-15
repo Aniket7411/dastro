@@ -3,6 +3,19 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 
+const SHELL_LINK =
+  '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
+
+const NAV_LINK = `${SHELL_LINK} rounded-full px-4 py-2 text-sm font-bold !text-[#6f4a32] visited:!text-[#6f4a32] transition hover:!bg-[#f8ead8] hover:!text-[#2a0f02]`;
+
+const BTN_GHOST = `${SHELL_LINK} hidden rounded-full border border-[#ead8c6] bg-transparent px-3 py-2 text-xs font-black !text-[#6f4a32] visited:!text-[#6f4a32] transition hover:!border-[#c8832a] hover:!bg-[#fffaf4] hover:!text-[#2a0f02] sm:inline-flex`;
+
+const BTN_SOLID = `${SHELL_LINK} inline-flex items-center gap-2 rounded-full border-0 bg-[#2a0f02] px-4 py-2 text-xs font-black !text-white visited:!text-white shadow-lg shadow-[#8b4a1e]/20 transition hover:!bg-[#8b4a1e] hover:!text-white`;
+
+const FOOTER_LINK = `${SHELL_LINK} !text-[#fff7ed] visited:!text-[#fff7ed] opacity-85 transition hover:!text-[#fff7ed] hover:opacity-100`;
+
+const LOGO_WRAP = `${SHELL_LINK} flex min-w-0 items-center gap-3 !text-inherit visited:!text-inherit`;
+
 const pageMeta = [
   {
     match: (path) => path === '/login',
@@ -114,7 +127,7 @@ function StandaloneLayout() {
   }, [pathname]);
 
   return (
-    <div className="contextual-shell min-h-screen bg-[#fff7ed] text-[#2a0f02]">
+    <div className="contextual-shell min-h-screen bg-[#fff7ed] font-body text-[#2a0f02] [&_a]:decoration-transparent">
       <motion.header
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
@@ -122,7 +135,7 @@ function StandaloneLayout() {
         className="sticky top-0 z-[1030] border-b border-[#ead8c6] bg-[#fffaf3]/95 backdrop-blur-xl"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-3 no-underline">
+          <Link to="/" className={LOGO_WRAP}>
             <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-[#8b4a1e]/20 sm:h-10 sm:w-10">
               <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-full w-full object-contain p-0.5" />
             </span>
@@ -137,42 +150,36 @@ function StandaloneLayout() {
           </Link>
 
           <nav className="hidden items-center gap-2 md:flex">
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/">
+            <Link className={NAV_LINK} to="/">
               Home
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/courses">
+            <Link className={NAV_LINK} to="/courses">
               Courses
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/consultations">
+            <Link className={NAV_LINK} to="/consultations">
               Consultation
             </Link>
             {authState.isStudent ? (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/dashboard">
+              <Link className={NAV_LINK} to="/dashboard">
                 Dashboard
               </Link>
             ) : (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/login">
+              <Link className={NAV_LINK} to="/login">
                 Student Login
               </Link>
             )}
             {authState.isAdmin && (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/admin">
+              <Link className={NAV_LINK} to="/admin">
                 Admin
               </Link>
             )}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
-            <Link
-              to={meta.secondary.to}
-              className="hidden rounded-full border border-[#ead8c6] px-3 py-2 text-xs font-black text-[#6f4a32] no-underline transition hover:border-[#c8832a] hover:text-[#2a0f02] sm:inline-flex"
-            >
+            <Link to={meta.secondary.to} className={BTN_GHOST}>
               {meta.secondary.label}
             </Link>
-            <Link
-              to={meta.primary.to}
-              className="inline-flex items-center gap-2 rounded-full bg-[#2a0f02] px-4 py-2 text-xs font-black text-white no-underline shadow-lg shadow-[#8b4a1e]/20 transition hover:bg-[#8b4a1e]"
-            >
+            <Link to={meta.primary.to} className={BTN_SOLID}>
               {meta.primary.label}
               <i className="fas fa-arrow-right text-[11px]"></i>
             </Link>
@@ -208,9 +215,9 @@ function StandaloneLayout() {
           </div>
 
           <div className="flex flex-wrap gap-3 text-sm font-bold">
-            <Link className="text-[#fff7ed] no-underline opacity-85 transition hover:opacity-100" to="/privacy-policy">Privacy</Link>
-            <Link className="text-[#fff7ed] no-underline opacity-85 transition hover:opacity-100" to="/terms-and-conditions">Terms</Link>
-            <Link className="text-[#fff7ed] no-underline opacity-85 transition hover:opacity-100" to="/contact">Support</Link>
+            <Link className={FOOTER_LINK} to="/privacy-policy">Privacy</Link>
+            <Link className={FOOTER_LINK} to="/terms-and-conditions">Terms</Link>
+            <Link className={FOOTER_LINK} to="/contact">Support</Link>
           </div>
 
           <p className="mb-0 text-xs font-bold text-[#d8b894]">&copy; 2026 Cosmic Light Astrology</p>

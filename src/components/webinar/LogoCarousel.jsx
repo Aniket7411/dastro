@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { WB_WRAP } from './tokens';
 
 const logos = [
   '/images/10350949.png',
@@ -13,10 +14,12 @@ const logos = [
 
 const LogoCarousel = () => {
   return (
-    <div className="logo-carousel-container">
-      <div className="logo-carousel-track">
+    <div className="relative overflow-hidden bg-white/[0.02] py-8 sm:py-10">
+      <div className={`${WB_WRAP} relative`}>
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-16 bg-gradient-to-r from-[#F8FAFC] to-transparent sm:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-16 bg-gradient-to-l from-[#F8FAFC] to-transparent sm:w-28" />
         <motion.div
-          className="logo-carousel-list"
+          className="flex w-max items-center gap-10 sm:gap-14"
           animate={{ x: ['0%', '-50%'] }}
           transition={{
             duration: 20,
@@ -25,70 +28,19 @@ const LogoCarousel = () => {
           }}
         >
           {[...logos, ...logos].map((logo, index) => (
-            <div key={index} className="logo-item">
-              <img src={logo} alt={`Partner ${index}`} />
+            <div
+              key={`${logo}-${index}`}
+              className="flex h-12 w-24 shrink-0 items-center justify-center opacity-60 grayscale brightness-200 contrast-50 transition hover:opacity-100 hover:grayscale-0 hover:brightness-100 sm:h-14 sm:w-[7.5rem]"
+            >
+              <img
+                src={logo}
+                alt={`Partner ${index}`}
+                className="max-h-full max-w-full object-contain"
+              />
             </div>
           ))}
         </motion.div>
       </div>
-      <style>{`
-        .logo-carousel-container {
-          padding: 40px 0;
-          background: rgba(255, 255, 255, 0.02);
-          overflow: hidden;
-          position: relative;
-        }
-        .logo-carousel-track {
-          max-width: var(--container-public);
-          margin: 0 auto;
-          padding-left: var(--page-pad-x);
-          padding-right: var(--page-pad-x);
-          position: relative;
-        }
-        .logo-carousel-track::before,
-        .logo-carousel-track::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          width: 150px;
-          height: 100%;
-          z-index: 2;
-        }
-        .logo-carousel-track::before {
-          left: 0;
-          background: linear-gradient(to right, #ffffff, transparent);
-        }
-        .logo-carousel-track::after {
-          right: 0;
-          background: linear-gradient(to left, #ffffff, transparent);
-        }
-        .logo-carousel-list {
-          display: flex;
-          gap: 60px;
-          align-items: center;
-          width: max-content;
-        }
-        .logo-item {
-          flex: 0 0 auto;
-          width: 120px;
-          height: 60px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          filter: grayscale(1) brightness(2) contrast(0.5);
-          opacity: 0.6;
-          transition: 0.3s;
-        }
-        .logo-item:hover {
-          filter: grayscale(0) brightness(1);
-          opacity: 1;
-        }
-        .logo-item img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-        }
-      `}</style>
     </div>
   );
 };

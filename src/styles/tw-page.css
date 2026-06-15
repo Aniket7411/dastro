@@ -113,3 +113,80 @@
 .tw-page .tw-field__input--filter {
   padding-left: 2.25rem !important;
 }
+
+/* Standalone layout (webinar, payment, course-inquiry) — beat Bootstrap link defaults */
+.contextual-shell {
+  font-family: var(--font-body) !important;
+}
+
+.contextual-shell a {
+  text-decoration: none !important;
+}
+
+.contextual-shell a:visited {
+  text-decoration: none !important;
+}
+
+/* Webinar fixed bottom CTA — isolate from Bootstrap reboot / button styles */
+.wb-fixed-cta {
+  font-family: var(--font-body) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wb-fixed-cta :where(p, h1, h2, h3, h4, h5, h6, span, div) {
+  margin: 0 !important;
+  padding: 0;
+  line-height: inherit;
+}
+
+.wb-fixed-cta button {
+  margin: 0 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  font-family: var(--font-body) !important;
+}
+
+@keyframes wb-cta-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 -3px 16px rgba(255, 120, 0, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+  50% {
+    box-shadow:
+      0 -4px 28px rgba(255, 120, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+}
+
+@keyframes wb-cta-shimmer {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+@keyframes wb-cta-arrow {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+.wb-fixed-cta__bar {
+  animation: wb-cta-glow 3.5s ease-in-out infinite;
+}
+
+.wb-fixed-cta__shimmer {
+  animation: wb-cta-shimmer 3s ease-in-out infinite;
+}
+
+.wb-fixed-cta__arrow {
+  animation: wb-cta-arrow 1s ease-in-out infinite;
+}

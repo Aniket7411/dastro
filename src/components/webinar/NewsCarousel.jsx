@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { WB_WRAP, TYPE } from './tokens';
 
 const newsItems = [
   { name: 'Aaj Tak', logo: '/images/5005806.png' },
@@ -11,12 +12,14 @@ const newsItems = [
 
 const NewsCarousel = () => {
   return (
-    <div className="news-carousel-section">
-      <div className="container">
-        <h4 className="news-heading">AS FEATURED IN</h4>
-        <div className="news-track-wrapper">
+    <div className="border-y border-white/5 bg-[#0b1220] py-10 sm:py-12">
+      <div className={WB_WRAP}>
+        <h4 className={`${TYPE.kicker} mb-6 text-center !text-orange-500 sm:mb-8`}>
+          AS FEATURED IN
+        </h4>
+        <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <motion.div
-            className="news-track"
+            className="flex w-max items-center gap-12 sm:gap-16"
             animate={{ x: ['-50%', '0%'] }}
             transition={{
               duration: 25,
@@ -25,64 +28,23 @@ const NewsCarousel = () => {
             }}
           >
             {[...newsItems, ...newsItems].map((item, index) => (
-              <div key={index} className="news-item">
-                <img src={item.logo} alt={item.name} />
-                <span>{item.name}</span>
+              <div
+                key={`${item.name}-${index}`}
+                className="flex cursor-pointer items-center gap-3 opacity-70 transition hover:-translate-y-0.5 hover:opacity-100"
+              >
+                <img
+                  src={item.logo}
+                  alt={item.name}
+                  className="h-8 w-auto invert grayscale sm:h-9"
+                />
+                <span className="!m-0 whitespace-nowrap font-body !text-sm !font-bold !text-white sm:!text-base">
+                  {item.name}
+                </span>
               </div>
             ))}
           </motion.div>
         </div>
       </div>
-      <style>{`
-        .news-carousel-section {
-          padding: 60px 0;
-          background: #0b1220;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .news-heading {
-          text-align: center;
-          font-size: 0.9rem;
-          color: #ff6a00;
-          letter-spacing: 4px;
-          font-weight: 800;
-          margin-bottom: 40px;
-          text-transform: uppercase;
-        }
-        .news-track-wrapper {
-          overflow: hidden;
-          mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-        }
-        .news-track {
-          display: flex;
-          gap: 80px;
-          align-items: center;
-          width: max-content;
-        }
-        .news-item {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          opacity: 0.7;
-          transition: 0.3s;
-          cursor: pointer;
-        }
-        .news-item:hover {
-          opacity: 1;
-          transform: translateY(-5px);
-        }
-        .news-item img {
-          height: 40px;
-          width: auto;
-          filter: grayscale(1) invert(1);
-        }
-        .news-item span {
-          color: #fff;
-          font-weight: 700;
-          font-size: 1.1rem;
-          white-space: nowrap;
-        }
-      `}</style>
     </div>
   );
 };

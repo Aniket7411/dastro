@@ -1,13 +1,56 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import {
+  WB_WRAP,
+  WB_HIGHLIGHT,
+  WB_SECTION,
+  WB_SECTION_HEADER,
+  WB_SIDE_NAV,
+  WB_SIDE_NAV_HIDDEN,
+  WB_SLIDER_TRACK,
+  WB_SUBTITLE,
+  WB_TITLE,
+  WB_UNDERLINE,
+  TYPE,
+} from './tokens';
 
 const textReviews = [
-  { id: 1, text: "This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you DS Institute!", author: "Siddharth Jain", role: "Software Engineer" },
-  { id: 2, text: "I was skeptical at first, but the depth of knowledge shared in just 2 days was mind-blowing. Highly recommended for everyone.", author: "Megha Malhotra", role: "Business Owner" },
-  { id: 3, text: "The way complex astrological concepts were explained made it so easy to understand. I finally know why certain patterns repeat in my life.", author: "Vikram Singh", role: "Creative Designer" },
-  { id: 4, text: "Professional, insightful, and truly life-altering. Best investment of ₹99 I've ever made. The Q&A session was very helpful.", author: "Anjali Deshmukh", role: "Homemaker" },
-  { id: 5, text: "Truly a cosmic experience! The practical tips on birth chart reading were the highlight for me. Already seeing positive changes.", author: "Rohan Khanna", role: "Marketing Head" },
-  { id: 6, text: "A must-attend for anyone lost in their life path. The instructor is extremely knowledgeable and patient with all questions.", author: "Sanya Gupta", role: "Artist" },
+  {
+    id: 1,
+    text: 'This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you DS Institute!',
+    author: 'Siddharth Jain',
+    role: 'Software Engineer',
+  },
+  {
+    id: 2,
+    text: 'I was skeptical at first, but the depth of knowledge shared in just 2 days was mind-blowing. Highly recommended for everyone.',
+    author: 'Megha Malhotra',
+    role: 'Business Owner',
+  },
+  {
+    id: 3,
+    text: 'The way complex astrological concepts were explained made it so easy to understand. I finally know why certain patterns repeat in my life.',
+    author: 'Vikram Singh',
+    role: 'Creative Designer',
+  },
+  {
+    id: 4,
+    text: "Professional, insightful, and truly life-altering. Best investment of ₹99 I've ever made. The Q&A session was very helpful.",
+    author: 'Anjali Deshmukh',
+    role: 'Homemaker',
+  },
+  {
+    id: 5,
+    text: 'Truly a cosmic experience! The practical tips on birth chart reading were the highlight for me. Already seeing positive changes.',
+    author: 'Rohan Khanna',
+    role: 'Marketing Head',
+  },
+  {
+    id: 6,
+    text: 'A must-attend for anyone lost in their life path. The instructor is extremely knowledgeable and patient with all questions.',
+    author: 'Sanya Gupta',
+    role: 'Artist',
+  },
 ];
 
 const TextReviewCarousel = () => {
@@ -28,7 +71,7 @@ const TextReviewCarousel = () => {
       const amount = containerRef.current.clientWidth * 0.7;
       containerRef.current.scrollBy({
         left: direction === 'left' ? -amount : amount,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
@@ -40,50 +83,62 @@ const TextReviewCarousel = () => {
       checkScroll();
       return () => el.removeEventListener('scroll', checkScroll);
     }
+    return undefined;
   }, []);
 
   return (
-    <section className="text-reviews-section">
-      <div className="container">
-        <div className="section-header-centered text-center">
-          <h5 className="section-subtitle">Wall of Love</h5>
-          <h2 className="section-title">Words from our <span className="text-highlight">Community</span></h2>
-          <div className="header-underline mx-auto mt-3"></div>
+    <section className={`${WB_SECTION} border-t border-slate-200 bg-slate-50`}>
+      <div className={WB_WRAP}>
+        <div className={`${WB_SECTION_HEADER} text-center`}>
+          <h5 className={WB_SUBTITLE}>Wall of Love</h5>
+          <h2 className={WB_TITLE}>
+            Words from our <span className={WB_HIGHLIGHT}>Community</span>
+          </h2>
+          <div className={WB_UNDERLINE} />
         </div>
 
-        <div className="text-slider-production-wrapper">
-          {/* Side Navigation Buttons */}
-          <button 
-            className={`side-nav-btn prev ${!canScrollLeft ? 'hidden' : ''}`} 
+        <div className="relative px-0 md:px-8">
+          <button
+            type="button"
+            className={`${WB_SIDE_NAV} left-0 ${!canScrollLeft ? WB_SIDE_NAV_HIDDEN : ''}`}
             onClick={() => scroll('left')}
+            aria-label="Previous"
           >
-            <i className="fas fa-chevron-left"></i>
-          </button>
-          
-          <button 
-            className={`side-nav-btn next ${!canScrollRight ? 'hidden' : ''}`} 
-            onClick={() => scroll('right')}
-          >
-            <i className="fas fa-chevron-right"></i>
+            <i className="fas fa-chevron-left" aria-hidden="true" />
           </button>
 
-          <div className="text-slider-container">
-            <div className="text-slider-track" ref={containerRef}>
+          <button
+            type="button"
+            className={`${WB_SIDE_NAV} right-0 ${!canScrollRight ? WB_SIDE_NAV_HIDDEN : ''}`}
+            onClick={() => scroll('right')}
+            aria-label="Next"
+          >
+            <i className="fas fa-chevron-right" aria-hidden="true" />
+          </button>
+
+          <div className="overflow-hidden">
+            <div ref={containerRef} className={WB_SLIDER_TRACK}>
               {textReviews.map((review) => (
-                <motion.div 
-                  key={review.id} 
-                  className="testimonial-card"
-                  whileHover={{ scale: 1.02 }}
+                <motion.div
+                  key={review.id}
+                  className="relative flex min-w-[280px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-orange-500 hover:shadow-md sm:min-w-[340px] sm:p-7"
+                  whileHover={{ scale: 1.01 }}
                 >
-                  <div className="quote-mark">“</div>
-                  <p className="testimonial-text">{review.text}</p>
-                  <div className="testimonial-footer">
-                    <div className="avatar-circle">
+                  <div className="pointer-events-none absolute right-6 top-2 font-serif text-6xl leading-none text-[#EE6662] opacity-[0.07] sm:text-7xl">
+                    &ldquo;
+                  </div>
+                  <p className={`${TYPE.body} relative z-[1] mb-6`}>{review.text}</p>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#3B2261] font-body text-base font-extrabold text-white shadow-sm sm:h-12 sm:w-12">
                       {review.author[0]}
                     </div>
-                    <div className="user-info">
-                      <span className="user-name">{review.author}</span>
-                      <span className="user-role">{review.role}</span>
+                    <div className="flex flex-col">
+                      <span className="!m-0 font-body !text-sm !font-bold !text-[#3B2261] sm:!text-base">
+                        {review.author}
+                      </span>
+                      <span className="!m-0 font-body !text-xs !font-semibold !text-[#EE6662] sm:!text-sm">
+                        {review.role}
+                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -92,144 +147,6 @@ const TextReviewCarousel = () => {
           </div>
         </div>
       </div>
-      <style>{`
-        .text-reviews-section {
-          padding: 100px 0;
-          background: #f8fafc;
-          border-top: 1px solid #e2e8f0;
-        }
-        .section-header-centered {
-          margin-bottom: 60px;
-        }
-        .section-subtitle { color: var(--brand-coral, #EE6662); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
-        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--brand-purple, #3B2261); margin: 0; }
-        .header-underline { height: 4px; width: 60px; background: var(--brand-coral, #EE6662); border-radius: 2px; }
-
-        .text-slider-production-wrapper {
-          position: relative;
-          padding: 0 40px;
-        }
-
-        .side-nav-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          border: 1px solid rgba(255,255,255,0.1);
-          background: #fff;
-          backdrop-filter: blur(10px);
-          color: var(--brand-purple, #3B2261);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: 0.3s;
-          font-size: 1.1rem;
-          z-index: 10;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .side-nav-btn.prev { left: 0; }
-        .side-nav-btn.next { right: 0; }
-        .side-nav-btn:hover {
-          background: var(--brand-coral, #EE6662);
-          border-color: var(--brand-coral, #EE6662);
-          color: #fff;
-          box-shadow: 0 0 20px rgba(238, 102, 98, 0.4);
-        }
-        .side-nav-btn.hidden { opacity: 0; pointer-events: none; }
-
-        .text-slider-container {
-          overflow: hidden;
-        }
-        .text-slider-track {
-          display: flex;
-          gap: 25px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          scrollbar-width: none;
-          padding: 20px 0 40px;
-        }
-        .text-slider-track::-webkit-scrollbar { display: none; }
-
-        .testimonial-card {
-          min-width: 400px;
-          scroll-snap-align: start;
-          background: #fff;
-          border: 1px solid #e2e8f0;
-          padding: 40px;
-          border-radius: 40px;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          transition: 0.3s;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-        .testimonial-card:hover {
-          background: rgba(255, 255, 255, 0.04);
-          border-color: #ff6a00;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .quote-mark {
-          position: absolute;
-          top: 20px;
-          right: 40px;
-          font-size: 8rem;
-          line-height: 1;
-          font-family: serif;
-          color: var(--brand-coral, #EE6662);
-          opacity: 0.08;
-        }
-        .testimonial-text {
-          font-size: 1.15rem;
-          line-height: 1.8;
-          color: #4a5568;
-          margin-bottom: 40px;
-          position: relative;
-          z-index: 1;
-        }
-        .testimonial-footer {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-        }
-        .avatar-circle {
-          width: 60px;
-          height: 60px;
-          background: var(--brand-purple, #3B2261);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          font-weight: 800;
-          font-size: 1.4rem;
-          box-shadow: 0 5px 15px rgba(59, 34, 97, 0.2);
-        }
-        .user-info {
-          display: flex;
-          flex-direction: column;
-        }
-        .user-name {
-          color: var(--brand-purple, #3B2261);
-          font-weight: 700;
-          font-size: 1.1rem;
-        }
-        .user-role {
-          color: var(--brand-coral, #EE6662);
-          font-size: 0.85rem;
-          font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-          .testimonial-card { min-width: 300px; padding: 30px; }
-          .testimonial-text { font-size: 1rem; }
-          .side-nav-btn { display: none; }
-          .text-slider-production-wrapper { padding: 0; }
-        }
-      `}</style>
     </section>
   );
 };

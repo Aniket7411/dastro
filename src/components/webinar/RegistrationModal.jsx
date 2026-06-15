@@ -1,58 +1,133 @@
-import React from 'react';
-import { createPortal } from 'react-dom';
-import { useModalLock } from '../modal/ModalLayer';
-import './RegistrationModal.css';
+import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
+import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
+import { WB_CTA, WB_HIGHLIGHT, TYPE } from './tokens';
 
-function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting }) {
+function RegistrationModal({
+  isOpen,
+  onClose,
+  formData,
+  handleChange,
+  handleSubmit,
+  isSubmitting,
+}) {
   useModalLock(isOpen, onClose);
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
-      <div className="modal-container">
-        <button className="modal-close" onClick={onClose} aria-label="Close">
-          <i className="fa fa-times" aria-hidden="true"></i>
-        </button>
-        <div className="modal-scroll-area">
-          <div className="modal-content-wrapper">
-            <div className="modal-image-side">
-              <h4>Join the <br/><span className="text-highlight">Masterclass</span></h4>
-              <p>Unlock your cosmic potential with India's leading astrology mentor.</p>
-              <ul className="modal-points">
-                <li><i className="fa fa-check-circle"></i> 2 Days Live Training</li>
-                <li><i className="fa fa-check-circle"></i> Practical Reading Skills</li>
-                <li><i className="fa fa-check-circle"></i> Q&A with DS Institute mentors</li>
-              </ul>
-            </div>
-            <div className="modal-form-side">
-              <div className="form-header-mini">
-                <h3>Reserve Your Seat</h3>
-                <p>Limited Seats Available at ₹99/-</p>
+  return (
+    <ModalPortal open={isOpen}>
+      <ModalOverlay onClose={onClose} className="!items-center !p-3 sm:!p-4">
+        <div
+          className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="webinar-modal-title"
+        >
+          <button
+            type="button"
+            className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-black/10 text-xl text-slate-700 transition hover:bg-black/20"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <i className="fa fa-times" aria-hidden="true" />
+          </button>
+
+          <div className="overflow-y-auto">
+            <div className="grid md:grid-cols-2">
+              <div className="bg-gradient-to-br from-[#3B2261] to-[#2a1845] p-6 text-white sm:p-8">
+                <h4 className={`${TYPE.h2} mb-3 !text-white`}>
+                  Join the <br />
+                  <span className={WB_HIGHLIGHT}>Masterclass</span>
+                </h4>
+                <p className={`${TYPE.bodySmOnDark} mb-5`}>
+                  Unlock your cosmic potential with India&apos;s leading astrology mentor.
+                </p>
+                <ul className="m-0 space-y-2.5 p-0">
+                  {[
+                    '2 Days Live Training',
+                    'Practical Reading Skills',
+                    'Q&A with DS Institute mentors',
+                  ].map((point) => (
+                    <li key={point} className={`${TYPE.bodySmOnDark} flex items-center gap-2.5`}>
+                      <i className="fa fa-check-circle shrink-0 text-sm text-[#EE6662]" aria-hidden="true" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <form onSubmit={handleSubmit} className="modal-form">
-                <div className="form-group">
-                  <label>Full Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter Your Full Name" />
+
+              <div className="p-5 sm:p-6">
+                <div className="mb-5">
+                  <h3 id="webinar-modal-title" className={`${TYPE.h3} mb-1`}>
+                    Reserve Your Seat
+                  </h3>
+                  <p className={TYPE.bodySm}>Limited Seats Available at ₹99/-</p>
                 </div>
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter Your Best Email" />
-                </div>
-                <div className="form-group">
-                  <label>Phone Number</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-Digit Mobile Number" />
-                </div>
-                <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
-                  {isSubmitting ? 'Processing...' : 'Complete Registration'}
-                </button>
-                <p className="secure-text"><i className="fas fa-lock me-2"></i> Secured by Razorpay</p>
-              </form>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="webinar-name" className={MODAL_LABEL}>
+                      Full Name
+                    </label>
+                    <input
+                      id="webinar-name"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter Your Full Name"
+                      className={MODAL_INPUT}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="webinar-email" className={MODAL_LABEL}>
+                      Email Address
+                    </label>
+                    <input
+                      id="webinar-email"
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter Your Best Email"
+                      className={MODAL_INPUT}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="webinar-phone" className={MODAL_LABEL}>
+                      Phone Number
+                    </label>
+                    <input
+                      id="webinar-phone"
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      placeholder="10-Digit Mobile Number"
+                      className={MODAL_INPUT}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className={`${WB_CTA} w-full justify-center`}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Processing...' : 'Complete Registration'}
+                  </button>
+                  <p className={`${TYPE.caption} text-center !normal-case !tracking-normal`}>
+                    <i className="fas fa-lock mr-1.5" aria-hidden="true" />
+                    Secured by Razorpay
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>,
-    document.body
+      </ModalOverlay>
+    </ModalPortal>
   );
 }
 

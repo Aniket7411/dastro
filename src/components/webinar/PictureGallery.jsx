@@ -1,30 +1,52 @@
+import {
+  WB_WRAP,
+  WB_HIGHLIGHT,
+  WB_SECTION,
+  WB_SUBTITLE,
+  WB_TITLE,
+  WB_UNDERLINE,
+  TYPE,
+} from './tokens';
+
 const galleryImages = [
   { url: '/images/horocurty.jpg', title: 'Live Webinar Session' },
   { url: '/images/horocurty03.jpg', title: 'Interactive Learning' },
   { url: '/images/ruiy-img01.jpg', title: 'Mentorship Program' },
   { url: '/images/bg-bannerpic.jpg', title: 'Student Community' },
   { url: '/images/cosmic_blueprint.png', title: 'Vedic Insights' },
- 
 ];
 
 const PictureGallery = () => {
   return (
-    <section className="gallery-section">
-      <div className="container">
-        <div className="section-header text-center">
-          <h5 className="section-subtitle">Memories</h5>
-          <h2 className="section-title">Glimpses of Our <span className="text-highlight">Webinars</span></h2>
-          <div className="header-underline mx-auto"></div>
+    <section className={`${WB_SECTION} bg-[#fdfaff]`}>
+      <div className={WB_WRAP}>
+        <div className="text-center">
+          <h5 className={WB_SUBTITLE}>Memories</h5>
+          <h2 className={WB_TITLE}>
+            Glimpses of Our <span className={WB_HIGHLIGHT}>Webinars</span>
+          </h2>
+          <div className={WB_UNDERLINE} />
         </div>
-        <div className="gallery-grid">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {galleryImages.map((img, idx) => (
-            <div key={idx} className="gallery-item" data-aos="zoom-in" data-aos-delay={idx * 100}>
-              <div className="gallery-img-wrapper">
-                <img src={img.url} alt={img.title} />
-                <div className="gallery-overlay">
-                  <div className="overlay-content">
-                    <h4>{img.title}</h4>
-                    <p>Experience the Magic</p>
+            <div
+              key={img.title}
+              className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-slate-200 shadow-sm"
+              data-aos="zoom-in"
+              data-aos-delay={idx * 100}
+            >
+              <div className="relative h-full w-full overflow-hidden">
+                <img
+                  src={img.url}
+                  alt={img.title}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-[#3B2261]/90 to-transparent p-5 opacity-0 transition duration-300 group-hover:opacity-100 sm:p-6">
+                  <div>
+                    <h4 className="!m-0 font-heading !text-base !font-bold !text-white sm:!text-lg">
+                      {img.title}
+                    </h4>
+                    <p className={`${TYPE.caption} !mt-1 !text-[#EE6662]`}>Experience the Magic</p>
                   </div>
                 </div>
               </div>
@@ -32,71 +54,6 @@ const PictureGallery = () => {
           ))}
         </div>
       </div>
-      <style>{`
-        .gallery-section {
-          padding: 100px 0;
-          background: #fdfaff;
-        }
-        .gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          margin-top: 50px;
-        }
-        .gallery-item {
-          border-radius: 20px;
-          overflow: hidden;
-          position: relative;
-          aspect-ratio: 4/3;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .gallery-img-wrapper {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          transition: 0.5s;
-        }
-        .gallery-img-wrapper img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: 0.5s;
-        }
-        .gallery-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(59, 34, 97, 0.9), transparent);
-          display: flex;
-          align-items: flex-end;
-          padding: 30px;
-          opacity: 0;
-          transition: 0.4s;
-        }
-        .overlay-content h4 {
-          color: #fff;
-          font-size: 1.2rem;
-          font-weight: 800;
-          margin-bottom: 5px;
-        }
-        .overlay-content p {
-          color: var(--brand-coral, #EE6662);
-          font-size: 0.9rem;
-          font-weight: 700;
-        }
-        .gallery-item:hover .gallery-img-wrapper img {
-          transform: scale(1.1);
-        }
-        .gallery-item:hover .gallery-overlay {
-          opacity: 1;
-        }
-        @media (max-width: 991px) {
-          .gallery-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 576px) {
-          .gallery-grid { grid-template-columns: 1fr; }
-        }
-      `}</style>
     </section>
   );
 };
