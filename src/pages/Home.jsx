@@ -988,8 +988,32 @@ function Home() {
       <main className="w-100 body-main">
         <section className="about-part-section w-100 py-5 mt-5 mt-lg-5 pt-lg-5">
           <div className="container">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6">
+            <div className="row align-items-center g-4 g-lg-5">
+
+              {/* Text — first on mobile, second on desktop */}
+              <div className="col-lg-6 order-1 order-lg-2">
+                <HomeSectionHeader
+                  align="left"
+                  className="max-w-none"
+                  kicker="About DS Institute"
+                  title="Unlock a Brilliant Future with"
+                  titleHighlight="Astrology"
+                  subtitle="Discover your true potential with expert astrology guidance — clarity, confidence, and success through accurate, personalized insights."
+                />
+                {/* Desktop button — below text */}
+                <div className="hidden lg:flex mt-5">
+                  <Link
+                    to="/about"
+                    style={{ textDecoration: 'none' }}
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-7 py-3 font-body text-sm font-semibold text-site-primary shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                  >
+                    More About Us
+                  </Link>
+                </div>
+              </div>
+
+              {/* Image — second on mobile (inward), first on desktop */}
+              <div className="col-lg-6 order-2 order-lg-1 px-4 px-sm-5 px-lg-3">
                 <div className="img-box01 position-relative">
                   <figure className="moon-img" data-aos="fade-right" data-aos-once="true">
                     <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
@@ -1006,17 +1030,18 @@ function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
-                <HomeSectionHeader
-                  align="left"
-                  className="max-w-none"
-                  kicker="About DS Institute"
-                  title="Unlock a Brilliant Future with"
-                  titleHighlight="Astrology"
-                  subtitle="Discover your true potential with expert astrology guidance — clarity, confidence, and success through accurate, personalized insights."
-                />
-                <a href="#" className="btn mystic-btn-outline mt-2 sm:mt-4" data-aos="fade-up" data-aos-once="true" data-aos-delay="300">Read More</a>
+
+              {/* Mobile button — after image, hidden on desktop */}
+              <div className="col-12 order-3 flex justify-center lg:!hidden">
+                <Link
+                  to="/about"
+                  style={{ textDecoration: 'none' }}
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-6 py-2 font-body text-sm font-semibold text-site-primary shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                >
+                  More About Us
+                </Link>
               </div>
+
             </div>
           </div>
         </section>
