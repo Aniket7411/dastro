@@ -42,10 +42,10 @@ export const BTN = {
 };
 
 export const TAB =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap !rounded-full border border-site-accent-dark/12 bg-site-bg px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/40 hover:bg-site-surface hover:text-site-primary sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark/12 bg-site-bg px-1.5 py-0.5 font-body text-[0.625rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/40 hover:bg-site-surface hover:text-site-primary sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const TAB_ACTIVE =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap !rounded-full border border-site-primary bg-site-primary px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-white shadow-sm antialiased transition sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-primary bg-site-primary px-1.5 py-0.5 font-body text-[0.625rem] font-semibold leading-none text-white shadow-sm antialiased transition sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const TAB_COUNT =
   'inline-flex min-w-[1rem] items-center justify-center rounded-full bg-site-accent-dark/10 px-1.5 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-site-accent-dark';
@@ -54,10 +54,10 @@ export const TAB_COUNT_ACTIVE =
   'inline-flex min-w-[1rem] items-center justify-center rounded-full bg-white/20 px-1.5 py-0.5 font-body text-[0.625rem] font-bold tabular-nums leading-none text-white/95';
 
 export const CHIP =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark/15 bg-site-bg px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/45 hover:bg-site-surface hover:text-site-primary sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark/15 bg-site-bg px-1.5 py-0.5 font-body text-[0.625rem] font-semibold leading-none text-site-muted antialiased transition hover:border-site-accent/45 hover:bg-site-surface hover:text-site-primary sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const CHIP_ACTIVE =
-  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark bg-site-accent-dark px-2 py-1 font-body text-[0.6875rem] font-semibold leading-none text-white shadow-sm antialiased sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
+  'm-0 inline-flex shrink-0 cursor-pointer items-center gap-0.5 whitespace-nowrap !rounded-full border border-site-accent-dark bg-site-accent-dark px-1.5 py-0.5 font-body text-[0.625rem] font-semibold leading-none text-white shadow-sm antialiased sm:gap-1 sm:px-2.5 sm:py-1.5 sm:text-xs md:px-3 md:py-2';
 
 export const CHIP_GHOST =
   'm-0 cursor-pointer border-0 bg-transparent p-0 font-body text-xs font-bold text-site-accent-dark underline-offset-2 hover:underline';
@@ -75,4 +75,4 @@ export const CARD_FLEX_ITEM =
   'flex w-full min-w-0 min-[480px]:w-[calc(50%-0.5rem)] min-[480px]:max-w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] lg:max-w-[calc(25%-0.75rem)]';
 
 export const SELECT =
-  'm-0 cursor-pointer appearance-none !rounded-full border border-site-accent-dark/15 bg-site-bg py-1.5 pl-3 pr-8 font-body text-[0.8125rem] font-semibold leading-none text-site-muted antialiased outline-none transition hover:border-site-accent/40 focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:py-2 sm:pl-3.5 sm:text-xs';
+  'm-0 cursor-pointer appearance-none !rounded-full border border-site-accent-dark/15 bg-site-bg py-1 pl-2.5 pr-7 font-body text-[0.625rem] font-semibold leading-none text-site-muted antialiased outline-none transition hover:border-site-accent/40 focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:py-1.5 sm:pl-3 sm:pr-8 sm:text-xs md:py-2 md:pl-3.5';

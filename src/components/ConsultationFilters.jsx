@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SlidersHorizontal, X, Tag, Clock, IndianRupee, ChevronDown } from 'lucide-react';
+import { SlidersHorizontal, X, Tag, Clock, IndianRupee, ChevronDown, ChevronUp } from 'lucide-react';
 import { PAGE_WRAP, TYPE, BTN, CHIP, CHIP_ACTIVE, FILTER_BAR, SELECT, TAB, TAB_ACTIVE, TAB_COUNT, TAB_COUNT_ACTIVE } from './consultation/tokens';
 
 const SCROLL_HIDE = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
@@ -160,7 +160,7 @@ function AdvancedFiltersSheet({
 function ResultsCount({ total, loading, hasActiveFilters }) {
   if (loading) {
     return (
-      <span className="inline-flex items-center gap-1.5 font-body text-[0.8125rem] font-medium leading-none text-site-muted antialiased">
+      <span className="inline-flex items-center gap-1.5 font-body text-xs font-medium leading-none text-site-muted antialiased">
         <span className="h-2.5 w-2.5 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent-dark" />
         Loading…
       </span>
@@ -168,12 +168,17 @@ function ResultsCount({ total, loading, hasActiveFilters }) {
   }
 
   const label = total === 1 ? 'consultation' : 'consultations';
+  const suffix = hasActiveFilters ? 'matched' : 'available';
 
   return (
-    <span className="font-body text-[0.8125rem] font-medium leading-none text-site-muted antialiased">
-      <strong className="font-bold tabular-nums text-site-primary">{total}</strong>
-      {' '}
-      {hasActiveFilters ? `${label} matched` : `${label} available`}
+    <span className="whitespace-nowrap font-body text-xs font-medium leading-none text-site-muted antialiased md:text-sm">
+      <span className="md:hidden">
+        Results <strong className="font-bold tabular-nums text-site-primary">{total}</strong>
+      </span>
+      <span className="hidden md:inline">
+        <strong className="font-bold tabular-nums text-site-primary">{total}</strong>
+        {' '}{label} {suffix}
+      </span>
     </span>
   );
 }
@@ -200,6 +205,7 @@ export function ConsultationFilterBar({
   hasActiveFilters = false,
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
 
   const advancedCount =
     selectedDurations.length +
@@ -213,8 +219,50 @@ export function ConsultationFilterBar({
     <>
       <div className={FILTER_BAR}>
         <div className={PAGE_WRAP}>
-          <div className="flex flex-col gap-2.5 py-2.5 sm:gap-3 lg:flex-row lg:items-center lg:justify-between lg:py-3">
-            <div className={`flex min-w-0 flex-wrap items-center gap-1.5 sm:flex-nowrap sm:gap-2 sm:overflow-x-auto ${SCROLL_HIDE}`}>
+          <div className="py-2 lg:py-3">
+
+            {/* ── Controls row (always visible) ── */}
+            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 sm:gap-x-3">
+              <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+                {/* Category toggle — mobile only */}
+                <button
+                  type="button"
+                  onClick={() => setCatOpen(v => !v)}
+                  className={`inline-flex items-center gap-1 lg:hidden ${chipClass(selectedCategories.length > 0)}`}
+                >
+                  {catOpen ? <ChevronUp size={9} aria-hidden /> : <ChevronDown size={9} aria-hidden />}
+                  Categories
+                  {selectedCategories.length > 0 && (
+                    <span className="rounded bg-white/25 px-1 py-0.5 text-[0.5rem] font-bold leading-none">{selectedCategories.length}</span>
+                  )}
+                </button>
+
+                <button type="button" onClick={() => setSheetOpen(true)} className={`${chipClass(advancedCount > 0)} gap-1`}>
+                  <SlidersHorizontal size={9} aria-hidden />
+                  Filters
+                  {advancedCount > 0 && (
+                    <span className="rounded bg-white/25 px-1 py-0.5 text-[0.5rem] font-bold leading-none">{advancedCount}</span>
+                  )}
+                </button>
+
+                <ResultsCount total={total} loading={loading} hasActiveFilters={hasActiveFilters} />
+              </div>
+
+              <div className="relative flex shrink-0 items-center gap-1.5">
+                <span className="hidden text-[0.625rem] font-bold uppercase tracking-wider text-site-accent-dark/55 lg:block">Sort</span>
+                <div className="relative">
+                  <select value={sortValue} onChange={(e) => onSortChange(e.target.value)} className={SELECT}>
+                    {sortOptions.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={10} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:right-2.5 sm:size-[11px]" aria-hidden />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Category tabs — always on desktop, toggle on mobile ── */}
+            <div className={`${catOpen ? 'flex' : 'hidden'} lg:flex mt-2.5 min-w-0 flex-wrap items-center gap-1.5 sm:gap-2 overflow-x-auto ${SCROLL_HIDE}`}>
               <button type="button" onClick={onClearCategories} className={tabClass(allCategoriesActive)}>
                 {!loading && total > 0 && (
                   <span className={allCategoriesActive ? TAB_COUNT_ACTIVE : TAB_COUNT}>{total}</span>
@@ -236,30 +284,6 @@ export function ConsultationFilterBar({
                 ))}
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:justify-end sm:gap-3">
-              <div className="flex min-w-0 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2.5">
-                <button type="button" onClick={() => setSheetOpen(true)} className={chipClass(advancedCount > 0)}>
-                  <SlidersHorizontal size={12} aria-hidden />
-                  Filters
-                  {advancedCount > 0 && (
-                    <span className="rounded bg-white/25 px-1 py-0.5 text-[0.5rem] font-bold leading-none">{advancedCount}</span>
-                  )}
-                </button>
-                <ResultsCount total={total} loading={loading} hasActiveFilters={hasActiveFilters} />
-              </div>
-
-              <div className="relative flex shrink-0 items-center gap-1.5">
-                <span className="hidden text-[0.625rem] font-bold uppercase tracking-wider text-site-accent-dark/55 lg:block">Sort</span>
-                <div className="relative">
-                  <select value={sortValue} onChange={(e) => onSortChange(e.target.value)} className={SELECT}>
-                    {sortOptions.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={11} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-site-accent-dark/50" aria-hidden />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

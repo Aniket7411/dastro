@@ -297,13 +297,13 @@ export default function SiteNavbar({
           scrolled ? 'shadow-[0_4px_20px_rgba(139,74,30,0.12)]' : 'shadow-[0_2px_8px_rgba(139,74,30,0.06)]'
         }`}
       >
-        <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:justify-normal">
+        <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline" aria-label="DS Institute home">
             <img
               src={SITE_LOGO}
               alt={SITE_LOGO_ALT}
-              className="h-11 w-auto object-contain sm:h-12 lg:h-14"
+              className="h-12 w-auto object-contain sm:h-14 lg:h-[60px]"
               fetchPriority="high"
             />
           </Link>
