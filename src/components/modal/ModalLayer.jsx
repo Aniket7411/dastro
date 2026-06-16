@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-/** Above SiteNavbar (1020) and mobile drawer (1055) */
-export const MODAL_Z = 'z-[1200]';
+/** Above SiteNavbar (1020), mobile drawer (1055), and sticky CTAs */
+export const MODAL_Z = 'z-[1300]';
 
 /** Above open modals (e.g. payment processing overlay) */
-export const MODAL_LOADER_Z = 'z-[1210]';
+export const MODAL_LOADER_Z = 'z-[1310]';
 
 export function useModalBodyLock(isOpen) {
   useEffect(() => {

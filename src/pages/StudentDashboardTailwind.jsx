@@ -34,7 +34,7 @@ const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 const CARD =
   'rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_1px_8px_rgba(42,15,2,0.05)]';
 const STAT_CARD =
-  'flex min-h-0 items-center gap-3 rounded-xl border border-site-accent-dark/10 px-3.5 py-3 shadow-[0_1px_6px_rgba(42,15,2,0.04)] transition hover:border-site-accent/25 hover:shadow-[0_4px_14px_rgba(42,15,2,0.07)] sm:gap-3.5 sm:px-4 sm:py-3.5';
+  'flex min-h-0 items-center gap-3.5 rounded-xl border border-t-2 border-site-accent-dark/10 px-4 py-3.5 shadow-[0_1px_6px_rgba(42,15,2,0.04)] transition-shadow hover:shadow-[0_4px_16px_rgba(42,15,2,0.09)] sm:px-4 sm:py-4';
 
 const inputCls = [
   'w-full rounded-xl border border-site-accent-dark/20 bg-[#fffcf8] px-4 py-2.5',
@@ -67,7 +67,14 @@ function validityStyle(val) {
   if (val === 'Expired') return 'bg-red-50 text-red-600 border-red-200';
   const n = parseInt(val, 10);
   if (!Number.isNaN(n) && n <= 30) return 'bg-orange-50 text-orange-600 border-orange-200';
-  return 'bg-green-50 text-green-700 border-green-200';
+  return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+}
+
+function validityBorderCls(val) {
+  if (val === 'Expired') return 'border-l-red-300';
+  const n = parseInt(val, 10);
+  if (!Number.isNaN(n) && n <= 30) return 'border-l-orange-300';
+  return 'border-l-emerald-300';
 }
 
 function Skel({ className = '' }) {
@@ -87,7 +94,7 @@ function DashboardLoading() {
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className={`${STAT_CARD} bg-white`}>
-                <Skel className="h-9 w-9 shrink-0 rounded-lg" />
+                <Skel className="h-10 w-10 shrink-0 rounded-lg" />
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <Skel className="h-2.5 w-16" />
                   <Skel className="h-5 w-8" />
@@ -105,11 +112,11 @@ function DashboardLoading() {
   );
 }
 
-function StatCard({ label, value, icon: Icon, iconBg, cardBg }) {
+function StatCard({ label, value, icon: Icon, iconBg, cardBg, topBorder }) {
   return (
-    <div className={`${STAT_CARD} ${cardBg || 'bg-white'}`}>
+    <div className={`${STAT_CARD} ${topBorder || ''} ${cardBg || 'bg-white'}`}>
       <div
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${iconBg}`}
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg shadow-sm ${iconBg}`}
       >
         <Icon size={17} strokeWidth={2.25} />
       </div>
@@ -117,7 +124,7 @@ function StatCard({ label, value, icon: Icon, iconBg, cardBg }) {
         <p className="truncate text-[10px] font-bold uppercase tracking-wide text-site-muted sm:text-[11px]">
           {label}
         </p>
-        <p className="mt-0.5 font-heading text-lg font-extrabold leading-none text-site-primary sm:text-xl">
+        <p className="mt-0.5 font-heading text-xl font-extrabold leading-none text-site-primary sm:text-2xl">
           {value}
         </p>
       </div>
@@ -128,7 +135,7 @@ function StatCard({ label, value, icon: Icon, iconBg, cardBg }) {
 function ProgressBar({ value, thin = false }) {
   const pct = Math.min(Math.max(Number(value) || 0, 0), 100);
   return (
-    <div className={`w-full overflow-hidden rounded-full bg-site-accent-dark/10 ${thin ? 'h-1.5' : 'h-2.5'}`}>
+    <div className={`w-full overflow-hidden rounded-full bg-site-accent-dark/10 ${thin ? 'h-1.5' : 'h-2'}`}>
       <div
         className="h-full rounded-full bg-gradient-to-r from-site-accent-dark to-site-accent transition-all duration-700"
         style={{ width: `${pct}%` }}
@@ -137,12 +144,13 @@ function ProgressBar({ value, thin = false }) {
   );
 }
 
-function SectionHead({ icon: Icon, title, badge }) {
+function SectionHead({ icon: Icon, title, badge, iconCls }) {
+  const cls = iconCls || 'bg-site-accent/10 text-site-accent-dark';
   return (
-    <div className="mb-2.5 flex items-center justify-between gap-3">
+    <div className="mb-3 flex items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-site-accent/10">
-          <Icon size={15} className="text-site-accent-dark" />
+        <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${cls}`}>
+          <Icon size={15} />
         </div>
         <h2 className="font-heading text-sm font-extrabold text-site-primary">{title}</h2>
       </div>
@@ -156,7 +164,7 @@ function Pill({ children, active }) {
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
         active
-          ? 'border border-site-accent/30 bg-site-accent/10 text-site-accent-dark'
+          ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
           : 'bg-site-bg text-site-muted'
       }`}
     >
@@ -238,8 +246,9 @@ export default function StudentDashboardTailwind() {
       label: 'Enrolled',
       value: enrolledCourses.length,
       icon: BookOpen,
-      iconBg: 'bg-pink-200 text-pink-800',
-      cardBg: 'bg-pink-100',
+      iconBg: 'bg-pink-100 text-pink-700',
+      cardBg: 'bg-pink-50',
+      topBorder: 'border-t-pink-300',
     },
     {
       label: 'Active',
@@ -247,20 +256,23 @@ export default function StudentDashboardTailwind() {
       icon: GraduationCap,
       iconBg: 'bg-blue-100 text-blue-700',
       cardBg: 'bg-blue-50',
+      topBorder: 'border-t-blue-300',
     },
     {
       label: 'Completed',
       value: completedCourses,
       icon: Sparkles,
-      iconBg: 'bg-purple-200 text-purple-800',
-      cardBg: 'bg-purple-100',
+      iconBg: 'bg-purple-100 text-purple-700',
+      cardBg: 'bg-purple-50',
+      topBorder: 'border-t-purple-400',
     },
     {
       label: 'Avg Progress',
       value: `${avgProgress}%`,
       icon: TrendingUp,
-      iconBg: 'bg-orange-200 text-orange-800',
-      cardBg: 'bg-orange-100',
+      iconBg: 'bg-orange-100 text-orange-700',
+      cardBg: 'bg-orange-50',
+      topBorder: 'border-t-orange-300',
     },
   ];
 
@@ -284,7 +296,7 @@ export default function StudentDashboardTailwind() {
         />
         <div className={`relative z-10 flex flex-col gap-3 py-7 sm:gap-4 sm:py-8 lg:flex-row lg:items-end lg:justify-between lg:py-9 ${WRAP}`}>
           <div className="min-w-0 flex-1">
-            <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#f5c98d] backdrop-blur-sm sm:mb-2 sm:px-3 sm:py-1 sm:text-[11px]">
+            <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#f5c98d] shadow-[0_0_12px_rgba(245,201,141,0.12)] backdrop-blur-sm sm:text-[11px]">
               <Sparkles size={11} />
               {greeting}
             </span>
@@ -314,7 +326,7 @@ export default function StudentDashboardTailwind() {
       </header>
 
       {/* Stats */}
-      <div className={`relative z-20 mt-2 sm:mt-4 ${WRAP}`}>
+      <div className={`relative z-20 mt-3 sm:mt-5 ${WRAP}`}>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
@@ -327,56 +339,64 @@ export default function StudentDashboardTailwind() {
 
           {/* Sidebar */}
           <aside className="flex flex-col gap-3 lg:sticky lg:top-[9rem]">
-            <div className={`${CARD} p-4 sm:p-5`}>
-              <div className="mb-3 flex items-center gap-3 border-b border-site-accent-dark/10 pb-3 sm:pb-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-site-accent-dark to-site-accent text-sm font-black text-white ring-2 ring-site-bg">
-                  {initials(studentName) || <UserRound size={20} />}
+
+            {/* Profile card */}
+            <div className={`${CARD} overflow-hidden`}>
+              {/* Gradient header area */}
+              <div className="bg-gradient-to-br from-amber-50/80 via-orange-50/40 to-transparent px-4 pb-3.5 pt-4 sm:px-5 sm:pb-4 sm:pt-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-site-accent-dark to-site-accent text-sm font-black text-white shadow-md ring-2 ring-white ring-offset-2 ring-offset-amber-50/60">
+                    {initials(studentName) || <UserRound size={20} />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-heading text-base font-extrabold text-site-primary">
+                      {studentName}
+                    </p>
+                    <p className="text-xs font-semibold text-site-muted">Student account</p>
+                  </div>
+                  <Pill active>Active</Pill>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-heading text-base font-extrabold text-site-primary">
-                    {studentName}
-                  </p>
-                  <p className="text-xs font-semibold text-site-muted">Student account</p>
-                </div>
-                <Pill active>Active</Pill>
               </div>
 
-              <dl className="space-y-2.5">
-                {[
-                  ['Name', profile?.name || '—'],
-                  ['Email', profile?.email || '—'],
-                  ['Mobile', profile?.mobile || '—'],
-                ].map(([k, v]) => (
-                  <div key={k}>
-                    <dt className="text-[10px] font-bold uppercase tracking-widest text-site-accent">
-                      {k}
-                    </dt>
-                    <dd className="mt-0.5 break-all text-sm font-semibold text-site-primary">{v}</dd>
-                  </div>
-                ))}
-              </dl>
+              {/* Profile details */}
+              <div className="border-t border-site-accent-dark/10 px-4 pb-4 pt-3.5 sm:px-5 sm:pb-5">
+                <dl className="space-y-2.5">
+                  {[
+                    ['Name', profile?.name || '—'],
+                    ['Email', profile?.email || '—'],
+                    ['Mobile', profile?.mobile || '—'],
+                  ].map(([k, v]) => (
+                    <div key={k}>
+                      <dt className="text-[10px] font-bold uppercase tracking-widest text-site-accent">
+                        {k}
+                      </dt>
+                      <dd className="mt-0.5 break-all text-sm font-semibold text-site-primary">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
 
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-site-accent-dark/10 pt-3">
-                <BtnOutline onClick={() => setProfileEditMode((o) => !o)}>
-                  <PenLine size={14} />
-                  {profileEditMode ? 'Cancel Edit' : 'Edit Profile'}
-                </BtnOutline>
-                <BtnOutline
-                  onClick={() => {
-                    setPasswordEditMode((open) => {
-                      if (open) resetPasswordForm();
-                      return !open;
-                    });
-                    setProfileEditMode(false);
-                  }}
-                >
-                  <Lock size={14} />
-                  {passwordEditMode ? 'Cancel' : 'Change Password'}
-                </BtnOutline>
-                <BtnPrimary className="hidden lg:inline-flex" onClick={handleLogout}>
-                  <LogOut size={14} />
-                  Logout
-                </BtnPrimary>
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-site-accent-dark/10 pt-3">
+                  <BtnOutline onClick={() => setProfileEditMode((o) => !o)}>
+                    <PenLine size={14} />
+                    {profileEditMode ? 'Cancel Edit' : 'Edit Profile'}
+                  </BtnOutline>
+                  <BtnOutline
+                    onClick={() => {
+                      setPasswordEditMode((open) => {
+                        if (open) resetPasswordForm();
+                        return !open;
+                      });
+                      setProfileEditMode(false);
+                    }}
+                  >
+                    <Lock size={14} />
+                    {passwordEditMode ? 'Cancel' : 'Change Password'}
+                  </BtnOutline>
+                  <BtnPrimary className="hidden lg:inline-flex" onClick={handleLogout}>
+                    <LogOut size={14} />
+                    Logout
+                  </BtnPrimary>
+                </div>
               </div>
             </div>
 
@@ -479,38 +499,50 @@ export default function StudentDashboardTailwind() {
             )}
 
             {enrolledCourses.length > 0 && (
-              <div className={`${CARD} p-4 sm:p-5`}>
-                <div className="mb-3 flex items-center justify-between">
+              <div className={`${CARD} overflow-hidden`}>
+                <div className="flex items-center justify-between px-4 pb-3 pt-4 sm:px-5 sm:pt-5">
                   <h3 className="font-heading text-sm font-extrabold text-site-primary">
                     Overall progress
                   </h3>
-                  <span className="font-price text-2xl font-bold tabular-nums tracking-tight text-site-accent">
+                  <span className="font-price text-2xl font-bold tabular-nums tracking-tight text-site-accent-dark">
                     {avgProgress}%
                   </span>
                 </div>
-                <ProgressBar value={avgProgress} />
-                <p className="mt-3 text-xs text-site-muted">
-                  {completedCourses} of {enrolledCourses.length} course
-                  {enrolledCourses.length !== 1 ? 's' : ''} completed
-                </p>
+                <div className="px-4 sm:px-5">
+                  <ProgressBar value={avgProgress} />
+                </div>
+                <div className="mt-3 flex items-center justify-between border-t border-site-accent-dark/8 px-4 py-3 sm:px-5">
+                  <p className="text-xs text-site-muted">
+                    {completedCourses} of {enrolledCourses.length} course
+                    {enrolledCourses.length !== 1 ? 's' : ''} completed
+                  </p>
+                  {avgProgress === 100 && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600">
+                      <Sparkles size={11} />
+                      All done!
+                    </span>
+                  )}
+                </div>
               </div>
             )}
           </aside>
 
           {/* Main */}
           <div className="flex min-w-0 flex-col gap-5 sm:gap-6">
-            {/* Courses */}
+
+            {/* My Courses */}
             <section>
               <SectionHead
                 icon={BookOpen}
                 title="My courses"
+                iconCls="bg-blue-100 text-blue-700"
                 badge={<Pill>{enrolledCourses.length} enrolled</Pill>}
               />
               <div className={CARD}>
                 {enrolledCourses.length === 0 ? (
-                  <div className="flex flex-col items-center px-6 py-16 sm:py-20 text-center">
-                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-site-accent/10">
-                      <FolderOpen size={30} className="text-site-accent-dark" />
+                  <div className="flex flex-col items-center px-6 py-16 text-center sm:py-20">
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
+                      <FolderOpen size={30} className="text-blue-500" />
                     </div>
                     <p className="font-heading text-base font-extrabold text-site-primary">
                       No enrolled courses yet
@@ -524,7 +556,7 @@ export default function StudentDashboardTailwind() {
                     </Link>
                   </div>
                 ) : (
-                  <div className="divide-y divide-site-accent-dark/10">
+                  <div className="divide-y divide-site-accent-dark/8">
                     {enrolledCourses.map((course) => {
                       const validity =
                         courseValidity[course.id]?.daysRemaining ??
@@ -532,7 +564,7 @@ export default function StudentDashboardTailwind() {
                       return (
                         <article
                           key={course.id}
-                          className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-5 sm:py-5"
+                          className={`flex flex-col gap-3 border-l-4 px-4 py-4 transition-colors hover:bg-site-bg/50 sm:flex-row sm:items-center sm:px-5 sm:py-5 ${validityBorderCls(validity)}`}
                         >
                           <img
                             src={course.thumbnail}
@@ -540,10 +572,14 @@ export default function StudentDashboardTailwind() {
                             className="h-20 w-full shrink-0 rounded-lg object-cover sm:h-[5.5rem] sm:w-32"
                           />
                           <div className="min-w-0 flex-1">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-site-accent">
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                              course.courseType === 'Live'
+                                ? 'bg-blue-50 text-blue-700'
+                                : 'bg-amber-50 text-amber-700'
+                            }`}>
                               {course.courseType}
                             </span>
-                            <h3 className="mt-0.5 line-clamp-2 font-heading text-base font-extrabold leading-snug text-site-primary">
+                            <h3 className="mt-1.5 line-clamp-2 font-heading text-base font-extrabold leading-snug text-site-primary">
                               {course.title}
                             </h3>
                             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-site-muted">
@@ -556,14 +592,27 @@ export default function StudentDashboardTailwind() {
                               >
                                 {validity}
                               </span>
+                              {course.accessApproved === false ? (
+                                <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                                  Awaiting approval
+                                </span>
+                              ) : null}
                             </div>
                             <div className="mt-3 flex items-center gap-3">
                               <ProgressBar value={course.progress} thin />
                               <span className="shrink-0 text-xs font-bold text-site-accent-dark">
-                                {course.progress}%
+                                {course.accessApproved === false ? '—' : `${course.progress}%`}
                               </span>
                             </div>
                           </div>
+                          {course.accessApproved === false ? (
+                            <span
+                              className={`${BTN.link} ${BTN.primary} self-start opacity-60 sm:self-center`}
+                              title="Lessons unlock after admin approval"
+                            >
+                              Pending
+                            </span>
+                          ) : (
                           <Link
                             to={`/student/course/${course.id}`}
                             className={`${BTN.link} ${BTN.primary} self-start sm:self-center`}
@@ -571,6 +620,7 @@ export default function StudentDashboardTailwind() {
                             Continue
                             <ChevronRight size={14} />
                           </Link>
+                          )}
                         </article>
                       );
                     })}
@@ -582,9 +632,13 @@ export default function StudentDashboardTailwind() {
             {/* Materials + Offers */}
             <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
               <section className="flex flex-col">
-                <SectionHead icon={FolderOpen} title="Course materials" />
+                <SectionHead
+                  icon={FolderOpen}
+                  title="Course materials"
+                  iconCls="bg-amber-100 text-amber-700"
+                />
                 <div className={`flex flex-1 flex-col ${CARD} overflow-hidden`}>
-                  <div className="overflow-x-auto border-b border-site-accent-dark/10">
+                  <div className="overflow-x-auto border-b border-site-accent-dark/10 bg-site-bg/40">
                     <div className="flex gap-2 p-3">
                       {materialTabs.length === 0 ? (
                         <Pill>No courses</Pill>
@@ -597,7 +651,7 @@ export default function StudentDashboardTailwind() {
                             className={`sd-btn shrink-0 whitespace-nowrap !rounded-full px-3 py-1.5 text-xs font-bold transition ${
                               selectedCourseForMaterials === course.id
                                 ? 'bg-site-primary text-white shadow-sm'
-                                : 'bg-site-bg text-site-muted hover:bg-site-accent-dark/10'
+                                : 'bg-white text-site-muted shadow-sm hover:bg-amber-50 hover:text-site-primary'
                             }`}
                           >
                             {course.title.length > 22
@@ -614,13 +668,16 @@ export default function StudentDashboardTailwind() {
                         {materials.map((item) => {
                           const isZip = (item.fileType || '').toLowerCase().includes('zip');
                           const FIcon = isZip ? FileArchive : FileText;
+                          const iconCls = isZip
+                            ? 'bg-green-50 text-green-700'
+                            : 'bg-amber-50 text-amber-700';
                           return (
                             <div
                               key={item.materialId || item.id || item.title}
-                              className="flex items-center gap-3 rounded-xl border border-site-accent-dark/12 bg-site-bg p-3 transition hover:border-site-accent/40"
+                              className="flex items-center gap-3 rounded-xl border border-site-accent-dark/10 bg-site-bg/60 p-3 transition hover:border-site-accent/35 hover:bg-white"
                             >
-                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-site-accent/10">
-                                <FIcon size={15} className="text-site-accent-dark" />
+                              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${iconCls}`}>
+                                <FIcon size={15} />
                               </div>
                               <div className="min-w-0 flex-1">
                                 <p className="line-clamp-1 text-sm font-extrabold text-site-primary">
@@ -654,7 +711,9 @@ export default function StudentDashboardTailwind() {
                           </>
                         ) : (
                           <>
-                            <FileText size={28} className="mb-2 text-site-accent/30" />
+                            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50">
+                              <FileText size={22} className="text-amber-400" />
+                            </div>
                             <p className="text-xs font-semibold text-site-muted">
                               {materialTabs.length
                                 ? 'Select a course above'
@@ -672,12 +731,15 @@ export default function StudentDashboardTailwind() {
                 <SectionHead
                   icon={BadgePercent}
                   title="Available offers"
+                  iconCls="bg-emerald-100 text-emerald-700"
                   badge={offers.length > 0 ? <Pill>{offers.length}</Pill> : null}
                 />
                 <div className={`flex flex-1 flex-col ${CARD} p-4 sm:p-5`}>
                   {offers.length === 0 ? (
                     <div className="flex min-h-36 flex-col items-center justify-center text-center">
-                      <Tag size={28} className="mb-2 text-site-accent/30" />
+                      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
+                        <Tag size={22} className="text-emerald-400" />
+                      </div>
                       <p className="text-xs font-semibold text-site-muted">
                         No special offers right now.
                       </p>
@@ -687,27 +749,27 @@ export default function StudentDashboardTailwind() {
                       {offers.map((offer) => (
                         <article
                           key={offer.offerId || offer.id || offer.title}
-                          className="rounded-xl border border-site-accent-dark/12 bg-site-bg p-4 transition hover:border-site-accent/40"
+                          className="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/60 to-white p-4 transition hover:border-emerald-200 hover:shadow-sm"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <p className="text-sm font-extrabold text-site-primary">
                               {offer.title || 'Special offer'}
                             </p>
                             {offer.discount && (
-                              <span className="shrink-0 rounded-full bg-site-accent/10 px-2 py-0.5 text-[10px] font-black text-site-accent-dark ring-1 ring-site-accent/25">
+                              <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-700 ring-1 ring-emerald-200">
                                 {offer.discount}
                               </span>
                             )}
                           </div>
                           {(offer.code || offer.couponCode) && (
-                            <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-site-accent bg-white px-2.5 py-1.5">
+                            <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-site-accent bg-white px-2.5 py-1.5">
                               <Tag size={11} className="text-site-accent" />
                               <code className="text-xs font-black tracking-wider text-site-accent-dark">
                                 {offer.code || offer.couponCode}
                               </code>
                             </div>
                           )}
-                          <p className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-site-muted">
+                          <p className="mt-2.5 flex items-center gap-1 text-[11px] font-semibold text-site-muted">
                             <Calendar size={11} />
                             Valid till {formatDashboardDate(offer.validTill)}
                           </p>
@@ -719,10 +781,14 @@ export default function StudentDashboardTailwind() {
               </section>
             </div>
 
-            {/* Promotions — only when there is content */}
+            {/* Promotions */}
             {hasPromotions && (
               <section>
-                <SectionHead icon={Rocket} title="Updates & launches" />
+                <SectionHead
+                  icon={Rocket}
+                  title="Updates & launches"
+                  iconCls="bg-purple-100 text-purple-700"
+                />
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {banners.length > 0 && (
                     <div className={CARD}>
@@ -767,7 +833,7 @@ export default function StudentDashboardTailwind() {
                         {promoItems.map((item, i) => (
                           <div
                             key={item.productId || item.courseId || item.id || i}
-                            className="flex items-center gap-3 rounded-xl border border-site-accent-dark/12 bg-site-bg p-3"
+                            className="flex items-center gap-3 rounded-xl border border-site-accent-dark/10 bg-site-bg/60 p-3 transition hover:border-site-accent/30 hover:bg-white"
                           >
                             {item.image ? (
                               <img
@@ -776,7 +842,7 @@ export default function StudentDashboardTailwind() {
                                 className="h-12 w-12 shrink-0 rounded-lg object-cover"
                               />
                             ) : (
-                              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-site-accent-dark/10 text-site-accent-dark">
+                              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
                                 {item.price ? <Package size={20} /> : <Rocket size={20} />}
                               </div>
                             )}
@@ -803,15 +869,15 @@ export default function StudentDashboardTailwind() {
                           New courses
                         </p>
                       </div>
-                      <div className="space-y-3 p-4">
+                      <div className="space-y-2.5 p-4">
                         {newCourses.slice(0, 5).map((c, i) => (
                           <Link
                             key={c.courseId || c.id || i}
                             to="/recorded-courses"
-                            className="flex items-center gap-3 rounded-xl border border-site-accent-dark/12 bg-site-bg p-3 transition hover:border-site-accent/40"
+                            className="flex items-center gap-3 rounded-xl border border-site-accent-dark/10 bg-site-bg/60 p-3 transition hover:border-emerald-200 hover:bg-emerald-50/40"
                           >
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-50">
-                              <GraduationCap size={17} className="text-green-700" />
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                              <GraduationCap size={17} className="text-emerald-600" />
                             </div>
                             <div className="min-w-0 flex-1">
                               <p className="line-clamp-1 text-sm font-extrabold text-site-primary">

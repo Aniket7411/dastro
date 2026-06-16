@@ -49,6 +49,10 @@ export const uploadVideo = async (file, folder = 'videos') => {
   const data = await postFile({ endpoint: 'video', file, folder, token });
   const publicUrl = data.publicUrl || data.videoUrl || data.url;
 
+  if (!publicUrl) {
+    throw new Error('Upload succeeded but no video URL was returned. Check Supabase storage configuration.');
+  }
+
   return {
     publicUrl,
     path: data.path,

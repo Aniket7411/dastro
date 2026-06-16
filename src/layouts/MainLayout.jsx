@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { PageLoader } from '../components/PageLoader';
+import SiteOffersModal from '../components/offers/SiteOffersModal';
 
 function MainLayout() {
   return (
@@ -14,6 +15,7 @@ function MainLayout() {
         </Suspense>
       </main>
       <Footer />
+      <SiteOffersModal />
     </div>
   );
 }

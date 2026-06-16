@@ -1,55 +1,107 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
+import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
+import { PAGE_WRAP } from './consultation/tokens';
+import HomeSectionHeader from './home/HomeSectionHeader';
 
 const STUDENTS = [
   {
-    name: "Aakash Tripathi",
-    location: "Lucknow, UP",
-    img: "https://randomuser.me/api/portraits/men/67.jpg",
+    name: 'Aakash Tripathi',
+    location: 'Lucknow, UP',
+    img: 'https://randomuser.me/api/portraits/men/67.jpg',
     rating: 5,
-    text: "The Vedic Astrology Deep Dive is outstanding. I learned planetary dashas and yogas in great depth. Real-life case studies in every lesson make the knowledge truly stick forever.",
-    course: "Vedic Astrology Deep Dive",
+    text: 'The Vedic Astrology Deep Dive is outstanding. I learned planetary dashas and yogas in great depth. Real-life case studies in every lesson make the knowledge truly stick.',
+    course: 'Vedic Astrology Deep Dive',
   },
   {
-    name: "Sunita Devi Sharma",
-    location: "New Delhi",
-    img: "https://randomuser.me/api/portraits/women/47.jpg",
+    name: 'Sunita Devi Sharma',
+    location: 'New Delhi',
+    img: 'https://randomuser.me/api/portraits/women/47.jpg',
     rating: 5,
-    text: "I enrolled in the Foundation course and it was life-changing. The way complex concepts are taught so simply is remarkable. Now I can read my own birth chart with full confidence!",
-    course: "Foundation in Astrology",
+    text: 'I enrolled in the Foundation course and it was life-changing. Complex concepts are taught so simply. Now I can read my own birth chart with full confidence.',
+    course: 'Foundation in Astrology',
   },
   {
-    name: "Arjun Nair",
-    location: "Bangalore, Karnataka",
-    img: "https://randomuser.me/api/portraits/men/22.jpg",
+    name: 'Arjun Nair',
+    location: 'Bangalore, Karnataka',
+    img: 'https://randomuser.me/api/portraits/men/22.jpg',
     rating: 5,
-    text: "KP Astrology Mastery exceeded all expectations. The precision of predictions using the KP system is phenomenal. I've already started helping family members with accurate readings.",
-    course: "KP Astrology Mastery",
+    text: "KP Astrology Mastery exceeded all expectations. The precision of predictions using the KP system is phenomenal. I've already started helping family with accurate readings.",
+    course: 'KP Astrology Mastery',
   },
   {
-    name: "Meenakshi Iyer",
-    location: "Chennai, Tamil Nadu",
-    img: "https://randomuser.me/api/portraits/women/62.jpg",
+    name: 'Meenakshi Iyer',
+    location: 'Chennai, Tamil Nadu',
+    img: 'https://randomuser.me/api/portraits/women/62.jpg',
     rating: 5,
-    text: "Completed the Guidance & Counseling course and it transformed how I help people. The blend of ancient wisdom with modern counseling techniques is truly unique and valuable.",
-    course: "Astrology for Guidance",
+    text: 'The Guidance & Counseling course transformed how I help people. The blend of ancient wisdom with modern counseling techniques is truly unique and valuable.',
+    course: 'Astrology for Guidance',
   },
   {
-    name: "Rohit Bansal",
-    location: "Chandigarh, Punjab",
-    img: "https://randomuser.me/api/portraits/men/38.jpg",
+    name: 'Rohit Bansal',
+    location: 'Chandigarh, Punjab',
+    img: 'https://randomuser.me/api/portraits/men/38.jpg',
     rating: 5,
-    text: "Started as a complete beginner and now I confidently analyze charts for my community. Structured curriculum, live sessions, and lifetime access make this institute one of a kind.",
-    course: "Foundation in Astrology",
+    text: 'Started as a complete beginner and now I confidently analyze charts for my community. Structured curriculum, live sessions, and lifetime access make this institute one of a kind.',
+    course: 'Foundation in Astrology',
   },
   {
-    name: "Priyanka Joshi",
-    location: "Pune, Maharashtra",
-    img: "https://randomuser.me/api/portraits/women/29.jpg",
+    name: 'Priyanka Joshi',
+    location: 'Pune, Maharashtra',
+    img: 'https://randomuser.me/api/portraits/women/29.jpg',
     rating: 5,
-    text: "The course content is deep yet very accessible. Acharya ji explains every concept with patience and real examples. I can now confidently interpret divisional charts and planetary yogas.",
-    course: "Vedic Astrology Deep Dive",
+    text: 'Acharya ji explains every concept with patience and real examples. I can now confidently interpret divisional charts and planetary yogas.',
+    course: 'Vedic Astrology Deep Dive',
   },
 ];
+
+function Stars({ rating }) {
+  return (
+    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star
+          key={i}
+          className={`h-3.5 w-3.5 ${i < rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200'}`}
+          aria-hidden
+        />
+      ))}
+      <span className="ml-1 font-body text-xs font-bold text-site-muted">{rating}.0</span>
+    </div>
+  );
+}
+
+function TestimonialCard({ item }) {
+  return (
+    <article className="st-card flex h-full min-h-full w-[min(100%,18.5rem)] shrink-0 snap-start flex-col rounded-2xl border border-site-accent-dark/12 bg-white p-4 shadow-[0_4px_18px_rgba(42,15,2,0.07)] transition hover:-translate-y-0.5 hover:border-site-accent/30 hover:shadow-[0_12px_28px_rgba(42,15,2,0.1)] sm:w-[min(100%,20rem)] sm:p-5">
+      <span className="font-serif text-4xl leading-none text-site-accent/25" aria-hidden>
+        "
+      </span>
+      <p className="m-0 flex-1 text-sm leading-relaxed text-site-muted">{item.text}</p>
+      <Stars rating={item.rating} />
+      <div className="mt-3 flex items-center gap-3 border-t border-site-accent-dark/10 pt-3">
+        <img
+          src={item.img}
+          alt=""
+          className="h-11 w-11 shrink-0 rounded-full border-2 border-site-accent object-cover"
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=8B4A1E&color=fff`;
+          }}
+        />
+        <div className="min-w-0">
+          <p className="m-0 truncate font-heading text-sm font-bold text-site-primary">{item.name}</p>
+          <p className="m-0 mt-0.5 flex items-center gap-1 text-xs text-site-muted">
+            <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+            <span className="truncate">{item.location}</span>
+          </p>
+        </div>
+      </div>
+      <span className="mt-3 inline-flex w-fit rounded-full bg-site-accent/10 px-2.5 py-1 font-body text-[0.625rem] font-bold uppercase tracking-wide text-site-accent-dark">
+        {item.course}
+      </span>
+    </article>
+  );
+}
 
 export default function StudentTestimonials() {
   const trackRef = useRef(null);
@@ -58,263 +110,61 @@ export default function StudentTestimonials() {
     const track = trackRef.current;
     if (!track) return;
     const card = track.querySelector('.st-card');
-    const gap = 24;
-    const amount = (card ? card.offsetWidth : 300) + gap;
+    const gap = 16;
+    const amount = (card?.offsetWidth || 300) + gap;
     track.scrollBy({ left: dir === 'next' ? amount : -amount, behavior: 'smooth' });
   };
 
   return (
-    <>
-      <style>{`
-        .st-section {
-          position: relative;
-          padding: 5rem 0 4rem;
-          background: var(--bg-color);
-          overflow: hidden;
-        }
-        .st-orb {
-          position: absolute;
-          border-radius: 50%;
-          pointer-events: none;
-          background: radial-gradient(circle, var(--primary-color), transparent);
-          opacity: 0.055;
-        }
-        .st-orb-1 { width: 460px; height: 460px; top: -120px; right: -120px; }
-        .st-orb-2 { width: 340px; height: 340px; bottom: -80px; left: -80px; }
+    <section
+      className="relative overflow-hidden border-t border-site-accent-dark/10 bg-white py-[clamp(2.5rem,6vw,4.5rem)]"
+      aria-labelledby="student-testimonials-heading"
+    >
+      <div className="pointer-events-none absolute -right-16 top-8 h-48 w-48 rounded-full bg-site-accent/5" aria-hidden />
+      <div className="pointer-events-none absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-site-accent-dark/5" aria-hidden />
 
-        .st-header { text-align: center; margin-bottom: 2.5rem; }
-        .st-badge {
-          display: inline-block;
-          font-size: 0.7rem;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: var(--primary-color);
-          background: rgba(139,74,30,0.08);
-          border: 1px solid rgba(139,74,30,0.15);
-          padding: 5px 16px;
-          border-radius: 20px;
-          font-family: var(--font-sans);
-          margin-bottom: 0.875rem;
-        }
-        .st-title {
-          font-family: var(--font-serif) !important;
-          font-size: var(--h2-size) !important;
-          font-weight: 700 !important;
-          color: var(--text-heading) !important;
-          line-height: 1.25 !important;
-          margin: 0.4rem 0 0.6rem !important;
-        }
-        .st-subtitle {
-          font-size: 0.95rem;
-          color: var(--text-content);
-          max-width: 520px;
-          margin: 0 auto;
-          line-height: 1.7;
-        }
+      <div className={PAGE_WRAP}>
+        <HomeSectionHeader
+          id="student-testimonials-heading"
+          kicker="Real Stories"
+          title="What Our"
+          titleHighlight="Students Say"
+          subtitle="Trusted by thousands of satisfied students across the globe."
+        />
 
-        /* carousel */
-        .st-carousel-wrap {
-          position: relative;
-        }
-        .st-track {
-          display: flex;
-          gap: 1.5rem;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          padding-bottom: 4px;
-        }
-        .st-track::-webkit-scrollbar { display: none; }
+        <div className="relative px-1 sm:px-2">
+          <button
+            type="button"
+            onClick={() => scroll('prev')}
+            aria-label="Previous testimonials"
+            className="absolute -left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-site-accent-dark/15 bg-white text-site-primary shadow-md transition hover:bg-site-primary hover:text-white sm:flex md:-left-3"
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden />
+          </button>
 
-        .st-card {
-          flex: 0 0 calc((100% - 3rem) / 3);
-          scroll-snap-align: start;
-          background: var(--card-color);
-          border: 1px solid var(--glass-border);
-          border-radius: 20px;
-          padding: 1.75rem 1.5rem 1.4rem;
-          position: relative;
-          overflow: hidden;
-          box-shadow: var(--premium-shadow);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          gap: 0.8rem;
-        }
-        .st-card::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        .st-card:hover { transform: translateY(-5px); box-shadow: 0 18px 46px rgba(139,74,30,0.14); }
-        .st-card:hover::after { opacity: 1; }
-
-        .st-big-quote {
-          font-family: Georgia, serif;
-          font-size: 3.8rem;
-          line-height: 0.7;
-          color: var(--accent-color);
-          opacity: 0.25;
-          font-weight: 900;
-          user-select: none;
-        }
-        .st-text {
-          font-size: 0.9rem;
-          color: var(--text-content);
-          line-height: 1.8;
-          flex: 1;
-          margin: 0;
-        }
-        .st-stars { display: flex; align-items: center; gap: 3px; }
-        .st-rating-label {
-          font-size: 0.74rem;
-          font-weight: 700;
-          color: var(--text-muted);
-          margin-left: 5px;
-          font-family: var(--font-sans);
-        }
-        .st-profile {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          padding-top: 0.8rem;
-          border-top: 1px solid var(--glass-border);
-        }
-        .st-avatar {
-          width: 50px; height: 50px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 2.5px solid var(--accent-color);
-          flex-shrink: 0;
-          box-shadow: 0 3px 12px rgba(200,131,42,0.2);
-        }
-        .st-name {
-          font-family: var(--font-serif);
-          font-weight: 700;
-          font-size: 0.95rem;
-          color: var(--text-heading);
-          line-height: 1.3;
-          margin: 0;
-        }
-        .st-loc {
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          margin-top: 2px;
-          font-family: var(--font-sans);
-        }
-        .st-tag {
-          display: inline-block;
-          background: rgba(139,74,30,0.07);
-          color: var(--primary-color);
-          border: 1px solid rgba(139,74,30,0.14);
-          border-radius: 20px;
-          padding: 3px 12px;
-          font-size: 0.65rem;
-          font-weight: 700;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          font-family: var(--font-sans);
-          width: fit-content;
-        }
-
-        /* nav buttons */
-        .st-nav {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 42px; height: 42px;
-          background: var(--card-color);
-          border: 1px solid var(--glass-border);
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          cursor: pointer;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-          z-index: 5;
-          transition: all 0.2s ease;
-          color: var(--text-heading);
-        }
-        .st-nav:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-50%) scale(1.08); }
-        .st-nav-prev { left: -20px; }
-        .st-nav-next { right: -20px; }
-
-        @media (max-width: 991px) {
-          .st-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
-          .st-nav-prev { left: -14px; }
-          .st-nav-next { right: -14px; }
-        }
-        @media (max-width: 575px) {
-          .st-card { flex: 0 0 88%; }
-          .st-section { padding: 3rem 0 2.5rem; }
-          .st-nav-prev { left: -10px; }
-          .st-nav-next { right: -10px; }
-          .st-nav { width: 36px; height: 36px; }
-        }
-      `}</style>
-
-      <section className="st-section">
-        <div className="st-orb st-orb-1" />
-        <div className="st-orb st-orb-2" />
-        <div className="container">
-          <div className="st-header" data-aos="fade-up">
-            <div className="st-badge">⭐ Student Reviews</div>
-            <h2 className="st-title">
-              What Our <span className="text-gradient">Students Say</span>
-            </h2>
-            <p className="st-subtitle">
-              Hundreds of students have transformed their understanding of life through our
-              astrology courses.
-            </p>
+          <div
+            ref={trackRef}
+            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {STUDENTS.map((item) => (
+              <TestimonialCard key={item.name} item={item} />
+            ))}
           </div>
 
-          <div className="st-carousel-wrap">
-            <button className="st-nav st-nav-prev" onClick={() => scroll('prev')} aria-label="Previous">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-
-            <div className="st-track" ref={trackRef}>
-              {STUDENTS.map((t, i) => (
-                <div className="st-card" key={i}>
-                  <div className="st-big-quote">"</div>
-                  <p className="st-text">{t.text}</p>
-                  <div className="st-stars">
-                    {[...Array(5)].map((_, s) => (
-                      <i key={s} className="fas fa-star" style={{ color: s < t.rating ? '#F59E0B' : '#D1D5DB', fontSize: '0.85rem' }} />
-                    ))}
-                    <span className="st-rating-label">{t.rating}.0</span>
-                  </div>
-                  <div className="st-profile">
-                    <img
-                      src={t.img}
-                      alt={t.name}
-                      className="st-avatar"
-                      onError={(e) => { e.target.onerror = null; e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=8B4A1E&color=fff`; }}
-                    />
-                    <div>
-                      <div className="st-name">{t.name}</div>
-                      <div className="st-loc">📍 {t.location}</div>
-                    </div>
-                  </div>
-                  <div className="st-tag">✦ {t.course}</div>
-                </div>
-              ))}
-            </div>
-
-            <button className="st-nav st-nav-next" onClick={() => scroll('next')} aria-label="Next">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => scroll('next')}
+            aria-label="Next testimonials"
+            className="absolute -right-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-site-accent-dark/15 bg-white text-site-primary shadow-md transition hover:bg-site-primary hover:text-white sm:flex md:-right-3"
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden />
+          </button>
         </div>
-      </section>
-    </>
+
+        <p className="m-0 mt-4 text-center text-xs text-site-soft sm:hidden">
+          Swipe to read more stories →
+        </p>
+      </div>
+    </section>
   );
 }

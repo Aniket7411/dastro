@@ -11,6 +11,7 @@ import {
   formatCourseDuration,
   parseCourseDuration,
 } from '../utils/courseDuration';
+import { countEnrolledVideos, mergeCourseVideosFromApi } from '../utils/courseVideoApi';
 
 const EMPTY_COURSE_FORM = {
   title: '',
@@ -41,7 +42,7 @@ const COURSE_TYPE_CONFIG = {
     validityLabel: 'Access validity (days)',
     validityHint: 'How long enrolled students can watch videos after purchase.',
     frontendCta: 'BUY NOW (or ENQUIRE NOW until payment live)',
-    videosHint: 'Add lesson videos — unlocked for students after purchase.',
+    videosHint: '1) Thumbnail image · 2) One introductory video (public) · 3) Multiple main lesson videos (admin approval required).',
   },
   Live: {
     optionLabel: 'Live Course — Enquiry only (no online payment)',
@@ -54,11 +55,31 @@ const COURSE_TYPE_CONFIG = {
     validityLabel: 'Program duration (days)',
     validityHint: 'Approximate batch length for display (e.g. 30–60 days). Not used for video access.',
     frontendCta: 'ENQUIRE NOW',
-    videosHint: 'Optional intro/preview clips only. Main delivery is live classes (Zoom/Meet).',
+    videosHint: '1) Thumbnail · 2) Optional intro preview · 3) Main lessons unlock after admin approves enrolment.',
   },
 };
 
 const getCourseTypeConfig = (type) => COURSE_TYPE_CONFIG[type === 'Live' ? 'Live' : 'Recorded'];
+
+const DEFAULT_VIDEO_FORM = {
+  title: '',
+  bunnyVideoId: '',
+  sortOrder: '',
+  videoProvider: 'supabase',
+  visibility: 'enrolled',
+  storagePath: '',
+  storageBucket: '',
+};
+
+const makeInitialVideoForm = (visibility) => ({
+  ...DEFAULT_VIDEO_FORM,
+  visibility,
+});
+
+const VISIBILITY_LABELS = {
+  public: 'Intro / Preview',
+  enrolled: 'Lesson (after purchase)',
+};
 
 function AdminCourses() {
   const [courses, setCourses] = useState([]);
@@ -68,9 +89,16 @@ function AdminCourses() {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoCourse, setVideoCourse] = useState(null);
   const [courseVideos, setCourseVideos] = useState([]);
-  const [videoForm, setVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
+  const [videoForm, setVideoForm] = useState({ ...DEFAULT_VIDEO_FORM });
   const [videoFile, setVideoFile] = useState(null);
-  const [videoLoading, setVideoLoading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [initialIntroForm, setInitialIntroForm] = useState(() => makeInitialVideoForm('public'));
+  const [initialLessonForm, setInitialLessonForm] = useState(() => makeInitialVideoForm('enrolled'));
+  const [initialIntroFile, setInitialIntroFile] = useState(null);
+  const [initialLessonFile, setInitialLessonFile] = useState(null);
+  const [initialIntroUploading, setInitialIntroUploading] = useState(false);
+  const [initialLessonUploading, setInitialLessonUploading] = useState(false);
+  const [initialVideos, setInitialVideos] = useState([]);
   const [videoModalLoading, setVideoModalLoading] = useState(false);
   const [editingCourseVideos, setEditingCourseVideos] = useState([]);
   const [editingCourseVideosLoading, setEditingCourseVideosLoading] = useState(false);
@@ -89,10 +117,9 @@ function AdminCourses() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [showCategoryPanel, setShowCategoryPanel] = useState(false);
   
-  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
-  const [initialVideoFile, setInitialVideoFile] = useState(null);
-  const [initialVideos, setInitialVideos] = useState([]);
+  const [videoLoading, setVideoLoading] = useState(false);
   const [editVideoDrafts, setEditVideoDrafts] = useState([]);
+  const [showVideoForm, setShowVideoForm] = useState(false);
 
   const videoProviders = {
     supabase: {
@@ -100,7 +127,7 @@ function AdminCourses() {
       idLabel: 'Video URL',
       fieldLabel: 'Supabase Video URL',
       placeholder: 'Auto-filled after upload, or paste an existing Supabase URL',
-      fileHint: 'Upload the video file first — it goes to Supabase, then the URL is saved in MongoDB.'
+      fileHint: 'Select a file to upload to Supabase immediately. The URL field fills in automatically.'
     },
     bunny: {
       label: 'Bunny.net',
@@ -219,7 +246,7 @@ function AdminCourses() {
   );
 
   const syncCourseVideoCount = (courseId, videos) => {
-    const count = videos?.length || 0;
+    const count = countEnrolledVideos(videos);
     setCourses((currentCourses) => currentCourses.map((course) => (
       course._id === courseId ? { ...course, videoCount: count, videosCount: count } : course
     )));
@@ -269,17 +296,185 @@ function AdminCourses() {
   };
 
   const handleVideoInputChange = (e) => {
-    setVideoForm({ ...videoForm, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === 'bunnyVideoId' && videoForm.videoProvider === 'supabase') {
+      setVideoForm({
+        ...videoForm,
+        bunnyVideoId: value,
+        storagePath: '',
+        storageBucket: '',
+      });
+      setVideoFile(null);
+      return;
+    }
+    setVideoForm({ ...videoForm, [name]: value });
   };
 
-  const handleVideoFileChange = (e) => {
-    setVideoFile(e.target.files?.[0] || null);
+  const uploadSupabaseSelection = async (file) => {
+    const maxMb = 500;
+    if (file.size > maxMb * 1024 * 1024) {
+      throw new Error(`Video must be under ${maxMb} MB`);
+    }
+    return uploadVideo(file, 'videos');
+  };
+
+  const handleVideoFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setVideoFile(null);
+      return;
+    }
+
+    if (videoForm.videoProvider !== 'supabase') {
+      setVideoFile(file);
+      return;
+    }
+
+    setVideoUploading(true);
+    try {
+      const uploaded = await uploadSupabaseSelection(file);
+      setVideoForm((prev) => ({
+        ...prev,
+        bunnyVideoId: uploaded.publicUrl,
+        storagePath: uploaded.path,
+        storageBucket: uploaded.bucket,
+      }));
+      setVideoFile(null);
+      toast.success('Video uploaded to Supabase');
+    } catch (err) {
+      toast.error(err.message || 'Video upload failed');
+      e.target.value = '';
+      setVideoFile(null);
+    } finally {
+      setVideoUploading(false);
+    }
+  };
+
+  const handleInitialDraftFileChange = async (e, kind) => {
+    const file = e.target.files?.[0];
+    const isIntro = kind === 'intro';
+    const form = isIntro ? initialIntroForm : initialLessonForm;
+    const setForm = isIntro ? setInitialIntroForm : setInitialLessonForm;
+    const setFile = isIntro ? setInitialIntroFile : setInitialLessonFile;
+    const setUploading = isIntro ? setInitialIntroUploading : setInitialLessonUploading;
+
+    if (!file) {
+      setFile(null);
+      return;
+    }
+
+    if (form.videoProvider !== 'supabase') {
+      setFile(file);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const uploaded = await uploadSupabaseSelection(file);
+      setForm((prev) => ({
+        ...prev,
+        bunnyVideoId: uploaded.publicUrl,
+        storagePath: uploaded.path,
+        storageBucket: uploaded.bucket,
+      }));
+      setFile(null);
+      toast.success('Video uploaded to Supabase');
+    } catch (err) {
+      toast.error(err.message || 'Video upload failed');
+      e.target.value = '';
+      setFile(null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const resetInitialVideoForms = () => {
+    setInitialIntroForm(makeInitialVideoForm('public'));
+    setInitialLessonForm(makeInitialVideoForm('enrolled'));
+    setInitialIntroFile(null);
+    setInitialLessonFile(null);
+  };
+
+  const queueInitialDraft = (visibility) => {
+    const isIntro = visibility === 'public';
+    const form = isIntro ? initialIntroForm : initialLessonForm;
+    const file = isIntro ? initialIntroFile : initialLessonFile;
+    const uploading = isIntro ? initialIntroUploading : initialLessonUploading;
+
+    if (!form.title) {
+      toast.error('Video title is required');
+      return;
+    }
+    if (uploading) {
+      toast.error('Please wait for the upload to finish.');
+      return;
+    }
+    if (isIntro && initialVideos.some((v) => v.visibility === 'public')) {
+      toast.error('Only one introductory video is allowed.');
+      return;
+    }
+    if (!form.bunnyVideoId && !file) {
+      toast.error('Upload a video file or paste a URL first.');
+      return;
+    }
+
+    const lessonCount = initialVideos.filter((v) => v.visibility !== 'public').length;
+    setInitialVideos((current) => [
+      ...current,
+      buildVideoDraft({
+        localId: `${Date.now()}-${current.length}`,
+        title: form.title,
+        bunnyVideoId: form.bunnyVideoId,
+        videoUrl: form.bunnyVideoId,
+        storagePath: form.storagePath,
+        storageBucket: form.storageBucket,
+        videoProvider: form.videoProvider,
+        visibility,
+        sortOrder: isIntro ? 0 : lessonCount,
+        file,
+        fallbackOrder: current.length,
+      }),
+    ]);
+
+    if (isIntro) {
+      setInitialIntroForm(makeInitialVideoForm('public'));
+      setInitialIntroFile(null);
+    } else {
+      setInitialLessonForm(makeInitialVideoForm('enrolled'));
+      setInitialLessonFile(null);
+    }
   };
 
   const resetVideoForm = () => {
-    setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
+    setVideoForm({ ...DEFAULT_VIDEO_FORM });
     setVideoFile(null);
     setEditingVideoId(null);
+    setShowVideoForm(false);
+  };
+
+  const loadAdminCourseVideos = async (courseId) => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) throw new Error('Admin login required');
+    const res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await parseApiResponse(res);
+    if (!data.success) throw new Error(data.message || 'Failed to load course videos');
+    return mergeCourseVideosFromApi(data);
+  };
+
+  const startAddingIntroVideo = () => {
+    setVideoForm({ ...DEFAULT_VIDEO_FORM, visibility: 'public' });
+    setVideoFile(null);
+    setEditingVideoId(null);
+    setShowVideoForm(true);
+  };
+
+  const startAddingLesson = () => {
+    setVideoForm({ ...DEFAULT_VIDEO_FORM, visibility: 'enrolled' });
+    setVideoFile(null);
+    setEditingVideoId(null);
+    setShowVideoForm(true);
   };
 
   const buildVideoDraft = ({
@@ -290,6 +485,7 @@ function AdminCourses() {
     file,
     fallbackOrder,
     videoProvider = 'supabase',
+    visibility = 'enrolled',
     videoUrl = '',
     storagePath = '',
     storageBucket = '',
@@ -301,6 +497,7 @@ function AdminCourses() {
     storagePath,
     storageBucket,
     videoProvider,
+    visibility,
     sortOrder: Number(sortOrder) || fallbackOrder || 0,
     file,
     sourceLabel: file
@@ -308,36 +505,7 @@ function AdminCourses() {
       : (videoUrl || bunnyVideoId || `${getProviderLabel(videoProvider)} pending upload`)
   });
 
-  const resetInitialVideoForm = () => {
-    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
-    setInitialVideoFile(null);
-  };
-
-  const addInitialVideoDraft = () => {
-    if (!initialVideoForm.title) {
-      toast.error('Video title is required before adding it to the list');
-      return;
-    }
-
-    if (!initialVideoForm.bunnyVideoId && !initialVideoFile) {
-      toast.error(`Please paste a ${getProviderIdLabel(initialVideoForm.videoProvider)} or select a video file`);
-      return;
-    }
-
-    setInitialVideos((current) => ([
-      ...current,
-      buildVideoDraft({
-        localId: `${Date.now()}-${current.length}`,
-        title: initialVideoForm.title,
-        bunnyVideoId: initialVideoForm.bunnyVideoId,
-        videoProvider: initialVideoForm.videoProvider,
-        sortOrder: initialVideoForm.sortOrder,
-        file: initialVideoFile,
-        fallbackOrder: current.length
-      })
-    ]));
-    resetInitialVideoForm();
-  };
+  const resetInitialVideoForm = resetInitialVideoForms;
 
   const removeInitialVideoDraft = (localId) => {
     setInitialVideos((current) => current.filter((video) => video.localId !== localId));
@@ -360,7 +528,11 @@ function AdminCourses() {
         localId: `${Date.now()}-${current.length}`,
         title: videoForm.title,
         bunnyVideoId: videoForm.bunnyVideoId,
+        videoUrl: videoForm.bunnyVideoId,
+        storagePath: videoForm.storagePath,
+        storageBucket: videoForm.storageBucket,
         videoProvider: videoForm.videoProvider,
+        visibility: videoForm.visibility,
         sortOrder: videoForm.sortOrder,
         file: videoFile,
         fallbackOrder: editingCourseVideos.length + current.length
@@ -379,9 +551,13 @@ function AdminCourses() {
       title: video.title || '',
       bunnyVideoId: getVideoValue(video),
       sortOrder: video.sortOrder ?? '',
-      videoProvider: getVideoProvider(video)
+      videoProvider: getVideoProvider(video),
+      visibility: video.visibility === 'public' ? 'public' : 'enrolled',
+      storagePath: video.storagePath || '',
+      storageBucket: video.storageBucket || '',
     });
     setVideoFile(null);
+    setShowVideoForm(true);
   };
 
   const resolveSupabaseVideoPayload = async (draftVideo) => {
@@ -398,6 +574,11 @@ function AdminCourses() {
 
     if (!videoUrl) {
       throw new Error('Upload a video file or paste a Supabase video URL.');
+    }
+
+    if (!storagePath && videoUrl.includes('/object/public/')) {
+      const match = videoUrl.match(/\/object\/public\/[^/]+\/(.+)$/);
+      if (match?.[1]) storagePath = decodeURIComponent(match[1]);
     }
 
     return { videoUrl, storagePath, storageBucket };
@@ -420,18 +601,12 @@ function AdminCourses() {
   const fetchCourseVideos = async (courseId) => {
     setVideoModalLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/courses/${courseId}`);
-      const data = await parseApiResponse(res);
-      if (data.success) {
-        const videos = data.videos || [];
-        setCourseVideos(videos);
-        syncCourseVideoCount(courseId, videos);
-      } else {
-        toast.error(data.message || 'Failed to load course videos');
-      }
+      const videos = await loadAdminCourseVideos(courseId);
+      setCourseVideos(videos);
+      syncCourseVideoCount(courseId, videos);
     } catch (err) {
       console.error('Failed to load course videos:', err);
-      toast.error('Failed to load course videos');
+      toast.error(err.message || 'Failed to load course videos');
     } finally {
       setVideoModalLoading(false);
     }
@@ -464,6 +639,11 @@ function AdminCourses() {
       return false;
     }
 
+    if (videoUploading) {
+      toast.error('Please wait for the video upload to finish.');
+      return false;
+    }
+
     const hasVideoFile = !!videoFile;
     const hasVideoId = !!videoForm.bunnyVideoId;
 
@@ -483,6 +663,8 @@ function AdminCourses() {
           file: videoFile,
           bunnyVideoId: videoForm.bunnyVideoId,
           videoUrl: videoForm.bunnyVideoId,
+          storagePath: videoForm.storagePath,
+          storageBucket: videoForm.storageBucket,
         });
 
         res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : ''}`, {
@@ -497,13 +679,15 @@ function AdminCourses() {
             videoUrl,
             storagePath,
             storageBucket,
-            sortOrder: Number(videoForm.sortOrder) || 0
+            sortOrder: Number(videoForm.sortOrder) || 0,
+            visibility: videoForm.visibility || 'enrolled',
           })
         });
       } else if (videoFile) {
         const formData = new FormData();
         formData.append('title', videoForm.title);
         formData.append('sortOrder', Number(videoForm.sortOrder) || 0);
+        formData.append('visibility', videoForm.visibility || 'enrolled');
         formData.append('videoProvider', provider);
         if (videoForm.bunnyVideoId) {
           formData.append('videoId', videoForm.bunnyVideoId);
@@ -526,7 +710,8 @@ function AdminCourses() {
         const payload = {
           title: videoForm.title,
           videoProvider: provider,
-          sortOrder: Number(videoForm.sortOrder) || 0
+          sortOrder: Number(videoForm.sortOrder) || 0,
+          visibility: videoForm.visibility || 'enrolled',
         };
 
         payload.videoId = videoForm.bunnyVideoId;
@@ -548,8 +733,7 @@ function AdminCourses() {
 
       const data = await parseApiResponse(res);
       if (data.success) {
-        const savedVideoId = getVideoValue(getSavedVideoFromResponse(data));
-        toast.success(savedVideoId ? `${videoId ? 'Video updated' : 'Video added'}: ${savedVideoId}` : (videoId ? 'Video updated' : 'Video added to course'));
+        toast.success(videoId ? `"${videoForm.title}" updated` : `"${videoForm.title}" added to course`);
         resetVideoForm();
         if (onSuccess) await onSuccess();
         return true;
@@ -559,7 +743,7 @@ function AdminCourses() {
       }
     } catch (err) {
       console.error('Failed to add course video:', err);
-      toast.error(videoId ? 'Network error while updating video' : 'Network error while adding video');
+      toast.error(err.message || (videoId ? 'Failed to update video' : 'Failed to add video'));
       return false;
     } finally {
       setVideoLoading(false);
@@ -585,13 +769,15 @@ function AdminCourses() {
           videoUrl,
           storagePath,
           storageBucket,
-          sortOrder: Number(draftVideo.sortOrder) || 0
+          sortOrder: Number(draftVideo.sortOrder) || 0,
+          visibility: draftVideo.visibility || 'enrolled',
         })
       });
     } else if (draftVideo.file) {
       const videoData = new FormData();
       videoData.append('title', draftVideo.title);
       videoData.append('sortOrder', Number(draftVideo.sortOrder) || 0);
+      videoData.append('visibility', draftVideo.visibility || 'enrolled');
       videoData.append('videoProvider', provider);
       if (draftVideo.bunnyVideoId) {
         videoData.append('videoId', draftVideo.bunnyVideoId);
@@ -621,7 +807,8 @@ function AdminCourses() {
           bunnyVideoId: provider === 'vdocipher' ? undefined : draftVideo.bunnyVideoId,
           vdocipherVideoId: provider === 'vdocipher' ? draftVideo.bunnyVideoId : undefined,
           videoProvider: provider,
-          sortOrder: Number(draftVideo.sortOrder) || 0
+          sortOrder: Number(draftVideo.sortOrder) || 0,
+          visibility: draftVideo.visibility || 'enrolled',
         })
       });
     }
@@ -635,13 +822,18 @@ function AdminCourses() {
 
   const refreshEditingCourseVideos = async () => {
     if (!editingCourse?._id) return [];
-    const res = await fetch(`${API_BASE}/api/courses/${editingCourse._id}`);
-    const data = await parseApiResponse(res);
-    if (!data.success) return [];
-    const videos = data.videos || [];
-    setEditingCourseVideos(videos);
-    syncCourseVideoCount(editingCourse._id, videos);
-    return videos;
+    setEditingCourseVideosLoading(true);
+    try {
+      const videos = await loadAdminCourseVideos(editingCourse._id);
+      setEditingCourseVideos(videos);
+      syncCourseVideoCount(editingCourse._id, videos);
+      return videos;
+    } catch (err) {
+      toast.error(err.message || 'Failed to refresh video list — the video was saved, please close and reopen Edit Course to see it.');
+      return [];
+    } finally {
+      setEditingCourseVideosLoading(false);
+    }
   };
 
   const handleAddVideo = async (e) => {
@@ -650,13 +842,14 @@ function AdminCourses() {
     await submitCourseVideo(videoCourse._id, () => fetchCourseVideos(videoCourse._id));
   };
 
-  const handleAddVideoFromEditModal = async () => {
+  const handleAddVideoFromEditModal = async (e) => {
+    e?.preventDefault?.();
     if (!editingCourse?._id) return;
-    if (editingVideoId) {
-      await submitCourseVideo(editingCourse._id, refreshEditingCourseVideos);
-      return;
-    }
-    addEditVideoDraft();
+    const ok = await submitCourseVideo(editingCourse._id, async () => {
+      await refreshEditingCourseVideos();
+      setShowVideoForm(false);
+    });
+    if (ok) setShowVideoForm(false);
   };
 
   const uploadEditVideoDrafts = async () => {
@@ -713,7 +906,10 @@ function AdminCourses() {
       });
       const data = await parseApiResponse(res);
       if (data.success) {
-        toast.success('Video removed successfully');
+        toast.success(data.message || 'Video removed successfully');
+        if (data.storageWarning) {
+          toast(`Storage note: ${data.storageWarning}`, { icon: '⚠️', duration: 6000 });
+        }
         resetVideoForm();
         if (onSuccess) {
           await onSuccess();
@@ -850,7 +1046,7 @@ function AdminCourses() {
   const openModal = (course = null) => {
     if (course) {
       setEditingCourse(course);
-      setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
+      setVideoForm({ ...DEFAULT_VIDEO_FORM });
       setVideoFile(null);
       setEditVideoDrafts([]);
       const parsedDuration = parseCourseDuration(course.duration || '');
@@ -874,20 +1070,13 @@ function AdminCourses() {
       setTopicInput('');
       // Fetch videos for this course
       setEditingCourseVideosLoading(true);
-      fetch(`${API_BASE}/api/courses/${course._id}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            const videos = data.videos || [];
-            setEditingCourseVideos(videos);
-            syncCourseVideoCount(course._id, videos);
-          }
-          setEditingCourseVideosLoading(false);
+      loadAdminCourseVideos(course._id)
+        .then((videos) => {
+          setEditingCourseVideos(videos);
+          syncCourseVideoCount(course._id, videos);
         })
-        .catch(() => {
-          setEditingCourseVideos([]);
-          setEditingCourseVideosLoading(false);
-        });
+        .catch(() => setEditingCourseVideos([]))
+        .finally(() => setEditingCourseVideosLoading(false));
     } else {
       setEditingCourse(null);
       setFormData(EMPTY_COURSE_FORM);
@@ -1318,8 +1507,8 @@ function AdminCourses() {
 
                   <div className="form-group">
                     <label className="form-label">
-                      Thumbnail Image
-                      <span className="optional"> (Optional — uploads via backend to Supabase, URL saved in MongoDB)</span>
+                      1. Thumbnail Image
+                      <span className="optional"> (uploads to Supabase — URL saved in MongoDB)</span>
                     </label>
 
                     {/* File upload row */}
@@ -1402,251 +1591,289 @@ function AdminCourses() {
                 </div>
 
                 <div className="form-section">
-                  <h4 className="section-title">Video Management</h4>
-                  <p className="section-hint">{getCourseTypeConfig(formData.courseType).videosHint}</p>
-                  {editingCourse ? (
-                    <>
-                      <p className="section-hint">Saved videos attached to this course. Preview, edit, replace, or delete them here.</p>
-                      {editingCourseVideosLoading ? (
-                        <div className="text-center py-3"><div className="lf-spinner"></div></div>
-                      ) : editingCourseVideos && editingCourseVideos.length > 0 ? (
-                        <div className="videos-preview">
-                          {editingCourseVideos.map((video) => (
-                            <div key={video._id} className="video-preview-item">
-                              <div className="video-preview-info">
-                                <div className="video-preview-title">{video.title}</div>
-                                <div className="video-preview-provider">{getProviderLabel(getVideoProvider(video))}</div>
-                                <div className="video-saved-id">
-                                  <span>{getProviderIdLabel(getVideoProvider(video))}</span>
-                                  <code>{getVideoValue(video) || 'No video ID saved'}</code>
-                                </div>
-                              </div>
-                              <div className="video-preview-actions">
-                                <button type="button" className="lms-mini-btn" onClick={() => openVideoPreview(video, editingCourse._id)} disabled={previewLoadingId === (video._id || video.id || video.videoId)}>
-                                  {previewLoadingId === (video._id || video.id || video.videoId) ? 'Loading...' : 'Preview'}
-                                </button>
-                                <button type="button" className="lms-mini-btn" onClick={() => copyVideoValue(video)}>
-                                  Copy ID
-                                </button>
-                                <button type="button" className="lms-mini-btn" onClick={() => startEditingVideo(video)}>
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  className="lms-mini-btn lms-mini-btn--danger"
-                                  onClick={() => confirmDeleteVideo(video, editingCourse._id, async () => {
-                                    const res = await fetch(`${API_BASE}/api/courses/${editingCourse._id}`);
-                                    const data = await parseApiResponse(res);
-                                    if (data.success) {
-                                      const videos = data.videos || [];
-                                      setEditingCourseVideos(videos);
-                                      syncCourseVideoCount(editingCourse._id, videos);
-                                    }
-                                  })}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="empty-state">No videos attached yet. Use the form below to add the first video.</div>
-                      )}
-                      <div className="initial-video-grid edit-video-grid">
+                  <h4 className="section-title">Course Media</h4>
+                  <p className="section-hint"><strong>1.</strong> Thumbnail (above) · <strong>2.</strong> Intro video (public) · <strong>3.</strong> Main lessons (admin approval)</p>
+                  {editingCourse ? (() => {
+                    const introVideo = editingCourseVideos.find((v) => v.visibility === 'public') || null;
+                    const lessonVideos = editingCourseVideos.filter((v) => v.visibility !== 'public');
+                    const refreshVideos = refreshEditingCourseVideos;
+                    const VideoForm = ({ label }) => (
+                      <div className="lms-video-form-wrap">
+                        <p className="lms-video-form-context">
+                          <i className={`fas ${videoForm.visibility === 'public' ? 'fa-eye' : 'fa-lock'}`} style={{ marginRight: '0.4rem' }} />
+                          {label}
+                        </p>
                         <div className="form-group">
-                          <label className="form-label">Video Title</label>
-                          <input
-                            type="text"
-                            name="title"
-                            value={videoForm.title}
-                            onChange={handleVideoInputChange}
-                            className="form-input"
-                            placeholder="e.g., Lesson 2"
-                          />
+                          <label className="form-label">Title</label>
+                          <input type="text" name="title" value={videoForm.title} onChange={handleVideoInputChange} className="form-input" placeholder={videoForm.visibility === 'public' ? 'e.g., Course Introduction' : 'e.g., Lesson 1 — Basics'} />
                         </div>
-
                         <div className="form-group">
                           <label className="form-label">Video Provider</label>
-                          <select
-                            name="videoProvider"
-                            value={videoForm.videoProvider}
-                            onChange={handleVideoInputChange}
-                            className="form-input"
-                          >
+                          <select name="videoProvider" value={videoForm.videoProvider} onChange={handleVideoInputChange} className="form-input">
                             <option value="supabase">Supabase Storage (recommended)</option>
                             <option value="bunny">Bunny.net</option>
                             <option value="vdocipher">VdoCipher</option>
                           </select>
                         </div>
-
                         <div className="form-group">
                           <label className="form-label">{getProviderConfig(videoForm.videoProvider).fieldLabel}</label>
-                          <input
-                            type="text"
-                            name="bunnyVideoId"
-                            value={videoForm.bunnyVideoId}
-                            onChange={handleVideoInputChange}
-                            className="form-input"
-                            placeholder={getProviderConfig(videoForm.videoProvider).placeholder}
-                          />
-                          <p className="form-hint">Paste an existing {getProviderLabel(videoForm.videoProvider)} video ID, or upload a file.</p>
+                          <input type="text" name="bunnyVideoId" value={videoForm.bunnyVideoId} onChange={handleVideoInputChange} className="form-input" placeholder={getProviderConfig(videoForm.videoProvider).placeholder} />
                         </div>
-
                         <div className="form-group">
                           <label className="form-label">Upload Video File</label>
                           <div className="file-input-wrap">
-                            <input
-                              type="file"
-                              accept="video/*"
-                              onChange={handleVideoFileChange}
-                            />
+                            <input type="file" accept="video/*" onChange={handleVideoFileChange} disabled={videoUploading} />
                           </div>
-                          <p className="form-hint">{getProviderConfig(videoForm.videoProvider).fileHint}</p>
+                          {videoUploading ? (
+                            <p className="form-hint" style={{ color: 'var(--primary)' }}>
+                              <span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />
+                              Uploading to Supabase…
+                            </p>
+                          ) : videoForm.videoProvider === 'supabase' && videoForm.bunnyVideoId ? (
+                            <p className="form-hint" style={{ color: '#16a34a' }}>
+                              <i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />
+                              Uploaded. Click save to attach to course.
+                            </p>
+                          ) : (
+                            <p className="form-hint">{getProviderConfig(videoForm.videoProvider).fileHint}</p>
+                          )}
                         </div>
-
-                        <div className="form-group">
-                          <label className="form-label">Sort Order</label>
-                          <input
-                            type="number"
-                            name="sortOrder"
-                            value={videoForm.sortOrder}
-                            onChange={handleVideoInputChange}
-                            className="form-input"
-                            placeholder="0"
-                          />
-                        </div>
-
-                        <button
-                          type="button"
-                          className="btn btn-primary add-video-inline-btn"
-                          disabled={videoLoading}
-                          onClick={handleAddVideoFromEditModal}
-                        >
-                          {videoLoading ? (editingVideoId ? 'Updating...' : 'Adding...') : (editingVideoId ? 'Update Selected Video' : 'Add Video to Queue')}
-                        </button>
-                        {editingVideoId && (
-                          <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={resetVideoForm}>
-                            Cancel Edit
+                        {videoForm.visibility === 'enrolled' && (
+                          <div className="form-group">
+                            <label className="form-label">Sort Order</label>
+                            <input type="number" name="sortOrder" value={videoForm.sortOrder} onChange={handleVideoInputChange} className="form-input" placeholder="0" />
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          <button type="button" className="btn btn-primary add-video-inline-btn" disabled={videoLoading || videoUploading} onClick={handleAddVideoFromEditModal}>
+                            {videoLoading ? (editingVideoId ? 'Updating…' : 'Saving…') : (
+                              editingVideoId
+                                ? (videoForm.visibility === 'public' ? 'Update Intro Video' : 'Update Lesson')
+                                : (videoForm.visibility === 'public' ? 'Save Intro Video' : 'Add Lesson')
+                            )}
                           </button>
-                        )}
-                        {editVideoDrafts.length > 0 && (
-                          <div className="queued-video-list">
-                            <div className="video-panel-title">
-                              <h4>Queued Videos</h4>
-                              <span>{editVideoDrafts.length}</span>
-                            </div>
-                            {editVideoDrafts.map((video, index) => (
-                              <div className="queued-video-item" key={video.localId}>
-                                <div className="video-item-index">{index + 1}</div>
-                                <div className="queued-video-info">
-                                  <strong>{video.title}</strong>
-                                  <span>{video.sourceLabel}</span>
-                                </div>
-                                <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeEditVideoDraft(video.localId)}>
-                                  Remove
-                                </button>
-                              </div>
-                            ))}
-                            <button
-                              type="button"
-                              className="btn btn-primary add-video-inline-btn"
-                              disabled={videoLoading}
-                              onClick={uploadEditVideoDrafts}
-                            >
-                              {videoLoading ? 'Uploading...' : `Upload ${editVideoDrafts.length} Queued Video${editVideoDrafts.length === 1 ? '' : 's'}`}
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="initial-video-grid">
-                      <p className="section-hint">Queue one or more videos now. They will be attached after the course is created.</p>
-
-                      <div className="form-group">
-                        <label className="form-label">Video Title <span className="optional">(Optional)</span></label>
-                        <input 
-                          type="text" 
-                          value={initialVideoForm.title} 
-                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, title: e.target.value })}
-                          className="form-input"
-                          placeholder="e.g., Introduction to Astrology"
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">Video Provider</label>
-                        <select
-                          value={initialVideoForm.videoProvider}
-                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, videoProvider: e.target.value })}
-                          className="form-input"
-                        >
-                          <option value="supabase">Supabase Storage (recommended)</option>
-                          <option value="bunny">Bunny.net</option>
-                          <option value="vdocipher">VdoCipher</option>
-                        </select>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">{getProviderConfig(initialVideoForm.videoProvider).fieldLabel} <span className="optional">(Optional)</span></label>
-                        <input 
-                          type="text" 
-                          value={initialVideoForm.bunnyVideoId} 
-                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, bunnyVideoId: e.target.value })}
-                          className="form-input"
-                          placeholder={getProviderConfig(initialVideoForm.videoProvider).placeholder}
-                        />
-                        <p className="form-hint">Paste your {getProviderLabel(initialVideoForm.videoProvider)} video ID here, OR upload a file below.</p>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">Or Upload Video File <span className="optional">(Optional)</span></label>
-                        <div className="file-input-wrap">
-                          <input 
-                            type="file" 
-                            accept="video/*" 
-                            onChange={(e) => setInitialVideoFile(e.target.files?.[0] || null)}
-                          />
+                          <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={resetVideoForm}>
+                            Cancel
+                          </button>
                         </div>
-                        <p className="form-hint">{getProviderConfig(initialVideoForm.videoProvider).fileHint}</p>
                       </div>
-
-                      <div className="form-group">
-                        <label className="form-label">Sort Order <span className="optional">(Optional)</span></label>
-                        <input
-                          type="number"
-                          value={initialVideoForm.sortOrder}
-                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, sortOrder: e.target.value })}
-                          className="form-input"
-                          placeholder="0"
-                        />
-                      </div>
-
-                      <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={addInitialVideoDraft}>
-                        Add Video to List
-                      </button>
-
-                      {initialVideos.length > 0 && (
-                        <div className="queued-video-list">
-                          <div className="video-panel-title">
-                            <h4>Videos Ready to Attach</h4>
-                            <span>{initialVideos.length}</span>
+                    );
+                    return (
+                      <>
+                        {/* ── SECTION 1: INTRODUCTORY VIDEO ── */}
+                        <div className="lms-video-group">
+                          <div className="lms-video-group-header">
+                            <span className="lms-video-group-badge lms-video-group-badge--intro">
+                              <i className="fas fa-play-circle" />
+                            </span>
+                            <div>
+                              <strong>Introductory Video <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>(1 max)</span></strong>
+                              <p className="section-hint" style={{ margin: 0 }}>Free preview shown to all visitors on the course page. No login required.</p>
+                            </div>
                           </div>
-                          {initialVideos.map((video, index) => (
-                            <div className="queued-video-item" key={video.localId}>
-                              <div className="video-item-index">{index + 1}</div>
-                              <div className="queued-video-info">
-                                <strong>{video.title}</strong>
-                                  <span>{video.sourceLabel}</span>
+                          {editingCourseVideosLoading ? (
+                            <div className="text-center py-3"><div className="lf-spinner" /></div>
+                          ) : introVideo ? (
+                            <div className="video-preview-item" style={{ borderLeft: '3px solid #22c55e' }}>
+                              <div className="video-preview-info">
+                                <div className="video-preview-title">{introVideo.title}</div>
+                                <div className="video-preview-provider">
+                                  <span style={{ color: '#16a34a', fontWeight: 600 }}>Public</span>
+                                  {' · '}{getProviderLabel(getVideoProvider(introVideo))}
+                                </div>
+                                <div className="video-saved-id">
+                                  <span>{getProviderIdLabel(getVideoProvider(introVideo))}</span>
+                                  <code>{getVideoValue(introVideo) || 'No video ID saved'}</code>
+                                </div>
                               </div>
-                              <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(video.localId)}>
-                                Remove
+                              <div className="video-preview-actions">
+                                <button type="button" className="lms-mini-btn" onClick={() => openVideoPreview(introVideo, editingCourse._id)} disabled={previewLoadingId === introVideo._id}>
+                                  {previewLoadingId === introVideo._id ? 'Loading...' : 'Preview'}
+                                </button>
+                                <button type="button" className="lms-mini-btn" onClick={() => startEditingVideo(introVideo)}>Replace</button>
+                                <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => confirmDeleteVideo(introVideo, editingCourse._id, refreshVideos)}>Remove</button>
+                              </div>
+                            </div>
+                          ) : (!showVideoForm || videoForm.visibility !== 'public') ? (
+                            <div className="lms-video-empty">
+                              <i className="fas fa-video-slash" style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '6px' }} />
+                              <p style={{ margin: '0 0 10px' }}>No intro video — visitors see only the thumbnail.</p>
+                              <button type="button" className="btn btn-secondary" style={{ fontSize: '12px' }} onClick={startAddingIntroVideo}>
+                                <i className="fas fa-plus" style={{ marginRight: '6px' }} />Set Intro Video
                               </button>
                             </div>
-                          ))}
+                          ) : null}
+                          {showVideoForm && videoForm.visibility === 'public' && (
+                            <VideoForm label={editingVideoId ? 'Replacing introductory video' : 'Setting introductory video'} />
+                          )}
                         </div>
-                      )}
+
+                        {/* ── SECTION 2: MAIN COURSE LESSONS ── */}
+                        <div className="lms-video-group">
+                          <div className="lms-video-group-header">
+                            <span className="lms-video-group-badge lms-video-group-badge--lesson">
+                              <i className="fas fa-lock" />
+                            </span>
+                            <div>
+                              <strong>Main Course Videos <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>({lessonVideos.length} lesson{lessonVideos.length === 1 ? '' : 's'})</span></strong>
+                              <p className="section-hint" style={{ margin: 0 }}>Unlocked for students only after admin approves their enrollment.</p>
+                            </div>
+                          </div>
+                          {editingCourseVideosLoading ? (
+                            <div className="text-center py-3"><div className="lf-spinner" /></div>
+                          ) : (
+                            <>
+                              {lessonVideos.length > 0 && (
+                                <div className="videos-preview">
+                                  {lessonVideos.map((video) => (
+                                    <div key={video._id} className="video-preview-item">
+                                      <div className="video-preview-info">
+                                        <div className="video-preview-title">{video.title}</div>
+                                        <div className="video-preview-provider">
+                                          <span style={{ color: '#dc2626', fontWeight: 600 }}>Enrolled only</span>
+                                          {' · '}{getProviderLabel(getVideoProvider(video))}
+                                        </div>
+                                        <div className="video-saved-id">
+                                          <span>{getProviderIdLabel(getVideoProvider(video))}</span>
+                                          <code>{getVideoValue(video) || 'No video ID saved'}</code>
+                                        </div>
+                                      </div>
+                                      <div className="video-preview-actions">
+                                        <button type="button" className="lms-mini-btn" onClick={() => openVideoPreview(video, editingCourse._id)} disabled={previewLoadingId === video._id}>
+                                          {previewLoadingId === video._id ? 'Loading...' : 'Preview'}
+                                        </button>
+                                        <button type="button" className="lms-mini-btn" onClick={() => copyVideoValue(video)}>Copy ID</button>
+                                        <button type="button" className="lms-mini-btn" onClick={() => startEditingVideo(video)}>Edit</button>
+                                        <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => confirmDeleteVideo(video, editingCourse._id, refreshVideos)}>Delete</button>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {showVideoForm && videoForm.visibility === 'enrolled' ? (
+                                <VideoForm label={editingVideoId ? 'Editing lesson' : 'Adding new lesson'} />
+                              ) : (
+                                <button type="button" className="btn btn-secondary" style={{ fontSize: '12px', marginTop: lessonVideos.length > 0 ? '10px' : 0 }} onClick={startAddingLesson}>
+                                  <i className="fas fa-plus" style={{ marginRight: '6px' }} />Add Lesson
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })() : (
+                    <div className="initial-video-grid">
+                      <p className="section-hint">After creating the course, intro and lesson videos attach automatically. Upload each file to Supabase first — the URL field fills in when ready.</p>
+
+                      {(() => {
+                        const queuedIntro = initialVideos.filter((v) => v.visibility === 'public');
+                        const queuedLessons = initialVideos.filter((v) => v.visibility !== 'public');
+
+                        return (
+                          <>
+                            <div className="lms-video-group">
+                              <div className="lms-video-group-header">
+                                <span className="lms-video-group-badge lms-video-group-badge--intro"><i className="fas fa-play-circle" /></span>
+                                <div>
+                                  <strong>2. Introductory Video <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>(optional, 1 max)</span></strong>
+                                  <p className="section-hint" style={{ margin: 0 }}>Shown to all visitors on the course page.</p>
+                                </div>
+                              </div>
+                              {queuedIntro.length > 0 ? (
+                                <div className="queued-video-item">
+                                  <div className="queued-video-info">
+                                    <strong>{queuedIntro[0].title}</strong>
+                                    <span>{queuedIntro[0].sourceLabel}</span>
+                                  </div>
+                                  <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(queuedIntro[0].localId)}>Remove</button>
+                                </div>
+                              ) : (
+                                <>
+                                  <div className="form-group">
+                                    <label className="form-label">Intro title</label>
+                                    <input
+                                      type="text"
+                                      value={initialIntroForm.title}
+                                      onChange={(e) => setInitialIntroForm({ ...initialIntroForm, title: e.target.value })}
+                                      className="form-input"
+                                      placeholder="e.g., Course Introduction"
+                                    />
+                                  </div>
+                                  <div className="form-group">
+                                    <label className="form-label">Upload intro video</label>
+                                    <div className="file-input-wrap">
+                                      <input
+                                        type="file"
+                                        accept="video/*"
+                                        onChange={(e) => handleInitialDraftFileChange(e, 'intro')}
+                                        disabled={initialIntroUploading}
+                                      />
+                                    </div>
+                                    {initialIntroUploading ? (
+                                      <p className="form-hint" style={{ color: 'var(--primary)' }}><span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />Uploading…</p>
+                                    ) : initialIntroForm.bunnyVideoId ? (
+                                      <p className="form-hint" style={{ color: '#16a34a' }}><i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />Ready — click Add Intro below.</p>
+                                    ) : null}
+                                  </div>
+                                  <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={() => queueInitialDraft('public')}>Add Intro Video</button>
+                                </>
+                              )}
+                            </div>
+
+                            <div className="lms-video-group" style={{ marginTop: '1rem' }}>
+                              <div className="lms-video-group-header">
+                                <span className="lms-video-group-badge lms-video-group-badge--lesson"><i className="fas fa-lock" /></span>
+                                <div>
+                                  <strong>3. Main Course Videos <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>(multiple)</span></strong>
+                                  <p className="section-hint" style={{ margin: 0 }}>Unlocked after admin approves student enrolment.</p>
+                                </div>
+                              </div>
+                              {queuedLessons.length > 0 && (
+                                <div className="queued-video-list">
+                                  {queuedLessons.map((video, index) => (
+                                    <div className="queued-video-item" key={video.localId}>
+                                      <div className="video-item-index">{index + 1}</div>
+                                      <div className="queued-video-info">
+                                        <strong>{video.title}</strong>
+                                        <span>{video.sourceLabel}</span>
+                                      </div>
+                                      <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(video.localId)}>Remove</button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              <div className="form-group">
+                                <label className="form-label">Lesson title</label>
+                                <input
+                                  type="text"
+                                  value={initialLessonForm.title}
+                                  onChange={(e) => setInitialLessonForm({ ...initialLessonForm, title: e.target.value })}
+                                  className="form-input"
+                                  placeholder="e.g., Lesson 1 — Planets"
+                                />
+                              </div>
+                              <div className="form-group">
+                                <label className="form-label">Upload lesson video</label>
+                                <div className="file-input-wrap">
+                                  <input
+                                    type="file"
+                                    accept="video/*"
+                                    onChange={(e) => handleInitialDraftFileChange(e, 'lesson')}
+                                    disabled={initialLessonUploading}
+                                  />
+                                </div>
+                                {initialLessonUploading ? (
+                                  <p className="form-hint" style={{ color: 'var(--primary)' }}><span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />Uploading…</p>
+                                ) : initialLessonForm.bunnyVideoId ? (
+                                  <p className="form-hint" style={{ color: '#16a34a' }}><i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />Ready — click Add Lesson below.</p>
+                                ) : null}
+                              </div>
+                              <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={() => queueInitialDraft('enrolled')}>Add Lesson Video</button>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
                 </div>
@@ -1707,7 +1934,11 @@ function AdminCourses() {
                             <div className="video-item-index">{index + 1}</div>
                             <div className="video-item-info">
                               <div className="video-item-title">{video.title || `Video ${index + 1}`}</div>
-                              <div className="video-item-provider">{getProviderLabel(getVideoProvider(video))}</div>
+                              <div className="video-item-provider">
+                                {VISIBILITY_LABELS[video.visibility === 'public' ? 'public' : 'enrolled']}
+                                {' · '}
+                                {getProviderLabel(getVideoProvider(video))}
+                              </div>
                               <div className="video-saved-id">
                                 <span>{getProviderIdLabel(getVideoProvider(video))}</span>
                                 <code>{getVideoValue(video) || 'No video ID saved'}</code>

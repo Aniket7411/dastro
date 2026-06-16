@@ -9,12 +9,12 @@ import {
   GraduationCap,
   Headphones,
   Radio,
-  Sparkles,
   Users,
   Video,
 } from 'lucide-react';
 import { fetchCourses } from '../hooks/useCourses';
 import { CourseGridSkeleton } from './PageLoader';
+import HomeSectionHeader from './home/HomeSectionHeader';
 import { COURSE_GRID, COURSE_GRID_ITEM, PAGE_WRAP } from './consultation/tokens';
 
 const FEATURES = [
@@ -160,21 +160,13 @@ export default function AstrologyCoursesSection() {
       </div>
 
       <div className={PAGE_WRAP}>
-        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
-          <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-site-accent-dark/15 bg-white px-2.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-site-accent-dark sm:mb-3 sm:px-3 sm:py-1 sm:text-[0.6875rem]">
-            <Sparkles size={11} />
-            Featured Programs
-          </span>
-          <h2 id="astro-courses-heading" className="m-0 font-heading text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-tight text-site-primary">
-            Astrology{' '}
-            <span className="bg-gradient-to-r from-site-accent-dark to-site-accent bg-clip-text text-transparent">
-              Courses
-            </span>
-          </h2>
-          <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-site-muted sm:mt-3">
-            Ancient wisdom, modern teaching — live batches and self-paced programs for every level.
-          </p>
-        </div>
+        <HomeSectionHeader
+          id="astro-courses-heading"
+          kicker="Featured Programs"
+          title="Astrology"
+          titleHighlight="Courses"
+          subtitle="Ancient wisdom, modern teaching — live batches and self-paced programs for every level."
+        />
 
         {loading ? (
           <CourseGridSkeleton count={4} />

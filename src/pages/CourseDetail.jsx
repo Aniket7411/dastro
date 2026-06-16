@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
   Calendar,
   CheckCircle2,
   Layers,
 } from 'lucide-react';
+import CourseListingCard from '../components/CourseListingCard';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
 import SEO from '../components/SEO';
@@ -23,6 +25,10 @@ import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentU
 import CourseTimer from '../components/CourseTimer';
 import { SITE_LOGO } from '../utils/brandAssets';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+import CoursePreviewPlayer from '../components/courses/CoursePreviewPlayer';
+import CourseLockedLessons from '../components/courses/CourseLockedLessons';
+import StatusModal from '../components/modal/StatusModal';
+import { fetchCoursePreviewVideos } from '../utils/courseVideoApi';
 
 const PAGE = 'min-h-screen w-full bg-site-bg font-body text-site-text antialiased';
 
@@ -115,6 +121,11 @@ function CourseDetail() {
   const [couponLoading, setCouponLoading] = useState(false);
   const [paymentEnabled, setPaymentEnabled] = useState(false);
   const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [relatedCourses, setRelatedCourses] = useState([]);
+  const [lessonCount, setLessonCount] = useState(0);
+  const [previewVideos, setPreviewVideos] = useState([]);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [statusModal, setStatusModal] = useState(null);
 
   const isLiveCourse = course?.courseType === 'Live';
   const isRecordedCourse = course?.courseType === 'Recorded';
@@ -137,18 +148,43 @@ function CourseDetail() {
     window.scrollTo(0, 0);
     const loadCourse = async () => {
       setLoading(true);
+      setPreviewLoading(true);
       try {
-        const data = await fetchCourseBySlugOrId(courseId);
-        setCourse(mapDetailCourse(data.course));
+        const [detail, previews] = await Promise.all([
+          fetchCourseBySlugOrId(courseId),
+          fetchCoursePreviewVideos(courseId).catch(() => []),
+        ]);
+        setCourse(mapDetailCourse(detail.course));
+        setLessonCount(detail.lessonCount || detail.course?.modulesCount || 0);
+        setPreviewVideos(previews);
       } catch (err) {
-        toast.error(err.message || 'Course not found');
+        setStatusModal({
+          type: 'error',
+          title: 'Course not found',
+          message: err.message || 'We could not load this course. Please try again or browse all courses.',
+        });
         navigate('/recorded-courses');
       } finally {
         setLoading(false);
+        setPreviewLoading(false);
       }
     };
     loadCourse();
   }, [courseId, navigate]);
+
+  useEffect(() => {
+    if (!courseId) return;
+    let cancelled = false;
+    fetch(`${API_BASE}/api/courses/${encodeURIComponent(courseId)}/related`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data.success && Array.isArray(data.courses)) {
+          setRelatedCourses(data.courses.map(mapCourseFromApi));
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [courseId]);
 
   useEffect(() => {
     if (!course?.id || !isRecordedCourse || !paymentEnabled) {
@@ -258,14 +294,26 @@ function CourseDetail() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Enquiry submitted. Our team will contact you soon.');
         setShowEnquiryModal(false);
         setEnquiryData({ name: '', phone: '', email: '', city: '', age: '', interest: '', message: '' });
+        setStatusModal({
+          type: 'success',
+          title: 'Enquiry received',
+          message: 'Thank you! Our team will contact you shortly with batch schedule and enrolment details.',
+        });
       } else {
-        toast.error(data.message || 'Failed to submit enquiry');
+        setStatusModal({
+          type: 'error',
+          title: 'Could not submit',
+          message: data.message || 'Failed to submit enquiry. Please try again.',
+        });
       }
     } catch {
-      toast.error('Network error. Please try again.');
+      setStatusModal({
+        type: 'error',
+        title: 'Network error',
+        message: 'Please check your connection and try again.',
+      });
     }
   };
 
@@ -531,6 +579,15 @@ function CourseDetail() {
               ) : null}
               <CourseFacts course={course} />
 
+              {(previewLoading || previewVideos.length > 0) && (
+                <div className="mt-4 lg:hidden">
+                  <p className="!mb-2 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
+                    Watch before you enrol
+                  </p>
+                  <CoursePreviewPlayer videos={previewVideos} loading={previewLoading} />
+                </div>
+              )}
+
               <div className="mt-4 lg:hidden">
                 <EnrollPanel
                   course={course}
@@ -565,6 +622,14 @@ function CourseDetail() {
                       ))}
                     </ul>
                   </Section>
+                ) : null}
+
+                {isRecordedCourse && lessonCount > 0 ? (
+                  <CourseLockedLessons
+                    lessonCount={lessonCount}
+                    onEnroll={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
+                    enrollLabel={canPayOnline ? 'Enrol now' : 'Enquire now'}
+                  />
                 ) : null}
 
                 {course.curriculum?.length > 0 ? (
@@ -682,9 +747,18 @@ function CourseDetail() {
 
             <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
-                </div>
+                {(previewLoading || previewVideos.length > 0) ? (
+                  <div className="p-3 pb-0">
+                    <p className="!mb-2 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
+                      Free preview
+                    </p>
+                    <CoursePreviewPlayer videos={previewVideos} loading={previewLoading} compact />
+                  </div>
+                ) : (
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                  </div>
+                )}
                 <div className="p-4">
                   <EnrollPanel
                     course={course}
@@ -706,7 +780,44 @@ function CourseDetail() {
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-[100] border-t border-site-accent-dark/10 bg-site-primary p-3 shadow-lg lg:hidden">
+      {relatedCourses.length > 0 && (
+        <section className="relative overflow-hidden py-10 sm:py-14">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-site-accent/30 to-transparent" aria-hidden />
+          <div className={`${PAGE_WRAP} relative`}>
+            <div className="mb-7 sm:mb-9">
+              <p className="mb-1.5 font-body text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-site-accent">
+                Explore more
+              </p>
+              <h2 className="font-heading text-[1.625rem] font-bold leading-tight text-site-primary sm:text-3xl">
+                You may also like
+              </h2>
+              <p className="mt-1.5 max-w-lg font-body text-sm text-site-muted">
+                Handpicked courses to continue your learning journey.
+              </p>
+            </div>
+
+            <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-4 lg:grid-cols-4">
+              {relatedCourses.map((c) => (
+                <li key={c.id}>
+                  <CourseListingCard course={c} />
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 flex justify-center">
+              <Link
+                to={course.courseType === 'Live' ? '/live-courses' : '/recorded-courses'}
+                className="inline-flex items-center gap-2 rounded-full border border-site-accent-dark/20 bg-white px-6 py-2.5 font-body text-sm font-semibold text-site-primary shadow-sm transition duration-200 hover:border-site-accent/40 hover:bg-site-bg hover:shadow"
+              >
+                Browse all courses
+                <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="fixed inset-x-0 bottom-0 z-[1100] border-t border-site-accent-dark/10 bg-site-primary p-3 shadow-lg lg:hidden">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="!m-0 truncate font-body text-xs text-white/70">{course.title}</p>
@@ -753,6 +864,14 @@ function CourseDetail() {
         enquiryData={enquiryData}
         onChange={handleEnquiryChange}
         onSubmit={handleEnquirySubmit}
+      />
+
+      <StatusModal
+        open={!!statusModal}
+        type={statusModal?.type}
+        title={statusModal?.title}
+        message={statusModal?.message}
+        onClose={() => setStatusModal(null)}
       />
     </div>
   );

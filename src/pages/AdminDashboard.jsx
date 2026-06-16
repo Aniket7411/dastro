@@ -7,6 +7,7 @@ import AdminLeads from './AdminLeads';
 import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
 import AdminCoupons from './AdminCoupons';
+import AdminOffers from './AdminOffers';
 import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
 import AdminCourses from './AdminCourses';
@@ -27,6 +28,7 @@ const PAGE_TITLES = {
   blogs: 'Blog & Articles',
   jobs: 'Careers & Hiring',
   coupons: 'Promo Codes',
+  offers: 'Site Offers',
   settings: 'Platform Settings',
   newsletter: 'Newsletter',
 };
@@ -50,6 +52,7 @@ const PAGE_ICONS = {
   blogs: 'fa-pen-nib',
   jobs: 'fa-briefcase',
   coupons: 'fa-percent',
+  offers: 'fa-gift',
   settings: 'fa-sliders-h',
   newsletter: 'fa-paper-plane',
 };
@@ -83,6 +86,7 @@ const NAV_SECTIONS = [
       { id: 'blogs', icon: 'fa-pen-nib', label: 'Blog & Articles', accent: 'amber' },
       { id: 'jobs', icon: 'fa-briefcase', label: 'Job Postings', accent: 'indigo' },
       { id: 'coupons', icon: 'fa-percent', label: 'Promo Codes', accent: 'rose' },
+      { id: 'offers', icon: 'fa-gift', label: 'Site Offers', accent: 'emerald' },
     ],
   },
   {
@@ -460,6 +464,7 @@ function AdminDashboard() {
           {activeTab === 'blogs'         && <AdminBlogs />}
           {activeTab === 'jobs'          && <AdminJobs />}
           {activeTab === 'coupons'       && <AdminCoupons />}
+          {activeTab === 'offers'        && <AdminOffers />}
           {activeTab === 'settings'      && <AdminSettings />}
           {activeTab === 'newsletter'    && <AdminNewsletter />}
         </main>

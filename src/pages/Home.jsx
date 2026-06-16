@@ -14,6 +14,9 @@ import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
 import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
 import HomeConsultationCard from '../components/HomeConsultationCard';
 import HomeBannerCTAs from '../components/HomeBannerCTAs';
+import HomeSectionHeader, { HomeSubsectionHeader } from '../components/home/HomeSectionHeader';
+import StudentTestimonials from '../components/StudentTestimonials';
+import ConsultationTestimonials from '../components/ConsultationTestimonials';
 import { COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
 
 const HOME_FEATURED_CONSULTATIONS = [
@@ -555,7 +558,6 @@ const BannerChevron = ({ direction = 'left' }) => (
 
 function Home() {
 
-  const trackRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -766,27 +768,6 @@ function Home() {
       });
     }
   }, []);
-
-  const scrollTestimonials = (direction) => {
-    if (trackRef.current) {
-      const scrollAmount = window.innerWidth < 768 ? 250 : 350;
-      trackRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const handleVideoClick = (e) => {
-    const video = e.currentTarget.querySelector('video');
-    if (video) {
-      if (video.paused) {
-        video.muted = false; // Unmute when playing
-        video.play();
-        e.currentTarget.classList.add('playing');
-      } else {
-        video.pause();
-        e.currentTarget.classList.remove('playing');
-      }
-    }
-  };
 
   return (
     <>
@@ -1026,16 +1007,15 @@ function Home() {
                 </div>
               </div>
               <div className="col-lg-6">
-                <h5 className="section-subtitle about-subtitle" data-aos="fade-up" data-aos-once="true">About DS Institute</h5>
-                <h2 className="section-title my-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="100">
-                  Unlock a Brilliant Future with <span className="text-gradient">Astrology</span>
-                </h2>
-                <p className="section-desc mt-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
-                  Discover Your True Potential with Expert Astrology Guidance!
-                  Step into a life full of clarity, confidence, and success. Our professional astrology
-                  consultants help you unlock the secrets of your future with accurate, personalized insights.
-                </p>
-                <a href="#" className="btn mystic-btn-outline mt-4" data-aos="fade-up" data-aos-once="true" data-aos-delay="300">Read More</a>
+                <HomeSectionHeader
+                  align="left"
+                  className="max-w-none"
+                  kicker="About DS Institute"
+                  title="Unlock a Brilliant Future with"
+                  titleHighlight="Astrology"
+                  subtitle="Discover your true potential with expert astrology guidance — clarity, confidence, and success through accurate, personalized insights."
+                />
+                <a href="#" className="btn mystic-btn-outline mt-2 sm:mt-4" data-aos="fade-up" data-aos-once="true" data-aos-delay="300">Read More</a>
               </div>
             </div>
           </div>
@@ -1045,13 +1025,12 @@ function Home() {
         {/* Services Section */}
         <section className="services-section w-100">
           <div className="container">
-            <div className="text-center mb-5">
-              <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
-              <h2 className="section-title mt-2" data-aos="fade-up">Guiding You <span className="text-gradient">Through Life</span></h2>
-              <p className="section-desc mx-auto mt-3" style={{ maxWidth: '650px' }} data-aos="fade-down">
-                Our Astrologers Are Dedicated to Providing Clarity and Direction
-              </p>
-            </div>
+            <HomeSectionHeader
+              kicker="Our Expertise"
+              title="Guiding You"
+              titleHighlight="Through Life"
+              subtitle="Our astrologers are dedicated to providing clarity and direction for every chapter of your journey."
+            />
 
             <div className="row g-3 g-lg-4 align-items-center mt-3 mt-lg-4">
 
@@ -1115,207 +1094,36 @@ function Home() {
 
 
 
-        {/* Video Testimonials - Professional Production Level */}
-        {/* Video Testimonials */}
-        <section className="testimonial-section">
-          <div className="container">
-            <div className="section-header text-center mb-5">
-              <span className="section-badge" data-aos="fade-up">
-                Real Stories
-              </span>
-              {/* Heading with gradient color on "Clients Say" only */}
-              <h2 className="section-title mt-3">
-                What Our <span className="text-gradient">Students Say</span>
-              </h2>
-              <p className="section-description mx-auto mt-3">
-                Trusted by thousands of satisfied students across globe
-              </p>
-            </div>
-
-            <div className="testimonial-slider-wrapper position-relative">
-              <button className="nav-btn left-btn" onClick={() => scrollTestimonials('left')}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-
-              <div className="testimonial-track" ref={trackRef}>
-                {/* Testimonial Card 1 */}
-                <div className="testimonial-card">
-                  <div className="card-inner">
-                    <div className="quote-icon">“</div>
-                    <div className="video-container" onClick={handleVideoClick}>
-                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-                      <div className="play-btn-overlay">
-                        <div className="play-circle">
-                          <i className="fas fa-play"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-content">
-                      <p className="testimonial-text">
-                        "The astrological guidance I received completely transformed my perspective. Highly recommended!"
-                      </p>
-                      <div className="client-info">
-                        <div className="client-avatar">
-                          <img src="/images/avatar1.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/1.jpg'} />
-                        </div>
-                        <div className="client-details">
-                          <h4>Priya Sharma</h4>
-                          <div className="rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        <StudentTestimonials />
 
 
-                {/* Testimonial Card 3 */}
-                <div className="testimonial-card">
-                  <div className="card-inner">
-                    <div className="quote-icon">“</div>
-                    <div className="video-container" onClick={handleVideoClick}>
-                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-                      <div className="play-btn-overlay">
-                        <div className="play-circle">
-                          <i className="fas fa-play"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-content">
-                      <p className="testimonial-text">
-                        "The career guidance helped me make the right decisions. I'm now in a much better place professionally."
-                      </p>
-                      <div className="client-info">
-                        <div className="client-avatar">
-                          <img src="/images/avatar3.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/3.jpg'} />
-                        </div>
-                        <div className="client-details">
-                          <h4>Anjali Patel</h4>
-                          <div className="rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star-half-alt"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Testimonial Card 4 */}
-                <div className="testimonial-card">
-                  <div className="card-inner">
-                    <div className="quote-icon">“</div>
-                    <div className="video-container" onClick={handleVideoClick}>
-                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-                      <div className="play-btn-overlay">
-                        <div className="play-circle">
-                          <i className="fas fa-play"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-content">
-                      <p className="testimonial-text">
-                        "Amazing experience! The remedies suggested were simple yet effective. Feeling blessed."
-                      </p>
-                      <div className="client-info">
-                        <div className="client-avatar">
-                          <img src="/images/avatar4.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/men/4.jpg'} />
-                        </div>
-                        <div className="client-details">
-                          <h4>Vikram Singh</h4>
-                          <div className="rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Testimonial Card 5 */}
-                <div className="testimonial-card">
-                  <div className="card-inner">
-                    <div className="quote-icon">“</div>
-                    <div className="video-container" onClick={handleVideoClick}>
-                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-                      <div className="play-btn-overlay">
-                        <div className="play-circle">
-                          <i className="fas fa-play"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="testimonial-content">
-                      <p className="testimonial-text">
-                        "The relationship compatibility analysis was spot on! Truly grateful for this service."
-                      </p>
-                      <div className="client-info">
-                        <div className="client-avatar">
-                          <img src="/images/avatar5.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/5.jpg'} />
-                        </div>
-                        <div className="client-details">
-                          <h4>Neha Gupta</h4>
-                          <div className="rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <button className="nav-btn right-btn" onClick={() => scrollTestimonials('right')}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="slider-dots">
-              <span className="dot active"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-            </div>
-          </div>
-        </section>
-
-
-
-        {/* Astrology Courses Section — Tailwind */}
+                {/* Astrology Courses Section — Tailwind */}
         <AstrologyCoursesSection />
 
 
 
         {/* Expert Consultations Section */}
-        <section className="consultation-home-section py-5">
+        <section
+          className="consultation-home-section py-5"
+          aria-labelledby="consultation-home-heading"
+        >
           <div className="container">
-            <div className="text-center mb-5" data-aos="fade-up">
-              <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
-              <h2 className="section-title">Expert <span className="text-gradient">Consultations</span></h2>
-              <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
-            </div>
+            <HomeSectionHeader
+              id="consultation-home-heading"
+              kicker="Professional Guidance"
+              title="Expert"
+              titleHighlight="Consultations"
+              subtitle="Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey."
+            />
 
             <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
+
+            <HomeSubsectionHeader
+              className="mt-1 sm:mt-2"
+              title="Featured"
+              titleHighlight="Sessions"
+              subtitle="Our most booked consultations — request a callback or learn more about each service."
+            />
 
             <ul className={COURSE_GRID} data-aos="fade-up">
               {HOME_FEATURED_CONSULTATIONS.map((item, idx) => (
@@ -1336,8 +1144,7 @@ function Home() {
           </div>
         </section>
 
-        {/* Consultation Client Testimonials */}
-
+        <ConsultationTestimonials />
 
         {/* Latest Blogs Section */}
         {/* {blogs.length > 0 && (
@@ -1434,6 +1241,19 @@ function Home() {
           line-height: 1.6;
           font-weight: 500;
           font-family: var(--font-sans);
+        }
+
+        .home-subsection-title {
+          font-family: var(--font-serif) !important;
+          font-weight: 700 !important;
+          color: var(--text-heading) !important;
+          font-size: clamp(1.125rem, 2.2vw, 1.5rem) !important;
+          line-height: 1.25 !important;
+        }
+
+        .consultation-home-section header {
+          position: relative;
+          z-index: 1;
         }
 
         .text-gradient {
@@ -3066,260 +2886,6 @@ function Home() {
           to { transform: rotate(360deg); }
         }
 
-        /* Testimonials Section */
-        .testimonial-section {
-          padding: 100px 0;
-          background: #FFFFFF;
-          overflow: hidden;
-          border-top: 1px solid var(--glass-border);
-        }
-
-        .section-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 25px;
-          background: rgba(139, 74, 30, 0.08);
-          border-radius: 50px;
-          color: var(--primary-color);
-          font-weight: 600;
-          font-size: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          font-family: var(--font-sans);
-        }
-
-        .section-description {
-          max-width: 500px;
-          font-size: 1.1rem;
-          color: var(--text-muted);
-          font-family: var(--font-sans);
-        }
-
-        .testimonial-slider-wrapper {
-          position: relative;
-          padding: 20px 0;
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-
-        .testimonial-track {
-          display: flex;
-          gap: 24px;
-          overflow-x: auto;
-          scroll-behavior: smooth;
-          scrollbar-width: none;
-          padding: 10px 40px;
-        }
-
-        .testimonial-card {
-          flex: 0 0 320px;
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .card-inner {
-          background: var(--card-color);
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.08);
-          border: 1px solid var(--glass-border);
-          position: relative;
-          transition: 0.4s ease;
-        }
-
-        .testimonial-card:hover .card-inner {
-          box-shadow: 0 25px 45px rgba(200, 131, 42, 0.15);
-          border-color: var(--accent-color);
-          transform: translateY(-5px);
-        }
-
-        .quote-icon {
-          position: absolute;
-          top: 15px;
-          right: 20px;
-          font-size: 4rem;
-          font-family: var(--font-serif);
-          color: rgba(139, 74, 30, 0.05);
-          line-height: 1;
-          z-index: 1;
-        }
-
-        .video-container {
-          position: relative;
-          width: 100%;
-          height: 180px;
-          overflow: hidden;
-          cursor: pointer;
-        }
-
-        .video-container video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        .play-btn-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .video-container:hover .play-btn-overlay {
-          opacity: 1;
-        }
-
-        .video-container.playing .play-btn-overlay {
-          opacity: 0;
-        }
-
-        .video-container.playing:hover .play-btn-overlay {
-          opacity: 0.5;
-        }
-
-        .play-circle {
-          width: 50px;
-          height: 50px;
-          background: #FFFFFF;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .play-circle i {
-          color: var(--primary-color);
-          font-size: 1.2rem;
-        }
-
-        .play-circle:hover {
-          transform: scale(1.1);
-          background: var(--primary-color);
-        }
-
-        .play-circle:hover i {
-          color: #FFFFFF;
-        }
-
-        .testimonial-content {
-          padding: 20px;
-        }
-
-        .testimonial-text {
-          font-size: 1.1rem;
-          line-height: 1.6;
-          color: var(--text-content);
-          margin-bottom: 20px;
-          font-style: italic;
-          min-height: 80px;
-          font-weight: 400;
-          font-family: var(--font-sans);
-        }
-
-        .client-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding-top: 12px;
-          border-top: 1px solid var(--glass-border);
-        }
-
-        .client-avatar {
-          width: 45px;
-          height: 45px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 2px solid var(--accent-color);
-        }
-
-        .client-avatar img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .client-details h4 {
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: var(--text-card-heading);
-          margin-bottom: 4px;
-          font-family: var(--font-serif);
-        }
-
-        .rating {
-          display: flex;
-          gap: 3px;
-        }
-
-        .rating i {
-          font-size: 0.7rem;
-          color: var(--accent-color);
-        }
-
-        .nav-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: #FFFFFF;
-          border: 1px solid var(--glass-border);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          z-index: 10;
-        }
-
-        .nav-btn:hover {
-          background: var(--primary-color);
-          border-color: var(--primary-color);
-          transform: translateY(-50%) scale(1.1);
-        }
-
-        .nav-btn:hover svg {
-          stroke: #FFFFFF;
-        }
-
-        .nav-btn svg {
-          stroke: var(--primary-color);
-        }
-
-        .slider-dots {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          margin-top: 40px;
-        }
-
-        .dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: rgba(139, 74, 30, 0.2);
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .dot.active {
-          width: 25px;
-          border-radius: 10px;
-          background: var(--primary-color);
-        }
-
         /* Responsive Breakpoints */
         @media (max-width: 991px) {
           .banner-section { text-align: center; padding: 120px 0 80px; }
@@ -3336,15 +2902,7 @@ function Home() {
             padding-bottom: clamp(3.5rem, 10vw, 4.5rem) !important;
             min-height: clamp(460px, calc(100svh - var(--spacing-site-header)), 780px) !important;
           }
-          .about-part-section, .services-section, .testimonial-section { padding: 60px 0; }
-          .testimonial-card { flex: 0 0 280px; }
-          .video-container { height: 160px; }
-          .testimonial-text { font-size: 1rem; min-height: 80px; }
-          .section-badge { font-size: 0.9rem; padding: 8px 18px; }
-          .section-description { font-size: 1rem !important; max-width: 100%; }
-          .nav-btn { width: 32px; height: 32px; }
-          .left-btn { left: 5px; }
-          .right-btn { right: 5px; }
+          .about-part-section, .services-section { padding: 60px 0; }
           .banner-section .cosmic-orbit-container .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: 20px; z-index: 5; }
           .experience-badge h4 { font-size: 1.8rem; }
@@ -3369,12 +2927,6 @@ function Home() {
         }
 
         @media (max-width: 576px) {
-          .testimonial-card { flex: 0 0 250px; }
-          .video-container { height: 140px; }
-          .testimonial-content { padding: 16px; }
-          .client-avatar { width: 38px; height: 38px; }
-          .client-details h4 { font-size: 1rem; }
-          .rating i { font-size: 0.8rem; }
           .banner-btn-row {
             max-width: 22rem;
             margin-left: auto;

@@ -68,6 +68,7 @@
   h4 {
     text-wrap: balance;
   }
+
 }
 
 @layer utilities {
@@ -90,4 +91,162 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+/*
+ * ─── Unlayered site-wide overrides ───────────────────────────────────────────
+ * Loaded via the Vite bundle AFTER Bootstrap's <link> in index.html.
+ * In the CSS cascade, same-origin unlayered rules that appear LATER win
+ * for equal specificity — no !important needed.
+ *
+ * These intentionally DO NOT use @layer so they sit ABOVE all @layer rules
+ * (Tailwind base / components / utilities).  Bootstrap pages rely on Bootstrap
+ * class names (.container, .btn-primary, .form-control …) — Tailwind pages use
+ * utility names — so there is no class-name collision in practice.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Body defaults ── */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-content);
+  font-family: var(--font-body);
+}
+
+/* ── Links — replace Bootstrap's default blue ── */
+a             { color: var(--primary-color); text-decoration: none; }
+a:hover       { color: var(--accent-color);  text-decoration: none; }
+a:visited     { color: var(--primary-color); }
+
+/* ── Container — generous side padding matching the site design ──
+   Padding matches the Contact page pattern (px-4 → px-6 → px-12).
+   Bootstrap's max-width breakpoints are still provided by Bootstrap's
+   own CSS (loaded earlier) so the layout constraint is unchanged.     */
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container,
+  .container-fluid,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container,
+  .container-fluid,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+}
+
+/* ── Cards ── */
+.card,
+.glass-panel,
+.sidebar-widget {
+  background: var(--card-color);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--premium-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* ── Buttons — cover every pseudo-class so Bootstrap's a:hover (0,1,1
+   specificity) can never bleed blue text onto anchor-based buttons ── */
+.btn-primary,   .btn-primary:link,   .btn-primary:visited,
+.btn-primary:hover,   .btn-primary:focus,   .btn-primary:active,
+.btn-dark,      .btn-dark:link,      .btn-dark:visited,
+.btn-dark:hover,      .btn-dark:focus,      .btn-dark:active,
+.btn-submit,    .btn-submit:link,    .btn-submit:visited,
+.btn-submit:hover,    .btn-submit:active,
+.mystic-btn-primary,  .mystic-btn-primary:link,  .mystic-btn-primary:visited,
+.mystic-btn-primary:hover,  .mystic-btn-primary:active,
+.cta-reg-btn,   .cta-reg-btn:link,   .cta-reg-btn:visited,
+.cta-reg-btn:hover,   .cta-reg-btn:active,
+.btn-consult-header,  .btn-consult-header:link,  .btn-consult-header:visited,
+.btn-consult-header:hover,  .btn-consult-header:active,
+.btn-mobile-cta.primary-cta, .btn-mobile-cta.primary-cta:link,
+.btn-mobile-cta.primary-cta:visited, .btn-mobile-cta.primary-cta:hover,
+.btn-mobile-cta.primary-cta:active {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-primary,
+.btn-dark,
+.btn-submit,
+.mystic-btn-primary,
+.cta-reg-btn,
+.btn-consult-header,
+.btn-mobile-cta.primary-cta {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-dark:hover,
+.btn-submit:hover,
+.mystic-btn-primary:hover,
+.cta-reg-btn:hover,
+.btn-consult-header:hover {
+  background-color: #723c26;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 74, 47, 0.3);
+}
+
+/* ── Form controls ── */
+.form-control,
+.form-select {
+  background-color: #ffffff;
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15);
+}
+
+/* Toast notifications above modals */
+.Toastify__toast-container {
+  z-index: 1400 !important;
 }

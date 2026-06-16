@@ -64,6 +64,18 @@
         --font-price:          'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
         --font-sans:           var(--font-body);
         --font-serif:          var(--font-heading);
+
+        /* ── Layout ── */
+        --container-public:    90rem;
+        --page-pad-x:          1rem;
+      }
+
+      @media (min-width: 640px) {
+        :root { --page-pad-x: 1.5rem; }
+      }
+
+      @media (min-width: 1024px) {
+        :root { --page-pad-x: 3rem; }
       }
 
       .font-price,
@@ -71,68 +83,14 @@
       .price-tag-v2,
       .price-amount,
       .csc-price {
-        font-family: var(--font-price) !important;
+        font-family: var(--font-price);
         font-variant-numeric: tabular-nums lining-nums;
         font-feature-settings: 'tnum' 1, 'lnum' 1;
         letter-spacing: -0.02em;
       }
-      
+
       body {
-        background-color: var(--bg-color) !important;
-        color: var(--text-content) !important;
         overflow-x: hidden;
-      }
-
-      /* Global Card / Glass Panel */
-      .card, .glass-panel, .sidebar-widget, .t-card {
-        background: var(--card-color) !important;
-        border: 1px solid var(--glass-border) !important;
-        border-radius: 20px !important;
-        box-shadow: var(--premium-shadow) !important;
-        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-      }
-  
-      .card-header {
-        background: transparent !important;
-        border-bottom: 1px solid var(--glass-border) !important;
-      }
-      
-      /* Buttons */
-      .btn-primary, .btn-dark, .btn-submit, .mystic-btn-primary, .cta-reg-btn, .t-btn {
-        background: var(--primary-color) !important;
-        border: none !important;
-        color: #FFFFFF !important;
-        border-radius: 12px !important;
-        padding: 14px 32px !important;
-        font-weight: 600 !important;
-        font-family: var(--font-body) !important;
-        font-size: 0.95rem !important;
-        text-transform: none !important;
-        letter-spacing: 0 !important;
-        box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      }
-  
-      .btn-primary:hover, .btn-dark:hover, .btn-submit:hover, .mystic-btn-primary:hover, .cta-reg-btn:hover, .t-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(139, 74, 47, 0.3) !important;
-        background-color: #723c26 !important;
-        color: #FFFFFF !important;
-      }
-  
-      .form-control, .form-select, .t-input {
-        background-color: #FFFFFF !important;
-        border: 1px solid var(--glass-border) !important;
-        color: var(--text-main) !important;
-        border-radius: 12px !important;
-        padding: 12px 16px !important;
-        font-family: var(--font-body) !important;
-        font-size: 0.95rem !important;
-      }
-
-      .form-control:focus, .t-input:focus {
-        border-color: var(--accent-color) !important;
-        box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15) !important;
       }
 
       .text-gradient {
@@ -140,20 +98,6 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-      }
-
-      .btn-primary, .btn-consult-header, .btn-mobile-cta.primary-cta {
-        background-color: #2A0F02;
-        color: #FFFFFF;
-        border: none;
-        font-weight: 700;
-        transition: all 0.3s ease;
-      }
-
-      .btn-primary:hover, .btn-consult-header:hover {
-        background-color: #000000;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
       }
     </style>
   </head>

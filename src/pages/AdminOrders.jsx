@@ -20,6 +20,7 @@ function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [approvingId, setApprovingId] = useState(null);
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -44,6 +45,32 @@ function AdminOrders() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const approveAccess = async (order) => {
+    if (!order.enrollmentId) {
+      toast.error('No enrollment found for this order.');
+      return;
+    }
+    const token = localStorage.getItem('adminToken');
+    setApprovingId(order.enrollmentId);
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/enrollments/${order.enrollmentId}/approve`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message || 'Course access approved');
+        fetchOrders();
+      } else {
+        toast.error(data.message || 'Approval failed');
+      }
+    } catch {
+      toast.error('Network error');
+    } finally {
+      setApprovingId(null);
+    }
+  };
 
   const filteredOrders = orders.filter((order) => {
     const name = (order.userId?.name || order.guestDetails?.name || '').toLowerCase();
@@ -102,6 +129,39 @@ function AdminOrders() {
         const status = String(order.paymentStatus || 'pending').toLowerCase();
         const tone = PAYMENT_TONE[status] || 'slate';
         return <AdminStatusDot label={order.paymentStatus || 'Pending'} tone={tone} />;
+      },
+    },
+    {
+      key: 'accessApproved',
+      label: 'Lesson access',
+      sortable: true,
+      render: (order) => {
+        const paid = ['completed', 'paid'].includes(String(order.paymentStatus || '').toLowerCase());
+        if (!paid) return <span className="atd-secondary">—</span>;
+        if (order.accessApproved === false) {
+          return <AdminStatusDot label="Pending approval" tone="amber" />;
+        }
+        return <AdminStatusDot label="Approved" tone="green" />;
+      },
+    },
+    {
+      key: 'actions',
+      label: 'Actions',
+      render: (order) => {
+        const paid = ['completed', 'paid'].includes(String(order.paymentStatus || '').toLowerCase());
+        if (!paid || !order.enrollmentId || order.accessApproved !== false) {
+          return <span className="atd-secondary">—</span>;
+        }
+        return (
+          <button
+            type="button"
+            className="lms-mini-btn"
+            disabled={approvingId === order.enrollmentId}
+            onClick={() => approveAccess(order)}
+          >
+            {approvingId === order.enrollmentId ? 'Approving…' : 'Approve access'}
+          </button>
+        );
       },
     },
     {

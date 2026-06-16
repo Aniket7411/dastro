@@ -142,5 +142,10 @@ export async function fetchCourseBySlugOrId(idOrSlug) {
   if (!res.ok || !data.success) {
     throw new Error(data.message || 'Course not found');
   }
-  return { course: data.course, videos: data.videos || [] };
+  return {
+    course: data.course,
+    videos: data.videos || [],
+    previewVideos: data.previewVideos || [],
+    lessonCount: data.lessonCount ?? data.course?.modulesCount ?? (data.videos || []).length,
+  };
 }
