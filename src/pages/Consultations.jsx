@@ -35,23 +35,10 @@ const SORT_OPTIONS = [
 
 function ResultsSkeleton() {
   return (
-    <ul className={CARD_FLEX_LIST}>
-      {Array.from({ length: 8 }).map((_, i) => (
-        <li key={i} className={CARD_FLEX_ITEM}>
-          <div className="animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
-            <div className="aspect-[2/1] bg-site-accent-dark/10" />
-            <div className="space-y-2 p-3">
-              <div className="h-4 w-3/4 rounded-full bg-site-accent-dark/10" />
-              <div className="h-3 w-full rounded-full bg-site-accent-dark/8" />
-              <div className="mt-3 flex justify-between border-t border-site-accent-dark/8 pt-3">
-                <div className="h-5 w-16 rounded-full bg-site-accent-dark/10" />
-                <div className="h-8 w-20 rounded-full bg-site-accent-dark/10" />
-              </div>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="w-10 h-10 rounded-full border-4 border-site-accent/30 border-t-site-accent-dark animate-spin" />
+      <p className="text-sm font-medium text-site-accent-dark/60">Loading services…</p>
+    </div>
   );
 }
 

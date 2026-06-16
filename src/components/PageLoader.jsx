@@ -59,31 +59,12 @@ export function InlineLoader({ size = 24 }) {
   return <Loader2 size={size} className="animate-spin text-site-accent-dark" aria-hidden />;
 }
 
-/* ── Skeleton grid for course cards ── */
-import { COURSE_GRID, COURSE_GRID_ITEM } from './consultation/tokens';
-
-export function CourseGridSkeleton({ count = 6 }) {
+export function CourseGridSkeleton() {
   return (
-    <ul className={COURSE_GRID}>
-      {Array.from({ length: count }).map((_, i) => (
-        <li
-          key={i}
-          className={`${COURSE_GRID_ITEM} animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm`}
-        >
-          <div className="aspect-[2/1] bg-site-accent-dark/10" />
-          <div className="space-y-1.5 p-2 sm:space-y-2 sm:p-3">
-            <div className="h-2 w-14 rounded bg-site-accent-dark/10" />
-            <div className="h-4 w-4/5 rounded bg-site-accent-dark/10" />
-            <div className="h-2.5 w-full rounded bg-site-accent-dark/8" />
-            <div className="h-2.5 w-11/12 rounded bg-site-accent-dark/8" />
-            <div className="flex items-center justify-between border-t border-site-accent-dark/10 pt-2.5">
-              <div className="h-5 w-20 rounded bg-site-accent-dark/10" />
-              <div className="h-7 w-20 rounded-full bg-site-accent-dark/10" />
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="w-10 h-10 rounded-full border-4 border-site-accent/30 border-t-site-accent-dark animate-spin" />
+      <p className="m-0 font-body text-[13px] font-semibold text-site-accent-dark/60">Loading…</p>
+    </div>
   );
 }
 

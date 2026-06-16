@@ -382,18 +382,9 @@ export default function Astrologer() {
       {/* Astrologers Grid */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-100 overflow-hidden animate-pulse">
-                <div className="h-56 bg-slate-100" />
-                <div className="p-5 space-y-3">
-                  <div className="h-4 bg-slate-100 rounded w-3/4" />
-                  <div className="h-3 bg-slate-100 rounded w-1/2" />
-                  <div className="h-3 bg-slate-100 rounded w-full" />
-                  <div className="h-10 bg-slate-100 rounded-xl mt-4" />
-                </div>
-              </div>
-            ))}
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <div className="w-10 h-10 rounded-full border-4 border-amber-200 border-t-amber-500 animate-spin" />
+            <p className="text-sm text-slate-400 font-medium">Loading astrologers…</p>
           </div>
         ) : error ? (
           <div className="text-center py-20">
