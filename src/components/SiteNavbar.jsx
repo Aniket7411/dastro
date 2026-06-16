@@ -415,7 +415,8 @@ export default function SiteNavbar({
               </Link>
             </li>
 
-            <li className="border-b border-site-accent-dark/10">
+            {/* Free Tools — hidden on mobile */}
+            {/* <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
                 className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text"
@@ -437,7 +438,7 @@ export default function SiteNavbar({
                       <Link
                         to={item.to}
                         onClick={closeMobile}
-                className="block rounded-lg border border-site-accent-dark/10 bg-white px-3 py-2.5 text-sm font-medium !text-site-muted !no-underline transition visited:!text-site-muted hover:!no-underline hover:bg-[#fff3e6] hover:!text-site-accent-dark"
+                        className="block rounded-lg border border-site-accent-dark/10 bg-white px-3 py-2.5 text-sm font-medium !text-site-muted !no-underline transition visited:!text-site-muted hover:!no-underline hover:bg-[#fff3e6] hover:!text-site-accent-dark"
                       >
                         {item.label}
                       </Link>
@@ -445,6 +446,21 @@ export default function SiteNavbar({
                   ))}
                 </ul>
               )}
+            </li> */}
+
+            {/* Webinar — mobile only */}
+            <li className="border-b border-site-accent-dark/10">
+              <Link
+                to="/webinar"
+                onClick={closeMobile}
+                className="flex items-center gap-2.5 px-4 py-3.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text no-underline transition hover:text-site-accent-dark"
+              >
+                <Radio className="h-3.5 w-3.5 shrink-0 text-site-accent" />
+                Free Live Webinar
+                <span className="ml-auto rounded-full bg-site-accent px-2 py-0.5 text-[0.55rem] font-extrabold normal-case tracking-wide text-white">
+                  Free
+                </span>
+              </Link>
             </li>
 
             {!authState.isStudent && (

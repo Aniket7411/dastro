@@ -1004,8 +1004,7 @@ function Home() {
                 <div className="hidden lg:flex mt-5">
                   <Link
                     to="/about"
-                    style={{ textDecoration: 'none' }}
-                    className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-7 py-3 font-body text-sm font-semibold text-site-primary shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-7 py-3 font-body text-sm font-semibold text-site-primary no-underline shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
                   >
                     More About Us
                   </Link>
@@ -1032,11 +1031,10 @@ function Home() {
               </div>
 
               {/* Mobile button — after image, hidden on desktop */}
-              <div className="col-12 order-3 flex justify-center lg:!hidden">
+              <div className="col-12 order-3 flex justify-center lg:hidden">
                 <Link
                   to="/about"
-                  style={{ textDecoration: 'none' }}
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-6 py-2 font-body text-sm font-semibold text-site-primary shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-6 py-2 font-body text-sm font-semibold text-site-primary no-underline shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
                 >
                   More About Us
                 </Link>
