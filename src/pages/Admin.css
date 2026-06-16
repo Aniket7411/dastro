@@ -5416,3 +5416,77 @@ input:checked + .slider:before { transform: translateX(22px); }
   font-size: 13px !important;
   font-family: var(--font-body) !important;
 }
+
+/* ============================================================
+   MOBILE SIDEBAR — RESPONSIVE IMPROVEMENTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Ensure sidebar slides over content, not push it */
+  .app-shell {
+    position: relative;
+  }
+
+  /* Sidebar nav items — ensure touch-friendly sizing */
+  .sb-item {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  /* Section labels in sidebar always show on mobile */
+  .sidebar--mobile-open .sb-section-label {
+    display: block !important;
+  }
+
+  .sidebar--mobile-open .sb-item-label {
+    display: block !important;
+  }
+
+  .sidebar--mobile-open .sb-logo-text {
+    display: flex !important;
+  }
+
+  .sidebar--mobile-open .sb-profile-meta {
+    display: flex !important;
+  }
+
+  /* Topbar right side wraps on very small screens */
+  .topbar-actions {
+    gap: 6px;
+  }
+
+  /* Page content reduces horizontal padding on tiny screens */
+  .page-content {
+    padding: 16px 12px;
+  }
+
+  /* Tables scroll horizontally */
+  .admin-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .topbar-title {
+    font-size: 13px !important;
+  }
+
+  .topbar-breadcrumb {
+    display: none;
+  }
+
+  .page-content {
+    padding: 14px 10px;
+  }
+
+  /* Hide text in logout button on very small screens */
+  .topbar-logout-btn span {
+    display: none !important;
+  }
+}

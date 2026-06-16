@@ -15,6 +15,7 @@ import AdminConsultations from './AdminConsultations';
 import AdminConsultationServices from './AdminConsultationServices';
 import AdminStudents from './AdminStudents';
 import AdminOrders from './AdminOrders';
+import AdminAstrologers from './AdminAstrologers';
 import './Admin.css';
 
 const PAGE_TITLES = {
@@ -31,6 +32,7 @@ const PAGE_TITLES = {
   offers: 'Site Offers',
   settings: 'Platform Settings',
   newsletter: 'Newsletter',
+  astrologers: 'Astrologers',
 };
 
 const LEAD_FILTER_LABELS = {
@@ -55,6 +57,7 @@ const PAGE_ICONS = {
   offers: 'fa-gift',
   settings: 'fa-sliders-h',
   newsletter: 'fa-paper-plane',
+  astrologers: 'fa-user-astronaut',
 };
 
 const NAV_SECTIONS = [
@@ -87,6 +90,7 @@ const NAV_SECTIONS = [
       { id: 'jobs', icon: 'fa-briefcase', label: 'Job Postings', accent: 'indigo' },
       { id: 'coupons', icon: 'fa-percent', label: 'Promo Codes', accent: 'rose' },
       { id: 'offers', icon: 'fa-gift', label: 'Site Offers', accent: 'emerald' },
+      { id: 'astrologers', icon: 'fa-user-astronaut', label: 'Astrologers', accent: 'violet' },
     ],
   },
   {
@@ -467,6 +471,7 @@ function AdminDashboard() {
           {activeTab === 'offers'        && <AdminOffers />}
           {activeTab === 'settings'      && <AdminSettings />}
           {activeTab === 'newsletter'    && <AdminNewsletter />}
+          {activeTab === 'astrologers'   && <AdminAstrologers />}
         </main>
       </div>
     </div>
