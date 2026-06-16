@@ -21,8 +21,8 @@ export default function HomeBannerCTAs({ primaryCta, onDark = false }) {
         {primaryCta?.label || 'View courses'}
       </Link>
 
-      <Link to="/shop" className={ghostClass}>
-        Astro shop
+      <Link to="/consultations" className={ghostClass}>
+        Book Consultation
       </Link>
     </div>
   );
