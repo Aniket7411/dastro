@@ -14,6 +14,7 @@ import {
   parseCourseDuration,
 } from '../utils/courseDuration';
 import { countEnrolledVideos, mergeCourseVideosFromApi } from '../utils/courseVideoApi';
+import { formatINR } from '../utils/currency';
 
 const EMPTY_COURSE_FORM = {
   title: '',
@@ -1152,7 +1153,7 @@ function AdminCourses() {
                       {getCourseTypeConfig(course.courseType).badge}
                     </span>
                   </td>
-                  <td className="lms-price">Rs. {course.price}</td>
+                  <td className="lms-price">{formatINR(course.price)}</td>
                   <td>{course.validityDays} days</td>
                   <td>
                     <span className="lms-video-count">

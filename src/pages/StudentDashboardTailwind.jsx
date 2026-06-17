@@ -593,8 +593,12 @@ export default function StudentDashboardTailwind() {
                                 {validity}
                               </span>
                               {course.accessApproved === false ? (
-                                <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800">
-                                  Awaiting approval
+                                <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+                                  course.accessStatus === 'disabled'
+                                    ? 'border-slate-200 bg-slate-100 text-slate-700'
+                                    : 'border-amber-200 bg-amber-50 text-amber-800'
+                                }`}>
+                                  {course.accessStatus === 'disabled' ? 'Access disabled' : 'Awaiting approval'}
                                 </span>
                               ) : null}
                             </div>

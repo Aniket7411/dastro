@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Plus, Trash2, Edit3, CheckCircle2, XCircle } from 'lucide-react';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
+import { formatINR } from '../utils/currency';
 
 const defaultCoupon = {
   code: '',
@@ -289,8 +290,8 @@ function AdminCoupons() {
                   {coupons.map((coupon) => (
                     <tr key={coupon._id}>
                       <td>{coupon.code}</td>
-                      <td>{coupon.discountType === 'fixed' ? `Rs.${coupon.discountValue}` : `${coupon.discountValue}%`}</td>
-                      <td>{coupon.minPurchase ? `Rs.${coupon.minPurchase}` : 'None'}</td>
+                      <td>{coupon.discountType === 'fixed' ? formatINR(coupon.discountValue) : `${coupon.discountValue}%`}</td>
+                      <td>{coupon.minPurchase ? formatINR(coupon.minPurchase) : 'None'}</td>
                       <td>
                         <span className={`status-pill ${coupon.active ? 'active' : 'disabled'}`}>
                           {coupon.active ? 'Active' : 'Disabled'}

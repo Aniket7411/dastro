@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { formatINR } from '../../utils/currency';
 import { PaymentInput, PaymentSelect } from './PaymentField';
 
 function PriceRow({ label, value, sub = false }) {
@@ -32,7 +33,7 @@ export default function PaymentCheckoutCard({
       </div>
 
       <div className="p-4 sm:p-6 md:p-7">
-        <PriceRow label="Amount" value={`Rs.${baseAmount}`} />
+        <PriceRow label="Amount" value={formatINR(baseAmount)} />
         <p className="mt-2 text-sm text-site-soft">Please note that this payment is non-refundable.</p>
 
         <div className="mt-4">
@@ -43,15 +44,15 @@ export default function PaymentCheckoutCard({
             <PaymentInput className="sm:w-36" />
           </div>
 
-          <PriceRow label="CGST9 (9%)" value={`Rs.${cgst}`} sub />
+          <PriceRow label="CGST9 (9%)" value={formatINR(cgst)} sub />
           <div className="mt-2">
-            <PriceRow label="SGST9 (9%)" value={`Rs.${sgst}`} sub />
+            <PriceRow label="SGST9 (9%)" value={formatINR(sgst)} sub />
           </div>
         </div>
 
         <div className="-mx-4 mt-4 flex items-center justify-between border-y border-site-accent-dark/14 bg-[#fffbf5] px-4 py-4 sm:-mx-6 sm:px-6 md:-mx-7 md:px-7">
           <span className="text-lg text-site-text">Total</span>
-          <span className="text-xl font-extrabold text-site-text">Rs.{totalAmount}</span>
+          <span className="text-xl font-extrabold text-site-text">{formatINR(totalAmount)}</span>
         </div>
 
         <div className="mt-5">

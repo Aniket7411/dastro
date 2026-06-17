@@ -5,7 +5,7 @@ import {
   Briefcase, Users, Download, FileText, MapPin,
   Trash2, Edit3, Plus, CheckCircle, Clock,
   UserCheck, TrendingUp, ChevronDown, X,
-  Building2, DollarSign,
+  Building2, IndianRupee,
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import API_BASE from '../utils/api';
@@ -619,7 +619,7 @@ const AdminJobs = () => {
                 <div className="border border-slate-200 rounded-xl overflow-hidden">
                   <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-b border-slate-200">
                     <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
-                      <DollarSign size={11} className="text-emerald-600" />
+                      <IndianRupee size={11} className="text-emerald-600" />
                     </div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.1em]">Employment Terms</span>
                   </div>

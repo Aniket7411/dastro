@@ -64,7 +64,7 @@ export default function StudentDashboard() {
       { title: 'Join our Premium Discord Community!', link: '#', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=60' }
     ],
     merchandise: [
-      { title: 'Official Dev Hoodie', price: '$45.00', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300&auto=format&fit=crop&q=60' }
+      { title: 'Official Dev Hoodie', price: '₹3,750', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300&auto=format&fit=crop&q=60' }
     ],
     launches: [
       { title: 'Next-Gen AI & LLM Bootcamp', launchDate: 'July 1, 2026' }

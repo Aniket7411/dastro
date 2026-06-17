@@ -1,3 +1,5 @@
+import { formatINR } from './currency.js';
+
 export function formatAdminDate(value, options = {}) {
   if (!value) return '—';
   const date = new Date(value);
@@ -39,15 +41,8 @@ export function getLeadSubmittedAt(lead) {
   return lead?.submittedAt || lead?.createdAt || null;
 }
 
-export function formatAdminCurrency(amount, currency = 'INR') {
-  if (amount == null || amount === '') return '—';
-  const num = Number(amount);
-  if (Number.isNaN(num)) return String(amount);
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(num);
+export function formatAdminCurrency(amount) {
+  return formatINR(amount);
 }
 
 export function getInitials(name = '') {

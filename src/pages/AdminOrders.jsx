@@ -8,19 +8,45 @@ import {
   AdminPersonCell,
   AdminStatusDot,
 } from '../components/admin/AdminTableCells';
+import {
+  AccessActionModal,
+  ExternalPaymentModal,
+} from '../components/admin/CourseAccessModals';
 
 const PAYMENT_TONE = {
-  completed: 'green',
   paid: 'green',
+  completed: 'green',
+  confirmed: 'green',
   pending: 'amber',
+  enquiry: 'amber',
   failed: 'rose',
+};
+
+const ACCESS_TONE = {
+  enabled: 'green',
+  pending: 'amber',
+  disabled: 'slate',
+  suspended: 'rose',
+  none: 'slate',
+};
+
+const ACCESS_LABELS = {
+  enabled: 'Enabled',
+  pending: 'Pending',
+  disabled: 'Disabled',
+  suspended: 'Suspended',
+  none: 'Not granted',
 };
 
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [approvingId, setApprovingId] = useState(null);
+  const [actingKey, setActingKey] = useState(null);
+  const [externalModal, setExternalModal] = useState(null);
+  const [accessModal, setAccessModal] = useState(null);
+  const [externalAmount, setExternalAmount] = useState('');
+  const [externalNote, setExternalNote] = useState('');
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -33,7 +59,7 @@ function AdminOrders() {
       if (data.success) {
         setOrders(data.orders);
       } else {
-        toast.error(data.message || 'Failed to fetch orders');
+        toast.error(data.message || 'Failed to fetch course access records');
       }
     } catch {
       toast.error('Network Error');
@@ -46,70 +72,216 @@ function AdminOrders() {
     fetchOrders();
   }, []);
 
-  const approveAccess = async (order) => {
-    if (!order.enrollmentId) {
-      toast.error('No enrollment found for this order.');
-      return;
-    }
-    const token = localStorage.getItem('adminToken');
-    setApprovingId(order.enrollmentId);
+  const closeModals = () => {
+    if (actingKey) return;
+    setExternalModal(null);
+    setAccessModal(null);
+    setExternalAmount('');
+    setExternalNote('');
+  };
+
+  const runAction = async (row, actionName, { url, method = 'PUT', body, successMessage, onSuccess }) => {
+    setActingKey(`${row.rowId}:${actionName}`);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/enrollments/${order.enrollmentId}/approve`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...(body ? { 'Content-Type': 'application/json' } : {}),
+        },
+        body: body ? JSON.stringify(body) : undefined,
       });
       const data = await res.json();
       if (data.success) {
-        toast.success(data.message || 'Course access approved');
+        toast.success(data.message || successMessage);
+        onSuccess?.();
         fetchOrders();
       } else {
-        toast.error(data.message || 'Approval failed');
+        toast.error(data.message || 'Action failed');
       }
     } catch {
       toast.error('Network error');
     } finally {
-      setApprovingId(null);
+      setActingKey(null);
     }
   };
 
-  const filteredOrders = orders.filter((order) => {
-    const name = (order.userId?.name || order.guestDetails?.name || '').toLowerCase();
-    const email = (order.userId?.email || order.guestDetails?.email || '').toLowerCase();
-    const course = (order.courseId?.title || '').toLowerCase();
+  const openExternalModal = (row) => {
+    setAccessModal(null);
+    setExternalModal(row);
+    setExternalAmount(row.amount != null ? String(row.amount) : '');
+    setExternalNote('');
+  };
+
+  const openAccessModal = (row, action) => {
+    setExternalModal(null);
+    setAccessModal({ row, action });
+  };
+
+  const submitExternalAccess = () => {
+    if (!externalModal) return;
+    runAction(externalModal, 'confirm', {
+      url: `${API_BASE}/api/admin/leads/${externalModal.leadId}/confirm-access`,
+      method: 'POST',
+      body: {
+        amount: externalAmount.trim() ? Number(externalAmount) : undefined,
+        note: externalNote.trim() || undefined,
+      },
+      successMessage: 'Course access enabled and credentials emailed.',
+      onSuccess: closeModals,
+    });
+  };
+
+  const submitAccessAction = () => {
+    if (!accessModal) return;
+    const { row, action } = accessModal;
+    runAction(row, action, {
+      url: `${API_BASE}/api/admin/enrollments/${row.enrollmentId}/access`,
+      body: { action },
+      successMessage: 'Course access updated.',
+      onSuccess: closeModals,
+    });
+  };
+
+  const filteredOrders = orders.filter((row) => {
     const q = searchTerm.toLowerCase();
-    return name.includes(q) || email.includes(q) || course.includes(q);
+    return (
+      row.studentName?.toLowerCase().includes(q)
+      || row.email?.toLowerCase().includes(q)
+      || row.courseTitle?.toLowerCase().includes(q)
+      || row.phone?.includes(searchTerm)
+    );
   });
 
+  const isActing = (row, actionName) => actingKey === `${row.rowId}:${actionName}`;
+  const externalBusy = externalModal && actingKey === `${externalModal.rowId}:confirm`;
+  const accessBusy = accessModal && actingKey === `${accessModal.row.rowId}:${accessModal.action}`;
+
+  const renderActions = (row) => {
+    if (row.source === 'lead') {
+      return (
+        <button
+          type="button"
+          className="lms-mini-btn"
+          disabled={Boolean(actingKey)}
+          onClick={() => openExternalModal(row)}
+        >
+          {isActing(row, 'confirm') ? 'Confirming…' : 'Confirm & Enable'}
+        </button>
+      );
+    }
+
+    if (!row.enrollmentId) {
+      return <span className="atd-secondary">—</span>;
+    }
+
+    const status = row.accessStatus || 'pending';
+    const busy = Boolean(actingKey);
+
+    if (status === 'enabled') {
+      return (
+        <div className="d-flex flex-wrap gap-1">
+          <button
+            type="button"
+            className="lms-mini-btn"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'disable')}
+          >
+            Disable
+          </button>
+          <button
+            type="button"
+            className="lms-mini-btn lms-mini-btn--danger"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'suspend')}
+          >
+            Suspend
+          </button>
+        </div>
+      );
+    }
+
+    if (status === 'disabled') {
+      return (
+        <div className="d-flex flex-wrap gap-1">
+          <button
+            type="button"
+            className="lms-mini-btn"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'enable')}
+          >
+            Enable
+          </button>
+          <button
+            type="button"
+            className="lms-mini-btn lms-mini-btn--danger"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'suspend')}
+          >
+            Suspend
+          </button>
+        </div>
+      );
+    }
+
+    if (status === 'suspended') {
+      return (
+        <div className="d-flex flex-wrap gap-1">
+          <button
+            type="button"
+            className="lms-mini-btn"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'enable')}
+          >
+            Enable
+          </button>
+          <button
+            type="button"
+            className="lms-mini-btn"
+            disabled={busy}
+            onClick={() => openAccessModal(row, 'disable')}
+          >
+            Disable
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <button
+        type="button"
+        className="lms-mini-btn"
+        disabled={busy}
+        onClick={() => openAccessModal(row, 'enable')}
+      >
+        Enable
+      </button>
+    );
+  };
+
   const columns = [
-    {
-      key: 'orderId',
-      label: 'Order ID',
-      sortable: true,
-      sortValue: (order) => order.razorpayOrderId || order._id,
-      render: (order) => (
-        <span className="atd-secondary" style={{ fontFamily: 'ui-monospace, monospace' }}>
-          {order.razorpayOrderId || order._id.toString().slice(-8)}
-        </span>
-      ),
-    },
     {
       key: 'student',
       label: 'Student',
       sortable: true,
-      sortValue: (order) => order.userId?.name || order.guestDetails?.name || '',
-      render: (order) => {
-        const name = order.userId?.name || order.guestDetails?.name || 'Guest';
-        const email = order.userId?.email || order.guestDetails?.email;
-        return <AdminPersonCell name={name} secondary={email} />;
-      },
+      sortValue: (row) => row.studentName || '',
+      render: (row) => (
+        <AdminPersonCell name={row.studentName || 'Student'} secondary={row.email} />
+      ),
     },
     {
       key: 'course',
       label: 'Course',
       sortable: true,
-      sortValue: (order) => order.courseId?.title || '',
-      render: (order) => (
-        <div className="atd-primary">{order.courseId?.title || 'Unknown Course'}</div>
+      sortValue: (row) => row.courseTitle || '',
+      render: (row) => (
+        <div>
+          <div className="atd-primary">{row.courseTitle || 'Unknown course'}</div>
+          {row.phone ? (
+            <div className="atd-secondary" style={{ fontSize: '0.75rem' }}>{row.phone}</div>
+          ) : null}
+        </div>
       ),
     },
     {
@@ -117,59 +289,62 @@ function AdminOrders() {
       label: 'Amount',
       sortable: true,
       align: 'right',
-      render: (order) => (
-        <div className="atd-primary">{formatAdminCurrency(order.amount)}</div>
+      render: (row) => (
+        <div className="atd-primary">
+          {row.amount != null ? formatAdminCurrency(row.amount) : '—'}
+        </div>
       ),
     },
     {
       key: 'paymentStatus',
       label: 'Payment',
       sortable: true,
-      render: (order) => {
-        const status = String(order.paymentStatus || 'pending').toLowerCase();
+      render: (row) => {
+        const status = String(row.paymentStatus || 'pending').toLowerCase();
         const tone = PAYMENT_TONE[status] || 'slate';
-        return <AdminStatusDot label={order.paymentStatus || 'Pending'} tone={tone} />;
+        const sourceLabel = row.paymentSource === 'external'
+          ? 'External'
+          : row.paymentSource === 'enquiry'
+            ? 'Enquiry'
+            : row.paymentSource === 'razorpay'
+              ? 'Online'
+              : '';
+        return (
+          <div>
+            <AdminStatusDot label={row.paymentStatus || 'Pending'} tone={tone} />
+            {sourceLabel ? (
+              <div className="atd-secondary" style={{ fontSize: '0.72rem', marginTop: '0.2rem' }}>{sourceLabel}</div>
+            ) : null}
+          </div>
+        );
       },
     },
     {
-      key: 'accessApproved',
-      label: 'Lesson access',
+      key: 'accessStatus',
+      label: 'Course access',
       sortable: true,
-      render: (order) => {
-        const paid = ['completed', 'paid'].includes(String(order.paymentStatus || '').toLowerCase());
-        if (!paid) return <span className="atd-secondary">—</span>;
-        if (order.accessApproved === false) {
-          return <AdminStatusDot label="Pending approval" tone="amber" />;
-        }
-        return <AdminStatusDot label="Approved" tone="green" />;
+      sortValue: (row) => row.accessStatus || 'none',
+      render: (row) => {
+        const status = row.accessStatus || 'none';
+        return (
+          <AdminStatusDot
+            label={ACCESS_LABELS[status] || status}
+            tone={ACCESS_TONE[status] || 'slate'}
+          />
+        );
       },
     },
     {
       key: 'actions',
       label: 'Actions',
-      render: (order) => {
-        const paid = ['completed', 'paid'].includes(String(order.paymentStatus || '').toLowerCase());
-        if (!paid || !order.enrollmentId || order.accessApproved !== false) {
-          return <span className="atd-secondary">—</span>;
-        }
-        return (
-          <button
-            type="button"
-            className="lms-mini-btn"
-            disabled={approvingId === order.enrollmentId}
-            onClick={() => approveAccess(order)}
-          >
-            {approvingId === order.enrollmentId ? 'Approving…' : 'Approve access'}
-          </button>
-        );
-      },
+      render: (row) => renderActions(row),
     },
     {
       key: 'createdAt',
-      label: 'Order Date',
+      label: 'Date',
       sortable: true,
-      sortValue: (order) => order.createdAt,
-      render: (order) => <span className="atd-secondary">{formatAdminDate(order.createdAt)}</span>,
+      sortValue: (row) => row.createdAt,
+      render: (row) => <span className="atd-secondary">{formatAdminDate(row.createdAt)}</span>,
     },
   ];
 
@@ -197,23 +372,49 @@ function AdminOrders() {
             <i className="fas fa-sync-alt" />
           </button>
         </div>
+        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary, #6b7280)', maxWidth: '52rem' }}>
+          Confirm external payments from recorded course enquiries, then use <strong>Enable</strong>, <strong>Disable</strong>, or <strong>Suspend</strong> to control lesson access. Enabling sends login credentials to the student email.
+        </p>
       </div>
 
       <AdminDataTable
         columns={columns}
         data={filteredOrders}
         loading={isLoading}
-        loadingMessage="Loading orders…"
-        entityLabel="order"
+        loadingMessage="Loading course access…"
+        entityLabel="record"
         totalCount={orders.length}
         filteredCount={filteredOrders.length}
-        title="Course Orders"
-        subtitle="Paid purchases and enrollment transactions"
+        title="Course Access & Orders"
+        subtitle="Enquiries, external payments, and online purchases"
         emptyIcon={Receipt}
-        emptyTitle="No orders found"
-        emptyMessage={searchTerm ? 'Try a different search term.' : 'Orders appear here after successful purchases.'}
-        minWidth={860}
+        emptyTitle="No course access records"
+        emptyMessage={searchTerm ? 'Try a different search term.' : 'Recorded course enquiries and enrollments appear here.'}
+        minWidth={980}
       />
+
+      {externalModal ? (
+        <ExternalPaymentModal
+          row={externalModal}
+          amount={externalAmount}
+          note={externalNote}
+          busy={Boolean(externalBusy)}
+          onAmountChange={setExternalAmount}
+          onNoteChange={setExternalNote}
+          onClose={closeModals}
+          onSubmit={submitExternalAccess}
+        />
+      ) : null}
+
+      {accessModal ? (
+        <AccessActionModal
+          row={accessModal.row}
+          action={accessModal.action}
+          busy={Boolean(accessBusy)}
+          onClose={closeModals}
+          onConfirm={submitAccessAction}
+        />
+      ) : null}
     </div>
   );
 }

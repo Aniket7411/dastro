@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Clock, Radio, User, Video } from 'lucide-react';
+import { formatINR } from '../utils/currency';
 
 const CARD_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
@@ -13,7 +14,7 @@ function formatPrice(price) {
   if (price == null || price === '') return null;
   const amount = Number(price);
   if (Number.isNaN(amount) || amount <= 0) return null;
-  return amount.toLocaleString('en-IN');
+  return formatINR(amount).replace(/^₹/, '');
 }
 
 function MetaChip({ icon: Icon, children }) {
