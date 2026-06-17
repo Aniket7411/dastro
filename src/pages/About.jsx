@@ -169,12 +169,13 @@ function About() {
             <div data-aos="zoom-in" data-aos-duration="700" data-aos-delay="80">
               <div className="rounded-xl border border-site-accent-dark/12 bg-site-bg p-3.5 shadow-sm">
                 <div className="relative h-0 w-full overflow-hidden rounded-xl border border-site-accent-dark/12 bg-black pb-[56.25%]">
-                  <iframe
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  <video
+                    src="/astrologyvideo.mp4"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full rounded-xl object-contain"
                     title="About DS Astro Institute"
-                    className="absolute inset-0 h-full w-full border-none"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
                   />
                 </div>
                 <p className="mt-3 text-center text-sm text-site-soft">
