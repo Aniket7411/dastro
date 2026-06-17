@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import API_BASE from '../utils/api';
+import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 import { formatAdminDate, formatAdminTime, getLeadSubmittedAt } from '../utils/adminTableUtils';
 import AdminNotifications from '../components/AdminNotifications';
 import AdminLeads from './AdminLeads';
@@ -244,15 +245,21 @@ function AdminDashboard() {
       {/* ── Sidebar ─────────────────────────────────────────── */}
       <aside className="sidebar">
         <div className="sb-head">
-          <div className="sb-logo">
-            {/* <div className="sb-logo-orb">
-              <i className="fas fa-star-and-crescent" />
-            </div> */}
+          <Link
+            to="/"
+            className="sb-logo no-underline transition-opacity hover:opacity-90"
+            title="Back to website home"
+            aria-label="Go to website home"
+          >
+            <img
+              src={SITE_LOGO}
+              alt={SITE_LOGO_ALT}
+              className="h-8 w-auto max-w-[120px] shrink-0 rounded-md bg-white/95 object-contain px-1.5 py-0.5 sm:h-9"
+            />
             <div className="sb-logo-text">
-              <span className="sb-logo-brand">DS Institute</span>
               <span className="sb-logo-badge">Admin Console</span>
             </div>
-          </div>
+          </Link>
           <button type="button" className="sb-toggle" onClick={() => setSidebarCollapsed(v => !v)} aria-label="Toggle sidebar">
             <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'}`} />
           </button>

@@ -606,48 +606,94 @@ function AdminLeads({ activeFilter }) {
         )}
       </div>
 
-      {/* Message Modal */}
-      {messageModal.isOpen && (
-        <>
-          <div className="modal-backdrop fade show" style={{ zIndex: 1040 }} onClick={() => setMessageModal({ isOpen: false, data: null })}></div>
-          <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050 }}>
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content border-0 shadow-lg" style={{ borderRadius: 'var(--r-lg)' }}>
-                <div className="modal-header border-bottom-0 pb-0">
-                  <h5 className="modal-title fw-bold" style={{ fontFamily: 'var(--font-display)' }}>
-                    <i className="far fa-comment-dots text-violet me-2"></i>
-                    Message Inquiry
-                  </h5>
-                  <button type="button" className="btn-close" onClick={() => setMessageModal({ isOpen: false, data: null })}></button>
+      {/* Message inquiry modal — centered Tailwind (no Bootstrap modal) */}
+      {messageModal.isOpen && messageModal.data && (
+        <div
+          className="fixed inset-0 z-[20060] flex items-end justify-center p-4 sm:items-center sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lead-message-modal-title"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-900/60"
+            aria-label="Close dialog"
+            onClick={() => setMessageModal({ isOpen: false, data: null })}
+          />
+          <div
+            className="relative z-10 flex w-full max-w-lg max-h-[min(90dvh,640px)] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-100 px-5 py-4 sm:px-6">
+              <h2
+                id="lead-message-modal-title"
+                className="flex items-center gap-2 text-lg font-bold text-slate-900"
+              >
+                <i className="far fa-comment-dots text-violet-500" aria-hidden />
+                Message Inquiry
+              </h2>
+              <button
+                type="button"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
+                onClick={() => setMessageModal({ isOpen: false, data: null })}
+                aria-label="Close"
+              >
+                <i className="fas fa-times text-sm" />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4 sm:px-6">
+              <div className="mb-4 flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-base font-bold text-violet-700"
+                  aria-hidden
+                >
+                  {messageModal.data.name?.charAt(0).toUpperCase()}
                 </div>
-                <div className="modal-body py-4">
-                  <div className="d-flex align-items-center gap-3 mb-3">
-                    <div className="sb-profile-avatar" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
-                      {messageModal.data?.name?.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="fw-bold text-dark">{messageModal.data?.name}</div>
-                      <div className="text-muted small">{messageModal.data?.email}</div>
-                    </div>
-                  </div>
-                  <div className="p-3 rounded bg-light border text-secondary" style={{ fontSize: '14px', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
-                    {(messageModal.data?.city || messageModal.data?.age || messageModal.data?.interest) ? (
-                      <div className="mb-3 pb-3 border-bottom">
-                        {messageModal.data?.city ? <div><strong>City:</strong> {messageModal.data.city}</div> : null}
-                        {messageModal.data?.age ? <div><strong>Age:</strong> {messageModal.data.age}</div> : null}
-                        {messageModal.data?.interest ? <div><strong>Interest:</strong> {messageModal.data.interest}</div> : null}
-                      </div>
-                    ) : null}
-                    {messageModal.data?.message || 'No message provided.'}
-                  </div>
-                </div>
-                <div className="modal-footer border-top-0 pt-0">
-                  <button type="button" className="btn btn-secondary rounded-pill px-4" onClick={() => setMessageModal({ isOpen: false, data: null })}>Close</button>
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-slate-900">{messageModal.data.name}</p>
+                  <p className="truncate text-sm text-slate-500">{messageModal.data.email}</p>
                 </div>
               </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-relaxed text-slate-700">
+                {(messageModal.data.city || messageModal.data.age || messageModal.data.interest) ? (
+                  <dl className="mb-3 space-y-1 border-b border-slate-200 pb-3">
+                    {messageModal.data.city ? (
+                      <div className="flex flex-wrap gap-x-2">
+                        <dt className="font-semibold text-slate-900">City:</dt>
+                        <dd>{messageModal.data.city}</dd>
+                      </div>
+                    ) : null}
+                    {messageModal.data.age ? (
+                      <div className="flex flex-wrap gap-x-2">
+                        <dt className="font-semibold text-slate-900">Age:</dt>
+                        <dd>{messageModal.data.age}</dd>
+                      </div>
+                    ) : null}
+                    {messageModal.data.interest ? (
+                      <div className="flex flex-wrap gap-x-2">
+                        <dt className="font-semibold text-slate-900">Interest:</dt>
+                        <dd>{messageModal.data.interest}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                ) : null}
+                <p className="whitespace-pre-wrap">{messageModal.data.message || 'No message provided.'}</p>
+              </div>
+            </div>
+
+            <div className="shrink-0 border-t border-slate-100 px-5 py-4 sm:px-6">
+              <button
+                type="button"
+                className="w-full rounded-full bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 sm:w-auto sm:min-w-[120px]"
+                onClick={() => setMessageModal({ isOpen: false, data: null })}
+              >
+                Close
+              </button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
