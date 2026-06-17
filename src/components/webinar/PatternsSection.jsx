@@ -1,7 +1,6 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_CTA,
   WB_SECTION_PATTERNS,
   WB_SECTION_INTRO,
   WB_SECTION_INTRO_SUB,
@@ -13,7 +12,9 @@ import {
   TYPE,
 } from './tokens';
 
-function PatternsSection({ onJoinNow }) {
+import WebinarActionButtons from './WebinarActionButtons';
+
+function PatternsSection({ onJoinNow, onJoinFree }) {
   const patterns = [
     {
       icon: 'fa-fingerprint',
@@ -77,9 +78,12 @@ function PatternsSection({ onJoinNow }) {
             </div>
           ))}
           <div className={`${WB_CTA_ROW_TIGHT} sm:col-span-2 lg:col-span-3`}>
-            <button type="button" onClick={onJoinNow} className={WB_CTA}>
-              Uncover Life&apos;s Secrets – Join Now
-            </button>
+            <WebinarActionButtons
+              onJoinPaid={onJoinNow}
+              onJoinFree={onJoinFree}
+              showUrgency={false}
+              compact
+            />
           </div>
         </div>
       </div>

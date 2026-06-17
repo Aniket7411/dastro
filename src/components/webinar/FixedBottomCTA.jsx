@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 
-const W = 11;
-const H = 20;
-const T = 2.6;
-const G = 1;
+const W = 9;
+const H = 16;
+const T = 2.2;
+const G = 0.8;
 const SK = 0;
 
 const SEG_POINTS = {
@@ -57,15 +58,15 @@ function Digit({ char }) {
 }
 
 function SegColon({ visible }) {
-  const dw = 2.6;
-  const dh = 5.5;
-  const cx = 5;
+  const dw = 2.2;
+  const dh = 4.5;
+  const cx = 4;
   const color = visible ? '#ff8c00' : OFF_COLOR;
   const glow = visible ? 'drop-shadow(0 0 3px rgba(255,160,0,0.9))' : 'none';
   return (
-    <svg width={10} height={H} viewBox={`0 0 10 ${H}`} className="block overflow-visible">
-      <rect x={cx - dw / 2} y={H * 0.28 - dh / 2} width={dw} height={dh} rx={1.2} fill={color} style={{ filter: glow }} />
-      <rect x={cx - dw / 2} y={H * 0.72 - dh / 2} width={dw} height={dh} rx={1.2} fill={color} style={{ filter: glow }} />
+    <svg width={8} height={H} viewBox={`0 0 8 ${H}`} className="block overflow-visible">
+      <rect x={cx - dw / 2} y={H * 0.28 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
+      <rect x={cx - dw / 2} y={H * 0.72 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
     </svg>
   );
 }
@@ -78,7 +79,7 @@ function DigitPair({ value, label }) {
         <Digit char={str[0]} />
         <Digit char={str[1]} />
       </div>
-      <span className="font-body text-[0.5rem] font-bold uppercase tracking-wider text-white/35 sm:text-[0.5625rem]">
+      <span className="font-body text-[0.4375rem] font-bold uppercase tracking-wider text-white/35 sm:text-[0.5rem]">
         {label}
       </span>
     </div>
@@ -94,13 +95,13 @@ function getOrCreateTarget(hours = 24) {
       const stored = parseInt(s, 10);
       if (stored > Date.now()) return stored;
     }
-  } catch (_) {
+  } catch {
     /* ignore */
   }
   const t = Date.now() + hours * 3600 * 1000;
   try {
     localStorage.setItem(STORAGE_KEY, String(t));
-  } catch (_) {
+  } catch {
     /* ignore */
   }
   return t;
@@ -118,7 +119,7 @@ function DigitalTimer() {
         target = now + 24 * 3600 * 1000;
         try {
           localStorage.setItem(STORAGE_KEY, String(target));
-        } catch (_) {
+        } catch {
           /* ignore */
         }
       }
@@ -136,64 +137,36 @@ function DigitalTimer() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <p className="!m-0 font-body text-[0.5rem] font-semibold uppercase tracking-[0.14em] text-white/55 sm:text-[0.5625rem]">
-        OFFER ENDS IN
+    <div className="flex flex-col items-center gap-0.5">
+      <p className="!m-0 font-body text-[0.4375rem] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[0.5rem]">
+        Offer ends
       </p>
-      <div className="relative overflow-hidden rounded-lg border border-orange-500/25 bg-[#0a0a0a]/90 px-2 py-1 sm:px-2.5 sm:py-1.5">
-        <div
-          className="pointer-events-none absolute inset-0 rounded-lg opacity-60"
-          style={{
-            background:
-              'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 3px)',
-          }}
-        />
-        <div className="relative z-[1] flex items-center gap-0.5 sm:gap-1">
+      <div className="relative overflow-hidden rounded-md border border-orange-500/25 bg-[#0a0a0a]/90 px-1.5 py-0.5 sm:px-2 sm:py-1">
+        <div className="relative z-[1] flex items-center gap-0.5">
           <DigitPair value={time.h} label="HRS" />
-          <div className="-mt-1.5">
+          <div className="-mt-1">
             <SegColon visible={colonOn} />
           </div>
-          <DigitPair value={time.m} label="MINS" />
-          <div className="-mt-1.5">
+          <DigitPair value={time.m} label="MIN" />
+          <div className="-mt-1">
             <SegColon visible={colonOn} />
           </div>
-          <DigitPair value={time.s} label="SECS" />
+          <DigitPair value={time.s} label="SEC" />
         </div>
       </div>
     </div>
   );
 }
 
-function OfferBadge({ compact }) {
+function PriceBlock() {
   return (
-    <div
-      className={`inline-flex w-fit items-center gap-1 rounded border border-white/15 bg-white/5 font-body font-bold uppercase text-orange-400 shadow-[inset_0_0_8px_rgba(0,0,0,0.25)] ${
-        compact ? 'px-1.5 py-0.5 text-[0.5rem] tracking-[0.08em]' : 'px-2 py-0.5 text-[0.5625rem] tracking-[0.1em] sm:text-[0.625rem]'
-      }`}
-    >
-      <svg width={compact ? 8 : 9} height={compact ? 10 : 11} viewBox="0 0 10 13" fill="none" className="shrink-0" aria-hidden="true">
-        <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-      </svg>
-      <span>LIMITED TIME OFFER</span>
-    </div>
-  );
-}
-
-function PriceBlock({ compact }) {
-  return (
-    <div className={`flex items-center justify-center gap-1.5 ${compact ? '' : 'gap-2 sm:gap-2.5'}`}>
-      <span
-        className={`!m-0 font-body font-semibold uppercase !text-white ${
-          compact ? 'text-xs tracking-wide' : 'text-sm tracking-wide sm:text-base'
-        }`}
-      >
-        {compact ? 'Only' : 'ONLY'}
+    <div className="flex items-center justify-center gap-1">
+      <span className="!m-0 font-body text-[0.6875rem] font-semibold uppercase !text-white sm:text-xs">
+        Only
       </span>
       <span
-        className={`!m-0 bg-gradient-to-br from-[#ffcc44] via-[#ff8800] to-[#ff5500] bg-clip-text font-body font-black leading-none text-transparent ${
-          compact ? 'text-2xl' : 'text-3xl sm:text-4xl'
-        }`}
-        style={{ filter: 'drop-shadow(0 2px 6px rgba(255,140,0,0.28))' }}
+        className="!m-0 bg-gradient-to-br from-[#ffcc44] via-[#ff8800] to-[#ff5500] bg-clip-text font-body text-xl font-black leading-none text-transparent sm:text-2xl"
+        style={{ filter: 'drop-shadow(0 2px 4px rgba(255,140,0,0.24))' }}
       >
         ₹99
       </span>
@@ -206,32 +179,12 @@ function EnrollButton({ onClick, fullWidth }) {
     <button
       type="button"
       onClick={onClick}
-      className={`relative z-[1] inline-flex !m-0 cursor-pointer appearance-none items-center justify-center gap-2 overflow-hidden rounded-lg border-0 bg-gradient-to-r from-[#ff9800] via-[#ff6200] to-[#ff4000] font-body !text-sm !font-bold !text-white shadow-[0_4px_14px_rgba(255,90,0,0.35)] transition hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(255,90,0,0.45)] ${
-        fullWidth ? 'min-h-9 w-full px-4 py-2' : 'min-h-9 w-auto min-w-[9.5rem] px-5 py-2 sm:min-h-10 sm:px-6'
+      className={`relative z-[1] inline-flex !m-0 cursor-pointer appearance-none items-center justify-center gap-1.5 overflow-hidden rounded-md border-0 bg-gradient-to-r from-[#ff9800] via-[#ff6200] to-[#ff4000] px-3 py-1.5 font-body !text-xs !font-bold !text-white shadow-[0_3px_10px_rgba(255,90,0,0.3)] transition hover:-translate-y-px ${
+        fullWidth ? 'min-h-8 w-full' : 'min-h-8 w-auto min-w-[7.5rem]'
       }`}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b from-white/10 to-transparent" />
-      <div className="wb-fixed-cta__shimmer pointer-events-none absolute top-0 h-[80%] w-1/3 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      <span className="relative">Enroll Now</span>
-      <span className="wb-fixed-cta__arrow relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/18">
-        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-          <path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
+      <span className="relative">Enroll — ₹99</span>
     </button>
-  );
-}
-
-function Divider() {
-  return (
-    <div
-      className="mx-1 h-9 w-px shrink-0 rounded-full sm:mx-2 sm:h-10"
-      style={{
-        background: 'linear-gradient(to bottom, transparent, #ff9900 40%, #ff5500 60%, transparent)',
-        boxShadow: '0 0 8px rgba(255,120,0,0.45)',
-      }}
-      aria-hidden="true"
-    />
   );
 }
 
@@ -247,52 +200,55 @@ function useIsMobile(breakpoint = 640) {
   return mobile;
 }
 
-function OfferPriceGroup({ compact }) {
-  return (
-    <div className="flex flex-col items-center justify-center gap-1 text-center">
-      <OfferBadge compact={compact} />
-      <PriceBlock compact={compact} />
-    </div>
-  );
-}
-
-export default function FixedBottomCTA({ onJoinNow }) {
+export default function FixedBottomCTA({ onJoinNow, onJoinFree, onDismiss }) {
   const isMobile = useIsMobile(640);
 
   return (
     <div
-      className="wb-fixed-cta wb-fixed-cta__bar fixed bottom-0 left-0 z-[9999] w-full overflow-hidden rounded-t-2xl border border-b-0 border-orange-500/20 bg-[#0c0c0c]/95 px-3 py-2 backdrop-blur-md sm:rounded-t-[1.125rem] sm:px-4 sm:py-2.5"
+      className="wb-fixed-cta wb-fixed-cta__bar fixed bottom-0 left-0 z-[9999] w-full overflow-hidden rounded-t-xl border border-b-0 border-orange-500/20 bg-[#0c0c0c]/95 px-2.5 py-1.5 backdrop-blur-md sm:px-3 sm:py-2"
       style={{
         backgroundImage:
-          'radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.06) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.04) 0%, transparent 55%)',
+          'radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.05) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.04) 0%, transparent 55%)',
       }}
     >
-      <div className="relative z-[1] mx-auto w-full justify-around">
+      <button
+        type="button"
+        onClick={onDismiss}
+        className="absolute right-1.5 top-1.5 z-20 flex h-6 w-6 items-center justify-center rounded-full border-0 bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
+        aria-label="Hide offer bar"
+      >
+        <X size={12} aria-hidden />
+      </button>
+
+      <div className="relative z-[1] mx-auto w-full max-w-4xl">
         {isMobile ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex w-full items-center justify-between gap-2">
-              <div className="flex min-w-0 flex-1 items-center justify-center">
-                <OfferPriceGroup compact />
-              </div>
-              <Divider />
-              <div className="flex min-w-0 flex-1 items-center justify-center">
-                <DigitalTimer />
-              </div>
-            </div>
-            <div className="flex w-full items-center justify-center">
-              <EnrollButton onClick={onJoinNow} fullWidth />
-            </div>
-          </div>
-        ) : (
-          <div className="flex w-full items-center justify-between gap-4 lg:gap-6">
-            <div className="flex shrink-0 items-center justify-center">
-              <OfferPriceGroup />
-            </div>
-            <div className="flex shrink-0 items-center justify-center">
+          <div className="flex flex-col items-center gap-1.5 pr-6">
+            <div className="flex w-full items-center justify-center gap-3">
+              <PriceBlock />
               <DigitalTimer />
             </div>
-            <div className="flex shrink-0 items-center justify-center">
+            <EnrollButton onClick={onJoinNow} fullWidth />
+            <button
+              type="button"
+              onClick={onJoinFree}
+              className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline"
+            >
+              Want to join free webinar?
+            </button>
+          </div>
+        ) : (
+          <div className="flex w-full items-center justify-between gap-3 pr-8">
+            <PriceBlock />
+            <DigitalTimer />
+            <div className="flex flex-col items-end gap-1">
               <EnrollButton onClick={onJoinNow} />
+              <button
+                type="button"
+                onClick={onJoinFree}
+                className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline"
+              >
+                Free webinar instead?
+              </button>
             </div>
           </div>
         )}

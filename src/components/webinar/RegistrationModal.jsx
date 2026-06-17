@@ -1,6 +1,6 @@
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
-import { WB_CTA, WB_HIGHLIGHT, TYPE } from './tokens';
+import { WB_CTA, WB_CTA_FREE, WB_HIGHLIGHT, TYPE } from './tokens';
 
 function RegistrationModal({
   isOpen,
@@ -9,6 +9,7 @@ function RegistrationModal({
   handleChange,
   handleSubmit,
   isSubmitting,
+  onJoinFree,
 }) {
   useModalLock(isOpen, onClose);
   if (!isOpen) return null;
@@ -121,6 +122,21 @@ function RegistrationModal({
                     <i className="fas fa-lock mr-1.5" aria-hidden="true" />
                     Secured by Razorpay
                   </p>
+                  {onJoinFree ? (
+                    <div className="border-t border-slate-100 pt-3 text-center">
+                      <p className={`${TYPE.bodySm} !mb-2`}>Not ready to pay ₹99?</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          onJoinFree();
+                        }}
+                        className={`${WB_CTA_FREE} w-full justify-center`}
+                      >
+                        Want to join free webinar?
+                      </button>
+                    </div>
+                  ) : null}
                 </form>
               </div>
             </div>

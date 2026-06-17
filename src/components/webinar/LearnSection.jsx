@@ -1,7 +1,6 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_CTA,
   WB_SECTION,
   WB_TITLE_CENTER,
   WB_CTA_ROW,
@@ -11,7 +10,9 @@ import {
   TYPE,
 } from './tokens';
 
-function LearnSection({ onJoinNow }) {
+import WebinarActionButtons from './WebinarActionButtons';
+
+function LearnSection({ onJoinNow, onJoinFree }) {
   const learningPoints = [
     {
       icon: 'fa-sun',
@@ -75,9 +76,7 @@ function LearnSection({ onJoinNow }) {
           ))}
         </div>
         <div className={WB_CTA_ROW}>
-          <button type="button" onClick={onJoinNow} className={WB_CTA}>
-            Uncover Life&apos;s Secrets – Join Now
-          </button>
+          <WebinarActionButtons onJoinPaid={onJoinNow} onJoinFree={onJoinFree} showUrgency={false} />
         </div>
       </div>
     </section>

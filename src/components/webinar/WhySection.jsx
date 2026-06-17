@@ -1,7 +1,6 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_CTA,
   WB_SECTION_WHY,
   WB_SECTION_INTRO,
   WB_TITLE_CENTER,
@@ -13,7 +12,9 @@ import {
   TYPE,
 } from './tokens';
 
-function WhySection({ onJoinNow }) {
+import WebinarActionButtons from './WebinarActionButtons';
+
+function WhySection({ onJoinNow, onJoinFree }) {
   const struggles = [
     "You're working hard but promotions or recognition feel stuck",
     'You attract the same type of person again and again.',
@@ -45,9 +46,7 @@ function WhySection({ onJoinNow }) {
 
         <div className={WB_WHY_FOOTER} data-aos="fade-up">
           <p className={WB_BRIDGE_LINE}>The answer lies in your kundli 👇</p>
-          <button type="button" onClick={onJoinNow} className={WB_CTA}>
-            Uncover Life&apos;s Secrets – Join Now
-          </button>
+          <WebinarActionButtons onJoinPaid={onJoinNow} onJoinFree={onJoinFree} showUrgency={false} />
         </div>
       </div>
     </section>

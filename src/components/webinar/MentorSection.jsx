@@ -1,14 +1,15 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_CTA,
   WB_SECTION,
   WB_STACK,
   WB_CTA_ROW,
   TYPE,
 } from './tokens';
 
-function MentorSection({ onJoinNow }) {
+import WebinarActionButtons from './WebinarActionButtons';
+
+function MentorSection({ onJoinNow, onJoinFree }) {
   const mediaLogos = ['Aaj Tak', 'Fox Interviewer', 'Outlook', 'LatestLY'];
 
   const listItems = [
@@ -60,17 +61,15 @@ function MentorSection({ onJoinNow }) {
               </p>
             </div>
             <div className={WB_CTA_ROW}>
-              <button type="button" onClick={onJoinNow} className={WB_CTA}>
-                Uncover Life&apos;s Secrets – Join Now
-              </button>
+              <WebinarActionButtons onJoinPaid={onJoinNow} onJoinFree={onJoinFree} showUrgency={false} />
             </div>
           </div>
           <div data-aos="fade-left">
-            <div className="overflow-hidden rounded-2xl border-[6px] border-white/5 sm:border-8">
+            <div className="mx-auto max-w-sm overflow-hidden rounded-xl border-4 border-white/10 lg:max-w-none">
               <img
                 src="/images/mentor-ava.png"
                 alt="DS Astrology mentor"
-                className="block w-full"
+                className="block max-h-[280px] w-full object-cover object-top lg:max-h-[320px]"
               />
             </div>
             <div className="mt-5 flex flex-wrap items-center justify-around gap-3 rounded-xl bg-white px-5 py-4 shadow-lg sm:mt-6 sm:px-6">

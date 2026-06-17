@@ -18,14 +18,21 @@ import ItinerarySection from '../components/webinar/ItinerarySection';
 import FaqSection from '../components/webinar/FaqSection';
 import FixedBottomCTA from '../components/webinar/FixedBottomCTA';
 import RegistrationModal from '../components/webinar/RegistrationModal';
+import FreeWebinarInterestModal from '../components/webinar/FreeWebinarInterestModal';
 import TailwindPage from '../components/layout/TailwindPage';
-import { WB_PAGE } from '../components/webinar/tokens';
+import { WB_PAGE, WB_PAGE_NO_CTA } from '../components/webinar/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+
+const CTA_HIDDEN_KEY = 'webinar_fixed_cta_hidden';
 
 function Webinar() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFreeModalOpen, setIsFreeModalOpen] = useState(false);
+  const [ctaVisible, setCtaVisible] = useState(
+    () => typeof window !== 'undefined' && sessionStorage.getItem(CTA_HIDDEN_KEY) !== '1',
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -101,31 +108,56 @@ function Webinar() {
     }
   };
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenPaidModal = () => setIsModalOpen(true);
+  const handleClosePaidModal = () => setIsModalOpen(false);
+  const handleOpenFreeModal = () => setIsFreeModalOpen(true);
+  const handleCloseFreeModal = () => setIsFreeModalOpen(false);
+
+  const handleDismissCta = () => {
+    try {
+      sessionStorage.setItem(CTA_HIDDEN_KEY, '1');
+    } catch {
+      /* ignore */
+    }
+    setCtaVisible(false);
+  };
+
+  const sectionProps = { onJoinNow: handleOpenPaidModal, onJoinFree: handleOpenFreeModal };
 
   return (
-    <TailwindPage className={WB_PAGE}>
-      <HeroSection onJoinNow={handleOpenModal} />
+    <TailwindPage className={ctaVisible ? WB_PAGE : WB_PAGE_NO_CTA}>
+      <HeroSection {...sectionProps} />
       <LogoCarousel />
       <NewsCarousel />
-      <WhySection onJoinNow={handleOpenModal} />
+      <WhySection {...sectionProps} />
       <PictureGallery />
-      <PatternsSection onJoinNow={handleOpenModal} />
-      <LearnSection onJoinNow={handleOpenModal} />
+      <PatternsSection {...sectionProps} />
+      <LearnSection {...sectionProps} />
       <VideoReviewCarousel />
       <TextReviewCarousel />
-      <MentorSection onJoinNow={handleOpenModal} />
+      <MentorSection {...sectionProps} />
       <ItinerarySection />
       <FaqSection />
-      <FixedBottomCTA onJoinNow={handleOpenModal} />
+      {ctaVisible ? (
+        <FixedBottomCTA
+          onJoinNow={handleOpenPaidModal}
+          onJoinFree={handleOpenFreeModal}
+          onDismiss={handleDismissCta}
+        />
+      ) : null}
       <RegistrationModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleClosePaidModal}
         formData={formData}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        onJoinFree={handleOpenFreeModal}
+      />
+      <FreeWebinarInterestModal
+        open={isFreeModalOpen}
+        onClose={handleCloseFreeModal}
+        source="webinar-page"
       />
     </TailwindPage>
   );

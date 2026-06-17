@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME } from '../utils/brandAssets';
+import FreeWebinarInterestModal from './webinar/FreeWebinarInterestModal';
 
 const REPORT_ITEMS = [
   '2026 Financial Horoscope Based on Your Birth Chart',
@@ -119,6 +120,7 @@ export default function SiteNavbar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  const [freeWebinarOpen, setFreeWebinarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const coursesActive = COURSE_LINKS.some((link) => location.pathname.startsWith(link.to));
@@ -179,6 +181,14 @@ export default function SiteNavbar({
       </li>
       <li className="flex list-none items-center">
         <NavLink to="/contact" match="/contact">Contact</NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/webinar" match="/webinar" className="gap-1.5">
+          Live Webinar
+          {/* <span className="rounded-full bg-site-primary px-1.5 py-0.5 text-[0.5625rem] font-extrabold normal-case tracking-normal text-white">
+            ₹99
+          </span> */}
+        </NavLink>
       </li>
     </>
   );
@@ -456,11 +466,23 @@ export default function SiteNavbar({
                 className="flex items-center gap-2.5 px-4 py-3.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text no-underline transition hover:text-site-accent-dark"
               >
                 <Radio className="h-3.5 w-3.5 shrink-0 text-site-accent" />
-                Free Live Webinar
-                <span className="ml-auto rounded-full bg-site-accent px-2 py-0.5 text-[0.55rem] font-extrabold normal-case tracking-wide text-white">
-                  Free
-                </span>
+                Live Webinar
+                {/* <span className="ml-auto rounded-full bg-site-primary px-2 py-0.5 text-[0.55rem] font-extrabold normal-case tracking-wide text-white">
+                  ₹99
+                </span> */}
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobile();
+                  setFreeWebinarOpen(true);
+                }}
+                className="block w-full border-0 border-t border-site-accent-dark/8 bg-[#fffaf4] px-4 py-3 text-left font-body text-xs leading-snug text-site-muted transition hover:bg-[#fff3e6]"
+              >
+                Interested in a{' '}
+                <span className="font-bold text-site-accent-dark">free webinar</span>?{' '}
+                <span className="font-semibold text-site-accent underline-offset-2 hover:underline">Click here</span>
+              </button>
             </li>
 
             {!authState.isStudent && (
@@ -560,6 +582,12 @@ export default function SiteNavbar({
           </div>
         </nav>
       </aside>
+
+      <FreeWebinarInterestModal
+        open={freeWebinarOpen}
+        onClose={() => setFreeWebinarOpen(false)}
+        source="navbar"
+      />
     </div>
   );
 }

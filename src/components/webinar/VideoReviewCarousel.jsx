@@ -134,11 +134,11 @@ const VideoReviewCarousel = () => {
               {videoReviews.map((review) => (
                 <motion.div
                   key={review.id}
-                  className="min-w-[260px] shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 sm:min-w-[280px]"
+                  className="min-w-[220px] shrink-0 cursor-pointer snap-start overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 sm:min-w-[240px]"
                   whileHover={{ y: -6 }}
                   onClick={() => setActiveVideo(review)}
                 >
-                  <div className="group relative h-40 overflow-hidden sm:h-44">
+                  <div className="group relative h-28 overflow-hidden sm:h-32">
                     <img
                       src={review.poster}
                       alt={review.title}
@@ -156,7 +156,7 @@ const VideoReviewCarousel = () => {
                       Student Story
                     </div>
                   </div>
-                  <div className="p-4 sm:p-5">
+                  <div className="p-3 sm:p-3.5">
                     <div className="mb-2 flex gap-0.5 text-[0.625rem] text-amber-400">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <i key={s} className="fas fa-star" aria-hidden="true" />

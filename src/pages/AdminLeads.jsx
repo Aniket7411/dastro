@@ -31,6 +31,7 @@ const LEAD_TYPE_CONFIG = {
   'Consultation':          { label: 'Consultation',    pill: 'bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200',       dot: '#06b6d4', icon: 'fa-user-md',             kind: 'DIRECT' },
   // Webinar
   'Webinar':               { label: 'Webinar',         pill: 'bg-violet-50 text-violet-700 ring-1 ring-violet-200', dot: '#8b5cf6', icon: 'fa-video',               kind: 'DIRECT' },
+  'FREE WEBINAR INTEREST': { label: 'Free Webinar',    pill: 'bg-fuchsia-50 text-fuchsia-700 ring-1 ring-fuchsia-200', dot: '#d946ef', icon: 'fa-gift',              kind: 'DIRECT' },
   // Contact / General
   'Contact':               { label: 'Contact',         pill: 'bg-slate-50 text-slate-600 ring-1 ring-slate-200',    dot: '#64748b', icon: 'fa-address-book',        kind: 'DIRECT' },
   'Home-Enroll':           { label: 'Home Enquiry',    pill: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', dot: '#10b981', icon: 'fa-home',             kind: 'DIRECT' },
