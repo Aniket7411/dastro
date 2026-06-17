@@ -1,4 +1,4 @@
-﻿import LegalPolicyLayout from '../components/LegalPolicyLayout';
+import LegalPolicyLayout from '../components/LegalPolicyLayout';
 import { PAGE_BANNERS } from '../data/pageBanners';
 import { CONTACT_PHONE_DISPLAY } from '../utils/contactInfo';
 
@@ -29,7 +29,7 @@ function PrivacyPolicy() {
     <LegalPolicyLayout
       seo={{
         title: 'Privacy Policy',
-        description: 'Read our privacy policy to understand how we collect, use, and protect your personal information at DS Astro Institute.',
+        description: 'Read our privacy policy to understand how we collect, use, and protect your personal information at DS Astrology.',
         url: '/privacy-policy'
       }}
       banner={PAGE_BANNERS.privacy}
@@ -120,7 +120,7 @@ function PrivacyPolicy() {
           <section id="comm-consent" className="content-section">
             <h2 className="section-title">6. Communication Consent</h2>
             <p>
-              By submitting your contact details on our platform, you authorise <strong>DS ASTRO INSTITUTE LLP</strong> to contact you through phone calls, SMS, email, WhatsApp, and push notifications for:
+              By submitting your contact details on our platform, you authorise <strong>DS ASTROLOGY LLP</strong> to contact you through phone calls, SMS, email, WhatsApp, and push notifications for:
             </p>
             <ul className="content-list">
               <li>Service updates, booking confirmations, and reminders</li>
@@ -247,9 +247,9 @@ function PrivacyPolicy() {
           </section>
 
           <section id="intellectual-prop" className="content-section">
-            <h2 className="section-title">15. Intellectual Property â€” Notice to Users</h2>
+            <h2 className="section-title">15. Intellectual Property — Notice to Users</h2>
             <p>
-              All course materials, videos, PDFs, live session recordings, study resources, branding materials, and website content are the exclusive intellectual property of DS ASTRO INSTITUTE LLP and are protected under the Copyright Act, 1957 and applicable Indian intellectual property laws.
+              All course materials, videos, PDFs, live session recordings, study resources, branding materials, and website content are the exclusive intellectual property of DS ASTROLOGY LLP and are protected under the Copyright Act, 1957 and applicable Indian intellectual property laws.
             </p>
             <p>
               Users are strictly prohibited from copying, recording, redistribution, resale, or unauthorised sharing of any course or platform content. Credential sharing is prohibited. Violations may result in immediate account termination and civil or criminal legal action.
@@ -272,7 +272,7 @@ function PrivacyPolicy() {
           <section id="grievance-officer" className="content-section">
             <h2 className="section-title">17. Grievance Officer</h2>
             <p>
-              In accordance with the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023, DS ASTRO INSTITUTE LLP has designated a Grievance Officer to address privacy-related concerns.
+              In accordance with the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023, DS ASTROLOGY LLP has designated a Grievance Officer to address privacy-related concerns.
             </p>
             <div className="contact-box">
               <p><strong>Name:</strong> Ananya Singh</p>
@@ -290,7 +290,7 @@ function PrivacyPolicy() {
           <section id="policy-changes" className="content-section">
             <h2 className="section-title">18. Changes to This Privacy Policy</h2>
             <p>
-              DS ASTRO INSTITUTE LLP reserves the right to update, amend, or modify this Privacy Policy at any time to reflect changes in our practices, services, or applicable legal requirements.
+              DS ASTROLOGY LLP reserves the right to update, amend, or modify this Privacy Policy at any time to reflect changes in our practices, services, or applicable legal requirements.
             </p>
             <p>
               Any material changes will be notified to users via email or through a prominent notice on our website. The revised policy will be effective from the date of publication. Continued use of our services after such changes constitutes acceptance of the revised policy.
@@ -303,7 +303,7 @@ function PrivacyPolicy() {
               For any questions, concerns, or requests relating to this Privacy Policy, please contact us at:
             </p>
             <div className="contact-details">
-              <p><strong>Company Name:</strong> DS ASTRO INSTITUTE LLP</p>
+              <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
               <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
@@ -311,7 +311,7 @@ function PrivacyPolicy() {
             </div>
             <a href="mailto:info@dsastroinstitute.com" className="contact-button">Contact Support</a>
             <p>
-              <em>This Privacy Policy is applicable to all services offered by DS ASTRO INSTITUTE LLP, including online astrology courses, live consultations, merchandise sales, and all associated digital platforms.</em>
+              <em>This Privacy Policy is applicable to all services offered by DS ASTROLOGY LLP, including online astrology courses, live consultations, merchandise sales, and all associated digital platforms.</em>
             </p>
           </section>
     </LegalPolicyLayout>

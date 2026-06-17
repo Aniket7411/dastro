@@ -120,7 +120,7 @@ export function ContactForm({ formData, isSubmitting, onChange, onSubmit }) {
             <Link to="/privacy-policy" className={LINK}>
               Privacy Policy
             </Link>{' '}
-            and consent to DS Institute contacting me via phone, email, and WhatsApp.
+            and consent to DS Astrology contacting me via phone, email, and WhatsApp.
           </label>
         </div>
 

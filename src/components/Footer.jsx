@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 import { CONTACT_PHONE_DISPLAY, WHATSAPP_NUMBER } from '../utils/contactInfo';
-import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
+import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME_LLP } from '../utils/brandAssets';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -686,7 +686,7 @@ function Footer() {
         {/* Bottom Legal Bar */}
         <div className="fb-bot-wrap">
           <div className="fb-bot">
-            <p className="mb-0">&copy; {currentYear} DS Institute LLP. All rights reserved.</p>
+            <p className="mb-0">&copy; {currentYear} {SITE_NAME_LLP}. All rights reserved.</p>
             <div className="fb-legal" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Link to="/privacy-policy">Privacy Policy</Link>
               <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>

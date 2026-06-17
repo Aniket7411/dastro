@@ -12,7 +12,7 @@ import {
   User,
   X,
 } from 'lucide-react';
-import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
+import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME } from '../utils/brandAssets';
 
 const REPORT_ITEMS = [
   '2026 Financial Horoscope Based on Your Birth Chart',
@@ -299,7 +299,7 @@ export default function SiteNavbar({
       >
         <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
           {/* Logo */}
-          <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline" aria-label="DS Institute home">
+          <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline" aria-label={`${SITE_NAME} home`}>
             <img
               src={SITE_LOGO}
               alt={SITE_LOGO_ALT}
@@ -352,7 +352,7 @@ export default function SiteNavbar({
         <div className="flex items-center justify-between border-b border-site-accent-dark/15 px-4 py-3">
           <Link to="/" onClick={closeMobile} className="flex items-center gap-2 no-underline">
             <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-10 w-auto" />
-            <span className="font-heading text-sm font-bold text-site-accent-dark">DS Institute</span>
+            <span className="font-heading text-sm font-bold text-site-accent-dark">{SITE_NAME}</span>
           </Link>
           <button
             type="button"

@@ -107,7 +107,7 @@ function Contact() {
     <div className="contact-page min-h-screen w-full bg-site-bg font-body text-site-text [&_a]:decoration-transparent [&_a]:no-underline [&_a:visited]:text-inherit">
       <SEO
         title="Contact Us"
-        description="Get in touch with DS Institute for astrology consultations and courses."
+        description="Get in touch with DS Astrology for astrology consultations and courses."
         url="/contact"
       />
 

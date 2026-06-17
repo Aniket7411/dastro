@@ -770,7 +770,7 @@ function LandingPage() {
       {/* Minimal Navigation */}
       <nav className="lp-nav" data-aos="fade-down" data-aos-duration="600">
         <div className="container d-flex justify-content-between align-items-center">
-          <div className="logo-text">DS Institute</div>
+          <div className="logo-text">DS Astrology</div>
           <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mystic-btn-outline d-none d-md-block">
             📋 Register Now
           </button>
@@ -812,7 +812,7 @@ function LandingPage() {
                     <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
                       <input type="checkbox" id="consent-lp1" name="consent" required style={{ width: 'auto', marginTop: '4px', padding: 0 }} />
                       <label htmlFor="consent-lp1" style={{ fontSize: '13px', color: 'var(--lp-text-muted)', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
-                        I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
+                        I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astrology LLP contacting me via phone, email, and WhatsApp.
                       </label>
                     </div>
 
@@ -855,7 +855,7 @@ function LandingPage() {
                   <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
                     <input type="checkbox" id="consent-lp2" name="consent" required style={{ width: 'auto', marginTop: '4px', padding: 0 }} />
                     <label htmlFor="consent-lp2" style={{ fontSize: '13px', color: 'var(--lp-text-muted)', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
-                      I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
+                      I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astrology LLP contacting me via phone, email, and WhatsApp.
                     </label>
                   </div>
 

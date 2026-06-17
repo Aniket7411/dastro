@@ -128,7 +128,7 @@ function AdvancedAstrology() {
     <div className="w-full overflow-x-clip bg-[#fdf6ee] font-body text-[#3d1a08]">
       <SEO
         title="Advanced Predictive Astrology Course"
-        description="Master divisional charts, Shadbala, Rahu-Ketu analysis, and professional predictive techniques with DS Astro Institute."
+        description="Master divisional charts, Shadbala, Rahu-Ketu analysis, and professional predictive techniques with DS Astrology."
         url="/advanced-astrology"
       />
 

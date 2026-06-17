@@ -107,7 +107,7 @@ function CourseInquiry() {
                   <div className="form-group consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <input type="checkbox" id="consent-course" name="consent" required style={{ width: 'auto', marginTop: '4px' }} />
                     <label htmlFor="consent-course" style={{ fontSize: '13px', color: '#ccc', lineHeight: '1.4', margin: 0 }}>
-                      I agree to the <a href="/privacy-policy" style={{ color: '#ff6a00' }}>Privacy Policy</a> and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
+                      I agree to the <a href="/privacy-policy" style={{ color: '#ff6a00' }}>Privacy Policy</a> and consent to DS Astrology LLP contacting me via phone, email, and WhatsApp.
                     </label>
                   </div>
 
@@ -219,9 +219,9 @@ function CourseInquiry() {
             </div>
             <div className="instructor-info">
               <h5 className="sub-heading">YOUR LEAD MENTOR</h5>
-              <h2 className="instructor-name">DS Institute</h2>
+              <h2 className="instructor-name">DS Astrology</h2>
               <p className="instructor-bio">
-                With over 16 years of deep astrological research and practice, DS Institute has transformed the lives of over 100,000 individuals globally. Known for pinpoint accuracy and practical remedies, it bridges ancient Vedic wisdom with modern life challenges.
+                With over 16 years of deep astrological research and practice, DS Astrology has transformed the lives of over 100,000 individuals globally. Known for pinpoint accuracy and practical remedies, it bridges ancient Vedic wisdom with modern life challenges.
               </p>
               <ul className="instructor-achievements">
                 <li><i className="fas fa-star"></i> Featured in Top Astrology Journals</li>
@@ -243,7 +243,7 @@ function CourseInquiry() {
           <div className="testimonials-grid">
             <div className="testimonial-card">
               <div className="stars">★★★★★</div>
-              <p className="review-text">"The structured curriculum made it so easy to learn. I am now doing paid consultations thanks to DS Institute's guidance."</p>
+              <p className="review-text">"The structured curriculum made it so easy to learn. I am now doing paid consultations thanks to DS Astrology's guidance."</p>
               <p className="reviewer-name">- Amit R.</p>
             </div>
             <div className="testimonial-card">

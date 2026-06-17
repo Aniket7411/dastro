@@ -1,6 +1,6 @@
 # Admin Guide: Enable Student Course Access
 
-**DS Astro Institute — manual confirmation for external payments & access control**
+**DS Astrology — manual confirmation for external payments & access control**
 
 Last updated: June 2026
 
@@ -82,7 +82,7 @@ Online Razorpay checkout may be disabled during setup. Students can still enquir
 
 ## What the student receives by email
 
-Subject: *Welcome to DS Astro Institute — Your Login Credentials*
+Subject: *Welcome to DS Astrology — Your Login Credentials*
 
 Contains:
 - Student login email

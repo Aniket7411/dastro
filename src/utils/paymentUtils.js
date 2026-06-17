@@ -124,7 +124,7 @@ export const handleRazorpayPayment = async (formData, onSuccess, navigate) => {
 
     const options = {
       key: data.keyId,
-      name: "DS Astro Institute",
+      name: "DS Astrology",
       description: `Consultation Booking: ${formData.consultationType}`,
       image: SITE_LOGO,
       order_id: data.orderId,

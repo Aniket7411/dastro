@@ -30,7 +30,7 @@ function Terms() {
     <LegalPolicyLayout
       seo={{
         title: 'Terms and Conditions',
-        description: 'Read the terms and conditions for using the DS Astro Institute website and services.',
+        description: 'Read the terms and conditions for using the DS Astrology website and services.',
         url: '/terms-and-conditions'
       }}
       banner={PAGE_BANNERS.terms}
@@ -39,7 +39,7 @@ function Terms() {
           <section id="definitions" className="content-section">
             <h2 className="section-title">1. Definitions</h2>
             <ul className="content-list">
-              <li><strong>Company:</strong> Refers to DS ASTRO INSTITUTE LLP.</li>
+              <li><strong>Company:</strong> Refers to DS ASTROLOGY LLP.</li>
               <li><strong>Services:</strong> Means all offerings by the Company including but not limited to live and recorded astrology courses, astrology consultations, digital content, and astrology-related merchandise.</li>
               <li><strong>Platform:</strong> Means the website https://dsastroinstitute.com/ and any associated mobile applications or digital channels operated by the Company.</li>
               <li><strong>User / you:</strong> Refers to any person who accesses, registers on, or uses the Platform or Services.</li>
@@ -117,7 +117,7 @@ function Terms() {
 
             <h3 className="subsection-title">B. Important Disclaimer</h3>
             <p>
-              Astrology consultations, kundali readings, birth chart analyses, predictions, and all related advisory content provided by DS ASTRO INSTITUTE LLP are offered solely for informational, educational, and entertainment purposes.
+              Astrology consultations, kundali readings, birth chart analyses, predictions, and all related advisory content provided by DS ASTROLOGY LLP are offered solely for informational, educational, and entertainment purposes.
             </p>
             <p>They must NOT be construed as, relied upon as, or used as a substitute for:</p>
             <ul className="content-list">
@@ -204,7 +204,7 @@ function Terms() {
           <section id="intellectual-property" className="content-section">
             <h2 className="section-title">9. Intellectual Property Rights</h2>
             <p>
-              All Content available on the Platform, including but not limited to course videos, live session recordings, PDFs, study materials, charts, software, logos, brand name, and website design, is the exclusive intellectual property of DS ASTRO INSTITUTE LLP and is protected under:
+              All Content available on the Platform, including but not limited to course videos, live session recordings, PDFs, study materials, charts, software, logos, brand name, and website design, is the exclusive intellectual property of DS ASTROLOGY LLP and is protected under:
             </p>
             <ul className="content-list">
               <li>The Copyright Act, 1957</li>
@@ -271,7 +271,7 @@ function Terms() {
           <section id="indemnification" className="content-section">
             <h2 className="section-title">14. Indemnification</h2>
             <p>
-              You agree to indemnify, defend, and hold harmless DS ASTRO INSTITUTE LLP, its partners, directors, employees, consultants, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable legal fees) arising out of or relating to:
+              You agree to indemnify, defend, and hold harmless DS ASTROLOGY LLP, its partners, directors, employees, consultants, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable legal fees) arising out of or relating to:
             </p>
             <ul className="content-list">
               <li>Your use of the Platform or Services.</li>
@@ -299,7 +299,7 @@ function Terms() {
           <section id="amendments" className="content-section">
             <h2 className="section-title">17. Amendments to These Terms</h2>
             <p>
-              DS ASTRO INSTITUTE LLP reserves the right to modify, update, or revise these Terms at any time without prior notice. Revised Terms will be published on the Platform with an updated effective date.
+              DS ASTROLOGY LLP reserves the right to modify, update, or revise these Terms at any time without prior notice. Revised Terms will be published on the Platform with an updated effective date.
             </p>
             <p>
               Your continued use of the Platform or Services after any such changes constitutes your acceptance of the revised Terms. It is your responsibility to review these Terms periodically.
@@ -334,7 +334,7 @@ function Terms() {
           <section id="grievance-officer" className="content-section">
             <h2 className="section-title">20. Grievance Officer</h2>
             <p>
-              In accordance with the Information Technology Act, 2000 and the Consumer Protection Act, 2019, DS ASTRO INSTITUTE LLP has designated a Grievance Officer for addressing user concerns.
+              In accordance with the Information Technology Act, 2000 and the Consumer Protection Act, 2019, DS ASTROLOGY LLP has designated a Grievance Officer for addressing user concerns.
             </p>
             <div className="contact-box">
               <p><strong>Name:</strong> Ananya Singh</p>
@@ -352,7 +352,7 @@ function Terms() {
               For any questions or concerns regarding these Terms, please contact us.
             </p>
             <div className="contact-details">
-              <p><strong>Company Name:</strong> DS ASTRO INSTITUTE LLP</p>
+              <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
               <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>

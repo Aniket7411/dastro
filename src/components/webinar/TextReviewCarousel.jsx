@@ -17,7 +17,7 @@ import {
 const textReviews = [
   {
     id: 1,
-    text: 'This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you DS Institute!',
+    text: 'This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you DS Astrology!',
     author: 'Siddharth Jain',
     role: 'Software Engineer',
   },

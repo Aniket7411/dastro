@@ -20,7 +20,7 @@ export const PAGE_BANNERS = {
   },
   careers: {
     kicker: 'Join Our Team',
-    title: 'Cosmic Careers at DS Astro',
+    title: 'Cosmic Careers at DS Astrology',
     subtitle: "Join India's leading astrology platform — spiritual guides, tech minds & creative souls welcome.",
     image: '/images/banners/careers.jpg'
   }

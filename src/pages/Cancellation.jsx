@@ -20,7 +20,7 @@ function Cancellation() {
     <LegalPolicyLayout
       seo={{
         title: 'Refund & Cancellation Policy',
-        description: 'Read our refund and cancellation policy for courses, consultations, and merchandise at DS Astro Institute.',
+        description: 'Read our refund and cancellation policy for courses, consultations, and merchandise at DS Astrology.',
         url: '/refund-policy'
       }}
       banner={PAGE_BANNERS.refund}
@@ -30,7 +30,7 @@ function Cancellation() {
             <h2 className="section-title">1. Online Courses — Strictly No Refund Policy</h2>
             <p>
               <strong>IMPORTANT NOTICE — PLEASE READ CAREFULLY BEFORE PURCHASING</strong><br />
-              All course purchases made on the DS ASTRO INSTITUTE LLP platform are final and non-refundable under any circumstances whatsoever.<br />
+              All course purchases made on the DS ASTROLOGY LLP platform are final and non-refundable under any circumstances whatsoever.<br />
               By completing your course purchase, you explicitly acknowledge and agree to this no-refund policy.
             </p>
 
@@ -271,14 +271,14 @@ function Cancellation() {
           <section id="amendments" className="content-section">
             <h2 className="section-title">9. Amendments to This Policy</h2>
             <p>
-              DS ASTRO INSTITUTE LLP reserves the right to revise this Policy at any time. Changes will be posted on the Platform with an updated effective date. Continued use of our Services after any revision constitutes your acceptance of the revised Policy.
+              DS ASTROLOGY LLP reserves the right to revise this Policy at any time. Changes will be posted on the Platform with an updated effective date. Continued use of our Services after any revision constitutes your acceptance of the revised Policy.
             </p>
           </section>
 
           <section id="contact-us" className="contact-section">
             <h2 className="contact-title">10. Contact Us</h2>
             <div className="contact-details">
-              <p><strong>Company Name:</strong> DS ASTRO INSTITUTE LLP</p>
+              <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
               <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Support Email:</strong> help@dsastroinstitute.com</p>

@@ -142,7 +142,7 @@ function Blog() {
   return (
     <TailwindPage>
       <SEO
-        title="Cosmic Blog | DS Institute"
+        title="Cosmic Blog | DS Astrology"
         description="Explore Vedic astrology, numerology, tarot, and spiritual wisdom for modern life."
       />
 

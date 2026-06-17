@@ -42,13 +42,13 @@ function MentorSection({ onJoinNow }) {
               <p className={TYPE.bodySmOnDark}>
                 <strong className="!font-semibold !text-white">Award Winning Expert in Astrology &amp; more</strong>
                 <br />
-                DS Institute brings expert guidance across astrology and related disciplines like
+                DS Astrology brings expert guidance across astrology and related disciplines like
                 numerology, vastu shastra, palmistry, and tarot reading.
               </p>
               <p className={TYPE.bodySmOnDark}>
                 <strong className="!font-semibold !text-white">Spiritual Learning Platform</strong>
                 <br />
-                DS Institute hosts guided sessions, Q&amp;A series, and learning programs for
+                DS Astrology hosts guided sessions, Q&amp;A series, and learning programs for
                 seekers who want practical astrology knowledge with clear mentorship.
               </p>
               <p className={TYPE.bodySmOnDark}>
@@ -69,7 +69,7 @@ function MentorSection({ onJoinNow }) {
             <div className="overflow-hidden rounded-2xl border-[6px] border-white/5 sm:border-8">
               <img
                 src="/images/mentor-ava.png"
-                alt="DS Institute mentor"
+                alt="DS Astrology mentor"
                 className="block w-full"
               />
             </div>

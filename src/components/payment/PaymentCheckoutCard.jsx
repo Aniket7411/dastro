@@ -29,7 +29,7 @@ export default function PaymentCheckoutCard({
   return (
     <div className="w-full max-w-[540px] overflow-hidden rounded-[14px] border border-site-accent-dark/14 bg-white shadow-[0_10px_24px_rgba(42,15,2,0.06)]">
       <div className="bg-site-primary px-5 py-4 text-center text-base font-extrabold text-white sm:text-lg">
-        DS Institute - Mega Astrology Webinar
+        DS Astrology - Mega Astrology Webinar
       </div>
 
       <div className="p-4 sm:p-6 md:p-7">

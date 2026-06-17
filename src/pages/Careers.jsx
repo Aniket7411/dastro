@@ -163,9 +163,9 @@ export default function Careers() {
   };
 
   useEffect(() => {
-    document.title = 'Careers | DS Astro';
+    document.title = 'Careers | DS Astrology';
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = 'Join India\'s leading astrology platform. Explore cosmic careers at DS Astro.';
+    if (metaDesc) metaDesc.content = 'Join India\'s leading astrology platform. Explore cosmic careers at DS Astrology.';
     fetchJobs();
   }, []);
 
@@ -291,7 +291,7 @@ export default function Careers() {
     <TailwindPage>
       <SEO
         title="Careers"
-        description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams."
+        description="Join DS Astrology — explore open roles in astrology, technology, and creative teams."
         url="/careers"
       />
       <PageBanner {...PAGE_BANNERS.careers} />

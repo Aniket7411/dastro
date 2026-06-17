@@ -84,7 +84,7 @@ const openRazorpayCheckout = async ({
       key: data.keyId,
       amount: data.amount,
       currency: data.currency,
-      name: 'DS Astro Institute',
+      name: 'DS Astrology',
       description: `Consultation: ${formData.consultationType}`,
       image: SITE_LOGO,
       order_id: data.orderId,

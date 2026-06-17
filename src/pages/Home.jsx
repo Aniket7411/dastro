@@ -995,7 +995,7 @@ function Home() {
                 <HomeSectionHeader
                   align="left"
                   className="max-w-none"
-                  kicker="About DS Institute"
+                  kicker="About DS Astrology"
                   title="Unlock a Brilliant Future with"
                   titleHighlight="Astrology"
                   subtitle="Discover your true potential with expert astrology guidance — clarity, confidence, and success through accurate, personalized insights."

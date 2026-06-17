@@ -69,7 +69,7 @@ function BlogDetail() {
 
   return (
     <TailwindPage>
-      <SEO title={`${blog.title} | DS Institute Blog`} description={blog.excerpt || blog.title} />
+      <SEO title={`${blog.title} | DS Astrology Blog`} description={blog.excerpt || blog.title} />
 
       <article className={`${SITE_CONTAINER} py-8 sm:py-10`}>
         <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-1 text-sm text-site-muted">
@@ -135,7 +135,7 @@ function BlogDetail() {
                 About {blog.author || 'the Author'}
               </h2>
               <p className="m-0 text-sm leading-relaxed text-site-muted">
-                Insights from DS Institute on practical astrology, spiritual growth, and everyday guidance.
+                Insights from DS Astrology on practical astrology, spiritual growth, and everyday guidance.
               </p>
             </div>
           </div>

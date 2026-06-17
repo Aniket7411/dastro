@@ -46,7 +46,7 @@ function RegistrationModal({
                   {[
                     '2 Days Live Training',
                     'Practical Reading Skills',
-                    'Q&A with DS Institute mentors',
+                    'Q&A with DS Astrology mentors',
                   ].map((point) => (
                     <li key={point} className={`${TYPE.bodySmOnDark} flex items-center gap-2.5`}>
                       <i className="fa fa-check-circle shrink-0 text-sm text-[#EE6662]" aria-hidden="true" />

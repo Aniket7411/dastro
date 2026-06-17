@@ -55,7 +55,7 @@ function FloatingChatAssistant() {
   if (shouldHide) return null;
 
   const openWhatsApp = (message) => {
-    const text = encodeURIComponent(message || 'Hello, I need help with DS Institute website.');
+    const text = encodeURIComponent(message || 'Hello, I need help with DS Astrology website.');
     window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank', 'noopener,noreferrer');
   };
 

@@ -336,7 +336,7 @@ function AdminDashboard() {
               {/* Greeting */}
               <div>
                 <div className="text-[18px] font-bold text-slate-800 leading-tight mb-1">
-                  Welcome, DS Institute Admin
+                  Welcome, DS Astrology Admin
                 </div>
                 <div className="text-[12px] text-slate-400 font-medium">
                   Live analytics · auto-refreshes every 30 s · last updated{' '}

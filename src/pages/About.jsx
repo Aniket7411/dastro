@@ -37,7 +37,7 @@ function About() {
     <div className="min-h-screen w-full bg-site-bg font-body text-site-text">
       <SEO
         title="About Us"
-        description="Learn about DS Astro Institute — our mission, mentors, and approach to Vedic astrology education and consultations."
+        description="Learn about DS Astrology — our mission, mentors, and approach to Vedic astrology education and consultations."
         url="/about"
       />
 
@@ -55,7 +55,7 @@ function About() {
                   About Us
                 </span>
                 <h1 className="font-heading text-4xl font-extrabold leading-tight text-site-primary sm:text-5xl">
-                  DS Astro Institute
+                  DS Astrology
                 </h1>
               </div>
 
@@ -69,7 +69,7 @@ function About() {
                   <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-site-accent/20 blur-3xl" aria-hidden="true" />
                   <img
                     src="/aboutus.webp"
-                    alt="DS Astro Institute — learn, consult, and grow"
+                    alt="DS Astrology — learn, consult, and grow"
                     className="relative z-10 aspect-[16/10] w-full rounded-2xl border-4 border-white object-cover shadow-lg"
                   />
                   <p className="relative z-10 mt-3 text-center text-xs text-site-soft">
@@ -145,7 +145,7 @@ function About() {
                 A trusted home for <span className="text-site-accent">astrology education</span>
               </h2>
               <p className="mt-4 text-base leading-relaxed text-site-muted">
-                DS Astro Institute was built to make serious astrology training approachable — whether you want to
+                DS Astrology was built to make serious astrology training approachable — whether you want to
                 start a professional practice, deepen your spiritual understanding, or seek clarity through
                 personalised consultations.
               </p>
@@ -175,7 +175,7 @@ function About() {
                     playsInline
                     preload="metadata"
                     className="absolute inset-0 h-full w-full rounded-xl object-contain"
-                    title="About DS Astro Institute"
+                    title="About DS Astrology"
                   />
                 </div>
                 <p className="mt-3 text-center text-sm text-site-soft">

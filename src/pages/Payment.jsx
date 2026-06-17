@@ -91,7 +91,7 @@ function Payment() {
       key: keyId,
       amount: rawAmount,
       currency: 'INR',
-      name: 'DS Institute',
+      name: 'DS Astrology',
       description: 'Webinar Registration',
       image: SITE_LOGO,
       order_id: orderId,

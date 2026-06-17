@@ -402,7 +402,7 @@ function CourseDetail() {
         key: orderData.keyId,
         amount: Number(orderData.amount),
         currency: orderData.currency || 'INR',
-        name: 'DS Institute',
+        name: 'DS Astrology',
         description: `Course: ${course.title}`,
         image: SITE_LOGO,
         order_id: orderData.orderId,
