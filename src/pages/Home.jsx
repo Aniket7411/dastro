@@ -1828,6 +1828,8 @@ function Home() {
         .banner-section .container {
           position: relative;
           z-index: 2;
+          padding-left: clamp(3.25rem, 5vw, 5rem);
+          padding-right: clamp(3.25rem, 5vw, 5rem);
         }
 
         .banner-text-home {
@@ -2038,6 +2040,10 @@ function Home() {
           .banner-section {
             padding-top: clamp(1rem, 3vw, 1.5rem);
             min-height: clamp(480px, calc(100svh - var(--spacing-site-header)), 820px);
+          }
+          .banner-section .container {
+            padding-left: clamp(2.85rem, 9vw, 3.75rem);
+            padding-right: clamp(2.85rem, 9vw, 3.75rem);
           }
           .banner-section .row.align-items-center {
             margin-top: 0 !important;
