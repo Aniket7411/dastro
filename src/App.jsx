@@ -75,6 +75,7 @@ function App() {
             draggable
             pauseOnHover
             theme="colored"
+            style={{ zIndex: 20050 }}
           />
           <CookieConsent />
           <FloatingChatAssistant />

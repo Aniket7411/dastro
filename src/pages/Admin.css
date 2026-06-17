@@ -1482,6 +1482,55 @@
   transform: translateY(-1px);
 }
 
+.lms-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+
+.lms-secondary-action:hover {
+  background: var(--bg-subtle, #f8fafc);
+  border-color: #cbd5e1;
+}
+
+.lms-secondary-action:disabled,
+.lms-primary-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lms-secondary-action--sm {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 12px;
+}
+
+.lms-course-modal .form-actions .lms-primary-action,
+.lms-course-modal .form-actions .lms-secondary-action,
+.lms-video-modal .form-actions .lms-primary-action,
+.lms-video-modal .form-actions .lms-secondary-action {
+  flex: 1;
+}
+
+/* Toasts must sit above admin modals (z-index up to 10050) */
+.Toastify__toast-container {
+  z-index: 20050 !important;
+}
+
 .lms-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

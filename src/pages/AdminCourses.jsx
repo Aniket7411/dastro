@@ -3,6 +3,8 @@ import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
 import { invalidateCoursesCache } from '../hooks/useCourses';
 import AdminCourseCategories from './AdminCourseCategories';
+import CourseInitialVideosPanel from '../components/admin/CourseInitialVideosPanel';
+import { btnPrimary, btnSecondary, fieldInput, fieldLabel, fieldHint } from '../components/admin/courseFormUi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
 import {
@@ -71,11 +73,6 @@ const DEFAULT_VIDEO_FORM = {
   storageBucket: '',
 };
 
-const makeInitialVideoForm = (visibility) => ({
-  ...DEFAULT_VIDEO_FORM,
-  visibility,
-});
-
 const VISIBILITY_LABELS = {
   public: 'Intro / Preview',
   enrolled: 'Lesson (after purchase)',
@@ -92,13 +89,6 @@ function AdminCourses() {
   const [videoForm, setVideoForm] = useState({ ...DEFAULT_VIDEO_FORM });
   const [videoFile, setVideoFile] = useState(null);
   const [videoUploading, setVideoUploading] = useState(false);
-  const [initialIntroForm, setInitialIntroForm] = useState(() => makeInitialVideoForm('public'));
-  const [initialLessonForm, setInitialLessonForm] = useState(() => makeInitialVideoForm('enrolled'));
-  const [initialIntroFile, setInitialIntroFile] = useState(null);
-  const [initialLessonFile, setInitialLessonFile] = useState(null);
-  const [initialIntroUploading, setInitialIntroUploading] = useState(false);
-  const [initialLessonUploading, setInitialLessonUploading] = useState(false);
-  const [initialVideos, setInitialVideos] = useState([]);
   const [videoModalLoading, setVideoModalLoading] = useState(false);
   const [editingCourseVideos, setEditingCourseVideos] = useState([]);
   const [editingCourseVideosLoading, setEditingCourseVideosLoading] = useState(false);
@@ -110,6 +100,7 @@ function AdminCourses() {
   const [courseSubmitMessage, setCourseSubmitMessage] = useState('');
   const [thumbUploading, setThumbUploading] = useState(false);
   const thumbInputRef = useRef(null);
+  const initialVideosRef = useRef(null);
 
   const [formData, setFormData] = useState(EMPTY_COURSE_FORM);
   const [topicInput, setTopicInput] = useState('');
@@ -292,22 +283,23 @@ function AdminCourses() {
   }, []);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleVideoInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'bunnyVideoId' && videoForm.videoProvider === 'supabase') {
-      setVideoForm({
-        ...videoForm,
+      setVideoForm((prev) => ({
+        ...prev,
         bunnyVideoId: value,
         storagePath: '',
         storageBucket: '',
-      });
+      }));
       setVideoFile(null);
       return;
     }
-    setVideoForm({ ...videoForm, [name]: value });
+    setVideoForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const uploadSupabaseSelection = async (file) => {
@@ -340,108 +332,13 @@ function AdminCourses() {
         storageBucket: uploaded.bucket,
       }));
       setVideoFile(null);
-      toast.success('Video uploaded to Supabase');
+      toast.success('Video uploaded');
     } catch (err) {
       toast.error(err.message || 'Video upload failed');
       e.target.value = '';
       setVideoFile(null);
     } finally {
       setVideoUploading(false);
-    }
-  };
-
-  const handleInitialDraftFileChange = async (e, kind) => {
-    const file = e.target.files?.[0];
-    const isIntro = kind === 'intro';
-    const form = isIntro ? initialIntroForm : initialLessonForm;
-    const setForm = isIntro ? setInitialIntroForm : setInitialLessonForm;
-    const setFile = isIntro ? setInitialIntroFile : setInitialLessonFile;
-    const setUploading = isIntro ? setInitialIntroUploading : setInitialLessonUploading;
-
-    if (!file) {
-      setFile(null);
-      return;
-    }
-
-    if (form.videoProvider !== 'supabase') {
-      setFile(file);
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const uploaded = await uploadSupabaseSelection(file);
-      setForm((prev) => ({
-        ...prev,
-        bunnyVideoId: uploaded.publicUrl,
-        storagePath: uploaded.path,
-        storageBucket: uploaded.bucket,
-      }));
-      setFile(null);
-      toast.success('Video uploaded to Supabase');
-    } catch (err) {
-      toast.error(err.message || 'Video upload failed');
-      e.target.value = '';
-      setFile(null);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const resetInitialVideoForms = () => {
-    setInitialIntroForm(makeInitialVideoForm('public'));
-    setInitialLessonForm(makeInitialVideoForm('enrolled'));
-    setInitialIntroFile(null);
-    setInitialLessonFile(null);
-  };
-
-  const queueInitialDraft = (visibility) => {
-    const isIntro = visibility === 'public';
-    const form = isIntro ? initialIntroForm : initialLessonForm;
-    const file = isIntro ? initialIntroFile : initialLessonFile;
-    const uploading = isIntro ? initialIntroUploading : initialLessonUploading;
-
-    if (!form.title) {
-      toast.error('Video title is required');
-      return;
-    }
-    if (uploading) {
-      toast.error('Please wait for the upload to finish.');
-      return;
-    }
-    if (isIntro && initialVideos.some((v) => v.visibility === 'public')) {
-      toast.error('Only one introductory video is allowed.');
-      return;
-    }
-    if (!form.bunnyVideoId && !file) {
-      toast.error('Upload a video file or paste a URL first.');
-      return;
-    }
-
-    const lessonCount = initialVideos.filter((v) => v.visibility !== 'public').length;
-    setInitialVideos((current) => [
-      ...current,
-      buildVideoDraft({
-        localId: `${Date.now()}-${current.length}`,
-        title: form.title,
-        bunnyVideoId: form.bunnyVideoId,
-        videoUrl: form.bunnyVideoId,
-        storagePath: form.storagePath,
-        storageBucket: form.storageBucket,
-        videoProvider: form.videoProvider,
-        visibility,
-        sortOrder: isIntro ? 0 : lessonCount,
-        file,
-        fallbackOrder: current.length,
-      }),
-    ]);
-
-    if (isIntro) {
-      setInitialIntroForm(makeInitialVideoForm('public'));
-      setInitialIntroFile(null);
-    } else {
-      setInitialLessonForm(makeInitialVideoForm('enrolled'));
-      setInitialLessonFile(null);
     }
   };
 
@@ -504,12 +401,6 @@ function AdminCourses() {
       ? `${file.name} (${getProviderLabel(videoProvider)})`
       : (videoUrl || bunnyVideoId || `${getProviderLabel(videoProvider)} pending upload`)
   });
-
-  const resetInitialVideoForm = resetInitialVideoForms;
-
-  const removeInitialVideoDraft = (localId) => {
-    setInitialVideos((current) => current.filter((video) => video.localId !== localId));
-  };
 
   const addEditVideoDraft = () => {
     if (!videoForm.title) {
@@ -836,6 +727,51 @@ function AdminCourses() {
     }
   };
 
+  const reorderLessonVideo = async (videoId, direction) => {
+    if (!editingCourse?._id) return;
+    const lessons = editingCourseVideos
+      .filter((v) => v.visibility !== 'public')
+      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    const index = lessons.findIndex((v) => v._id === videoId);
+    if (index < 0) return;
+
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= lessons.length) return;
+
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      toast.error('Admin login required');
+      return;
+    }
+
+    const reordered = [...lessons];
+    [reordered[index], reordered[swapIndex]] = [reordered[swapIndex], reordered[index]];
+    const videoOrders = reordered.map((video, order) => ({
+      videoId: video._id,
+      sortOrder: order,
+    }));
+
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/courses/${editingCourse._id}/videos/reorder`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ videoOrders }),
+      });
+      const data = await parseApiResponse(res);
+      if (data.success) {
+        await refreshEditingCourseVideos();
+        toast.success('Lesson order updated');
+      } else {
+        toast.error(data.message || 'Failed to reorder lessons');
+      }
+    } catch (err) {
+      toast.error(err.message || 'Failed to reorder lessons');
+    }
+  };
+
   const handleAddVideo = async (e) => {
     e.preventDefault();
     if (!videoCourse) return;
@@ -927,6 +863,14 @@ function AdminCourses() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!editingCourse && initialVideosRef.current?.isUploading()) {
+      toast.error('Please wait for video uploads to finish before creating the course.');
+      return;
+    }
+
+    const videosToAttach = !editingCourse ? (initialVideosRef.current?.getVideos() || []) : [];
+
     setCourseSubmitting(true);
     setCourseSubmitMessage(editingCourse ? 'Saving course...' : 'Creating course...');
     const token = localStorage.getItem('adminToken');
@@ -957,14 +901,14 @@ function AdminCourses() {
       if (data.success) {
         let initialVideoFailed = false;
         // If creating a new course and videos were queued, attach each one after the course exists.
-        if (!editingCourse && initialVideos.length > 0) {
+        if (!editingCourse && videosToAttach.length > 0) {
           const courseId = data.course._id;
           const token = localStorage.getItem('adminToken');
-          setCourseSubmitMessage(`Attaching ${initialVideos.length} video${initialVideos.length === 1 ? '' : 's'}...`);
+          setCourseSubmitMessage(`Attaching ${videosToAttach.length} video${videosToAttach.length === 1 ? '' : 's'}...`);
           
-          for (let index = 0; index < initialVideos.length; index += 1) {
-            const draftVideo = initialVideos[index];
-            setCourseSubmitMessage(`${draftVideo.file ? 'Uploading' : 'Attaching'} video ${index + 1} of ${initialVideos.length}...`);
+          for (let index = 0; index < videosToAttach.length; index += 1) {
+            const draftVideo = videosToAttach[index];
+            setCourseSubmitMessage(`${draftVideo.file ? 'Uploading' : 'Attaching'} video ${index + 1} of ${videosToAttach.length}...`);
 
             try {
               await submitVideoDraft(courseId, { ...draftVideo, sortOrder: Number(draftVideo.sortOrder) || index }, token);
@@ -988,10 +932,10 @@ function AdminCourses() {
           return;
         }
         
-        if (editingCourse || initialVideos.length === 0) {
+        if (editingCourse || videosToAttach.length === 0) {
           toast.success(editingCourse ? 'Course updated!' : 'Course created!');
         }
-        setInitialVideos([]);
+        initialVideosRef.current?.reset();
         setShowModal(false);
         invalidateCoursesCache();
         fetchCourses();
@@ -1082,8 +1026,7 @@ function AdminCourses() {
       setFormData(EMPTY_COURSE_FORM);
       setDurationLegacy('');
       setTopicInput('');
-      resetInitialVideoForm();
-      setInitialVideos([]);
+      initialVideosRef.current?.reset();
       setEditVideoDrafts([]);
       setEditingCourseVideos([]);
     }
@@ -1122,11 +1065,8 @@ function AdminCourses() {
       >
         <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
           <i className={`fas ${supabaseStatus.ready ? 'fa-check-circle' : 'fa-exclamation-triangle'}`} style={{ marginRight: '0.45rem' }} />
-          Server upload (Supabase) {supabaseStatus.ready ? 'configured' : 'not ready'}
+          Video uploads {supabaseStatus.ready ? 'ready' : 'not configured'}
         </strong>
-        <span>Bucket: <code>{supabaseStatus.bucket}</code></span>
-        {' · '}
-        <span>Backend keys: {supabaseStatus.ready ? 'set' : 'missing in backend .env'}</span>
         {!supabaseStatus.ready && supabaseStatus.issues.length > 0 && (
           <ul style={{ margin: '0.5rem 0 0 1.1rem', padding: 0 }}>
             {supabaseStatus.issues.map((issue) => (
@@ -1247,37 +1187,59 @@ function AdminCourses() {
 
       <AnimatePresence>
         {showModal && (
-          <div className="modal-overlay lms-modal-overlay">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+          <div
+            className="fixed inset-0 z-[10050] flex items-end justify-center bg-slate-900/70 p-0 sm:items-center sm:p-4"
+            onClick={() => !courseSubmitting && setShowModal(false)}
+          >
+            <motion.div
+              key="course-form-modal"
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="course-modal lms-course-modal"
+              exit={{ opacity: 0, y: 24 }}
+              className="relative flex w-full max-h-[96dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90vh] sm:max-w-3xl sm:rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
             >
               {courseSubmitting && (
-                <div className="lms-operation-overlay">
-                  <div className="lf-spinner"></div>
-                  <p>{courseSubmitMessage || 'Saving...'}</p>
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/90 backdrop-blur-sm">
+                  <div className="lf-spinner" />
+                  <p className="text-sm font-medium text-slate-700">{courseSubmitMessage || 'Saving...'}</p>
                 </div>
               )}
-              <div className="course-modal-header">
-                <div>
-                  <h3 className="course-modal-title">{editingCourse ? 'Edit Course & Videos' : 'Create New Course'}</h3>
-                  <p className="course-modal-subtitle">{editingCourse ? 'Update course details, video list, previews, replacements, and deletes from one place.' : 'Add course details and queue one or more videos before saving.'}</p>
+              <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-6">
+                <div className="min-w-0 pr-2">
+                  <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
+                    {editingCourse ? 'Edit Course & Videos' : 'Create New Course'}
+                  </h3>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500 sm:text-sm">
+                    {editingCourse
+                      ? 'Update details and manage intro / lesson videos.'
+                      : 'Add course details and upload videos — they attach when you save.'}
+                  </p>
                 </div>
-                <button type="button" className="modal-close-btn" disabled={courseSubmitting} onClick={() => setShowModal(false)}>
+                <button
+                  type="button"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
+                  disabled={courseSubmitting}
+                  onClick={() => setShowModal(false)}
+                  aria-label="Close"
+                >
                   <i className="fas fa-times" />
                 </button>
               </div>
-              
-              <form onSubmit={handleSubmit} className="course-form">
-                <div className="form-section">
+
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="max-h-[calc(96dvh-11rem)] overflow-y-auto px-4 py-4 sm:max-h-[calc(90vh-11rem)] sm:px-6 sm:py-5">
+                <div className="space-y-4">
                   <div className="form-group">
-                    <label className="form-label">Course Title</label>
-                    <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="form-input" required />
+                    <label className={fieldLabel}>Course Title</label>
+                    <input type="text" name="title" value={formData.title} onChange={handleInputChange} className={fieldInput} required />
                   </div>
 
-                  <div className="form-row">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">URL Slug</label>
@@ -1314,19 +1276,19 @@ function AdminCourses() {
                   </div>
                   
                   <div className="form-group">
-                    <label className="form-label">Short Description</label>
+                    <label className={fieldLabel}>Short Description</label>
                     <textarea
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      className="form-textarea"
+                      className={`${fieldInput} min-h-[72px] resize-y`}
                       rows={2}
                       placeholder="Brief summary shown on listing cards and below the course title"
                       required
                     />
                   </div>
 
-                  <div className="form-row">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">Duration</label>
@@ -1404,7 +1366,7 @@ function AdminCourses() {
                       />
                       <button
                         type="button"
-                        className="btn btn-secondary"
+                        className="lms-secondary-action lms-secondary-action--sm"
                         style={{ whiteSpace: 'nowrap', padding: '0 14px', fontSize: '0.85rem' }}
                         onClick={() => {
                           const t = topicInput.trim();
@@ -1442,7 +1404,7 @@ function AdminCourses() {
                       name="longDesc"
                       value={formData.longDesc}
                       onChange={handleInputChange}
-                      className="form-textarea"
+                      className={`${fieldInput} min-h-[72px] resize-y`}
                       rows={4}
                       placeholder="Longer description for the Overview section on the course detail page"
                     />
@@ -1466,7 +1428,7 @@ function AdminCourses() {
                     </p>
                   </div>
 
-                  <div className="form-row">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">{getCourseTypeConfig(formData.courseType).priceLabel}</label>
@@ -1508,7 +1470,7 @@ function AdminCourses() {
                   <div className="form-group">
                     <label className="form-label">
                       1. Thumbnail Image
-                      <span className="optional"> (uploads to Supabase — URL saved in MongoDB)</span>
+                      <span className="font-normal normal-case text-slate-400"> (optional)</span>
                     </label>
 
                     {/* File upload row */}
@@ -1540,7 +1502,7 @@ function AdminCourses() {
                       />
                       <button
                         type="button"
-                        className="btn btn-secondary"
+                        className="lms-secondary-action lms-secondary-action--sm"
                         style={{ fontSize: '12px', height: '36px', padding: '0 14px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}
                         onClick={() => thumbInputRef.current?.click()}
                         disabled={thumbUploading}
@@ -1627,7 +1589,7 @@ function AdminCourses() {
                           {videoUploading ? (
                             <p className="form-hint" style={{ color: 'var(--primary)' }}>
                               <span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />
-                              Uploading to Supabase…
+                              Uploading video…
                             </p>
                           ) : videoForm.videoProvider === 'supabase' && videoForm.bunnyVideoId ? (
                             <p className="form-hint" style={{ color: '#16a34a' }}>
@@ -1645,14 +1607,14 @@ function AdminCourses() {
                           </div>
                         )}
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                          <button type="button" className="btn btn-primary add-video-inline-btn" disabled={videoLoading || videoUploading} onClick={handleAddVideoFromEditModal}>
+                          <button type="button" className="lms-primary-action add-video-inline-btn" disabled={videoLoading || videoUploading} onClick={handleAddVideoFromEditModal}>
                             {videoLoading ? (editingVideoId ? 'Updating…' : 'Saving…') : (
                               editingVideoId
                                 ? (videoForm.visibility === 'public' ? 'Update Intro Video' : 'Update Lesson')
                                 : (videoForm.visibility === 'public' ? 'Save Intro Video' : 'Add Lesson')
                             )}
                           </button>
-                          <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={resetVideoForm}>
+                          <button type="button" className="lms-secondary-action lms-secondary-action--sm add-video-inline-btn" onClick={resetVideoForm}>
                             Cancel
                           </button>
                         </div>
@@ -1698,7 +1660,7 @@ function AdminCourses() {
                             <div className="lms-video-empty">
                               <i className="fas fa-video-slash" style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '6px' }} />
                               <p style={{ margin: '0 0 10px' }}>No intro video — visitors see only the thumbnail.</p>
-                              <button type="button" className="btn btn-secondary" style={{ fontSize: '12px' }} onClick={startAddingIntroVideo}>
+                              <button type="button" className="lms-secondary-action lms-secondary-action--sm" style={{ fontSize: '12px' }} onClick={startAddingIntroVideo}>
                                 <i className="fas fa-plus" style={{ marginRight: '6px' }} />Set Intro Video
                               </button>
                             </div>
@@ -1725,7 +1687,9 @@ function AdminCourses() {
                             <>
                               {lessonVideos.length > 0 && (
                                 <div className="videos-preview">
-                                  {lessonVideos.map((video) => (
+                                  {lessonVideos
+                                    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+                                    .map((video, lessonIndex) => (
                                     <div key={video._id} className="video-preview-item">
                                       <div className="video-preview-info">
                                         <div className="video-preview-title">{video.title}</div>
@@ -1739,6 +1703,12 @@ function AdminCourses() {
                                         </div>
                                       </div>
                                       <div className="video-preview-actions">
+                                        <button type="button" className="lms-mini-btn" onClick={() => reorderLessonVideo(video._id, 'up')} disabled={lessonIndex === 0} title="Move up">
+                                          <i className="fas fa-arrow-up" />
+                                        </button>
+                                        <button type="button" className="lms-mini-btn" onClick={() => reorderLessonVideo(video._id, 'down')} disabled={lessonIndex === lessonVideos.length - 1} title="Move down">
+                                          <i className="fas fa-arrow-down" />
+                                        </button>
                                         <button type="button" className="lms-mini-btn" onClick={() => openVideoPreview(video, editingCourse._id)} disabled={previewLoadingId === video._id}>
                                           {previewLoadingId === video._id ? 'Loading...' : 'Preview'}
                                         </button>
@@ -1753,7 +1723,7 @@ function AdminCourses() {
                               {showVideoForm && videoForm.visibility === 'enrolled' ? (
                                 <VideoForm label={editingVideoId ? 'Editing lesson' : 'Adding new lesson'} />
                               ) : (
-                                <button type="button" className="btn btn-secondary" style={{ fontSize: '12px', marginTop: lessonVideos.length > 0 ? '10px' : 0 }} onClick={startAddingLesson}>
+                                <button type="button" className="lms-secondary-action lms-secondary-action--sm" style={{ fontSize: '12px', marginTop: lessonVideos.length > 0 ? '10px' : 0 }} onClick={startAddingLesson}>
                                   <i className="fas fa-plus" style={{ marginRight: '6px' }} />Add Lesson
                                 </button>
                               )}
@@ -1763,126 +1733,16 @@ function AdminCourses() {
                       </>
                     );
                   })() : (
-                    <div className="initial-video-grid">
-                      <p className="section-hint">After creating the course, intro and lesson videos attach automatically. Upload each file to Supabase first — the URL field fills in when ready.</p>
-
-                      {(() => {
-                        const queuedIntro = initialVideos.filter((v) => v.visibility === 'public');
-                        const queuedLessons = initialVideos.filter((v) => v.visibility !== 'public');
-
-                        return (
-                          <>
-                            <div className="lms-video-group">
-                              <div className="lms-video-group-header">
-                                <span className="lms-video-group-badge lms-video-group-badge--intro"><i className="fas fa-play-circle" /></span>
-                                <div>
-                                  <strong>2. Introductory Video <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>(optional, 1 max)</span></strong>
-                                  <p className="section-hint" style={{ margin: 0 }}>Shown to all visitors on the course page.</p>
-                                </div>
-                              </div>
-                              {queuedIntro.length > 0 ? (
-                                <div className="queued-video-item">
-                                  <div className="queued-video-info">
-                                    <strong>{queuedIntro[0].title}</strong>
-                                    <span>{queuedIntro[0].sourceLabel}</span>
-                                  </div>
-                                  <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(queuedIntro[0].localId)}>Remove</button>
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="form-group">
-                                    <label className="form-label">Intro title</label>
-                                    <input
-                                      type="text"
-                                      value={initialIntroForm.title}
-                                      onChange={(e) => setInitialIntroForm({ ...initialIntroForm, title: e.target.value })}
-                                      className="form-input"
-                                      placeholder="e.g., Course Introduction"
-                                    />
-                                  </div>
-                                  <div className="form-group">
-                                    <label className="form-label">Upload intro video</label>
-                                    <div className="file-input-wrap">
-                                      <input
-                                        type="file"
-                                        accept="video/*"
-                                        onChange={(e) => handleInitialDraftFileChange(e, 'intro')}
-                                        disabled={initialIntroUploading}
-                                      />
-                                    </div>
-                                    {initialIntroUploading ? (
-                                      <p className="form-hint" style={{ color: 'var(--primary)' }}><span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />Uploading…</p>
-                                    ) : initialIntroForm.bunnyVideoId ? (
-                                      <p className="form-hint" style={{ color: '#16a34a' }}><i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />Ready — click Add Intro below.</p>
-                                    ) : null}
-                                  </div>
-                                  <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={() => queueInitialDraft('public')}>Add Intro Video</button>
-                                </>
-                              )}
-                            </div>
-
-                            <div className="lms-video-group" style={{ marginTop: '1rem' }}>
-                              <div className="lms-video-group-header">
-                                <span className="lms-video-group-badge lms-video-group-badge--lesson"><i className="fas fa-lock" /></span>
-                                <div>
-                                  <strong>3. Main Course Videos <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>(multiple)</span></strong>
-                                  <p className="section-hint" style={{ margin: 0 }}>Unlocked after admin approves student enrolment.</p>
-                                </div>
-                              </div>
-                              {queuedLessons.length > 0 && (
-                                <div className="queued-video-list">
-                                  {queuedLessons.map((video, index) => (
-                                    <div className="queued-video-item" key={video.localId}>
-                                      <div className="video-item-index">{index + 1}</div>
-                                      <div className="queued-video-info">
-                                        <strong>{video.title}</strong>
-                                        <span>{video.sourceLabel}</span>
-                                      </div>
-                                      <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(video.localId)}>Remove</button>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                              <div className="form-group">
-                                <label className="form-label">Lesson title</label>
-                                <input
-                                  type="text"
-                                  value={initialLessonForm.title}
-                                  onChange={(e) => setInitialLessonForm({ ...initialLessonForm, title: e.target.value })}
-                                  className="form-input"
-                                  placeholder="e.g., Lesson 1 — Planets"
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label className="form-label">Upload lesson video</label>
-                                <div className="file-input-wrap">
-                                  <input
-                                    type="file"
-                                    accept="video/*"
-                                    onChange={(e) => handleInitialDraftFileChange(e, 'lesson')}
-                                    disabled={initialLessonUploading}
-                                  />
-                                </div>
-                                {initialLessonUploading ? (
-                                  <p className="form-hint" style={{ color: 'var(--primary)' }}><span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />Uploading…</p>
-                                ) : initialLessonForm.bunnyVideoId ? (
-                                  <p className="form-hint" style={{ color: '#16a34a' }}><i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />Ready — click Add Lesson below.</p>
-                                ) : null}
-                              </div>
-                              <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={() => queueInitialDraft('enrolled')}>Add Lesson Video</button>
-                            </div>
-                          </>
-                        );
-                      })()}
-                    </div>
+                    <CourseInitialVideosPanel ref={initialVideosRef} key={editingCourse?._id || 'new-course'} />
                   )}
                 </div>
+                </div>
 
-                <div className="form-actions">
-                  <button type="button" className="btn btn-secondary" disabled={courseSubmitting} onClick={() => setShowModal(false)}>
+                <div className="flex shrink-0 flex-col-reverse gap-3 border-t border-slate-100 bg-white p-4 sm:flex-row sm:px-6">
+                  <button type="button" className={btnSecondary} disabled={courseSubmitting} onClick={() => setShowModal(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary" disabled={courseSubmitting}>
+                  <button type="submit" className={btnPrimary} disabled={courseSubmitting}>
                     {courseSubmitting ? 'Please wait...' : (editingCourse ? 'Save Changes' : 'Create Course')}
                   </button>
                 </div>
@@ -1957,10 +1817,10 @@ function AdminCourses() {
                   </div>
                   {courseVideos.length > 0 && (
                     <div className="video-preview-modal-actions">
-                      <button type="button" className="btn btn-secondary" onClick={closeVideoModal}>
+                      <button type="button" className="lms-secondary-action lms-secondary-action--sm" onClick={closeVideoModal}>
                         Close
                       </button>
-                      <button type="button" className="btn btn-primary" onClick={() => { closeVideoModal(); openModal(videoCourse); }}>
+                      <button type="button" className="lms-primary-action" onClick={() => { closeVideoModal(); openModal(videoCourse); }}>
                         Edit Course Videos
                       </button>
                     </div>
@@ -1989,7 +1849,7 @@ function AdminCourses() {
                 <p>{confirmDialog.message}</p>
               </div>
               <div className="lms-confirm-actions">
-                <button type="button" className="btn btn-secondary" onClick={closeConfirm}>
+                <button type="button" className="lms-secondary-action lms-secondary-action--sm" onClick={closeConfirm}>
                   Cancel
                 </button>
                 <button

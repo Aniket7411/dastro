@@ -246,7 +246,7 @@ a:visited     { color: var(--primary-color); }
   box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15);
 }
 
-/* Toast notifications above modals */
+/* Toast notifications above modals (admin modals use z-index ~10050) */
 .Toastify__toast-container {
-  z-index: 1400 !important;
+  z-index: 20050 !important;
 }

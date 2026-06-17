@@ -150,10 +150,16 @@ function CourseDetail() {
       setLoading(true);
       setPreviewLoading(true);
       try {
-        const [detail, previews] = await Promise.all([
-          fetchCourseBySlugOrId(courseId),
-          fetchCoursePreviewVideos(courseId).catch(() => []),
-        ]);
+        const detail = await fetchCourseBySlugOrId(courseId);
+        let previews = [];
+        try {
+          previews = await fetchCoursePreviewVideos(courseId);
+        } catch {
+          previews = detail.previewVideos || [];
+        }
+        if (!previews.length && detail.previewVideos?.length) {
+          previews = detail.previewVideos;
+        }
         setCourse(mapDetailCourse(detail.course));
         setLessonCount(detail.lessonCount || detail.course?.modulesCount || 0);
         setPreviewVideos(previews);
@@ -580,13 +586,17 @@ function CourseDetail() {
               <CourseFacts course={course} />
 
               {(previewLoading || previewVideos.length > 0) && (
-                <div className="mt-4 lg:hidden">
+                <div className="mt-4">
                   <p className="!mb-2 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
-                    Watch before you enrol
+                    Introductory video
                   </p>
-                  <CoursePreviewPlayer videos={previewVideos} loading={previewLoading} />
+                  <CoursePreviewPlayer videos={previewVideos} loading={previewLoading} inline />
                 </div>
               )}
+
+              <div className="mt-4 overflow-hidden rounded-xl border border-site-accent-dark/10 lg:hidden">
+                <img src={course.image} alt={course.title} className="block aspect-[16/10] w-full object-cover" />
+              </div>
 
               <div className="mt-4 lg:hidden">
                 <EnrollPanel
@@ -624,7 +634,7 @@ function CourseDetail() {
                   </Section>
                 ) : null}
 
-                {isRecordedCourse && lessonCount > 0 ? (
+                {lessonCount > 0 ? (
                   <CourseLockedLessons
                     lessonCount={lessonCount}
                     onEnroll={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
@@ -747,18 +757,9 @@ function CourseDetail() {
 
             <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
-                {(previewLoading || previewVideos.length > 0) ? (
-                  <div className="p-3 pb-0">
-                    <p className="!mb-2 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
-                      Free preview
-                    </p>
-                    <CoursePreviewPlayer videos={previewVideos} loading={previewLoading} compact />
-                  </div>
-                ) : (
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
-                  </div>
-                )}
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                </div>
                 <div className="p-4">
                   <EnrollPanel
                     course={course}
