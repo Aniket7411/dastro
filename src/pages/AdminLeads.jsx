@@ -271,79 +271,65 @@ function AdminLeads({ activeFilter }) {
 
   return (
     <div className="admin-leads-content">
-      {/* Search & Filters Row */}
-      <div className="d-flex flex-column gap-3 mb-4">
-        <div className="d-flex flex-column flex-xl-row justify-content-between gap-3">
-          {/* Search Bar */}
-          <div className="search-bar flex-grow-1" style={{ maxWidth: '400px', background: 'var(--surface)' }}>
-            <i className="fas fa-search"></i>
-            <input 
-              type="text" 
-              placeholder="Search by name, email, or phone..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '100%' }}
-            />
-          </div>
+      {/* Search & filters */}
+      <div className="mb-4 space-y-3">
+        <div className="search-bar w-full max-w-full bg-[var(--surface)] sm:max-w-md">
+          <i className="fas fa-search" />
+          <input
+            type="text"
+            placeholder="Search by name, email, or phone..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full min-w-0"
+          />
+        </div>
 
-          <div className="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
-            <select
-              name="sort"
-              value={filters.sort}
-              onChange={handleFilterChange}
-              className="bg-white border text-dark rounded"
-              style={{ height: '42px', fontSize: '12px', padding: '0 10px', minWidth: '140px', flex: 1 }}
-              title="Sort leads"
-            >
-              <option value="newest">Newest → Oldest</option>
-              <option value="oldest">Oldest → Newest</option>
-              <option value="name_asc">Name A → Z</option>
-              <option value="name_desc">Name Z → A</option>
-            </select>
-            <select
-              name="paymentStatus"
-              value={filters.paymentStatus}
-              onChange={handleFilterChange}
-              className="bg-white border text-dark rounded"
-              style={{ height: '42px', fontSize: '12px', padding: '0 10px', minWidth: '130px', flex: 1 }}
-            >
-              <option value="">All Payments</option>
-              <option value="PAID">Paid</option>
-              <option value="PENDING">Pending</option>
-              <option value="FAILED">Failed</option>
-              <option value="NOT REQUIRED">Not Required</option>
-            </select>
-            <div className="lf-group mb-0" style={{ minWidth: '120px', flex: 1 }}>
-              <div className="lf-input-wrap">
-                <i className="fas fa-calendar-alt"></i>
-                <input
-                  type="date"
-                  name="startDate"
-                  value={filters.startDate}
-                  onChange={handleFilterChange}
-                  className="bg-white border text-dark"
-                  style={{ paddingLeft: '32px', height: '42px', fontSize: '12px' }}
-                />
-              </div>
-            </div>
-            <span className="text-muted small px-1 d-none d-sm-inline">–</span>
-            <div className="lf-group mb-0" style={{ minWidth: '120px', flex: 1 }}>
-              <div className="lf-input-wrap">
-                <i className="fas fa-calendar-alt"></i>
-                <input
-                  type="date"
-                  name="endDate"
-                  value={filters.endDate}
-                  onChange={handleFilterChange}
-                  className="bg-white border text-dark"
-                  style={{ paddingLeft: '32px', height: '42px', fontSize: '12px' }}
-                />
-              </div>
-            </div>
-            <div className="d-flex gap-2 ms-sm-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:items-center lg:gap-2">
+          <select
+            name="sort"
+            value={filters.sort}
+            onChange={handleFilterChange}
+            className="col-span-2 h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:col-span-1 sm:text-sm"
+            title="Sort leads"
+          >
+            <option value="newest">Newest → Oldest</option>
+            <option value="oldest">Oldest → Newest</option>
+            <option value="name_asc">Name A → Z</option>
+            <option value="name_desc">Name Z → A</option>
+          </select>
+          <select
+            name="paymentStatus"
+            value={filters.paymentStatus}
+            onChange={handleFilterChange}
+            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
+          >
+            <option value="">All Payments</option>
+            <option value="PAID">Paid</option>
+            <option value="PENDING">Pending</option>
+            <option value="FAILED">Failed</option>
+            <option value="NOT REQUIRED">Not Required</option>
+          </select>
+          <input
+            type="date"
+            name="startDate"
+            value={filters.startDate}
+            onChange={handleFilterChange}
+            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
+            title="Start date"
+          />
+          <input
+            type="date"
+            name="endDate"
+            value={filters.endDate}
+            onChange={handleFilterChange}
+            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
+            title="End date"
+          />
+          <div className="col-span-2 flex gap-2 sm:col-span-1 lg:col-span-1 lg:ml-auto">
               {/* Excel export dropdown */}
               <div className="position-relative" ref={exportBtnRef}>
                 <button
+                  type="button"
                   onClick={() => setExportMenuOpen(v => !v)}
                   disabled={isExporting}
                   title="Download Excel"
@@ -394,7 +380,7 @@ function AdminLeads({ activeFilter }) {
                 )}
               </div>
 
-              <button onClick={handleRefresh} className="topbar-icon-btn" title="Reset Filters" style={{ height: '42px', width: '42px' }}>
+              <button type="button" onClick={handleRefresh} className="topbar-icon-btn shrink-0" title="Reset filters" style={{ height: '42px', width: '42px' }}>
                 <i className="fas fa-sync-alt"></i>
               </button>
             </div>
@@ -652,7 +638,18 @@ function AdminLeads({ activeFilter }) {
                 </div>
                 <div className="min-w-0">
                   <p className="truncate font-semibold text-slate-900">{messageModal.data.name}</p>
-                  <p className="truncate text-sm text-slate-500">{messageModal.data.email}</p>
+                  {messageModal.data.email ? (
+                    <p className="truncate text-sm text-slate-500">{messageModal.data.email}</p>
+                  ) : null}
+                  {messageModal.data.phone ? (
+                    <a
+                      href={`tel:${String(messageModal.data.phone).replace(/\s/g, '')}`}
+                      className="mt-0.5 inline-flex items-center gap-1.5 text-sm font-medium text-violet-600 hover:text-violet-800 no-underline"
+                    >
+                      <i className="fas fa-phone text-xs" aria-hidden />
+                      {messageModal.data.phone}
+                    </a>
+                  ) : null}
                 </div>
               </div>
 

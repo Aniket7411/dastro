@@ -46,7 +46,7 @@ const LEAD_FILTER_LABELS = {
 
 const PAGE_ICONS = {
   dashboard: 'fa-chart-pie',
-  leads: 'fa-filter',
+  leads: 'fa-inbox',
   lms: 'fa-graduation-cap',
   consultations: 'fa-handshake',
   'consultation-catalog': 'fa-th-large',
@@ -295,17 +295,17 @@ function AdminDashboard() {
       <div className="main-area">
 
         {/* Topbar — title + logout only, no dummy search/bell/message */}
-        <header className="topbar">
-          <div className="topbar-left">
-            <button type="button" className="mobile-nav-toggle" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
+        <header className="topbar !flex-row !items-center !flex-nowrap gap-2 px-3 py-2 sm:gap-3 sm:px-4 md:h-[68px] md:px-6 md:py-0">
+          <div className="topbar-left min-w-0 flex-1">
+            <button type="button" className="mobile-nav-toggle !mr-0 shrink-0" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
               <i className="fas fa-bars" />
             </button>
-            <div className="topbar-page-icon">
+            <div className="topbar-page-icon hidden lg:flex">
               <i className={`fas ${pageIcon}`} />
             </div>
-            <div className="min-w-0">
-              <div className="topbar-title truncate">{pageTitle}</div>
-              <div className="topbar-breadcrumb">
+            <div className="min-w-0 flex-1">
+              <div className="topbar-title truncate text-sm sm:text-[17px]">{pageTitle}</div>
+              <div className="topbar-breadcrumb hidden md:flex">
                 <span>Admin Console</span>
                 <i className="fas fa-chevron-right" />
                 <span className="current truncate">{breadcrumbLabel}</span>
@@ -313,7 +313,7 @@ function AdminDashboard() {
             </div>
           </div>
 
-          <div className="topbar-actions">
+          <div className="topbar-actions shrink-0">
             <span className="topbar-sync-pill hidden lg:inline-flex">
               <i className="fas fa-sync-alt" />
               Updated {lastRefreshed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

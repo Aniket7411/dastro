@@ -3576,6 +3576,15 @@
 @media (max-width: 768px) {
   .mobile-nav-toggle {
     display: flex;
+    width: 36px;
+    height: 36px;
+    margin-right: 0;
+  }
+
+  .topbar-logout-btn {
+    padding: 0 10px;
+    min-width: 36px;
+    height: 36px;
   }
 }
 
@@ -5263,14 +5272,34 @@ input:checked + .slider:before { transform: translateX(22px); }
     padding: 18px;
   }
 
+  /* Keep topbar on one row on tablets/phones */
   .topbar {
-    align-items: flex-start;
-    flex-direction: column;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-height: 56px;
+    height: auto;
+  }
+
+  .topbar-left {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .topbar-actions {
+    width: auto;
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  .topbar-page-icon {
+    display: none;
   }
 
   .topbar-right {
-    width: 100%;
-    justify-content: stretch;
+    width: auto;
+    justify-content: flex-end;
   }
 
   .search-bar {
