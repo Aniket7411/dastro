@@ -49,50 +49,80 @@ function About() {
         />
         <div className={`${WRAP} relative z-10`}>
           <div className="grid items-center gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8">
-            <div data-aos="fade-right" data-aos-duration="700">
-              <span className="mb-3 inline-block text-xs font-extrabold uppercase tracking-[0.14em] text-site-accent">
-                About Us
-              </span>
-              <h1 className="font-heading text-4xl font-extrabold leading-tight text-site-primary sm:text-5xl">
-                DS Astro Institute
-              </h1>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-site-muted sm:text-lg">
-                We are an astrology education and consultation platform dedicated to authentic Vedic learning,
-                professional mentorship, and meaningful guidance for students across India and abroad.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {[
-                  { value: '5000+', label: 'Students trained' },
-                  { value: '15+', label: 'Specialised courses' },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-xl border border-site-accent-dark/12 bg-white px-4 py-2.5 shadow-sm"
-                  >
-                    <p className="font-heading text-xl font-bold text-site-primary">{stat.value}</p>
-                    <p className="mt-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-site-soft">{stat.label}</p>
-                  </div>
-                ))}
+            <div className="flex flex-col gap-6">
+              <div data-aos="fade-right" data-aos-duration="700">
+                <span className="mb-3 inline-block text-xs font-extrabold uppercase tracking-[0.14em] text-site-accent">
+                  About Us
+                </span>
+                <h1 className="font-heading text-4xl font-extrabold leading-tight text-site-primary sm:text-5xl">
+                  DS Astro Institute
+                </h1>
               </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="/live-courses" className={btnPrimary}>
-                  <i className="fas fa-chalkboard-teacher" aria-hidden="true" />
-                  Explore our courses
-                </Link>
-                <Link to="/consultations" className={btnOutline}>
-                  <i className="fas fa-comments" aria-hidden="true" />
-                  Book a consultation
-                </Link>
+
+              <div
+                className="lg:hidden"
+                data-aos="fade-left"
+                data-aos-duration="700"
+                data-aos-delay="80"
+              >
+                <div className="relative w-full">
+                  <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-site-accent/20 blur-3xl" aria-hidden="true" />
+                  <img
+                    src="/aboutus.webp"
+                    alt="DS Astro Institute — learn, consult, and grow"
+                    className="relative z-10 aspect-[16/10] w-full rounded-2xl border-4 border-white object-cover shadow-lg"
+                  />
+                  <p className="relative z-10 mt-3 text-center text-xs text-site-soft">
+                    Guided by experienced practitioners and educators
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p className="max-w-xl text-base leading-relaxed text-site-muted sm:text-lg">
+                  We are an astrology education and consultation platform dedicated to authentic Vedic learning,
+                  professional mentorship, and meaningful guidance for students across India and abroad.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {[
+                    { value: '5000+', label: 'Students trained' },
+                    { value: '15+', label: 'Specialised courses' },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="rounded-xl border border-site-accent-dark/12 bg-white px-4 py-2.5 shadow-sm"
+                    >
+                      <p className="font-heading text-xl font-bold text-site-primary">{stat.value}</p>
+                      <p className="mt-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-site-soft">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link to="/live-courses" className={btnPrimary}>
+                    <i className="fas fa-chalkboard-teacher" aria-hidden="true" />
+                    Explore our courses
+                  </Link>
+                  <Link to="/consultations" className={btnOutline}>
+                    <i className="fas fa-comments" aria-hidden="true" />
+                    Book a consultation
+                  </Link>
+                </div>
               </div>
             </div>
 
-            <div className="flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="700" data-aos-delay="80">
-              <div className="relative w-full max-w-[280px]">
+            <div
+              className="hidden justify-end lg:flex"
+              data-aos="fade-left"
+              data-aos-duration="700"
+              data-aos-delay="80"
+            >
+              <div className="relative w-full">
                 <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-site-accent/20 blur-3xl" aria-hidden="true" />
                 <img
-                  src="/manimage.png"
-                  alt="DS Astro mentor"
-                  className="relative z-10 max-h-80 w-full rounded-2xl border-4 border-white object-cover object-top shadow-lg"
+                  src="/aboutus.webp"
+                  alt=""
+                  aria-hidden="true"
+                  className="relative z-10 aspect-[16/10] w-full rounded-2xl border-4 border-white object-cover shadow-lg"
                 />
                 <p className="relative z-10 mt-3 text-center text-xs text-site-soft">
                   Guided by experienced practitioners and educators
