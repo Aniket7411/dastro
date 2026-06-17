@@ -549,6 +549,27 @@ function CourseDetail() {
         ? 'Enquire now'
         : 'Request callback';
 
+  const overviewSection =
+    course.longDesc && course.longDesc !== course.shortDesc ? (
+      <Section title="Overview">
+        <p className={`${TYPE.bodySm} whitespace-pre-line !text-sm leading-relaxed`}>{course.longDesc}</p>
+      </Section>
+    ) : null;
+
+  const enrollPanelProps = {
+    course,
+    canPayOnline,
+    isLiveCourse,
+    getCoursePrice,
+    getDiscountAmount,
+    getPayableAmount,
+    appliedCoupon,
+    isProcessingPayment,
+    ctaLabel,
+    onCta: () => (canPayOnline ? initiateCheckout() : openEnquiryModal()),
+    couponProps: canPayOnline ? { ...couponProps, compact: true } : null,
+  };
+
   return (
     <div className={PAGE}>
       <SEO title={course.title} description={course.shortDesc} url={`/courses/${course.slug || course.id}`} />
@@ -599,32 +620,14 @@ function CourseDetail() {
                 </div>
               )}
 
-              <div className="mt-4 overflow-hidden rounded-xl border border-site-accent-dark/10 lg:hidden">
-                <img src={course.image} alt={course.title} className="block aspect-[16/10] w-full object-cover" />
-              </div>
+              {overviewSection ? <div className="mt-4 lg:hidden">{overviewSection}</div> : null}
 
-              <div className="mt-4 lg:hidden">
-                <EnrollPanel
-                  course={course}
-                  canPayOnline={canPayOnline}
-                  isLiveCourse={isLiveCourse}
-                  getCoursePrice={getCoursePrice}
-                  getDiscountAmount={getDiscountAmount}
-                  getPayableAmount={getPayableAmount}
-                  appliedCoupon={appliedCoupon}
-                  isProcessingPayment={isProcessingPayment}
-                  ctaLabel={ctaLabel}
-                  onCta={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
-                  couponProps={canPayOnline ? { ...couponProps, compact: true } : null}
-                />
+              <div className="mt-4 rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-sm lg:hidden">
+                <EnrollPanel {...enrollPanelProps} />
               </div>
 
               <div className="mt-4 space-y-4 sm:mt-5">
-                {course.longDesc && course.longDesc !== course.shortDesc ? (
-                  <Section title="Overview">
-                    <p className={`${TYPE.bodySm} whitespace-pre-line !text-sm leading-relaxed`}>{course.longDesc}</p>
-                  </Section>
-                ) : null}
+                {overviewSection ? <div className="hidden lg:block">{overviewSection}</div> : null}
 
                 {course.topics?.length > 0 ? (
                   <Section title="What you will learn">
@@ -919,12 +922,6 @@ function EnrollPanel({
 
       {couponProps ? <CouponControls {...couponProps} compact /> : null}
 
-      {!isLiveCourse && getCoursePrice() > 0 && (
-        <div className="rounded-xl bg-gradient-to-br from-site-primary to-[#3a1c0c] px-4 pb-3 pt-2.5">
-          <CourseTimer courseId={course?.id} label="Offer expires in" />
-        </div>
-      )}
-
       <button
         type="button"
         onClick={onCta}
@@ -933,6 +930,12 @@ function EnrollPanel({
       >
         {ctaLabel}
       </button>
+
+      {!isLiveCourse && getCoursePrice() > 0 && (
+        <div className="mt-4 rounded-xl bg-gradient-to-br from-site-primary to-[#3a1c0c] px-4 py-3.5">
+          <CourseTimer courseId={course?.id} label="Offer expires in" />
+        </div>
+      )}
     </div>
   );
 }

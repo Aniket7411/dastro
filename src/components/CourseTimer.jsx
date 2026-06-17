@@ -69,7 +69,7 @@ export default function CourseTimer({ courseId, label = 'Offer closes in' }) {
   }, [courseId]);
 
   return (
-    <div className="mb-4 w-full" role="timer" aria-live="polite">
+    <div className="w-full" role="timer" aria-live="polite">
       <p className="mb-[0.55rem] text-center text-[0.72rem] font-extrabold uppercase tracking-[0.14em] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.35)]">
         {label}
       </p>
