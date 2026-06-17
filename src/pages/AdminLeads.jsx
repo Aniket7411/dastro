@@ -386,7 +386,6 @@ function AdminLeads({ activeFilter }) {
             </div>
           </div>
         </div>
-      </div>
 
       <div className="admin-table-shell" style={{ minHeight: '400px' }}>
         <div className="admin-table-shell__bar">
