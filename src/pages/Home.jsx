@@ -840,9 +840,9 @@ function Home() {
 
                   <div className="trust-indicator mt-3">
                     <div className="trust-avatars">
-                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" decoding="async" />
-                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" decoding="async" />
-                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="" loading="lazy" decoding="async" />
+                      <img src="/images/kavita.png" alt="" loading="lazy" decoding="async" />
+                      <img src="/images/rahul.png" alt="" loading="lazy" decoding="async" />
+                      <img src="/images/sanjay.png" alt="" loading="lazy" decoding="async" />
                       <div className="avatar-plus">+10k</div>
                     </div>
                     <div className="trust-text">
@@ -2074,11 +2074,22 @@ function Home() {
           }
           .trust-indicator {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: center;
             gap: 0.75rem;
+            width: 100%;
+          }
+          .trust-avatars {
+            justify-content: center;
           }
           .trust-text {
-            text-align: left;
+            text-align: center;
+            align-items: center;
+          }
+          .trust-text .stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.15rem;
           }
         }
 
@@ -3040,6 +3051,18 @@ function Home() {
 
           .trust-indicator {
             justify-content: center;
+            align-items: center;
+          }
+
+          .trust-text {
+            text-align: center;
+            align-items: center;
+          }
+
+          .trust-text .stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.15rem;
           }
 
           .banner-graphic-stage {
