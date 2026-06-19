@@ -95,6 +95,7 @@ function App() {
                 <Route path="terms-and-conditions" element={<Terms />} />
                 <Route path="refund-policy" element={<Cancellation />} />
                 <Route path="astrologer" element={<Astrologer />} />
+                <Route path="astro-chat" element={<Navigate to="/astrologer" replace />} />
                 <Route path="vedic-course" element={<Navigate to="/live-courses" replace />} />
                 <Route path="advanced-astrology" element={<Navigate to="/live-courses" replace />} />
                 <Route path="predictive-astrology" element={<Navigate to="/recorded-courses" replace />} />
@@ -115,10 +116,11 @@ function App() {
                 <Route path="admin/login" element={<AdminLogin />} />
                 <Route path="dashboard" element={<StudentDashboard />} />
                 <Route path="student/course/:id" element={<CoursePlayer />} />
+                <Route path="webinar" element={<Webinar />} />
               </Route>
 
               <Route element={<StandaloneLayout />}>
-                <Route path="/webinar" element={<Webinar />} />
+                {/* webinar moved to MainLayout above */}
                 <Route path="/course-inquiry" element={<LandingPage />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/payment-success" element={<PaymentSuccess />} />

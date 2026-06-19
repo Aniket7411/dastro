@@ -64,6 +64,7 @@ function initials(name = '') {
 }
 
 function validityStyle(val) {
+  if (val === 'Lifetime Access') return 'bg-purple-50 text-purple-700 border-purple-200';
   if (val === 'Expired') return 'bg-red-50 text-red-600 border-red-200';
   const n = parseInt(val, 10);
   if (!Number.isNaN(n) && n <= 30) return 'bg-orange-50 text-orange-600 border-orange-200';
@@ -71,6 +72,7 @@ function validityStyle(val) {
 }
 
 function validityBorderCls(val) {
+  if (val === 'Lifetime Access') return 'border-l-purple-300';
   if (val === 'Expired') return 'border-l-red-300';
   const n = parseInt(val, 10);
   if (!Number.isNaN(n) && n <= 30) return 'border-l-orange-300';
@@ -558,9 +560,12 @@ export default function StudentDashboardTailwind() {
                 ) : (
                   <div className="divide-y divide-site-accent-dark/8">
                     {enrolledCourses.map((course) => {
-                      const validity =
-                        courseValidity[course.id]?.daysRemaining ??
-                        computeDaysRemaining(course.validTill);
+                      const validityData = courseValidity[course.id];
+                      const validity = validityData?.isLifetime
+                        ? 'Lifetime Access'
+                        : (validityData?.daysRemaining != null
+                          ? (validityData.daysRemaining === 0 ? 'Expired' : `${validityData.daysRemaining} day${validityData.daysRemaining === 1 ? '' : 's'}`)
+                          : computeDaysRemaining(course.validTill, course.isLifetime));
                       return (
                         <article
                           key={course.id}

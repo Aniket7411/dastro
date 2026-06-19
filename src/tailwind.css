@@ -79,6 +79,14 @@
     letter-spacing: -0.02em;
   }
 
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .animate-marquee {
     animation: marquee 38s linear infinite;
   }

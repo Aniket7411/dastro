@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -54,6 +54,7 @@ function CoursePlayer() {
   });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [accessPending, setAccessPending] = useState(false);
+  const videoRef = useRef(null);
 
   const token = localStorage.getItem('studentToken');
   const protectedIdentity =
@@ -210,7 +211,7 @@ function CoursePlayer() {
     const showNotice = (message) => {
       setSecurityNotice(message);
       window.clearTimeout(window.__courseSecurityNoticeTimer);
-      window.__courseSecurityNoticeTimer = window.setTimeout(() => setSecurityNotice(''), 2200);
+      window.__courseSecurityNoticeTimer = window.setTimeout(() => setSecurityNotice(''), 2800);
     };
 
     const blockEvent = (event, message) => {
@@ -218,6 +219,12 @@ function CoursePlayer() {
       event.stopPropagation();
       showNotice(message);
       return false;
+    };
+
+    const pauseVideo = () => {
+      if (videoRef.current && !videoRef.current.paused) {
+        videoRef.current.pause();
+      }
     };
 
     const handleKeyDown = (event) => {
@@ -240,14 +247,33 @@ function CoursePlayer() {
     };
 
     const handleFocus = () => setIsWindowFocused(true);
-    const handleBlur = () => setIsWindowFocused(false);
-    const handleVisibility = () => setIsWindowFocused(!document.hidden);
+    const handleBlur = () => {
+      setIsWindowFocused(false);
+      pauseVideo();
+    };
+    const handleVisibility = () => {
+      const focused = !document.hidden;
+      setIsWindowFocused(focused);
+      if (!focused) pauseVideo();
+    };
     const handleContextMenu = (event) =>
       blockEvent(event, 'Right click is disabled for protected videos.');
     const handleCopy = (event) =>
       blockEvent(event, 'Copy is disabled on protected course pages.');
     const handleDragStart = (event) =>
       blockEvent(event, 'Dragging content is disabled on protected course pages.');
+
+    // Intercept screen capture API — shows warning when user tries to share screen
+    const originalGetDisplayMedia =
+      navigator.mediaDevices?.getDisplayMedia?.bind(navigator.mediaDevices);
+    if (originalGetDisplayMedia) {
+      navigator.mediaDevices.getDisplayMedia = async (...args) => {
+        pauseVideo();
+        showNotice('Screen sharing detected. Video paused to protect content.');
+        // Reject the capture request to deny screen recording
+        throw new DOMException('Screen capture is not allowed on this page.', 'NotAllowedError');
+      };
+    }
 
     document.addEventListener('keydown', handleKeyDown, true);
     document.addEventListener('contextmenu', handleContextMenu, true);
@@ -266,6 +292,10 @@ function CoursePlayer() {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
       window.clearTimeout(window.__courseSecurityNoticeTimer);
+      // Restore original getDisplayMedia on unmount
+      if (originalGetDisplayMedia) {
+        navigator.mediaDevices.getDisplayMedia = originalGetDisplayMedia;
+      }
     };
   }, []);
 
@@ -371,15 +401,17 @@ function CoursePlayer() {
                 <>
                   {getVideoProvider(activeVideo) === 'supabase' ? (
                     <video
+                      ref={videoRef}
                       key={activeVideo.videoId || activeVideo._id}
                       src={getPlayerSrc(activeVideo)}
                       title={activeVideo.title || 'Course video'}
                       controls
-                      controlsList="nodownload"
+                      controlsList="nodownload nofullscreen"
+                      disablePictureInPicture
                       playsInline
                       onContextMenu={(e) => e.preventDefault()}
                       className="h-full w-full bg-black transition-[filter] duration-200"
-                      style={{ filter: isWindowFocused ? 'none' : 'blur(12px)' }}
+                      style={{ filter: isWindowFocused ? 'none' : 'blur(14px)' }}
                     />
                   ) : (
                     <iframe
@@ -451,31 +483,38 @@ function CoursePlayer() {
                     <p className="mb-2.5 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
                       Course validity
                     </p>
-                    <dl className="space-y-2.5">
-                      <div className="flex items-center justify-between gap-3">
-                        <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
-                          <CalendarClock size={12} className="text-site-accent-dark/60" />
-                          Valid from
-                        </dt>
-                        <dd className="font-body text-xs font-bold text-site-primary">{validity.validFrom || 'N/A'}</dd>
+                    {validity.isLifetime ? (
+                      <div className="flex items-center gap-2 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2">
+                        <Gem size={13} className="shrink-0 text-purple-600" />
+                        <span className="font-body text-sm font-bold text-purple-700">Lifetime Access</span>
                       </div>
-                      <div className="flex items-center justify-between gap-3">
-                        <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
-                          <CalendarClock size={12} className="text-site-accent-dark/60" />
-                          Valid till
-                        </dt>
-                        <dd className="font-body text-xs font-bold text-site-primary">{validity.validTill || 'N/A'}</dd>
-                      </div>
-                      <div className="flex items-center justify-between gap-3 border-t border-site-accent-dark/8 pt-2.5">
-                        <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
-                          <Clock size={12} className="text-site-accent-dark/60" />
-                          Days remaining
-                        </dt>
-                        <dd className="font-body text-xs font-black text-site-accent-dark">
-                          {validity.daysRemaining ?? 'N/A'}
-                        </dd>
-                      </div>
-                    </dl>
+                    ) : (
+                      <dl className="space-y-2.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
+                            <CalendarClock size={12} className="text-site-accent-dark/60" />
+                            Valid from
+                          </dt>
+                          <dd className="font-body text-xs font-bold text-site-primary">{validity.validFrom || 'N/A'}</dd>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
+                            <CalendarClock size={12} className="text-site-accent-dark/60" />
+                            Valid till
+                          </dt>
+                          <dd className="font-body text-xs font-bold text-site-primary">{validity.validTill || 'N/A'}</dd>
+                        </div>
+                        <div className="flex items-center justify-between gap-3 border-t border-site-accent-dark/8 pt-2.5">
+                          <dt className="flex items-center gap-1.5 font-body text-xs font-semibold text-site-muted">
+                            <Clock size={12} className="text-site-accent-dark/60" />
+                            Days remaining
+                          </dt>
+                          <dd className="font-body text-xs font-black text-site-accent-dark">
+                            {validity.daysRemaining ?? 'N/A'}
+                          </dd>
+                        </div>
+                      </dl>
+                    )}
                   </div>
                 )}
               </div>

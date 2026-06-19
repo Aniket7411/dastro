@@ -17,6 +17,7 @@ export function normalizeCourse(entry) {
       validTill: entry.validTill || entry.course.validTill || entry.course.valid_until || entry.validUntil,
       courseType: entry.course.courseType || entry.courseType || 'Recorded',
       progress: entry.course.progress ?? entry.progress ?? 0,
+      isLifetime: entry.isLifetime || entry.course.isLifetime || false,
     };
   }
 
@@ -29,6 +30,7 @@ export function normalizeCourse(entry) {
     validTill: entry.validTill || entry.valid_until || entry.validity,
     courseType: entry.courseType || 'Recorded',
     progress: entry.progress ?? 0,
+    isLifetime: entry.isLifetime || false,
   };
 }
 
@@ -38,9 +40,12 @@ export function formatDashboardDate(value) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
 }
 
-export function computeDaysRemaining(validTill) {
+export function computeDaysRemaining(validTill, isLifetime = false) {
+  if (isLifetime) return 'Lifetime Access';
   if (!validTill) return 'N/A';
   const end = new Date(validTill);
+  // Treat far-future dates (year >= 2099) as lifetime access
+  if (end.getFullYear() >= 2099) return 'Lifetime Access';
   const diff = Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
   return diff >= 0 ? `${diff} day${diff === 1 ? '' : 's'}` : 'Expired';
 }

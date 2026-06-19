@@ -6,6 +6,7 @@ import {
   GraduationCap,
   LogOut,
   Menu,
+  MessageCircle,
   PlayCircle,
   Radio,
   Shield,
@@ -169,35 +170,29 @@ export default function SiteNavbar({
 
   const guestDesktopLinks = (
     <>
-      <li className="flex list-none items-center">
-        <NavLink to="/" match="/">Home</NavLink>
-      </li>
       <CoursesDropdown coursesActive={coursesActive} />
       <li className="flex list-none items-center">
         <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
       </li>
       <li className="flex list-none items-center">
-        <NavLink to="/about" match="/about">About</NavLink>
-      </li>
-      <li className="flex list-none items-center">
-        <NavLink to="/contact" match="/contact">Contact</NavLink>
+        <NavLink to="/astrologer" match="/astrologer" className="gap-1.5">
+          <MessageCircle className="h-3.5 w-3.5 opacity-80" />
+          Astro Chat
+        </NavLink>
       </li>
       <li className="flex list-none items-center">
         <NavLink to="/webinar" match="/webinar" className="gap-1.5">
           Live Webinar
-          {/* <span className="rounded-full bg-site-primary px-1.5 py-0.5 text-[0.5625rem] font-extrabold normal-case tracking-normal text-white">
-            ₹99
-          </span> */}
         </NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/about" match="/about">About</NavLink>
       </li>
     </>
   );
 
   const studentDesktopLinks = (
     <>
-      <li className="flex list-none items-center">
-        <NavLink to="/" match="/">Home</NavLink>
-      </li>
       <li className="flex list-none items-center">
         <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
       </li>
@@ -206,7 +201,10 @@ export default function SiteNavbar({
         <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
       </li>
       <li className="flex list-none items-center">
-        <NavLink to="/contact" match="/contact">Contact</NavLink>
+        <NavLink to="/astrologer" match="/astrologer" className="gap-1.5">
+          <MessageCircle className="h-3.5 w-3.5 opacity-80" />
+          Astro Chat
+        </NavLink>
       </li>
     </>
   );
@@ -262,16 +260,14 @@ export default function SiteNavbar({
 
   const mobilePrimaryLinks = authState.isStudent
     ? [
-        { label: 'Home', to: '/', match: '/' },
         { label: 'My Courses', to: '/dashboard', match: '/dashboard' },
         { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
-        { label: 'Contact', to: '/contact', match: '/contact' },
+        { label: 'Astro Chat', to: '/astrologer', match: '/astrologer', icon: MessageCircle },
       ]
     : [
-        { label: 'Home', to: '/', match: '/' },
         { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'Astro Chat', to: '/astrologer', match: '/astrologer', icon: MessageCircle },
         { label: 'About', to: '/about', match: '/about' },
-        { label: 'Contact', to: '/contact', match: '/contact' },
       ];
 
   return (
@@ -378,7 +374,8 @@ export default function SiteNavbar({
           <ul className="m-0 list-none p-0">
             {mobilePrimaryLinks.map((item) => (
               <li key={item.to} className="border-b border-site-accent-dark/10">
-                <NavLink to={item.to} match={item.match} onClick={closeMobile} className="block px-4 py-3.5">
+                <NavLink to={item.to} match={item.match} onClick={closeMobile} className="flex items-center gap-2 px-4 py-3.5">
+                  {item.icon && <item.icon className="h-3.5 w-3.5 shrink-0 opacity-60" />}
                   {item.label}
                 </NavLink>
               </li>
