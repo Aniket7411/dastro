@@ -4,13 +4,17 @@ import {
   CalendarCheck,
   ChevronDown,
   GraduationCap,
+  Hash,
+  Heart,
   LogOut,
   Menu,
   MessageCircle,
   PlayCircle,
   Radio,
   Shield,
+  Sparkles,
   User,
+  Wrench,
   X,
 } from 'lucide-react';
 import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME } from '../utils/brandAssets';
@@ -41,6 +45,13 @@ const NAV_ACTION_BTN =
 const COURSE_LINKS = [
   { label: 'Live Classes', to: '/live-courses', Icon: Radio },
   { label: 'Recorded Courses', to: '/recorded-courses', Icon: PlayCircle },
+];
+
+const FREE_TOOL_LINKS = [
+  { label: 'All Free Tools', to: '/free-tools', Icon: Wrench },
+  { label: 'Numerology', to: '/numerology', Icon: Hash },
+  { label: 'Tarot Reading', to: '/tarot', Icon: Sparkles },
+  { label: 'Love Calculator', to: '/love', Icon: Heart },
 ];
 
 function CoursesDropdown({ coursesActive }) {
@@ -92,6 +103,55 @@ function CoursesDropdown({ coursesActive }) {
   );
 }
 
+function FreeToolsDropdown({ toolsActive }) {
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <li
+      className="relative flex list-none items-center"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className={`${NAV_LINK_BASE} ${
+          toolsActive ? NAV_LINK_ACTIVE : open ? '!text-site-accent-dark' : NAV_LINK_IDLE
+        }`}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Free Tools
+        <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div
+        className={`absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 pt-2 transition-opacity ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <ul className="overflow-hidden rounded-xl border border-site-accent-dark/15 bg-white py-1 shadow-lg">
+          {FREE_TOOL_LINKS.map(({ label, to, Icon }) => (
+            <li key={`${label}-${to}`}>
+              <Link
+                to={to}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-[#fff8ef] hover:!text-site-accent-dark"
+              >
+                <Icon className="h-4 w-4 shrink-0 opacity-60" />
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
 function NavLink({ to, match, children, onClick, className = '' }) {
   const location = useLocation();
   const isActive = match === '/'
@@ -125,6 +185,7 @@ export default function SiteNavbar({
   const [scrolled, setScrolled] = useState(false);
 
   const coursesActive = COURSE_LINKS.some((link) => location.pathname.startsWith(link.to));
+  const toolsActive = ['/free-tools', '/numerology', '/tarot', '/love'].some((p) => location.pathname.startsWith(p));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -171,6 +232,7 @@ export default function SiteNavbar({
   const guestDesktopLinks = (
     <>
       <CoursesDropdown coursesActive={coursesActive} />
+      <FreeToolsDropdown toolsActive={toolsActive} />
       <li className="flex list-none items-center">
         <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
       </li>
@@ -197,6 +259,7 @@ export default function SiteNavbar({
         <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
       </li>
       <CoursesDropdown coursesActive={coursesActive} />
+      <FreeToolsDropdown toolsActive={toolsActive} />
       <li className="flex list-none items-center">
         <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
       </li>
@@ -422,8 +485,7 @@ export default function SiteNavbar({
               </Link>
             </li>
 
-            {/* Free Tools — hidden on mobile */}
-            {/* <li className="border-b border-site-accent-dark/10">
+            <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
                 className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text"
@@ -453,7 +515,7 @@ export default function SiteNavbar({
                   ))}
                 </ul>
               )}
-            </li> */}
+            </li>
 
             {/* Webinar — mobile only */}
             <li className="border-b border-site-accent-dark/10">

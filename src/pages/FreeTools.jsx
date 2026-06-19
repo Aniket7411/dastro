@@ -1,170 +1,188 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  SITE_BTN_OUTLINE,
-  SITE_CARD,
-  SITE_CONTAINER,
-  SITE_KICKER,
-  SITE_PAGE,
-  SITE_SUBTITLE,
-  SITE_TITLE_LG,
-} from '../utils/siteTokens';
+import { ArrowRight, Hash, Heart, Moon, Sparkles, Star, Sun, Compass } from 'lucide-react';
 import KundaliTool from '../components/tools/KundaliTool';
 import HoroscopeTool from '../components/tools/HoroscopeTool';
 import MoonTool from '../components/tools/MoonTool';
 import ZodiacFinder from '../components/tools/ZodiacFinder';
 
+const tools = [
+  {
+    id: 'kundali',
+    name: 'Kundali / Birth Chart',
+    desc: 'Generate your Vedic birth chart with detailed planetary positions.',
+    Icon: Star,
+    badge: 'Popular',
+  },
+  {
+    id: 'horoscope',
+    name: 'Daily Horoscope',
+    desc: 'Read your personalised daily cosmic predictions by sun sign.',
+    Icon: Sun,
+  },
+  {
+    id: 'love',
+    name: 'Love Compatibility',
+    desc: 'Vedic synastry to reveal your celestial compatibility score.',
+    Icon: Heart,
+    badge: 'Trending',
+    link: '/love',
+  },
+  {
+    id: 'numerology',
+    name: 'Numerology Calculator',
+    desc: 'Discover your radical, destiny, and name numbers.',
+    Icon: Hash,
+    link: '/numerology',
+  },
+  {
+    id: 'tarot',
+    name: 'Tarot Reading',
+    desc: 'Draw a Major Arcana card for ancient wisdom and guidance.',
+    Icon: Sparkles,
+    link: '/tarot',
+  },
+  {
+    id: 'moon',
+    name: 'Moon Sign Calculator',
+    desc: 'Find your Vedic moon sign and emotional blueprint.',
+    Icon: Moon,
+  },
+  {
+    id: 'zodiac',
+    name: 'Sun Sign Calculator',
+    desc: 'Know your zodiac sun sign from your exact date of birth.',
+    Icon: Compass,
+  },
+];
+
+function ToolCard({ tool, onActivate }) {
+  const { Icon } = tool;
+
+  const inner = (
+    <div className="group relative flex h-full flex-col rounded-xl border border-[rgba(139,74,30,0.11)] bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(139,74,30,0.3)] hover:shadow-[0_10px_28px_rgba(139,74,30,0.11)] sm:p-5">
+      {tool.badge && (
+        <span className="absolute right-3 top-3 rounded-full bg-[#fff3e0] px-2 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-[0.1em] text-[#9c5a1e]">
+          {tool.badge}
+        </span>
+      )}
+
+      <div className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[rgba(139,74,30,0.1)] bg-[#fff8ef] text-[#9c5a1e] transition-colors duration-200 group-hover:bg-[#9c5a1e] group-hover:text-white">
+        <Icon className="h-4 w-4" strokeWidth={2} />
+      </div>
+
+      <h3 className="mb-1.5 text-[0.9375rem] font-extrabold leading-snug text-[#3d1a06]">
+        {tool.name}
+      </h3>
+      <p className="mb-4 flex-1 text-xs leading-relaxed text-[#7a5c4f]">{tool.desc}</p>
+
+      <span className="mt-auto inline-flex items-center gap-1 self-start rounded-lg border border-[rgba(139,74,30,0.18)] px-3 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide text-[#7a3a12] transition-all duration-200 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white">
+        Access Tool
+        <ArrowRight className="h-2.5 w-2.5" strokeWidth={2.5} />
+      </span>
+    </div>
+  );
+
+  if (tool.link) {
+    return (
+      <Link to={tool.link} className="!no-underline" aria-label={tool.name}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => onActivate(tool.id)}
+      className="h-full w-full text-left"
+      aria-label={tool.name}
+    >
+      {inner}
+    </button>
+  );
+}
+
 function FreeTools() {
   const [activeTool, setActiveTool] = useState(null);
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [activeTool]);
 
-  const tools = [
-    { id: 'kundali', name: 'Kundali / Birth Chart', desc: 'Generate your free birth chart', icon: 'fa-star' },
-    { id: 'horoscope', name: 'Daily Horoscope', desc: 'Read your daily predictions', icon: 'fa-sun' },
-    { id: 'love', name: 'Love Calculator', desc: 'Check compatibility with your partner', icon: 'fa-heart', link: '/love' },
-    { id: 'numerology', name: 'Numerology Calculator', desc: 'Calculate your life path number', icon: 'fa-calculator', link: '/numerology' },
-    { id: 'tarot', name: 'Tarot Reading', desc: 'Draw a card for guidance', icon: 'fa-magic', link: '/tarot' },
-    { id: 'moon', name: 'Moonsign Calculator', desc: 'Find your moon sign', icon: 'fa-moon' },
-    { id: 'zodiac', name: 'Sun Sign Calculator', desc: 'Know your zodiac sign', icon: 'fa-certificate' },
-  ];
-
-  const handleBack = () => setActiveTool(null);
-
-  if (activeTool === 'kundali') return <section className="tools-container"><KundaliTool onBack={handleBack} /></section>;
-  if (activeTool === 'horoscope') return <section className="tools-container"><HoroscopeTool onBack={handleBack} /></section>;
-  if (activeTool === 'moon') return <section className="tools-container"><MoonTool onBack={handleBack} /></section>;
-  if (activeTool === 'zodiac') return <section className="tools-container"><ZodiacFinder onBack={handleBack} /></section>;
+  if (activeTool === 'kundali') {
+    return <KundaliTool onBack={() => setActiveTool(null)} />;
+  }
+  if (activeTool === 'horoscope') {
+    return <HoroscopeTool onBack={() => setActiveTool(null)} />;
+  }
+  if (activeTool === 'moon') {
+    return <MoonTool onBack={() => setActiveTool(null)} />;
+  }
+  if (activeTool === 'zodiac') {
+    return <ZodiacFinder onBack={() => setActiveTool(null)} />;
+  }
 
   return (
-    <section className={`freetools-section ${SITE_PAGE}`}>
-      <div className={SITE_CONTAINER}>
-        <div className="row justify-content-center">
-          <div className="col-lg-8 text-center mb-4 fade-in">
-            <span className={SITE_KICKER}>Explore The Cosmos</span>
-            <h1 className={`${SITE_TITLE_LG} mt-1 mb-3`}>Free Astrology Tools</h1>
-            <p className={`${SITE_SUBTITLE} mx-auto`}>Use simple astrology calculators and guidance tools to understand your chart, signs, compatibility, and daily direction.</p>
-          </div>
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#fffdf9]">
+
+      {/* Hero — compact */}
+      <div className="relative overflow-hidden border-b border-[rgba(139,74,30,0.09)] bg-gradient-to-b from-[#fff8ef] to-[#fffdf9] py-8 sm:py-10 lg:py-12">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(198,132,63,0.06) 0%, transparent 60%)' }}
+        />
+        <div className="relative mx-auto max-w-[90rem] px-4 text-center sm:px-6 lg:px-12">
+          <span className="mb-3 inline-block rounded-full border border-[rgba(139,74,30,0.14)] bg-[#fff3e0] px-3.5 py-1 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-[#9c5a1e]">
+            Explore the Cosmos
+          </span>
+          <h1 className="mx-auto mb-2.5 max-w-lg font-heading text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-tight text-[#3d1a06]">
+            Free Astrology Tools
+          </h1>
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-[#7a5c4f] sm:text-[0.9375rem]">
+            Discover your chart, signs, compatibility, and daily guidance — all free.
+          </p>
         </div>
-        
-        <div className="row g-3 g-lg-4 justify-content-center">
+      </div>
+
+      {/* Tools grid */}
+      <div className="mx-auto max-w-[90rem] px-4 py-7 sm:px-6 sm:py-9 lg:px-12 lg:py-10">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
           {tools.map((tool, idx) => (
-            <div key={idx} className="col-12 col-md-6 col-lg-4 fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
-              <div className={`tool-card ${SITE_CARD} h-100 d-flex flex-column`}>
-                <div className="tool-icon-wrapper mx-auto">
-                  <i className={`fas ${tool.icon}`}></i>
-                </div>
-                <h4 className="tool-name">{tool.name}</h4>
-                <p className="tool-desc flex-grow-1">{tool.desc}</p>
-                
-                <div className="mt-3">
-                  {tool.link ? (
-                    <Link to={tool.link} className={`${SITE_BTN_OUTLINE} tool-action w-100`}>Access Tool <i className="fas fa-arrow-right ms-2"></i></Link>
-                  ) : (
-                    <button 
-                      className={`${SITE_BTN_OUTLINE} tool-action w-100`}
-                      onClick={() => setActiveTool(tool.id)}
-                    >
-                      Access Tool <i className="fas fa-arrow-right ms-2"></i>
-                    </button>
-                  )}
-                </div>
-              </div>
+            <div
+              key={tool.id}
+              style={{ animation: `fadeSlideUp 0.4s ease ${idx * 0.06}s both` }}
+            >
+              <ToolCard tool={tool} onActivate={setActiveTool} />
             </div>
           ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-8 rounded-xl border border-[rgba(139,74,30,0.12)] bg-gradient-to-br from-[#9c5a1e] to-[#65250c] p-6 text-center sm:p-8">
+          <h2 className="mb-2 font-heading text-lg font-extrabold text-white sm:text-xl">
+            Want a personal consultation?
+          </h2>
+          <p className="mx-auto mb-5 max-w-md text-xs leading-relaxed text-white/80 sm:text-sm">
+            Speak directly with our expert astrologers for in-depth guidance on your birth chart, career, love, and life path.
+          </p>
+          <Link
+            to="/book-consultation"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2 text-xs font-bold uppercase tracking-wide text-[#9c5a1e] !no-underline shadow transition hover:-translate-y-0.5 hover:shadow-md sm:text-sm"
+          >
+            Book a Consultation
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+          </Link>
         </div>
       </div>
 
       <style>{`
-        .freetools-section {
-          background: var(--site-bg);
-          min-height: 80vh;
-          padding: clamp(2.4rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
-        }
-
-        .tool-card {
-          padding: clamp(1.25rem, 3vw, 1.75rem);
-          text-align: left;
-        }
-        
-        .tool-card:hover {
-          transform: translateY(-5px);
-        }
-        
-        .tool-icon-wrapper {
-          width: 3.25rem;
-          height: 3.25rem;
-          background: var(--site-accent-soft);
-          border-radius: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 0 1rem;
-          border: 1px solid rgba(200, 131, 42, 0.18);
-          transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-        }
-        
-        .tool-card:hover .tool-icon-wrapper {
-          background: var(--site-primary);
-          border-color: var(--site-primary);
-          transform: translateY(-2px);
-        }
-        
-        .tool-card:hover .tool-icon-wrapper i {
-          color: #fff !important;
-        }
-        
-        .tool-icon-wrapper i {
-          color: var(--site-accent-dark);
-          font-size: 1.25rem;
-          transition: color 0.25s ease;
-        }
-        
-        .tool-name {
-          color: var(--site-text);
-          font-weight: 800;
-          font-size: var(--h3-size);
-          line-height: 1.25;
-          margin-bottom: 0.65rem;
-          font-family: var(--font-heading);
-        }
-        
-        .tool-desc {
-          color: var(--site-text-muted);
-          font-size: 0.96rem;
-          line-height: 1.55;
-          margin-bottom: 0;
-        }
-
-        .tool-action {
-          border-radius: var(--radius-control);
-          font-size: 0.82rem;
-          letter-spacing: 0.04rem;
-          text-transform: uppercase;
-        }
-
-        .fade-in { animation: fadeIn 0.5s ease both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .tools-container {
-          background-color: var(--site-bg);
-          min-height: 100vh;
-          padding: clamp(1.5rem, 4vw, 3rem) var(--page-pad-x);
-        }
-
-        @media (max-width: 640px) {
-          .freetools-section {
-            padding-top: 2rem;
-          }
-
-          .tool-card {
-            padding: 1.1rem;
-          }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </section>
+    </div>
   );
 }
 

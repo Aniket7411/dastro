@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 
+const inputCls = 'w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]';
+const labelCls = 'mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]';
+
 function MoonTool({ onBack }) {
   const [formData, setFormData] = useState({ name: '', dob: '', tob: '12:00' });
   const [result, setResult] = useState(null);
@@ -15,7 +18,7 @@ function MoonTool({ onBack }) {
       const res = await fetch(`${API_BASE}/api/tools/moon`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       const resp = await res.json();
       if (!resp) throw new Error('Calculation failed');
@@ -28,262 +31,147 @@ function MoonTool({ onBack }) {
   };
 
   return (
-    <div className="moon-tool-container animated fadeIn">
-      <div className="container-fluid p-0">
-        <div className="row g-0 min-vh-100">
+    <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row">
 
-          {/* LEFT HERO PANEL */}
-          {!result ? (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
-              <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
-                {onBack && (
-                  <button className="btn-back-tool mb-4" onClick={onBack}>
-                    <i className="fas fa-chevron-left me-2"></i> Back to Tools
-                  </button>
-                )}
-                <h1 className="display-4 fw-bold mb-3 hero-title">Moon Sign & Phase</h1>
-                <p className="hero-desc mb-5">
-                  Discover your Vedic moon sign, lunar phase, and emotional blueprint. The Moon reveals your inner world and subconscious reactions.
-                </p>
-                <div className="decor-icons">🌙 ✨ 🌊 🌒</div>
-              </div>
-            </div>
-          ) : (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white text-center">
-              <div className="mx-auto" style={{ maxWidth: '480px' }}>
-                <div className="selected-sign-icon mb-4">
-                  <div className="selected-svg-wrap" style={{ fontSize: '80px' }}>🌙</div>
-                </div>
-                <h1 className="display-4 fw-bold mb-2 hero-title">{result.phase?.name}</h1>
-                <p className="hero-desc mb-5">{result.phase?.title}</p>
-                <button className="btn-change-sign" onClick={() => setResult(null)}>
-                  <i className="fas fa-sync-alt me-2"></i> Calculate Another
-                </button>
-              </div>
-            </div>
+      {/* Left hero panel */}
+      <div className="shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 py-8 text-white sm:px-8 sm:py-10 lg:flex lg:w-[38%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
+        <div className="mx-auto w-full max-w-xs lg:max-w-none">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="mb-5 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20"
+            >
+              ← Back to Tools
+            </button>
           )}
-
-          {/* RIGHT CONTENT PANEL */}
-          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white-content">
-            {!result ? (
-              <div className="w-100" style={{ maxWidth: '500px' }}>
-                <div className="prediction-box animated fadeInUp p-4 p-md-5" style={{ borderRadius: '20px', border: '1px solid #f3e5d8', boxShadow: '0 20px 40px rgba(198,132,63,0.1)' }}>
-                  <h3 className="form-title text-center mb-4" style={{ fontFamily: 'Playfair Display', color: '#65250c', fontWeight: 800 }}>Enter Birth Details</h3>
-                  <form onSubmit={calculate}>
-                    <div className="mb-4">
-                      <label className="custom-lbl">Full Name</label>
-                      <input className="custom-inp" type="text" placeholder="Enter your name"
-                        value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
-                    </div>
-                    <div className="row g-3 mb-5">
-                      <div className="col-7">
-                        <label className="custom-lbl">Date of Birth</label>
-                        <input className="custom-inp" type="date" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required />
-                      </div>
-                      <div className="col-5">
-                        <label className="custom-lbl">Birth Time</label>
-                        <input className="custom-inp" type="time" value={formData.tob} onChange={(e) => setFormData({ ...formData, tob: e.target.value })} />
-                      </div>
-                    </div>
-                    <button className="btn-calculate-premium w-100" type="submit" disabled={loading}>
-                      {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Calculating…</> : 'Get Moon Report'}
-                    </button>
-                    {error && <p className="text-danger mt-3 text-center small">{error}</p>}
-                  </form>
-                </div>
-              </div>
-            ) : (
-              <div className="horoscope-report w-100" style={{ maxWidth: '680px' }}>
-                <div className="prediction-box animated fadeInUp">
-                  <div className="prediction-header mb-5 border-bottom pb-4">
-                    <span className="badge-cosmic">Lunar Report</span>
-                    <h2 className="prediction-h1 mt-3">{result.name}'s Moon Phase</h2>
-                    <div className="prediction-date-label">Phase #{result.phase?.number} • {result.moonSign} Moon</div>
-                  </div>
-
-                  <div className="prediction-body">
-                    <div className="prediction-section mb-5">
-                      <h3 className="section-title mb-3"><i className="fas fa-moon me-2"></i> Key Characteristics</h3>
-                      <div className="row g-2">
-                        {result.phase?.keywords?.map((kw, i) => (
-                          <div key={i} className="col-md-6">
-                            <div className="lucky-stat d-flex align-items-center gap-2 text-start py-2">
-                              <span style={{ color: '#c6843f' }}>✦</span>
-                              <span style={{ fontSize: '14px', color: '#65250c' }}>{kw}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="row g-4">
-                      <div className="col-md-6">
-                        <div className="lucky-stat p-4">
-                          <span className="stat-label">Moon Sign</span>
-                          <span className="stat-value">{result.moonSign}</span>
-                          <div className="mt-1 small text-muted">{result.moonDegree}°</div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="lucky-stat p-4">
-                          <span className="stat-label">Phase Range</span>
-                          <span className="stat-value">{result.phase?.startDeg}° - {result.phase?.endDeg}°</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
+          {!result ? (
+            <>
+              <div className="mb-3 text-2xl">🌙</div>
+              <h1 className="mb-3 font-serif text-2xl font-black leading-tight sm:text-3xl lg:text-[1.875rem]">
+                Moon Sign &amp; Phase
+              </h1>
+              <p className="text-sm leading-relaxed text-white/85 sm:text-[0.9375rem]">
+                Discover your Vedic moon sign, lunar phase, and emotional blueprint. The Moon reveals your inner world and subconscious nature.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="mb-3 text-4xl">🌙</div>
+              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/70">Moon Phase</p>
+              <h1 className="mb-2 font-serif text-3xl font-black leading-tight">{result.phase?.name}</h1>
+              <p className="mb-5 text-sm text-white/80">{result.moonSign} Moon · {result.moonDegree}°</p>
+              <button
+                onClick={() => setResult(null)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
+              >
+                ↺ Calculate Another
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+      {/* Right content panel */}
+      <div className="flex flex-1 items-start justify-center bg-white px-4 py-8 sm:px-6 sm:py-10 lg:items-center lg:px-10 lg:py-14">
+        {!result ? (
+          <div className="w-full max-w-sm">
+            <div className="rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-[0_8px_28px_rgba(198,132,63,0.09)] sm:p-8">
+              <h2 className="mb-6 text-center font-serif text-lg font-extrabold text-[#65250c]">
+                Birth Details
+              </h2>
+              <form onSubmit={calculate} className="flex flex-col gap-5">
+                <div>
+                  <label className={labelCls}>Full Name</label>
+                  <input
+                    className={inputCls}
+                    type="text"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>Date of Birth</label>
+                    <input
+                      className={inputCls}
+                      type="date"
+                      value={formData.dob}
+                      onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Birth Time</label>
+                    <input
+                      className={inputCls}
+                      type="time"
+                      value={formData.tob}
+                      onChange={(e) => setFormData({ ...formData, tob: e.target.value })}
+                    />
+                  </div>
+                </div>
+                {error && <p className="text-center text-xs text-red-600">{error}</p>}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="mt-1 w-full rounded-xl bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? 'Calculating…' : 'Get Moon Report'}
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full max-w-lg">
+            {/* Header */}
+            <div className="mb-4 rounded-2xl border border-[#f3e5d8] bg-[#fffaf4] p-5 sm:p-6">
+              <span className="inline-block rounded-full bg-[#fff3e0] px-3 py-1 text-[0.6875rem] font-extrabold uppercase tracking-widest text-[#9c5a1e]">
+                Lunar Report
+              </span>
+              <h2 className="mt-2 font-serif text-xl font-bold text-[#65250c] sm:text-2xl">
+                {result.name}'s Moon Phase
+              </h2>
+              <p className="mt-0.5 text-sm font-semibold text-[#9c5a1e]">
+                Phase #{result.phase?.number} · {result.moonSign} Moon
+              </p>
+            </div>
 
-        .moon-tool-container {
-          font-family: 'Be Vietnam Pro', sans-serif;
-          overflow-x: hidden;
-        }
+            {/* Keywords */}
+            {result.phase?.keywords?.length > 0 && (
+              <div className="mb-4 rounded-2xl border border-[#f3e5d8] bg-white p-4 shadow-[0_4px_16px_rgba(198,132,63,0.06)] sm:p-5">
+                <h3 className="mb-3 font-serif text-sm font-bold text-[#65250c]">🌙 Key Characteristics</h3>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {result.phase.keywords.map((kw, i) => (
+                    <div key={i} className="flex items-center gap-2 rounded-lg bg-[#fffaf4] px-3 py-2">
+                      <span className="text-xs text-[#c6843f]">✦</span>
+                      <span className="text-xs font-medium text-[#65250c]">{kw}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        .bg-bronze-hero {
-          background: linear-gradient(to right, #c6843f, #9c5a1e);
-        }
-
-        .bg-white-content {
-          background-color: #ffffff;
-        }
-
-        .hero-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(2.8rem, 6vw, 4.8rem);
-          font-weight: 900;
-          line-height: 1.1;
-          margin-bottom: 20px;
-        }
-
-        .hero-desc {
-          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-          line-height: 1.7;
-          opacity: 0.95;
-          font-weight: 500;
-        }
-
-        .btn-back-tool {
-          background: rgba(255,255,255,0.15);
-          border: 1px solid rgba(255,255,255,0.3);
-          color: #fff;
-          padding: 8px 24px;
-          border-radius: 4px;
-          font-size: 14px;
-          transition: 0.3s;
-          font-weight: 500;
-        }
-        .btn-back-tool:hover { background: rgba(255,255,255,0.25); }
-
-        .custom-lbl {
-          display: block;
-          font-size: 13px;
-          color: #65250c;
-          margin-bottom: 8px;
-          font-weight: 700;
-          text-align: left;
-        }
-
-        .custom-inp {
-          width: 100%;
-          border: none;
-          border-bottom: 2px solid #f3e5d8;
-          background: transparent;
-          padding: 10px 0;
-          font-size: 16px;
-          color: #65250c;
-          outline: none;
-          transition: 0.3s;
-          font-weight: 600;
-        }
-        .custom-inp:focus { border-color: #c6843f; }
-
-        .btn-calculate-premium {
-          background: linear-gradient(to right, #c6843f, #9c5a1e);
-          border: none;
-          color: #fff;
-          padding: 14px 40px;
-          border-radius: 8px;
-          font-weight: 700;
-          letter-spacing: 1px;
-          box-shadow: 0 10px 20px rgba(198,132,63,0.2);
-          transition: 0.3s;
-        }
-        .btn-calculate-premium:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(198,132,63,0.3); }
-
-        .prediction-h1 {
-          font-family: 'Playfair Display', serif;
-          font-size: 32px;
-          color: #65250c;
-        }
-
-        .badge-cosmic {
-          background: #ffefd6;
-          color: #9c5a1e;
-          padding: 6px 16px;
-          border-radius: 50px;
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        .prediction-date-label {
-          color: #9c5a1e;
-          font-weight: 600;
-          font-size: 15px;
-        }
-
-        .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 20px;
-          color: #65250c;
-          font-weight: 700;
-        }
-
-        .prediction-text {
-          font-size: 16px;
-          line-height: 1.6;
-          color: rgba(101, 37, 12, 0.85);
-        }
-
-        .lucky-stat {
-          padding: 15px;
-          background: #ffefd6;
-          border-radius: 12px;
-          text-align: center;
-        }
-        .stat-label { display: block; font-size: 10px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
-        .stat-value { font-weight: 800; color: #65250c; font-size: 18px; }
-
-        .btn-change-sign {
-          background: #ffefd6;
-          border: none;
-          color: #9c5a1e;
-          padding: 12px 30px;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 700;
-          transition: 0.3s;
-        }
-        .btn-change-sign:hover { background: #f3e5d8; transform: translateY(-2px); }
-
-        @media (max-width: 991px) {
-          .hero-title { font-size: 28px; }
-          .prediction-h1 { font-size: 26px; }
-        }
-      `}</style>
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
+                <div className="mb-1 text-[0.6rem] font-bold uppercase tracking-wider text-[#9c5a1e]">Moon Sign</div>
+                <div className="text-sm font-extrabold text-[#65250c]">{result.moonSign}</div>
+                <div className="mt-0.5 text-[0.6875rem] text-[#9c847b]">{result.moonDegree}°</div>
+              </div>
+              <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
+                <div className="mb-1 text-[0.6rem] font-bold uppercase tracking-wider text-[#9c5a1e]">Phase Range</div>
+                <div className="text-sm font-extrabold text-[#65250c]">
+                  {result.phase?.startDeg}° – {result.phase?.endDeg}°
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 export default MoonTool;
-
