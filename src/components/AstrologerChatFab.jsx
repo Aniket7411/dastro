@@ -17,7 +17,8 @@ export default function AstrologerChatFab() {
         className="astro-chat-fab"
       >
         <span className="astro-chat-fab__icon" aria-hidden="true">✦</span>
-        <span className="astro-chat-fab__label">Chat with Astrologer</span>
+        <span className="astro-chat-fab__full">Chat with Astrologer</span>
+        <span className="astro-chat-fab__short">Astro Chat</span>
       </button>
 
       <style>{`
@@ -58,34 +59,32 @@ export default function AstrologerChatFab() {
           background: rgba(255, 255, 255, 0.2);
           border-radius: 50%;
           display: flex;
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           height: 1.9rem;
           justify-content: center;
           width: 1.9rem;
           flex-shrink: 0;
         }
 
-        /* Mobile — shrink to icon-only pill */
+        .astro-chat-fab__short { display: none; }
+
         @media (max-width: 480px) {
           .astro-chat-fab {
             bottom: 5.2rem;
-            padding: 0;
             right: 0.9rem;
-            height: 3rem;
-            width: 3rem;
-            justify-content: center;
-          }
-
-          .astro-chat-fab__label {
-            display: none;
+            font-size: 0.73rem;
+            padding: 0.5rem 0.8rem 0.5rem 0.55rem;
+            gap: 0.35rem;
           }
 
           .astro-chat-fab__icon {
-            background: none;
-            font-size: 1.2rem;
-            height: auto;
-            width: auto;
+            height: 1.6rem;
+            width: 1.6rem;
+            font-size: 0.65rem;
           }
+
+          .astro-chat-fab__full  { display: none; }
+          .astro-chat-fab__short { display: inline; }
         }
       `}</style>
     </>
