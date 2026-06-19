@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SettingsProvider } from './context/SettingsContext';
 import CookieConsent from './components/CookieConsent';
 import FloatingChatAssistant from './components/FloatingChatAssistant';
+import AstrologerChatFab from './components/AstrologerChatFab';
 import { HelmetProvider } from 'react-helmet-async';
 
 const Home = lazy(() => import('./pages/Home'));
@@ -78,6 +79,7 @@ function App() {
             style={{ zIndex: 20050 }}
           />
           <CookieConsent />
+          <AstrologerChatFab />
           <FloatingChatAssistant />
           <Suspense fallback={null}>
             <Routes>
