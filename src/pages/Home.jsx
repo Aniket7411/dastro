@@ -2574,7 +2574,6 @@ function Home() {
           width: 85%;
           height: 220px;
           border-radius: 40px;
-          border: 12px solid var(--bg-color);
           box-shadow: var(--premium-shadow);
           overflow: hidden;
           z-index: 1;
