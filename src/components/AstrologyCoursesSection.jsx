@@ -166,6 +166,7 @@ export default function AstrologyCoursesSection() {
           title="Astrology"
           titleHighlight="Courses"
           subtitle="Ancient wisdom, modern teaching — live batches and self-paced programs for every level."
+          subtitleClassName="lg:whitespace-nowrap"
         />
 
         {loading ? (

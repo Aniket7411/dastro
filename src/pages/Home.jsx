@@ -1053,6 +1053,7 @@ function Home() {
               title="Guiding You"
               titleHighlight="Through Life"
               subtitle="Our astrologers are dedicated to providing clarity and direction for every chapter of your journey."
+              subtitleClassName="lg:whitespace-nowrap"
             />
 
             <div className="row g-3 g-lg-4 align-items-center mt-3 mt-lg-4">
@@ -1137,6 +1138,7 @@ function Home() {
               title="Expert"
               titleHighlight="Consultations"
               subtitle="Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey."
+              subtitleClassName="lg:whitespace-nowrap"
             />
 
             <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
@@ -1146,6 +1148,7 @@ function Home() {
               title="Featured"
               titleHighlight="Sessions"
               subtitle="Our most booked consultations — request a callback or learn more about each service."
+              subtitleClassName="lg:whitespace-nowrap"
             />
 
             <ul className={COURSE_GRID} data-aos="fade-up">

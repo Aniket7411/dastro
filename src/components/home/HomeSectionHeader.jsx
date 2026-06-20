@@ -7,6 +7,7 @@ export default function HomeSectionHeader({
   title,
   titleHighlight,
   subtitle,
+  subtitleClassName = '',
   id,
   align = 'center',
   className = '',
@@ -36,8 +37,8 @@ export default function HomeSectionHeader({
 
       {subtitle ? (
         <p
-          className={`section-desc mt-3 ${center ? 'mx-auto' : ''}`}
-          style={center ? { maxWidth: '650px' } : undefined}
+          className={`section-desc mt-3 ${center ? 'mx-auto' : ''} ${subtitleClassName}`}
+          style={center && !subtitleClassName ? { maxWidth: '650px' } : undefined}
         >
           {subtitle}
         </p>
@@ -47,7 +48,7 @@ export default function HomeSectionHeader({
 }
 
 /** Smaller heading block inside a home section (e.g. carousel vs grid). */
-export function HomeSubsectionHeader({ title, titleHighlight, subtitle, className = '' }) {
+export function HomeSubsectionHeader({ title, titleHighlight, subtitle, subtitleClassName = '', className = '' }) {
   return (
     <div className={`mb-4 text-center sm:mb-5 ${className}`} data-aos="fade-up">
       <h3 className="home-subsection-title m-0">
@@ -60,7 +61,10 @@ export function HomeSubsectionHeader({ title, titleHighlight, subtitle, classNam
         ) : null}
       </h3>
       {subtitle ? (
-        <p className="section-desc mx-auto mt-2 mb-0" style={{ maxWidth: '560px', fontSize: '0.92rem' }}>
+        <p
+          className={`section-desc mx-auto mt-2 mb-0 ${subtitleClassName}`}
+          style={{ maxWidth: subtitleClassName ? undefined : '560px', fontSize: '0.92rem' }}
+        >
           {subtitle}
         </p>
       ) : null}
