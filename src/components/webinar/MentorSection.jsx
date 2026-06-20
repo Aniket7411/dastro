@@ -27,7 +27,30 @@ function MentorSection({ onJoinNow, onJoinFree }) {
           Meet Your <span className={WB_HIGHLIGHT}>Mentor</span>
         </h2>
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          <div data-aos="fade-right">
+          {/* Image — first on mobile (order-first), right column on desktop (lg:order-last) */}
+          <div data-aos="fade-left" className="order-first lg:order-last">
+            <div className="mx-auto max-w-xs overflow-hidden rounded-xl border-4 border-white/10 sm:max-w-sm lg:max-w-none">
+              <img
+                src="/images/mentor-ava.png"
+                alt="DS Astrology mentor"
+                className="block w-full object-cover object-top"
+                style={{ maxHeight: '320px' }}
+              />
+            </div>
+            <div className="mt-5 flex flex-wrap items-center justify-around gap-3 rounded-xl bg-white px-5 py-4 shadow-lg sm:mt-6 sm:px-6">
+              {mediaLogos.map((logo) => (
+                <div
+                  key={logo}
+                  className={`${TYPE.media} opacity-80 transition hover:scale-105 hover:opacity-100`}
+                >
+                  <span className="block border-l-2 border-[#EE6662] pl-2">{logo}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Text — second on mobile (order-last), left column on desktop (lg:order-first) */}
+          <div data-aos="fade-right" className="order-last lg:order-first">
             <ul className="m-0 list-none p-0">
               {listItems.map((item) => (
                 <li key={item} className="mb-4 flex items-start gap-3 last:mb-0">
@@ -62,25 +85,6 @@ function MentorSection({ onJoinNow, onJoinFree }) {
             </div>
             <div className={WB_CTA_ROW}>
               <WebinarActionButtons onJoinPaid={onJoinNow} onJoinFree={onJoinFree} showUrgency={false} />
-            </div>
-          </div>
-          <div data-aos="fade-left">
-            <div className="mx-auto max-w-sm overflow-hidden rounded-xl border-4 border-white/10 lg:max-w-none">
-              <img
-                src="/images/mentor-ava.png"
-                alt="DS Astrology mentor"
-                className="block max-h-[280px] w-full object-cover object-top lg:max-h-[320px]"
-              />
-            </div>
-            <div className="mt-5 flex flex-wrap items-center justify-around gap-3 rounded-xl bg-white px-5 py-4 shadow-lg sm:mt-6 sm:px-6">
-              {mediaLogos.map((logo) => (
-                <div
-                  key={logo}
-                  className={`${TYPE.media} opacity-80 transition hover:scale-105 hover:opacity-100`}
-                >
-                  <span className="block border-l-2 border-[#EE6662] pl-2">{logo}</span>
-                </div>
-              ))}
             </div>
           </div>
         </div>

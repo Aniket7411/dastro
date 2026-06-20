@@ -27,11 +27,11 @@ const PictureGallery = () => {
           </h2>
           <div className={WB_UNDERLINE} />
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:grid-cols-3 sm:gap-3">
+        <div className="mt-5 flex flex-wrap justify-center gap-2.5 sm:mt-6 sm:gap-3">
           {galleryImages.map((img, idx) => (
             <div
               key={img.title}
-              className="group relative aspect-[16/10] overflow-hidden rounded-lg border border-slate-200 shadow-sm"
+              className="group relative aspect-[16/10] w-[calc(50%_-_5px)] overflow-hidden rounded-lg border border-slate-200 shadow-sm sm:w-[calc(50%_-_6px)] md:w-[calc(33.333%_-_8px)]"
               data-aos="zoom-in"
               data-aos-delay={idx * 100}
             >
