@@ -12,7 +12,7 @@ export default function CourseHero({
 
   if (heroImg) {
     return (
-      <header className="relative -mt-site-header mb-4 w-full overflow-hidden border-b border-site-accent-dark/10 sm:mb-5">
+      <header className="relative -mt-site-header mb-4 w-full overflow-hidden border-b border-site-accent-dark/10 sm:mb-5 bg-[#0d0d0d]">
         <div className="relative flex min-h-[min(16rem,52svh)] flex-col justify-end pt-site-header sm:min-h-72 lg:min-h-80">
           <img
             src={heroImg}
