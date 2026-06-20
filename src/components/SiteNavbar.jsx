@@ -340,7 +340,11 @@ export default function SiteNavbar({
         <div className="flex h-full shrink-0 items-center bg-site-accent-dark px-3 text-[0.625rem] font-bold uppercase tracking-wider text-white sm:px-4 sm:text-xs">
           Popular Reports
         </div>
-        <div className="relative flex h-full min-w-0 flex-1 items-center overflow-hidden">
+        <Link
+          to="/free-tools"
+          className="relative flex h-full min-w-0 flex-1 cursor-pointer items-center overflow-hidden transition hover:bg-site-accent/5"
+          aria-label="View all free astrology tools"
+        >
           <div className="flex w-max animate-marquee items-center gap-6 pl-3 pr-6 sm:gap-10">
             {[...REPORT_ITEMS, ...REPORT_ITEMS].map((text, index) => (
               <span
@@ -354,7 +358,7 @@ export default function SiteNavbar({
               </span>
             ))}
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Main navbar */}
