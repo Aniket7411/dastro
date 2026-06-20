@@ -760,14 +760,7 @@ function Home() {
   }, [bannerReady, carouselPaused, nextSlide]);
 
   useEffect(() => {
-    if (window.AOS) {
-      window.AOS.init({
-        duration: 1000,
-        once: true,
-        offset: 50, // Trigger earlier on mobile
-        disable: false // Ensure it's not disabled on any device
-      });
-    }
+    if (window.AOS) window.AOS.refresh();
   }, []);
 
   return (
@@ -795,6 +788,7 @@ function Home() {
             muted
             loop
             playsInline
+            preload="metadata"
           />
           {BANNER_SLIDES.map((slide, index) =>
             slide.bgImage ? (
@@ -866,19 +860,19 @@ function Home() {
                   <div className={`banner-graphic-layer ${!isThemedSlide ? 'is-active' : ''}`} aria-hidden={isThemedSlide}>
                     <div className="cosmic-orbit-container">
                     <div className="big-circle">
-                      <div className="icon-block"><img alt="" src="/images/as6.png" loading="eager" decoding="async" fetchPriority="high" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as7.png" loading="eager" decoding="async" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as8.png" loading="eager" decoding="async" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as9.png" loading="eager" decoding="async" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as10.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as6.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as7.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as8.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as9.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as10.png" loading="lazy" decoding="async" /></div>
                     </div>
                     <div className="small-circle">
-                      <div className="icon-block"><img alt="" src="/images/as1.png" loading="eager" decoding="async" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as2.png" loading="eager" decoding="async" /></div>
-                      <div className="icon-block"><img alt="" src="/images/as3.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as1.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as2.png" loading="lazy" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as3.png" loading="lazy" decoding="async" /></div>
                     </div>
                     <div className="center-logo">
-                      <img src="/images/middle-img.png" alt="" loading="eager" decoding="async" />
+                      <img src="/images/middle-img.png" alt="" loading="lazy" decoding="async" />
                       <div className="glow-orb"></div>
                     </div>
                     </div>

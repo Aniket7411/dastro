@@ -52,9 +52,26 @@ function LazyImageLoader() {
       });
     };
     applyLazy();
-    const observer = new MutationObserver(applyLazy);
+    // Throttle: at most once per 500ms so rapid DOM changes don't spam querySelectorAll
+    let timer = null;
+    const throttled = () => {
+      if (timer) return;
+      timer = setTimeout(() => { applyLazy(); timer = null; }, 500);
+    };
+    const observer = new MutationObserver(throttled);
     observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); clearTimeout(timer); };
+  }, []);
+  return null;
+}
+
+// Global AOS init — called once so pages don't each add their own scroll listeners
+let aosInitialised = false;
+function GlobalAOS() {
+  useEffect(() => {
+    if (aosInitialised || !window.AOS) return;
+    aosInitialised = true;
+    window.AOS.init({ duration: 1000, once: true, offset: 50 });
   }, []);
   return null;
 }
@@ -66,6 +83,7 @@ function App() {
         <BrowserRouter>
           <ScrollToTop />
           <LazyImageLoader />
+          <GlobalAOS />
           <ToastContainer
             position="top-center"
             autoClose={4000}
@@ -76,7 +94,7 @@ function App() {
             draggable
             pauseOnHover
             theme="colored"
-            style={{ zIndex: 20050 }}
+            style={{ zIndex: 99999 }}
           />
           <CookieConsent />
           <AstrologerChatFab />

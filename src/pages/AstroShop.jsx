@@ -31,10 +31,7 @@ function AstroShop() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   useEffect(() => {
-    if (window.AOS) {
-      window.AOS.refresh();
-      window.AOS.init({ duration: 1000, once: true });
-    }
+    if (window.AOS) window.AOS.refresh();
   }, []);
 
   const handleAddToCart = (product) => {

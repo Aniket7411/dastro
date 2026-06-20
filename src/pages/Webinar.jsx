@@ -37,7 +37,7 @@ function Webinar() {
 
   useEffect(() => {
     if (window.AOS) {
-      window.AOS.init({ duration: 1000, once: true });
+      window.AOS.refresh();
     }
 
     const timerKey = 'webinar_timer_v4';

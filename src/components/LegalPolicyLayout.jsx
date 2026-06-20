@@ -15,20 +15,29 @@ function LegalPolicyLayout({ seo, banner, sections, children }) {
   const [activeSection, setActiveSection] = useState(sections[0]?.id ?? '');
 
   useEffect(() => {
+    let rafId = null;
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + SCROLL_OFFSET;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id);
-        if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i].id);
-          break;
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const scrollPosition = window.scrollY + SCROLL_OFFSET;
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const el = document.getElementById(sections[i].id);
+          if (el && el.offsetTop <= scrollPosition) {
+            // Only setState when section actually changes — avoids re-renders on every frame
+            setActiveSection((prev) => (prev === sections[i].id ? prev : sections[i].id));
+            break;
+          }
         }
-      }
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [sections]);
 
   const scrollToSection = useCallback((id) => {

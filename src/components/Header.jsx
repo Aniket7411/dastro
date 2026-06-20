@@ -142,12 +142,6 @@ function Header() {
   };
 
   useEffect(() => {
-    if (window.AOS) {
-      window.AOS.init();
-    }
-  }, []);
-
-  useEffect(() => {
     syncAuthState();
     window.addEventListener('storage', syncAuthState);
     window.addEventListener('focus', syncAuthState);

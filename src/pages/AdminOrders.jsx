@@ -72,12 +72,16 @@ function AdminOrders() {
     fetchOrders();
   }, []);
 
-  const closeModals = () => {
-    if (actingKey) return;
+  const dismissModals = () => {
     setExternalModal(null);
     setAccessModal(null);
     setExternalAmount('');
     setExternalNote('');
+  };
+
+  const closeModals = () => {
+    if (actingKey) return;
+    dismissModals();
   };
 
   const runAction = async (row, actionName, { url, method = 'PUT', body, successMessage, onSuccess }) => {
@@ -98,10 +102,13 @@ function AdminOrders() {
         onSuccess?.();
         fetchOrders();
       } else {
+        dismissModals();
+        fetchOrders();
         toast.error(data.message || 'Action failed');
       }
     } catch {
-      toast.error('Network error');
+      dismissModals();
+      toast.error('Network error — please check your connection and try again.');
     } finally {
       setActingKey(null);
     }

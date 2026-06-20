@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import axios from 'axios';
@@ -133,12 +133,15 @@ function Footer() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const syncAuthState = () => {
+  const isMounted = useRef(true);
+  useEffect(() => { return () => { isMounted.current = false; }; }, []);
+
+  const syncAuthState = useCallback(() => {
     setAuthState({
       isStudent: Boolean(localStorage.getItem('studentToken')),
       isAdmin: Boolean(localStorage.getItem('adminToken'))
     });
-  };
+  }, []);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -146,6 +149,7 @@ function Footer() {
     setLoading(true);
     try {
       const { data } = await axios.post(`${API_BASE}/api/newsletter/subscribe`, { email });
+      if (!isMounted.current) return;
       if (data.success) {
         toast.success(data.message || 'Subscribed successfully!');
         setEmail('');
@@ -153,9 +157,11 @@ function Footer() {
         toast.error(data.message || 'Subscription failed.');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Network error. Please try again.');
+      if (isMounted.current) {
+        toast.error(error.response?.data?.message || 'Network error. Please try again.');
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 
@@ -168,7 +174,7 @@ function Footer() {
       window.removeEventListener('storage', syncAuthState);
       window.removeEventListener('focus', syncAuthState);
     };
-  }, []);
+  }, [syncAuthState]);
 
   // Map social links from settings
   const socialLinks = [

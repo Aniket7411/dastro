@@ -87,6 +87,16 @@ function ServiceSlide({ item, onBook }) {
 export default function ConsultationServicesCarousel({ onBook }) {
   const [held, setHeld] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [inView, setInView] = useState(true);
+  const sectionRef = useCallback((node) => {
+    if (!node) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    io.observe(node);
+    node._cscIo = io;
+  }, []);
 
   const slides = [...CONSULTATION_SERVICE_SLIDES, ...CONSULTATION_SERVICE_SLIDES];
 
@@ -108,9 +118,13 @@ export default function ConsultationServicesCarousel({ onBook }) {
     setHeld(false);
   }, []);
 
+  // Pause when scrolled out of viewport so GPU isn't animating invisible elements
+  const paused = held || !inView;
+
   return (
     <div
-      className={`csc-section${held ? ' csc-section--held' : ''}${reduceMotion ? ' csc-section--static' : ''}`}
+      ref={sectionRef}
+      className={`csc-section${paused ? ' csc-section--held' : ''}${reduceMotion ? ' csc-section--static' : ''}`}
       aria-label="Consultation services carousel"
     >
       <div

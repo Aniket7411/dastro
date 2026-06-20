@@ -18,36 +18,8 @@ function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Initialize AOS with proper settings
-    if (window.AOS) {
-      window.AOS.init({
-        duration: 800,
-        once: true,
-        offset: 50,
-        easing: 'ease-in-out'
-      });
-    } else {
-      // Fallback - load AOS if not present
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
-      script.onload = () => {
-        if (window.AOS) {
-          window.AOS.init({
-            duration: 800,
-            once: true,
-            offset: 50,
-            easing: 'ease-in-out'
-          });
-        }
-      };
-      document.head.appendChild(script);
-      
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/aos@2.3.1/dist/aos.css';
-      document.head.appendChild(link);
-    }
-    
+    if (window.AOS) window.AOS.refresh();
+
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };

@@ -91,12 +91,18 @@ const VideoReviewCarousel = () => {
 
   useEffect(() => {
     const el = containerRef.current;
-    if (el) {
-      el.addEventListener('scroll', checkScroll);
-      checkScroll();
-      return () => el.removeEventListener('scroll', checkScroll);
-    }
-    return undefined;
+    if (!el) return undefined;
+    let rafId = null;
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => { rafId = null; checkScroll(); });
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    checkScroll();
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (

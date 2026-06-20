@@ -217,14 +217,11 @@ export default function SiteNavbar({
 
     syncHeaderOffset();
 
+    // ResizeObserver handles all resize cases — no need for window resize listener too
     const observer = new ResizeObserver(syncHeaderOffset);
     observer.observe(el);
-    window.addEventListener('resize', syncHeaderOffset);
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', syncHeaderOffset);
-    };
+    return () => observer.disconnect();
   }, []);
 
   const closeMobile = () => setMobileOpen(false);
