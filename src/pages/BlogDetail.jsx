@@ -72,43 +72,65 @@ function BlogDetail() {
       <SEO title={`${blog.title} | DS Astrology Blog`} description={blog.excerpt || blog.title} />
 
       <article className={`${SITE_CONTAINER} py-8 sm:py-10`}>
-        <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-1 text-sm text-site-muted">
-          <Link to="/" className="text-site-accent-dark no-underline hover:underline">
-            Home
-          </Link>
+
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1 text-sm text-site-muted">
+          <Link to="/" className="text-site-accent-dark no-underline hover:underline">Home</Link>
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          <Link to="/blog" className="text-site-accent-dark no-underline hover:underline">
-            Blog
-          </Link>
+          <Link to="/blog" className="text-site-accent-dark no-underline hover:underline">Blog</Link>
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          <span className="text-site-muted">{blog.title}</span>
+          <span className="line-clamp-1 text-site-muted">{blog.title}</span>
         </nav>
 
-        <header className="mb-6 border-b border-site-accent-dark/12 pb-5">
-          <span className={`${BLOG_CHIP} mb-3`}>{blog.category}</span>
-          <h1 className="m-0 mb-3 font-heading text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-tight text-site-primary">
-            {blog.title}
-          </h1>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-site-muted">
-            <span className="inline-flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-site-accent/12 text-site-primary">
-                <User className="h-4 w-4" aria-hidden="true" />
+        {/* ── Hero: two-col on lg ── */}
+        <div className="mb-8 grid grid-cols-1 items-center gap-8 border-b border-site-accent-dark/12 pb-8 lg:mb-10 lg:grid-cols-2 lg:gap-12 lg:pb-10">
+
+          {/* Left — category · title · excerpt · meta */}
+          <div className="flex flex-col gap-4">
+            <span className={`${BLOG_CHIP} self-start`}>{blog.category}</span>
+
+            <h1 className="m-0 font-heading text-[clamp(1.625rem,3.2vw,2.5rem)] font-extrabold leading-[1.2] tracking-tight text-site-primary">
+              {blog.title}
+            </h1>
+
+            {blog.excerpt && (
+              <p className="m-0 text-base leading-relaxed text-site-muted sm:text-lg">
+                {blog.excerpt}
+              </p>
+            )}
+
+            {/* Author + date */}
+            <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-site-muted">
+              <span className="inline-flex items-center gap-2">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-site-accent/12 text-site-primary">
+                  <User className="h-4 w-4" aria-hidden="true" />
+                </span>
+                <span className="font-semibold text-site-primary">{blog.author || 'Admin'}</span>
               </span>
-              {blog.author || 'Admin'}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" aria-hidden="true" />
-              {formatBlogDate(blog.createdAt, 'long')}
-            </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-4 w-4 shrink-0" aria-hidden="true" />
+                {formatBlogDate(blog.createdAt, 'long')}
+              </span>
+            </div>
           </div>
-        </header>
 
-        {blog.image && (
-          <figure className="mb-6 overflow-hidden rounded-xl border border-site-accent-dark/12 shadow-sm">
-            <img src={blog.image} alt={blog.title} className="block max-h-[28rem] w-full object-cover" />
-          </figure>
-        )}
+          {/* Right — cover image */}
+          {blog.image ? (
+            <figure className="m-0 overflow-hidden rounded-2xl border border-site-accent-dark/12 shadow-md">
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="block aspect-[4/3] w-full object-cover"
+                loading="eager"
+              />
+            </figure>
+          ) : (
+            /* Placeholder keeps grid stable when there's no image */
+            <div className="hidden lg:block" aria-hidden="true" />
+          )}
+        </div>
 
+        {/* ── Rich content ── */}
         <div
           className="blog-rich-content"
           dangerouslySetInnerHTML={{ __html: blog.content }}
