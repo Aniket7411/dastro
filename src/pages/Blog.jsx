@@ -94,16 +94,21 @@ function Blog() {
     setIsLoading(true);
     try {
       const hasFilter = category !== 'All' || Boolean(search?.trim());
-      const [fullList, filtered] = await Promise.all([
-        hasFilter ? fetchBlogs() : fetchBlogs({ category, search }),
-        fetchBlogs({
-          category: category === 'All' ? undefined : category,
-          search: search || undefined,
-        }),
-      ]);
-
-      setAllBlogs(hasFilter ? fullList : filtered);
-      setBlogs(filtered);
+      if (hasFilter) {
+        const [fullList, filtered] = await Promise.all([
+          fetchBlogs(),
+          fetchBlogs({
+            category: category !== 'All' ? category : undefined,
+            search: search || undefined,
+          }),
+        ]);
+        setAllBlogs(fullList);
+        setBlogs(filtered);
+      } else {
+        const data = await fetchBlogs();
+        setAllBlogs(data);
+        setBlogs(data);
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.message || 'Failed to fetch blogs');

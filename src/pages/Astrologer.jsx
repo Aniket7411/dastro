@@ -148,7 +148,7 @@ function LeadModal({ astrologer, onClose, onSuccess }) {
   return (
     /* Backdrop — flex-col so the sheet sits at the bottom on mobile */
     <div
-      className="fixed inset-0 z-[60] flex flex-col justify-end sm:justify-center sm:items-center bg-black/55 backdrop-blur-sm"
+      className="fixed inset-0 z-[1060] flex flex-col justify-end sm:justify-center sm:items-center sm:p-6 bg-black/55 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Sheet */}
@@ -272,7 +272,7 @@ function LeadModal({ astrologer, onClose, onSuccess }) {
 function ConfirmationModal({ astrologerName, onClose }) {
   useScrollLock(true);
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/55 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[1060] flex items-center justify-center p-4 sm:p-6 bg-black/55 backdrop-blur-sm">
       <div className="bg-white w-full max-w-xs rounded-3xl shadow-2xl p-6 text-center">
         <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-amber-200">
           <IcoCheck />
@@ -423,6 +423,7 @@ export default function Astrologer() {
   const [activeTag, setActiveTag] = useState('All');
   const debounceRef = useRef(null);
   const pillsRef = useRef(null);
+  const isFirstMount = useRef(true);
   const [isRefetching, setIsRefetching] = useState(false);
 
   const fetchData = useCallback(async (tag, q, refetch = false) => {
@@ -448,11 +449,13 @@ export default function Astrologer() {
     }
   }, []);
 
-  // Initial load
-  useEffect(() => { fetchData('All', ''); }, [fetchData]);
-
-  // Debounce search/filter — dims grid instead of full skeleton
+  // Single effect: immediate on first mount, debounced on subsequent filter/search changes
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      fetchData(activeTag, search);
+      return;
+    }
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchData(activeTag, search, true), 350);
     return () => clearTimeout(debounceRef.current);

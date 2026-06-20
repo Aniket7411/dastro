@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { PageLoader } from '../components/PageLoader';
 import { motion } from 'framer-motion';
 import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 
@@ -198,7 +199,9 @@ function StandaloneLayout() {
       </motion.header>
 
       <main className="contextual-main min-h-[calc(100vh-174px)]">
-        <Outlet />
+        <Suspense fallback={<PageLoader label="Loading…" />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       <motion.footer

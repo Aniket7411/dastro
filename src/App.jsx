@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import MainLayout from './layouts/MainLayout';
 import StandaloneLayout from './layouts/StandaloneLayout';
@@ -43,6 +43,13 @@ const StudentLogin = lazy(() => import('./pages/StudentLogin'));
 const StudentDashboard = lazy(() => import('./pages/StudentDashboardTailwind'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Force a full remount when the URL param changes — guarantees clean state and a fresh API call.
+// Must be defined at module level (not inside App) to keep a stable component identity.
+function KeyedBlogDetail() { const { slug } = useParams(); return <BlogDetail key={slug} />; }
+function KeyedCourseDetail() { const { courseId } = useParams(); return <CourseDetail key={courseId} />; }
+function KeyedConsultationDetail() { const { serviceId } = useParams(); return <ConsultationDetail key={serviceId} />; }
+function KeyedShopCategory() { const { category } = useParams(); return <ShopCategory key={category} />; }
 
 function LazyImageLoader() {
   useEffect(() => {
@@ -104,12 +111,12 @@ function App() {
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
                 <Route path="book-consultation" element={<Consultations />} />
-                <Route path="book-consultation/:serviceId" element={<ConsultationDetail />} />
+                <Route path="book-consultation/:serviceId" element={<KeyedConsultationDetail />} />
                 <Route path="consultations" element={<Consultations />} />
-                <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
+                <Route path="consultations/:serviceId" element={<KeyedConsultationDetail />} />
                 <Route path="about" element={<About />} />
                 <Route path="blog" element={<Blog />} />
-                <Route path="blog/:slug" element={<BlogDetail />} />
+                <Route path="blog/:slug" element={<KeyedBlogDetail />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="terms-and-conditions" element={<Terms />} />
@@ -123,14 +130,14 @@ function App() {
                 <Route path="courses" element={<Courses />} />
                 <Route path="live-courses" element={<Courses mode="live" />} />
                 <Route path="recorded-courses" element={<Courses mode="recorded" />} />
-                <Route path="courses/:courseId" element={<CourseDetail />} />
+                <Route path="courses/:courseId" element={<KeyedCourseDetail />} />
                 <Route path="free-tools" element={<FreeTools />} />
                 <Route path="numerology" element={<Numerology />} />
                 <Route path="tarot" element={<Tarot />} />
                 <Route path="love" element={<Love />} />
                 <Route path="shop" element={<AstroShop />} />
                 <Route path="shop/checkout" element={<ShopCheckout />} />
-                <Route path="shop/:category" element={<ShopCategory />} />
+                <Route path="shop/:category" element={<KeyedShopCategory />} />
                 <Route path="careers" element={<Careers />} />
                 <Route path="login" element={<StudentLogin />} />
                 <Route path="admin/login" element={<AdminLogin />} />

@@ -146,11 +146,14 @@ function CourseDetail() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    let cancelled = false;
     const loadCourse = async () => {
       setLoading(true);
       setPreviewLoading(true);
+      setCourse(null);
       try {
         const detail = await fetchCourseBySlugOrId(courseId);
+        if (cancelled) return;
         let previews = [];
         try {
           previews = await fetchCoursePreviewVideos(courseId);
@@ -160,10 +163,12 @@ function CourseDetail() {
         if (!previews.length && detail.previewVideos?.length) {
           previews = detail.previewVideos;
         }
+        if (cancelled) return;
         setCourse(mapDetailCourse(detail.course));
         setLessonCount(detail.lessonCount || detail.course?.modulesCount || 0);
         setPreviewVideos(previews);
       } catch (err) {
+        if (cancelled) return;
         setStatusModal({
           type: 'error',
           title: 'Course not found',
@@ -171,11 +176,14 @@ function CourseDetail() {
         });
         navigate('/recorded-courses');
       } finally {
-        setLoading(false);
-        setPreviewLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          setPreviewLoading(false);
+        }
       }
     };
     loadCourse();
+    return () => { cancelled = true; };
   }, [courseId, navigate]);
 
   useEffect(() => {
