@@ -90,7 +90,7 @@ function StudentLogin() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success('OTP sent to your email (if registered)');
+        toast.success('Password reset email sent. Please check your inbox.');
         return true;
       }
 
