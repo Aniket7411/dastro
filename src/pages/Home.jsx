@@ -455,6 +455,7 @@ const BANNER_SLIDES = [
     desc: 'Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.',
     primaryCta: { label: 'Explore Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
     themeRust: false,
+    overlayGlass: true,
   },
   {
     badge: 'Mystic Insights · Divine Truth',
@@ -774,7 +775,7 @@ function Home() {
       <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
       <section
-        className={`banner-section banner-hero-full w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
+        className={`banner-section banner-hero-full w-100 banner-has-bg banner-glass-overlay ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
         data-slide-dir={slideDirection === 1 ? 'next' : 'prev'}
         aria-busy={!bannerReady}
         aria-roledescription="carousel"
@@ -787,7 +788,14 @@ function Home() {
         }}
       >
         <div className="banner-bg-layers" aria-hidden="true">
-          <div className={`banner-bg-layer banner-bg-layer--gradient ${currentSlide === 0 ? 'is-active' : ''}`} />
+          <video
+            className={`banner-bg-layer banner-bg-video ${currentSlide === 0 ? 'is-active' : ''}`}
+            src="/bannervideo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
           {BANNER_SLIDES.map((slide, index) =>
             slide.bgImage ? (
               <div
@@ -797,9 +805,7 @@ function Home() {
               />
             ) : null,
           )}
-          {activeSlide.bgImage ? (
-            <div className="banner-bg-overlay banner-bg-overlay--shade is-active" />
-          ) : null}
+          <div className="banner-bg-overlay banner-bg-overlay--shade is-active" />
           {activeSlide.glassOverall ? (
             <div className="banner-bg-overlay banner-bg-overlay--glass-overall is-active" />
           ) : null}
@@ -835,7 +841,7 @@ function Home() {
 
                   <HomeBannerCTAs
                     primaryCta={activeSlide.primaryCta}
-                    onDark={Boolean(activeSlide.bgImage || activeSlide.overlayGlass)}
+                    onDark={true}
                   />
 
                   <div className="trust-indicator mt-3">
@@ -1409,6 +1415,15 @@ function Home() {
             opacity: 1;
             transform: translateX(0);
           }
+        }
+
+        .banner-bg-video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
         }
 
         .banner-bg-image {
