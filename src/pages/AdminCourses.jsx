@@ -79,6 +79,108 @@ const VISIBILITY_LABELS = {
   enrolled: 'Lesson (after purchase)',
 };
 
+const videoProviders = {
+  supabase: {
+    label: 'Supabase Storage',
+    idLabel: 'Video URL',
+    fieldLabel: 'Supabase Video URL',
+    placeholder: 'Auto-filled after upload, or paste an existing Supabase URL',
+    fileHint: 'Select a file to upload to Supabase immediately. The URL field fills in automatically.'
+  },
+  bunny: {
+    label: 'Bunny.net',
+    idLabel: 'Bunny Video ID',
+    fieldLabel: 'Bunny.net Video ID or URL',
+    placeholder: 'Paste Bunny Stream URL or video ID',
+    fileHint: 'If a file is selected, it will be uploaded to Bunny.net automatically.'
+  },
+  vdocipher: {
+    label: 'VdoCipher',
+    idLabel: 'VdoCipher Video ID',
+    fieldLabel: 'VdoCipher Video ID',
+    placeholder: 'Paste VdoCipher video ID',
+    fileHint: 'Upload will be connected to VdoCipher after backend keys are configured.'
+  }
+};
+
+const getProviderConfig = (provider = 'bunny') => videoProviders[provider] || videoProviders.bunny;
+const getProviderLabel = (provider = 'bunny') => getProviderConfig(provider).label;
+const getProviderIdLabel = (provider = 'bunny') => getProviderConfig(provider).idLabel;
+
+function VideoEntryForm({
+  label,
+  videoForm,
+  videoLoading,
+  videoUploading,
+  editingVideoId,
+  handleVideoInputChange,
+  handleVideoFileChange,
+  handleAddVideoFromEditModal,
+  resetVideoForm,
+}) {
+  return (
+    <div className="lms-video-form-wrap">
+      <p className="lms-video-form-context">
+        <i className={`fas ${videoForm.visibility === 'public' ? 'fa-eye' : 'fa-lock'}`} style={{ marginRight: '0.4rem' }} />
+        {label}
+      </p>
+      <div className="form-group">
+        <label className="form-label">Title</label>
+        <input type="text" name="title" value={videoForm.title} onChange={handleVideoInputChange} className="form-input" placeholder={videoForm.visibility === 'public' ? 'e.g., Course Introduction' : 'e.g., Lesson 1 — Basics'} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Video Provider</label>
+        <select name="videoProvider" value={videoForm.videoProvider} onChange={handleVideoInputChange} className="form-input">
+          <option value="supabase">Supabase Storage (recommended)</option>
+          <option value="bunny">Bunny.net</option>
+          <option value="vdocipher">VdoCipher</option>
+        </select>
+      </div>
+      <div className="form-group">
+        <label className="form-label">{getProviderConfig(videoForm.videoProvider).fieldLabel}</label>
+        <input type="text" name="bunnyVideoId" value={videoForm.bunnyVideoId} onChange={handleVideoInputChange} className="form-input" placeholder={getProviderConfig(videoForm.videoProvider).placeholder} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Upload Video File</label>
+        <div className="file-input-wrap">
+          <input type="file" accept="video/*" onChange={handleVideoFileChange} disabled={videoUploading} />
+        </div>
+        {videoUploading ? (
+          <p className="form-hint" style={{ color: 'var(--primary)' }}>
+            <span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />
+            Uploading video…
+          </p>
+        ) : videoForm.videoProvider === 'supabase' && videoForm.bunnyVideoId ? (
+          <p className="form-hint" style={{ color: '#16a34a' }}>
+            <i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />
+            Uploaded. Click save to attach to course.
+          </p>
+        ) : (
+          <p className="form-hint">{getProviderConfig(videoForm.videoProvider).fileHint}</p>
+        )}
+      </div>
+      {videoForm.visibility === 'enrolled' && (
+        <div className="form-group">
+          <label className="form-label">Sort Order</label>
+          <input type="number" name="sortOrder" value={videoForm.sortOrder} onChange={handleVideoInputChange} className="form-input" placeholder="0" />
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <button type="button" className="lms-primary-action add-video-inline-btn" disabled={videoLoading || videoUploading} onClick={handleAddVideoFromEditModal}>
+          {videoLoading ? (editingVideoId ? 'Updating…' : 'Saving…') : (
+            editingVideoId
+              ? (videoForm.visibility === 'public' ? 'Update Intro Video' : 'Update Lesson')
+              : (videoForm.visibility === 'public' ? 'Save Intro Video' : 'Add Lesson')
+          )}
+        </button>
+        <button type="button" className="lms-secondary-action lms-secondary-action--sm add-video-inline-btn" onClick={resetVideoForm}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function AdminCourses() {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,34 +215,7 @@ function AdminCourses() {
   const [editVideoDrafts, setEditVideoDrafts] = useState([]);
   const [showVideoForm, setShowVideoForm] = useState(false);
 
-  const videoProviders = {
-    supabase: {
-      label: 'Supabase Storage',
-      idLabel: 'Video URL',
-      fieldLabel: 'Supabase Video URL',
-      placeholder: 'Auto-filled after upload, or paste an existing Supabase URL',
-      fileHint: 'Select a file to upload to Supabase immediately. The URL field fills in automatically.'
-    },
-    bunny: {
-      label: 'Bunny.net',
-      idLabel: 'Bunny Video ID',
-      fieldLabel: 'Bunny.net Video ID or URL',
-      placeholder: 'Paste Bunny Stream URL or video ID',
-      fileHint: 'If a file is selected, it will be uploaded to Bunny.net automatically.'
-    },
-    vdocipher: {
-      label: 'VdoCipher',
-      idLabel: 'VdoCipher Video ID',
-      fieldLabel: 'VdoCipher Video ID',
-      placeholder: 'Paste VdoCipher video ID',
-      fileHint: 'Upload will be connected to VdoCipher after backend keys are configured.'
-    }
-  };
-
   const getVideoProvider = (video) => video?.videoProvider || video?.provider || 'supabase';
-  const getProviderConfig = (provider = 'bunny') => videoProviders[provider] || videoProviders.bunny;
-  const getProviderLabel = (provider = 'bunny') => getProviderConfig(provider).label;
-  const getProviderIdLabel = (provider = 'bunny') => getProviderConfig(provider).idLabel;
 
   const getVideoValue = (video) => {
     return (
@@ -1560,67 +1635,6 @@ function AdminCourses() {
                     const introVideo = editingCourseVideos.find((v) => v.visibility === 'public') || null;
                     const lessonVideos = editingCourseVideos.filter((v) => v.visibility !== 'public');
                     const refreshVideos = refreshEditingCourseVideos;
-                    const VideoForm = ({ label }) => (
-                      <div className="lms-video-form-wrap">
-                        <p className="lms-video-form-context">
-                          <i className={`fas ${videoForm.visibility === 'public' ? 'fa-eye' : 'fa-lock'}`} style={{ marginRight: '0.4rem' }} />
-                          {label}
-                        </p>
-                        <div className="form-group">
-                          <label className="form-label">Title</label>
-                          <input type="text" name="title" value={videoForm.title} onChange={handleVideoInputChange} className="form-input" placeholder={videoForm.visibility === 'public' ? 'e.g., Course Introduction' : 'e.g., Lesson 1 — Basics'} />
-                        </div>
-                        <div className="form-group">
-                          <label className="form-label">Video Provider</label>
-                          <select name="videoProvider" value={videoForm.videoProvider} onChange={handleVideoInputChange} className="form-input">
-                            <option value="supabase">Supabase Storage (recommended)</option>
-                            <option value="bunny">Bunny.net</option>
-                            <option value="vdocipher">VdoCipher</option>
-                          </select>
-                        </div>
-                        <div className="form-group">
-                          <label className="form-label">{getProviderConfig(videoForm.videoProvider).fieldLabel}</label>
-                          <input type="text" name="bunnyVideoId" value={videoForm.bunnyVideoId} onChange={handleVideoInputChange} className="form-input" placeholder={getProviderConfig(videoForm.videoProvider).placeholder} />
-                        </div>
-                        <div className="form-group">
-                          <label className="form-label">Upload Video File</label>
-                          <div className="file-input-wrap">
-                            <input type="file" accept="video/*" onChange={handleVideoFileChange} disabled={videoUploading} />
-                          </div>
-                          {videoUploading ? (
-                            <p className="form-hint" style={{ color: 'var(--primary)' }}>
-                              <span className="lf-spinner" style={{ width: '12px', height: '12px', marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }} />
-                              Uploading video…
-                            </p>
-                          ) : videoForm.videoProvider === 'supabase' && videoForm.bunnyVideoId ? (
-                            <p className="form-hint" style={{ color: '#16a34a' }}>
-                              <i className="fas fa-check-circle" style={{ marginRight: '0.35rem' }} />
-                              Uploaded. Click save to attach to course.
-                            </p>
-                          ) : (
-                            <p className="form-hint">{getProviderConfig(videoForm.videoProvider).fileHint}</p>
-                          )}
-                        </div>
-                        {videoForm.visibility === 'enrolled' && (
-                          <div className="form-group">
-                            <label className="form-label">Sort Order</label>
-                            <input type="number" name="sortOrder" value={videoForm.sortOrder} onChange={handleVideoInputChange} className="form-input" placeholder="0" />
-                          </div>
-                        )}
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                          <button type="button" className="lms-primary-action add-video-inline-btn" disabled={videoLoading || videoUploading} onClick={handleAddVideoFromEditModal}>
-                            {videoLoading ? (editingVideoId ? 'Updating…' : 'Saving…') : (
-                              editingVideoId
-                                ? (videoForm.visibility === 'public' ? 'Update Intro Video' : 'Update Lesson')
-                                : (videoForm.visibility === 'public' ? 'Save Intro Video' : 'Add Lesson')
-                            )}
-                          </button>
-                          <button type="button" className="lms-secondary-action lms-secondary-action--sm add-video-inline-btn" onClick={resetVideoForm}>
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    );
                     return (
                       <>
                         {/* ── SECTION 1: INTRODUCTORY VIDEO ── */}
@@ -1667,7 +1681,17 @@ function AdminCourses() {
                             </div>
                           ) : null}
                           {showVideoForm && videoForm.visibility === 'public' && (
-                            <VideoForm label={editingVideoId ? 'Replacing introductory video' : 'Setting introductory video'} />
+                            <VideoEntryForm
+                              label={editingVideoId ? 'Replacing introductory video' : 'Setting introductory video'}
+                              videoForm={videoForm}
+                              videoLoading={videoLoading}
+                              videoUploading={videoUploading}
+                              editingVideoId={editingVideoId}
+                              handleVideoInputChange={handleVideoInputChange}
+                              handleVideoFileChange={handleVideoFileChange}
+                              handleAddVideoFromEditModal={handleAddVideoFromEditModal}
+                              resetVideoForm={resetVideoForm}
+                            />
                           )}
                         </div>
 
@@ -1722,7 +1746,17 @@ function AdminCourses() {
                                 </div>
                               )}
                               {showVideoForm && videoForm.visibility === 'enrolled' ? (
-                                <VideoForm label={editingVideoId ? 'Editing lesson' : 'Adding new lesson'} />
+                                <VideoEntryForm
+                                  label={editingVideoId ? 'Editing lesson' : 'Adding new lesson'}
+                                  videoForm={videoForm}
+                                  videoLoading={videoLoading}
+                                  videoUploading={videoUploading}
+                                  editingVideoId={editingVideoId}
+                                  handleVideoInputChange={handleVideoInputChange}
+                                  handleVideoFileChange={handleVideoFileChange}
+                                  handleAddVideoFromEditModal={handleAddVideoFromEditModal}
+                                  resetVideoForm={resetVideoForm}
+                                />
                               ) : (
                                 <button type="button" className="lms-secondary-action lms-secondary-action--sm" style={{ fontSize: '12px', marginTop: lessonVideos.length > 0 ? '10px' : 0 }} onClick={startAddingLesson}>
                                   <i className="fas fa-plus" style={{ marginRight: '6px' }} />Add Lesson
