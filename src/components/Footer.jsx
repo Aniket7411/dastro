@@ -473,6 +473,7 @@ function Footer() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to="/live">Live Astrologers</Link></li>
                 <li><Link to={authState.isStudent ? '/dashboard' : '/login'}>{authState.isStudent ? 'Student Dashboard' : 'Student Login'}</Link></li>
                 {authState.isAdmin && <li><Link to="/admin">Admin Dashboard</Link></li>}
                 {/* <li><Link to="/shop">Merchandise</Link></li> */}
@@ -606,6 +607,7 @@ function Footer() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to="/live">Live Astrologers</Link></li>
                 <li><Link to={authState.isStudent ? '/dashboard' : '/login'}>{authState.isStudent ? 'Student Dashboard' : 'Student Login'}</Link></li>
                 {authState.isAdmin && <li><Link to="/admin">Admin Dashboard</Link></li>}
                 {/* <li><Link to="/shop">Merchandise</Link></li> */}
