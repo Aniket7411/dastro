@@ -17,6 +17,7 @@ function PlaceAutocomplete({ value, onChange, onSelect, placeholder = "Type city
   const [showDropdown, setShowDropdown] = useState(false);
   const debouncedQuery = useDebounce(query, 400);
   const wrapperRef = useRef(null);
+  const skipNextFetchRef = useRef(false);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -31,6 +32,10 @@ function PlaceAutocomplete({ value, onChange, onSelect, placeholder = "Type city
 
   // Fetch suggestions when debounced query changes
   useEffect(() => {
+    if (skipNextFetchRef.current) {
+      skipNextFetchRef.current = false;
+      return;
+    }
     if (debouncedQuery.length < 3) {
       setSuggestions([]);
       setShowDropdown(false);
@@ -57,25 +62,44 @@ function PlaceAutocomplete({ value, onChange, onSelect, placeholder = "Type city
 
   const handleSelect = (place) => {
     const label = place.display_name.split(',').slice(0, 3).join(', ');
+    skipNextFetchRef.current = true;
     setQuery(label);
     setSuggestions([]);
     setShowDropdown(false);
     onSelect({ lat: place.lat, lon: place.lon, displayName: place.display_name, label });
   };
 
+  const clear = () => {
+    setQuery('');
+    setSuggestions([]);
+    setShowDropdown(false);
+    onChange('');
+  };
+
   return (
     <div className="place-autocomplete-wrapper" ref={wrapperRef} style={{ position: 'relative' }}>
-      <div className="input-group">
-        <span className="input-group-text bg-transparent border-secondary text-muted">
+      <div style={{ position: 'relative' }}>
+        <span
+          style={{
+            position: 'absolute',
+            left: '14px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: '#c6843f',
+            pointerEvents: 'none',
+            display: 'flex',
+          }}
+        >
           {searching ? (
-            <span className="spinner-border spinner-border-sm text-pink" style={{ width: '14px', height: '14px' }}></span>
+            <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px' }}></span>
           ) : (
-            <i className="fas fa-map-marker-alt text-pink"></i>
+            <i className="fas fa-map-marker-alt"></i>
           )}
         </span>
         <input
           type="text"
-          className="form-control bg-transparent text-white border-secondary"
+          className="form-control"
+          style={{ color: '#65250c', paddingLeft: '2.5rem', paddingRight: query ? '2.25rem' : undefined }}
           placeholder={placeholder}
           value={query}
           onChange={(e) => {
@@ -86,19 +110,47 @@ function PlaceAutocomplete({ value, onChange, onSelect, placeholder = "Type city
           autoComplete="off"
           required
         />
+        {query && (
+          <button
+            type="button"
+            onClick={clear}
+            aria-label="Clear birth place"
+            className="text-[#c6843f] transition hover:text-[#9c5a1e]"
+            style={{
+              position: 'absolute',
+              right: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              lineHeight: 1,
+              cursor: 'pointer',
+            }}
+          >
+            <i className="fas fa-times-circle"></i>
+          </button>
+        )}
       </div>
 
       {showDropdown && (
-        <ul className="place-suggestions-dropdown">
+        <ul
+          className="absolute z-50 mt-1.5 max-h-52 w-full overflow-y-auto rounded-xl border border-[#f3e5d8] bg-white py-1 shadow-[0_12px_28px_rgba(139,74,30,0.14)]"
+        >
           {suggestions.map((place, i) => {
             const parts = place.display_name.split(',');
             const primary = parts.slice(0, 2).join(',').trim();
             const secondary = parts.slice(2, 4).join(',').trim();
             return (
-              <li key={i} onClick={() => handleSelect(place)} className="suggestion-item">
-                <i className="fas fa-map-pin me-2 text-pink opacity-75"></i>
-                <span className="suggestion-primary">{primary}</span>
-                {secondary && <span className="suggestion-secondary">, {secondary}</span>}
+              <li
+                key={i}
+                onClick={() => handleSelect(place)}
+                className="flex cursor-pointer items-start gap-2 px-3 py-2 text-sm transition hover:bg-[#fff3e0]"
+              >
+                <i className="fas fa-map-marker-alt mt-0.5 text-[#c6843f]"></i>
+                <span className="leading-snug">
+                  <span className="font-semibold text-[#65250c]">{primary}</span>
+                  {secondary && <span className="text-[#9c847b]">, {secondary}</span>}
+                </span>
               </li>
             );
           })}

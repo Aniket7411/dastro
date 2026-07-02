@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import API_BASE from '../../utils/api.js';
 
@@ -7,10 +9,18 @@ const emptyPartner = () => ({ name: '', dob: '', tob: '12:00', place: '', lat: '
 const inputCls = 'w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]';
 const labelCls = 'mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]';
 
-function PartnerCard({ label, data, onChange }) {
+function PartnerCard({ label, icon, iconColor, data, onChange }) {
   return (
     <div className="rounded-2xl border border-[#f3e5d8] bg-white p-4 shadow-[0_4px_16px_rgba(198,132,63,0.07)] sm:p-5">
-      <h4 className="mb-4 font-serif text-base font-extrabold text-[#65250c]">{label}</h4>
+      <h4 className="mb-4 flex items-center gap-2 font-serif text-base font-extrabold text-[#65250c]">
+        <span
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-sm text-white"
+          style={{ background: iconColor }}
+        >
+          <i className={`fas ${icon}`}></i>
+        </span>
+        {label}
+      </h4>
       <div className="flex flex-col gap-4">
         <div>
           <label className={labelCls}>Full Name</label>
@@ -67,6 +77,8 @@ function LoveCalculator({ onBack }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [downloading, setDownloading] = useState(false);
+  const reportRef = useRef(null);
 
   const isValid = () =>
     partnerA.lat && partnerA.lon && partnerB.lat && partnerB.lon &&
@@ -98,6 +110,22 @@ function LoveCalculator({ onBack }) {
 
   const score = result?.score || 0;
   const scoreColor = score > 80 ? '#c6843f' : score > 60 ? '#9c5a1e' : '#65250c';
+
+  const downloadReport = async () => {
+    if (!reportRef.current) return;
+    setDownloading(true);
+    try {
+      const canvas = await html2canvas(reportRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`${result.partnerA?.name || 'Partner1'}-${result.partnerB?.name || 'Partner2'}-compatibility.pdf`);
+    } catch {
+      setError('Could not download report. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row">
@@ -148,8 +176,8 @@ function LoveCalculator({ onBack }) {
           <div className="w-full max-w-2xl">
             <form onSubmit={calculate}>
               <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <PartnerCard label="👤 Partner One" data={partnerA} onChange={setPartnerA} />
-                <PartnerCard label="👤 Partner Two" data={partnerB} onChange={setPartnerB} />
+                <PartnerCard label="Partner One" icon="fa-mars" iconColor="#3b82f6" data={partnerA} onChange={setPartnerA} />
+                <PartnerCard label="Partner Two" icon="fa-venus" iconColor="#ec4899" data={partnerB} onChange={setPartnerB} />
               </div>
               {error && <p className="mb-3 text-center text-xs text-red-600">{error}</p>}
               <div className="text-center">
@@ -165,6 +193,7 @@ function LoveCalculator({ onBack }) {
           </div>
         ) : (
           <div className="w-full max-w-lg">
+            <div ref={reportRef} className="bg-white">
             {/* Score progress */}
             <div className="mb-5 rounded-2xl border border-[#f3e5d8] bg-[#fffaf4] p-5 text-center sm:p-6">
               <span className="inline-block rounded-full bg-[#fff3e0] px-3 py-1 text-[0.6875rem] font-extrabold uppercase tracking-widest text-[#9c5a1e]">
@@ -206,8 +235,16 @@ function LoveCalculator({ onBack }) {
                 ))}
               </div>
             )}
+            </div>
 
-            <div className="mt-5 text-center">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={downloadReport}
+                disabled={downloading}
+                className="rounded-xl bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] px-6 py-2 text-xs font-bold uppercase tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {downloading ? 'Preparing…' : '⬇ Download Report'}
+              </button>
               <button
                 onClick={() => setResult(null)}
                 className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] px-6 py-2 text-xs font-bold uppercase tracking-wide text-[#9c5a1e] transition hover:bg-[#f3e5d8]"

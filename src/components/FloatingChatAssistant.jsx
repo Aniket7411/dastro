@@ -47,6 +47,7 @@ function FloatingChatAssistant() {
   const { settings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [answer, setAnswer] = useState('Hi, I can help with courses, consultations, shop remedies, student login, and payments.');
 
   const shouldHide = pathname.startsWith('/admin') || pathname.startsWith('/student/course');
@@ -77,8 +78,14 @@ function FloatingChatAssistant() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsTyping(false);
     answerQuestion(question);
   };
+
+  const lowerQuestion = question.trim().toLowerCase();
+  const liveMatches = isTyping
+    ? suggestedQuestions.filter((item) => item.keywords.some((keyword) => keyword.includes(lowerQuestion) || lowerQuestion.includes(keyword)))
+    : [];
 
   return (
     <div className="floating-chat-assistant">
@@ -94,29 +101,56 @@ function FloatingChatAssistant() {
             </button>
           </div>
 
-          <div className="chat-body">
-            <p>{answer}</p>
-            <div className="chat-suggestions">
-              {suggestedQuestions.map((item) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  onClick={() => {
-                    setQuestion(item.question);
-                    answerQuestion(item.question);
-                  }}
-                >
-                  {item.label}
-                </button>
-              ))}
+          {!isTyping && (
+            <div className="chat-body">
+              <p>{answer}</p>
+              <div className="chat-suggestions">
+                {suggestedQuestions.map((item) => (
+                  <button
+                    type="button"
+                    key={item.label}
+                    onClick={() => {
+                      setQuestion(item.question);
+                      setIsTyping(false);
+                      answerQuestion(item.question);
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {isTyping && liveMatches.length > 0 && (
+            <div className="chat-body">
+              <div className="chat-suggestions">
+                {liveMatches.map((item) => (
+                  <button
+                    type="button"
+                    key={item.label}
+                    onClick={() => {
+                      setQuestion(item.question);
+                      setIsTyping(false);
+                      answerQuestion(item.question);
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <form className="chat-form" onSubmit={handleSubmit}>
             <input
               type="text"
               value={question}
-              onChange={(event) => setQuestion(event.target.value)}
+              onChange={(event) => {
+                const value = event.target.value;
+                setQuestion(value);
+                setIsTyping(value.trim().length > 0);
+              }}
               placeholder="Ask about courses, payment, shop..."
             />
             <button type="submit" aria-label="Ask question">

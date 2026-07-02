@@ -160,14 +160,15 @@ function UserInfoModal({ astrologer, freeMinutes, onStart, onClose }) {
 /* ─── Main Page ─── */
 export default function LiveAstrologers() {
   const navigate = useNavigate();
-  const [astrologers, setAstrologers] = useState([]);
-  const [settings,    setSettings]    = useState({ freeMinutes: 3, chatEnabled: true });
-  const [tags,        setTags]        = useState([]);
-  const [loading,     setLoading]     = useState(true);
-  const [err,         setErr]         = useState('');
-  const [search,      setSearch]      = useState('');
-  const [activeTag,   setActiveTag]   = useState('All');
-  const [infoModal,   setInfoModal]   = useState(null); // astrologer object
+  const [astrologers,     setAstrologers]     = useState([]);
+  const [totalAstrologers, setTotalAstrologers] = useState(null);
+  const [settings,        setSettings]        = useState({ freeMinutes: 3, chatEnabled: true });
+  const [tags,            setTags]            = useState([]);
+  const [loading,         setLoading]         = useState(true);
+  const [err,             setErr]             = useState('');
+  const [search,          setSearch]          = useState('');
+  const [activeTag,       setActiveTag]       = useState('All');
+  const [infoModal,       setInfoModal]       = useState(null);
 
   const fetchData = async (params = {}) => {
     setLoading(true); setErr('');
@@ -181,6 +182,10 @@ export default function LiveAstrologers() {
         setAstrologers(data.astrologers);
         setTags(['All', ...(data.tags || [])]);
         if (data.settings) setSettings(data.settings);
+        // capture total only on the unfiltered initial load
+        if (!params.search && (!params.specialty || params.specialty === 'All')) {
+          setTotalAstrologers(data.total ?? data.astrologers.length);
+        }
       } else {
         setErr(data.message || 'Failed to load astrologers');
       }
@@ -221,18 +226,25 @@ export default function LiveAstrologers() {
   const offline = astrologers.length - online;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="bg-slate-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-violet-900 text-white py-10 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <span className="inline-block text-xs font-bold bg-white/10 border border-white/20 px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
+      <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-violet-900 text-white py-8 px-6 sm:px-8 lg:px-12">
+        <div className="text-center">
+          <span className="inline-block text-xs font-bold bg-white/10 border border-white/20 px-3 py-1 rounded-full mb-3 tracking-wide uppercase">
             Live Astrology Chat
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">Talk to an Astrologer</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">Talk to an Astrologer</h1>
           <p className="text-indigo-200 text-sm sm:text-base max-w-xl mx-auto">
             Connect instantly with expert astrologers. {settings.freeMinutes > 0 && `First ${settings.freeMinutes} minutes free.`}
           </p>
-          <div className="flex justify-center gap-6 mt-5 text-sm">
+          <div className="flex justify-center gap-6 mt-4 text-sm flex-wrap">
+            {totalAstrologers !== null && (
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-violet-300 inline-block" />
+                <strong className="text-white">{totalAstrologers}</strong>
+                <span className="text-indigo-200">Total Astrologers</span>
+              </span>
+            )}
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" />
               <strong className="text-white">{online}</strong>
@@ -247,9 +259,9 @@ export default function LiveAstrologers() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="w-full px-6 sm:px-8 lg:px-12 py-5">
         {/* Search + filters */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <input
             value={search} onChange={handleSearch}
             placeholder="Search by name, specialty…"
@@ -259,7 +271,7 @@ export default function LiveAstrologers() {
 
         {/* Specialty pills */}
         {tags.length > 1 && (
-          <div className="flex flex-wrap gap-1.5 mb-5">
+          <div className="flex flex-wrap gap-1.5 mb-4">
             {tags.map((tag) => (
               <button key={tag} onClick={() => handleTag(tag)}
                 className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors
@@ -274,15 +286,15 @@ export default function LiveAstrologers() {
 
         {/* Chat disabled banner */}
         {!settings.chatEnabled && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 font-medium mb-5">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 font-medium mb-4">
             Live chat is temporarily unavailable. Please check back soon.
           </div>
         )}
 
         {/* Content */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
               <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse">
                 <div className="flex gap-3 mb-3">
                   <div className="w-16 h-16 bg-slate-200 rounded-xl" />
@@ -308,7 +320,7 @@ export default function LiveAstrologers() {
             <p className="text-xs text-slate-400 mt-1">Try a different search or check back later</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {astrologers.map((a) => (
               <AstrologerCard key={a._id} a={a} freeMinutes={settings.freeMinutes} onChat={handleChatClick} />
             ))}

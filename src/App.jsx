@@ -148,6 +148,7 @@ function App() {
                 <Route path="dashboard" element={<StudentDashboard />} />
                 <Route path="student/course/:id" element={<CoursePlayer />} />
                 <Route path="webinar" element={<Webinar />} />
+              <Route path="live" element={<LiveAstrologers />} />
               </Route>
 
               <Route element={<StandaloneLayout />}>
@@ -161,8 +162,7 @@ function App() {
 
               <Route path="/admin" element={<AdminDashboard />} />
 
-              {/* Live chat — full-screen, no main layout */}
-              <Route path="/live" element={<LiveAstrologers />} />
+              {/* Live chat session — full-screen chat UI, no main layout */}
               <Route path="/live/:astrologerId" element={<LiveSession />} />
               <Route path="/astrologer-login" element={<AstrologerLogin />} />
               <Route path="/astrologer-dashboard" element={<AstrologerDashboard />} />
