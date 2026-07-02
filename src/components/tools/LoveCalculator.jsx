@@ -171,7 +171,7 @@ function LoveCalculator({ onBack }) {
       </div>
 
       {/* Right content panel */}
-      <div className="flex flex-1 items-start justify-center bg-white px-4 py-8 sm:px-6 sm:py-10 lg:items-center lg:overflow-y-auto lg:px-10 lg:py-14">
+      <div className="flex flex-1 items-start justify-center bg-white px-4 pt-8 pb-32 sm:px-6 sm:pt-10 sm:pb-32 lg:items-center lg:overflow-y-auto lg:px-10 lg:pt-14 lg:pb-28">
         {!result ? (
           <div className="w-full max-w-2xl">
             <form onSubmit={calculate}>

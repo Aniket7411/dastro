@@ -283,29 +283,29 @@ function HoroscopeTool({ onBack }) {
 
           {/* LEFT HERO PANEL */}
           {!selected ? (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
+            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-4 bg-bronze-hero text-white">
               <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
                 {onBack && (
-                  <button className="btn-back-tool mb-4" onClick={onBack}>
+                  <button className="btn-back-tool mb-3" onClick={onBack}>
                     <i className="fas fa-chevron-left me-2"></i> Back to Tools
                   </button>
                 )}
-                <h1 className="display-4 fw-bold mb-3 hero-title">Daily Horoscope</h1>
-                <p className="hero-desc mb-5">
-                  Reveal what the stars have in store for you. Choose your sign below to receive your personalized 
+                <h1 className="fw-bold mb-2 hero-title">Daily Horoscope</h1>
+                <p className="hero-desc mb-3">
+                  Reveal what the stars have in store for you. Choose your sign below to receive your personalized
                   cosmic guidance and planetary insights for today.
                 </p>
                 <div className="decor-icons">☀️ 🌙 ✨ 🌟</div>
               </div>
             </div>
           ) : (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white text-center">
+            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-4 bg-bronze-hero text-white text-center">
               <div className="mx-auto" style={{ maxWidth: '480px' }}>
-                <div className="selected-sign-icon mb-4">
+                <div className="selected-sign-icon mb-3">
                   <div className="selected-svg-wrap">{svgFigures[selected.name]}</div>
                 </div>
-                <h1 className="display-4 fw-bold mb-2 hero-title">{selected.name}</h1>
-                <p className="hero-desc mb-5">Guided by the celestial alignment of {prediction?.date || 'Today'}.</p>
+                <h1 className="fw-bold mb-2 hero-title">{selected.name}</h1>
+                <p className="hero-desc mb-3">Guided by the celestial alignment of {prediction?.date || 'Today'}.</p>
                 <button className="btn-change-sign" onClick={() => { setSelected(null); setPrediction(null); }}>
                   <i className="fas fa-sync-alt me-2"></i> Choose Another Sign
                 </button>
@@ -314,19 +314,17 @@ function HoroscopeTool({ onBack }) {
           )}
 
           {/* RIGHT CONTENT PANEL */}
-          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white-content">
+          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-4 bg-white-content">
             {!selected ? (
               <div className="zodiac-selection-grid w-100" style={{ maxWidth: '720px' }}>
-                <div className="row g-3 g-md-4">
+                <div className="zodiac-grid">
                   {signs.map((sign) => (
-                    <div key={sign.name} className="col-4 col-md-3">
-                      <div className="zodiac-card-premium" onClick={() => fetchHoroscope(sign)}>
-                        <div className="zodiac-card-icon">
-                          {svgFigures[sign.name]}
-                        </div>
-                        <div className="zodiac-card-name">{sign.name}</div>
-                        <div className="zodiac-card-dates">{sign.dates}</div>
+                    <div key={sign.name} className="zodiac-card-premium" onClick={() => fetchHoroscope(sign)}>
+                      <div className="zodiac-card-icon">
+                        {svgFigures[sign.name]}
                       </div>
+                      <div className="zodiac-card-name">{sign.name}</div>
+                      <div className="zodiac-card-dates">{sign.dates}</div>
                     </div>
                   ))}
                 </div>
@@ -340,36 +338,36 @@ function HoroscopeTool({ onBack }) {
                   </div>
                 ) : (
                   <div className="prediction-box animated fadeInUp">
-                    <div className="prediction-header mb-5 border-bottom pb-4">
+                    <div className="prediction-header mb-3 border-bottom pb-3">
                       <span className="badge-cosmic">Cosmic Guidance</span>
-                      <h2 className="prediction-h1 mt-3">Daily Predictions</h2>
+                      <h2 className="prediction-h1 mt-2">Daily Predictions</h2>
                       <div className="prediction-date-label">{prediction.date || 'Today'}</div>
                     </div>
 
                     <div className="prediction-body">
-                      <div className="prediction-section mb-5">
-                        <h3 className="section-title mb-3"><i className="fas fa-star me-2"></i> General Outlook</h3>
+                      <div className="prediction-section mb-3">
+                        <h3 className="section-title mb-2"><i className="fas fa-star me-2"></i> General Outlook</h3>
                         <p className="prediction-text">{prediction.prediction}</p>
                       </div>
 
-                      <div className="row g-4">
+                      <div className="row g-3">
                         <div className="col-md-6">
-                          <div className="prediction-section card-insight p-4">
-                            <h3 className="section-title-sm mb-2">Personal Growth</h3>
+                          <div className="prediction-section card-insight p-3">
+                            <h3 className="section-title-sm mb-1">Personal Growth</h3>
                             <p className="prediction-text-sm">Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions.</p>
                           </div>
                         </div>
                         <div className="col-md-6">
-                          <div className="prediction-section card-insight p-4">
-                            <h3 className="section-title-sm mb-2">Social Energy</h3>
+                          <div className="prediction-section card-insight p-3">
+                            <h3 className="section-title-sm mb-1">Social Energy</h3>
                             <p className="prediction-text-sm">A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative.</p>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="prediction-footer mt-5 pt-4 border-top">
-                      <div className="row g-3 text-center">
+                    <div className="prediction-footer mt-3 pt-3 border-top">
+                      <div className="row g-2 text-center">
                         <div className="col-6">
                           <div className="lucky-stat">
                             <span className="stat-label">Lucky Number</span>
@@ -408,19 +406,20 @@ function HoroscopeTool({ onBack }) {
 
         .bg-white-content {
           background-color: #ffffff;
+          padding-bottom: 8.5rem !important;
         }
 
         .hero-title {
           font-family: 'Playfair Display', serif;
-          font-size: clamp(2.8rem, 6vw, 4.8rem);
+          font-size: clamp(2rem, 4vw, 3rem);
           font-weight: 900;
-          line-height: 1.1;
-          margin-bottom: 20px;
+          line-height: 1.15;
+          margin-bottom: 12px;
         }
 
         .hero-desc {
-          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-          line-height: 1.7;
+          font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+          line-height: 1.6;
           opacity: 0.95;
           font-weight: 500;
         }
@@ -463,6 +462,17 @@ function HoroscopeTool({ onBack }) {
         }
 
         /* Zodiac Cards */
+        .zodiac-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+        }
+        @media (min-width: 768px) {
+          .zodiac-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+          }
+        }
         .zodiac-card-premium {
           background: #ffffff;
           padding: 22px 10px 16px;
@@ -506,16 +516,16 @@ function HoroscopeTool({ onBack }) {
         /* Prediction Styles */
         .prediction-h1 {
           font-family: 'Playfair Display', serif;
-          font-size: 42px;
+          font-size: 28px;
           color: #65250c;
           margin: 0;
         }
         .badge-cosmic {
           background: #ffefd6;
           color: #9c5a1e;
-          padding: 6px 16px;
+          padding: 5px 14px;
           border-radius: 50px;
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -523,30 +533,30 @@ function HoroscopeTool({ onBack }) {
         .prediction-date-label {
           color: #9c5a1e;
           font-weight: 600;
-          font-size: 16px;
-          margin-top: 8px;
+          font-size: 14px;
+          margin-top: 6px;
         }
         .section-title {
           font-family: 'Playfair Display', serif;
-          font-size: 24px;
+          font-size: 19px;
           color: #65250c;
           font-weight: 700;
         }
         .section-title-sm {
           font-family: 'Playfair Display', serif;
-          font-size: 22px;
+          font-size: 16px;
           color: #65250c;
           font-weight: 700;
         }
         .prediction-text {
-          font-size: 18px;
-          line-height: 24px;
+          font-size: 15px;
+          line-height: 1.6;
           color: rgba(101, 37, 12, 0.85);
           text-align: justify;
         }
         .prediction-text-sm {
-          font-size: 16px;
-          line-height: 1.6;
+          font-size: 13.5px;
+          line-height: 1.55;
           color: rgba(101, 37, 12, 0.7);
         }
         .card-insight {
@@ -555,12 +565,12 @@ function HoroscopeTool({ onBack }) {
           border: 1px solid #f1e4d8;
         }
         .lucky-stat {
-          padding: 15px;
+          padding: 12px;
           background: #ffefd6;
           border-radius: 8px;
         }
-        .stat-label { display: block; font-size: 13px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
-        .stat-value { font-weight: 800; color: #65250c; font-size: 20px; }
+        .stat-label { display: block; font-size: 11.5px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+        .stat-value { font-weight: 800; color: #65250c; font-size: 17px; }
 
         .text-bronze { color: #c6843f; }
         .font-heading { font-family: 'Playfair Display', serif; }

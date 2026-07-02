@@ -341,7 +341,7 @@ function KundaliTool({ onBack }) {
 
         .kundali-tool-container { font-family: 'Be Vietnam Pro', sans-serif; overflow-x: hidden; }
         .bg-bronze-hero { background: linear-gradient(to right, #c6843f, #9c5a1e); }
-        .bg-white-content { background-color: #ffffff; }
+        .bg-white-content { background-color: #ffffff; padding-bottom: 8.5rem !important; }
         .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
         .hero-desc { font-size: clamp(1.1rem, 1.8vw, 1.4rem); line-height: 1.7; opacity: 0.95; font-weight: 500; }
 

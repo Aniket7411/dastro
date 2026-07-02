@@ -127,26 +127,26 @@ function FreeTools() {
     <div className="min-h-screen w-full overflow-x-hidden bg-[#fffdf9]">
 
       {/* Hero — compact */}
-      <div className="relative overflow-hidden border-b border-[rgba(139,74,30,0.09)] bg-gradient-to-b from-[#fff8ef] to-[#fffdf9] py-8 sm:py-10 lg:py-12">
+      <div className="relative overflow-hidden border-b border-[rgba(139,74,30,0.09)] bg-gradient-to-b from-[#fff8ef] to-[#fffdf9] py-3 sm:py-4 lg:py-5">
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(198,132,63,0.06) 0%, transparent 60%)' }}
         />
         <div className="relative mx-auto max-w-[90rem] px-4 text-center sm:px-6 lg:px-12">
-          <span className="mb-3 inline-block rounded-full border border-[rgba(139,74,30,0.14)] bg-[#fff3e0] px-3.5 py-1 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-[#9c5a1e]">
+          <span className="mb-1.5 inline-block rounded-full border border-[rgba(139,74,30,0.14)] bg-[#fff3e0] px-3.5 py-1 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-[#9c5a1e]">
             Explore the Cosmos
           </span>
-          <h1 className="mx-auto mb-2.5 max-w-lg font-heading text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-tight text-[#3d1a06]">
+          <h1 className="mx-auto mb-1.5 max-w-lg font-heading text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-tight text-[#3d1a06]">
             Free Astrology Tools
           </h1>
-          <p className="mx-auto max-w-md text-sm leading-relaxed text-[#7a5c4f] sm:text-[0.9375rem]">
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-[#7a5c4f] sm:max-w-none sm:whitespace-nowrap sm:text-[0.9375rem]">
             Discover your chart, signs, compatibility, and daily guidance — all free.
           </p>
         </div>
       </div>
 
       {/* Tools grid */}
-      <div className="mx-auto max-w-[90rem] px-4 py-7 sm:px-6 sm:py-9 lg:px-12 lg:py-10">
+      <div className="mx-auto max-w-[90rem] px-4 py-5 sm:px-6 sm:py-6 lg:px-12 lg:py-7">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
           {tools.map((tool, idx) => (
             <div
