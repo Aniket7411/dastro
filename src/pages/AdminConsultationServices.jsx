@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import toast from '@/utils/toast';
-import { Plus, Edit2, Trash2, UploadCloud, Layers, LayoutGrid, CheckCircle2, RefreshCw, X, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, UploadCloud, Layers, LayoutGrid, RefreshCw, X, Sparkles, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import API_BASE from '../utils/api';
 import { uploadImage } from '../utils/uploadMedia';
+import { formatINR } from '../utils/currency';
 
 const EMPTY_CATEGORY = {
   name: '',
@@ -36,6 +37,10 @@ const authHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
 });
 
+// Glassmorphic Input Class
+const inputClass = "w-full px-4 py-2.5 bg-white/60 backdrop-blur-md border border-white/40 shadow-inner rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 focus:bg-white outline-none transition-all duration-300 text-slate-800 placeholder-slate-400";
+const labelClass = "block text-sm font-semibold text-slate-700 mb-1.5 ml-1 flex items-center gap-1.5";
+
 export default function AdminConsultationServices() {
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -47,6 +52,14 @@ export default function AdminConsultationServices() {
   const [categoryForm, setCategoryForm] = useState(EMPTY_CATEGORY);
   const [serviceForm, setServiceForm] = useState(EMPTY_SERVICE);
   const [activePanel, setActivePanel] = useState('services');
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState('All');
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+
+  const filteredServices = useMemo(() => {
+    if (serviceCategoryFilter === 'All') return services;
+    return services.filter((svc) => (svc.categoryId || svc.categorySlug) === serviceCategoryFilter);
+  }, [services, serviceCategoryFilter]);
 
   const loadCatalog = useCallback(async () => {
     setLoading(true);
@@ -82,6 +95,26 @@ export default function AdminConsultationServices() {
     setServiceForm(EMPTY_SERVICE);
   };
 
+  const openNewCategory = () => {
+    resetCategoryForm();
+    setShowCategoryModal(true);
+  };
+
+  const openNewService = () => {
+    resetServiceForm();
+    setShowServiceModal(true);
+  };
+
+  const closeCategoryModal = () => {
+    setShowCategoryModal(false);
+    resetCategoryForm();
+  };
+
+  const closeServiceModal = () => {
+    setShowServiceModal(false);
+    resetServiceForm();
+  };
+
   const saveCategory = async (e) => {
     e.preventDefault();
     if (!categoryForm.name.trim()) {
@@ -105,6 +138,7 @@ export default function AdminConsultationServices() {
       if (data.success) {
         toast.success(editingCategorySlug ? 'Category updated' : 'Category created');
         resetCategoryForm();
+        setShowCategoryModal(false);
         loadCatalog();
       } else {
         toast.error(data.message || 'Save failed');
@@ -148,6 +182,7 @@ export default function AdminConsultationServices() {
       if (data.success) {
         toast.success(editingServiceSlug ? 'Service updated' : 'Service created');
         resetServiceForm();
+        setShowServiceModal(false);
         loadCatalog();
       } else {
         toast.error(data.message || 'Save failed');
@@ -169,8 +204,7 @@ export default function AdminConsultationServices() {
       sortOrder: String(cat.sortOrder ?? 0),
       isActive: cat.isActive !== false,
     });
-    setActivePanel('categories');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setShowCategoryModal(true);
   };
 
   const editService = (svc) => {
@@ -191,8 +225,7 @@ export default function AdminConsultationServices() {
       sortOrder: String(svc.sortOrder ?? 0),
       isActive: svc.isActive !== false,
     });
-    setActivePanel('services');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setShowServiceModal(true);
   };
 
   const deleteCategory = async (slug) => {
@@ -239,10 +272,6 @@ export default function AdminConsultationServices() {
       setUploading(false);
     }
   };
-
-  // Glassmorphic Input Class
-  const inputClass = "w-full px-4 py-3 bg-white/60 backdrop-blur-md border border-white/40 shadow-inner rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 focus:bg-white outline-none transition-all duration-300 text-slate-800 placeholder-slate-400";
-  const labelClass = "block text-sm font-semibold text-slate-700 mb-1.5 ml-1 flex items-center gap-1.5";
 
   if (loading) {
     return (
@@ -328,488 +357,578 @@ export default function AdminConsultationServices() {
           </div>
         </motion.div>
 
-        <div className="flex flex-col gap-10">
+        {/* LIST SECTION */}
+        <div className="lms-table-card">
+          <div className="lms-table-head">
+            <div>
+              <h3>{activePanel === 'categories' ? 'Consultation Categories' : 'Consultation Services'}</h3>
+              <p>
+                {activePanel === 'categories'
+                  ? 'Focused / Vedic — Detailed / Premium Chart / Tarot / Remedies and any others you add.'
+                  : 'Click Edit to open a service in the editor, or add a new one.'}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="lms-primary-action"
+              onClick={activePanel === 'categories' ? openNewCategory : openNewService}
+            >
+              <Plus className="w-4 h-4" />
+              <span>{activePanel === 'categories' ? 'New Category' : 'New Service'}</span>
+            </button>
+          </div>
 
-          {/* FORM SECTION - Top */}
-          <div className="w-full">
+          {activePanel === 'services' && categories.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
+              <button
+                type="button"
+                onClick={() => setServiceCategoryFilter('All')}
+                className="lms-type-badge"
+                style={{
+                  cursor: 'pointer',
+                  background: '#f1f5f9',
+                  color: '#334155',
+                  border: serviceCategoryFilter === 'All' ? '2px solid #334155' : '2px solid transparent',
+                  opacity: serviceCategoryFilter === 'All' ? 1 : 0.55,
+                }}
+              >
+                All ({services.length})
+              </button>
+              {categories.map((cat) => {
+                const catSlug = cat.slug || cat.id;
+                const count = services.filter((svc) => (svc.categoryId || svc.categorySlug) === catSlug).length;
+                return (
+                  <button
+                    key={catSlug}
+                    type="button"
+                    onClick={() => setServiceCategoryFilter(catSlug)}
+                    className="lms-type-badge"
+                    style={{
+                      cursor: 'pointer',
+                      background: '#eef2ff',
+                      color: '#4338ca',
+                      border: serviceCategoryFilter === catSlug ? '2px solid #4338ca' : '2px solid transparent',
+                      opacity: serviceCategoryFilter === catSlug ? 1 : 0.55,
+                    }}
+                  >
+                    {cat.name} ({count})
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {activePanel === 'categories' ? (
+            <table className="lms-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Slug</th>
+                  <th>Services</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.length === 0 ? (
+                  <tr>
+                    <td colSpan="5">
+                      <div className="lms-empty-row">No categories crafted yet.</div>
+                    </td>
+                  </tr>
+                ) : (
+                  categories.map((cat) => (
+                    <tr key={cat.slug || cat.id}>
+                      <td>
+                        <strong>{cat.name}</strong>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{cat.slug || cat.id}</span>
+                      </td>
+                      <td>{cat.cards?.length ?? 0}</td>
+                      <td>
+                        <span className={`lms-status ${cat.isActive !== false ? 'lms-status--active' : 'lms-status--inactive'}`}>
+                          {cat.isActive !== false ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="lms-actions">
+                          <button className="lms-icon-btn" title="Edit category" onClick={() => editCategory(cat)}>
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button className="lms-icon-btn lms-icon-btn--danger" title="Delete category" onClick={() => deleteCategory(cat.slug || cat.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          ) : (
+            <table className="lms-table">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th>Category</th>
+                  <th>Duration</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredServices.length === 0 ? (
+                  <tr>
+                    <td colSpan="6">
+                      <div className="lms-empty-row">
+                        {services.length === 0 ? 'No magical services added yet.' : 'No services in this category.'}
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredServices.map((svc) => (
+                    <tr key={svc.slug || svc.id}>
+                      <td>
+                        <div className="lms-course-cell">
+                          {svc.img ? (
+                            <img src={svc.img} alt={svc.title} />
+                          ) : (
+                            <div style={{
+                              width: 46, height: 46, flexShrink: 0, borderRadius: 'var(--r-sm)',
+                              border: '1px solid var(--border)', display: 'flex', alignItems: 'center',
+                              justifyContent: 'center', background: '#f5f3ff',
+                            }}>
+                              <Sparkles className="w-5 h-5 text-violet-300" />
+                            </div>
+                          )}
+                          <div>
+                            <strong>{svc.title}</strong>
+                            <span>{svc.desc || 'No description added yet'}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="lms-type-badge" style={{ background: '#eef2ff', color: '#4338ca' }}>
+                          {svc.category || '—'}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                          {svc.duration || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not set</span>}
+                        </span>
+                      </td>
+                      <td className="lms-price">
+                        <div>
+                          <div>{svc.priceLabel || formatINR(svc.price)}</div>
+                          {Number(svc.mrp) > Number(svc.price) && (
+                            <div style={{ fontSize: '11px', fontWeight: 400, color: '#94a3b8', textDecoration: 'line-through' }}>
+                              {formatINR(svc.mrp)}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`lms-status ${svc.isActive !== false ? 'lms-status--active' : 'lms-status--inactive'}`}>
+                          {svc.isActive !== false ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="lms-actions">
+                          <button className="lms-icon-btn" title="Edit service" onClick={() => editService(svc)}>
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button className="lms-icon-btn lms-icon-btn--danger" title="Delete service" onClick={() => deleteService(svc.slug || svc.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+
+      {/* CATEGORY MODAL */}
+      <AnimatePresence>
+        {showCategoryModal && (
+          <div
+            className="fixed inset-0 z-[10050] flex items-end justify-center bg-slate-900/70 p-0 sm:items-center sm:p-4"
+            onClick={() => !saving && closeCategoryModal()}
+          >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              key="category-form-modal"
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/70 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-white/80 overflow-hidden"
+              exit={{ opacity: 0, y: 24 }}
+              className="relative flex w-full max-h-[96dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90vh] sm:max-w-2xl sm:rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="bg-gradient-to-r from-violet-50 to-indigo-50/50 border-b border-white/60 px-6 py-5 flex items-center justify-between shrink-0">
                 <h3 className="font-bold text-violet-900 flex items-center gap-2 text-lg">
-                  {activePanel === 'categories' ? (
-                    editingCategorySlug ? <><Edit2 className="w-5 h-5 text-violet-600" /> Edit Category</> : <><Plus className="w-5 h-5 text-violet-600" /> New Category</>
-                  ) : (
-                    editingServiceSlug ? <><Edit2 className="w-5 h-5 text-violet-600" /> Edit Service</> : <><Plus className="w-5 h-5 text-violet-600" /> New Service</>
-                  )}
+                  {editingCategorySlug ? <><Edit2 className="w-5 h-5 text-violet-600" /> Edit Category</> : <><Plus className="w-5 h-5 text-violet-600" /> New Category</>}
                 </h3>
-                {(editingCategorySlug || editingServiceSlug) && (
-                  <button
-                    onClick={activePanel === 'categories' ? resetCategoryForm : resetServiceForm}
-                    className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all flex items-center gap-2 text-sm font-medium pr-4"
-                    title="Cancel editing"
-                  >
-                    <X className="w-5 h-5" /> Cancel
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={closeCategoryModal}
+                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"
+                  disabled={saving}
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div className="p-6 lg:p-8">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activePanel}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {activePanel === 'categories' ? (
-                      /* CATEGORY FORM */
-                      <form onSubmit={saveCategory} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          <div>
-                            <label className={labelClass}>Name</label>
-                            <input
-                              className={inputClass}
-                              value={categoryForm.name}
-                              onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-                              required
-                              placeholder="e.g. Astrology Reading"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Slug</label>
-                            <input
-                              className={`${inputClass} bg-slate-100/50 cursor-not-allowed`}
-                              value={categoryForm.slug}
-                              onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })}
-                              disabled={!!editingCategorySlug}
-                              placeholder="Auto-generated"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Icon</label>
-                            <input
-                              className={inputClass}
-                              value={categoryForm.icon}
-                              onChange={(e) => setCategoryForm({ ...categoryForm, icon: e.target.value })}
-                              placeholder="e.g. fa-star"
-                            />
-                          </div>
-                        </div>
+              <form onSubmit={saveCategory} className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <div className="min-h-0 flex-1 overflow-y-auto p-6 lg:p-8 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className={labelClass}>Name</label>
+                      <input
+                        className={inputClass}
+                        value={categoryForm.name}
+                        onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
+                        required
+                        placeholder="e.g. Premium Chart"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Slug</label>
+                      <input
+                        className={`${inputClass} bg-slate-100/50 cursor-not-allowed`}
+                        value={categoryForm.slug}
+                        onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })}
+                        disabled={!!editingCategorySlug}
+                        placeholder="Auto-generated"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Icon</label>
+                      <input
+                        className={inputClass}
+                        value={categoryForm.icon}
+                        onChange={(e) => setCategoryForm({ ...categoryForm, icon: e.target.value })}
+                        placeholder="e.g. fa-star"
+                      />
+                    </div>
+                  </div>
 
-                        <div>
-                          <label className={labelClass}>Description</label>
-                          <textarea
-                            rows={3}
-                            className={`${inputClass} resize-none`}
-                            value={categoryForm.description}
-                            onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
-                            placeholder="Enchanting description..."
+                  <div>
+                    <label className={labelClass}>Description</label>
+                    <textarea
+                      rows={3}
+                      className={`${inputClass} resize-none`}
+                      value={categoryForm.description}
+                      onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
+                      placeholder="Enchanting description..."
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                      <label className={labelClass}>Sort Order</label>
+                      <input
+                        type="number"
+                        className={inputClass}
+                        value={categoryForm.sortOrder}
+                        onChange={(e) => setCategoryForm({ ...categoryForm, sortOrder: e.target.value })}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Status</label>
+                      <div className="flex items-center gap-3 px-4 py-2.5 bg-white/40 border border-white rounded-xl shadow-sm">
+                        <input
+                          id="cat-active"
+                          type="checkbox"
+                          className="w-5 h-5 text-violet-600 rounded-md border-slate-300 focus:ring-violet-500 transition-colors"
+                          checked={categoryForm.isActive}
+                          onChange={(e) => setCategoryForm({ ...categoryForm, isActive: e.target.checked })}
+                        />
+                        <label htmlFor="cat-active" className="block text-sm font-semibold text-slate-700 cursor-pointer">
+                          Active & Visible
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex shrink-0 flex-col-reverse gap-3 border-t border-slate-100 bg-white p-4 sm:flex-row sm:justify-end sm:px-6">
+                  <button type="button" className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 transition" disabled={saving} onClick={closeCategoryModal}>
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2"
+                    disabled={saving}
+                  >
+                    {saving ? <RefreshCw className="w-5 h-5 animate-spin" /> : null}
+                    {saving ? 'Saving...' : 'Save Category'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* SERVICE MODAL */}
+      <AnimatePresence>
+        {showServiceModal && (
+          <div
+            className="fixed inset-0 z-[10050] flex items-end justify-center bg-slate-900/70 p-0 sm:items-center sm:p-4"
+            onClick={() => !saving && closeServiceModal()}
+          >
+            <motion.div
+              key="service-form-modal"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              className="relative flex w-full max-h-[96dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90vh] sm:max-w-4xl sm:rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="bg-gradient-to-r from-violet-50 to-indigo-50/50 border-b border-white/60 px-6 py-5 flex items-center justify-between shrink-0">
+                <h3 className="font-bold text-violet-900 flex items-center gap-2 text-lg">
+                  {editingServiceSlug ? <><Edit2 className="w-5 h-5 text-violet-600" /> Edit Service</> : <><Plus className="w-5 h-5 text-violet-600" /> New Service</>}
+                </h3>
+                <button
+                  type="button"
+                  onClick={closeServiceModal}
+                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"
+                  disabled={saving}
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={saveService} className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <div className="min-h-0 flex-1 overflow-y-auto p-6 lg:p-8 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className={labelClass}>Category</label>
+                      <div className="relative">
+                        <select
+                          className={`${inputClass} appearance-none pr-10`}
+                          value={serviceForm.categorySlug}
+                          onChange={(e) => setServiceForm({ ...serviceForm, categorySlug: e.target.value })}
+                          required
+                        >
+                          <option value="" className="text-slate-400">Select a category</option>
+                          {categories.map((cat) => (
+                            <option key={cat.slug || cat.id} value={cat.slug || cat.id}>{cat.name}</option>
+                          ))}
+                        </select>
+                        <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Title</label>
+                      <input
+                        className={inputClass}
+                        value={serviceForm.title}
+                        onChange={(e) => setServiceForm({ ...serviceForm, title: e.target.value })}
+                        required
+                        placeholder="e.g. Full Kundli Analysis"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Slug</label>
+                      <input
+                        className={`${inputClass} bg-slate-100/50 cursor-not-allowed`}
+                        value={serviceForm.slug}
+                        onChange={(e) => setServiceForm({ ...serviceForm, slug: e.target.value })}
+                        disabled={!!editingServiceSlug}
+                        placeholder="Auto-generated"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div>
+                      <label className={labelClass}>Short Label</label>
+                      <input
+                        className={inputClass}
+                        value={serviceForm.short}
+                        onChange={(e) => setServiceForm({ ...serviceForm, short: e.target.value })}
+                        placeholder="e.g. Popular"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Price (₹)</label>
+                      <div className="relative">
+                        <span className="absolute left-4 top-3.5 text-slate-500 font-medium">₹</span>
+                        <input
+                          type="number"
+                          min="0"
+                          className={`${inputClass} pl-9`}
+                          value={serviceForm.price}
+                          onChange={(e) => setServiceForm({ ...serviceForm, price: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>MRP / full price (₹) — optional</label>
+                      <div className="relative">
+                        <span className="absolute left-4 top-3.5 text-slate-500 font-medium">₹</span>
+                        <input
+                          type="number"
+                          min="0"
+                          className={`${inputClass} pl-9`}
+                          value={serviceForm.mrp}
+                          onChange={(e) => setServiceForm({ ...serviceForm, mrp: e.target.value })}
+                          placeholder="Shown struck-through when higher than price"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Duration</label>
+                      <input
+                        className={inputClass}
+                        value={serviceForm.duration}
+                        onChange={(e) => setServiceForm({ ...serviceForm, duration: e.target.value })}
+                        placeholder="e.g. 40 min"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                      <label className={labelClass}>Description</label>
+                      <textarea
+                        rows={4}
+                        className={`${inputClass} resize-none`}
+                        value={serviceForm.desc}
+                        onChange={(e) => setServiceForm({ ...serviceForm, desc: e.target.value })}
+                        required
+                        placeholder="What mysteries will this unravel?"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Highlights (Bullet Points)</label>
+                      <textarea
+                        rows={4}
+                        className={`${inputClass} resize-none text-sm leading-relaxed`}
+                        value={serviceForm.highlightsText}
+                        onChange={(e) => setServiceForm({ ...serviceForm, highlightsText: e.target.value })}
+                        placeholder="Enter one highlight per line..."
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    {/* Image Upload Area */}
+                    <div className="lg:col-span-5">
+                      <label className={labelClass}>Cover Image</label>
+                      <div className="flex items-center gap-4 py-2.5 px-4 rounded-xl bg-white/40 border border-white/60 shadow-sm">
+                        {serviceForm.img ? (
+                          <div className="relative group w-[54px] h-[54px] shrink-0 rounded-lg overflow-hidden shadow-md">
+                            <img src={serviceForm.img} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
+                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        ) : (
+                          <div className="w-[54px] h-[54px] shrink-0 rounded-lg border-2 border-dashed border-violet-200 flex items-center justify-center text-violet-400 bg-white/50">
+                            <UploadCloud className="w-5 h-5" />
+                          </div>
+                        )}
+                        <div className="flex-1 space-y-2">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            id="img-upload"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                          />
+                          <label
+                            htmlFor="img-upload"
+                            className="w-full inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-white border border-violet-100 shadow-sm hover:shadow-md rounded-lg text-xs font-bold text-violet-700 cursor-pointer hover:bg-violet-50 transition-all"
+                          >
+                            {uploading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <UploadCloud className="w-3.5 h-3.5" />}
+                            {uploading ? 'Uploading...' : 'Choose Cover'}
+                          </label>
+                          <input
+                            className={`${inputClass} !py-1.5 !px-3 !text-[11px]`}
+                            value={serviceForm.img}
+                            onChange={(e) => setServiceForm({ ...serviceForm, img: e.target.value })}
+                            placeholder="Or image URL..."
                           />
                         </div>
+                      </div>
+                    </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                          <div>
-                            <label className={labelClass}>Sort Order</label>
-                            <input
-                              type="number"
-                              className={inputClass}
-                              value={categoryForm.sortOrder}
-                              onChange={(e) => setCategoryForm({ ...categoryForm, sortOrder: e.target.value })}
-                            />
-                          </div>
+                    <div className="lg:col-span-2">
+                      <label className={labelClass}>Badge Text</label>
+                      <input
+                        className={inputClass}
+                        value={serviceForm.badge}
+                        onChange={(e) => setServiceForm({ ...serviceForm, badge: e.target.value })}
+                        placeholder="e.g. Bestseller"
+                      />
+                    </div>
 
-                          <div className="flex items-center h-[50px] px-4 bg-white/40 border border-white rounded-xl shadow-sm">
-                            <input
-                              id="cat-active"
-                              type="checkbox"
-                              className="w-5 h-5 text-violet-600 rounded-md border-slate-300 focus:ring-violet-500 transition-colors"
-                              checked={categoryForm.isActive}
-                              onChange={(e) => setCategoryForm({ ...categoryForm, isActive: e.target.checked })}
-                            />
-                            <label htmlFor="cat-active" className="ml-3 block text-sm font-semibold text-slate-700 cursor-pointer">
-                              Active & Visible
-                            </label>
-                          </div>
+                    <div className="lg:col-span-2">
+                      <label className={labelClass}>Badge Color</label>
+                      <select
+                        className={inputClass}
+                        value={serviceForm.badgeColor}
+                        onChange={(e) => setServiceForm({ ...serviceForm, badgeColor: e.target.value })}
+                      >
+                        {['purple', 'pink', 'orange', 'red', 'green', 'blue', 'indigo'].map((c) => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                      </select>
+                    </div>
 
-                          <div className="flex items-center justify-end">
-                            <button
-                              type="submit"
-                              className="w-full md:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
-                              disabled={saving}
-                            >
-                              {saving ? <RefreshCw className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-                              {saving ? 'Saving...' : 'Save Category'}
-                            </button>
-                          </div>
-                        </div>
-                      </form>
-                    ) : (
-                      /* SERVICE FORM */
-                      <form onSubmit={saveService} className="space-y-6">
+                    <div className="lg:col-span-3">
+                      <label className={labelClass}>Status</label>
+                      <div className="flex items-center gap-3 px-4 py-2.5 bg-white/40 border border-white rounded-xl shadow-sm">
+                        <input
+                          id="svc-active"
+                          type="checkbox"
+                          className="w-5 h-5 text-violet-600 rounded-md border-slate-300 focus:ring-violet-500 transition-colors"
+                          checked={serviceForm.isActive}
+                          onChange={(e) => setServiceForm({ ...serviceForm, isActive: e.target.checked })}
+                        />
+                        <label htmlFor="svc-active" className="block text-sm font-semibold text-slate-700 cursor-pointer">
+                          Active & Visible
+                        </label>
+                      </div>
+                    </div>
+                  </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          <div>
-                            <label className={labelClass}>Category</label>
-                            <select
-                              className={`${inputClass} appearance-none`}
-                              value={serviceForm.categorySlug}
-                              onChange={(e) => setServiceForm({ ...serviceForm, categorySlug: e.target.value })}
-                              required
-                            >
-                              <option value="" className="text-slate-400">Select a category</option>
-                              {categories.map((cat) => (
-                                <option key={cat.slug || cat.id} value={cat.slug || cat.id}>{cat.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <div>
-                            <label className={labelClass}>Title</label>
-                            <input
-                              className={inputClass}
-                              value={serviceForm.title}
-                              onChange={(e) => setServiceForm({ ...serviceForm, title: e.target.value })}
-                              required
-                              placeholder="e.g. Destiny Blueprint"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Slug</label>
-                            <input
-                              className={`${inputClass} bg-slate-100/50`}
-                              value={serviceForm.slug}
-                              onChange={(e) => setServiceForm({ ...serviceForm, slug: e.target.value })}
-                              disabled={!!editingServiceSlug}
-                              placeholder="Auto-generated"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                          <div>
-                            <label className={labelClass}>Short Label</label>
-                            <input
-                              className={inputClass}
-                              value={serviceForm.short}
-                              onChange={(e) => setServiceForm({ ...serviceForm, short: e.target.value })}
-                              placeholder="e.g. Popular"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Price (₹)</label>
-                            <div className="relative">
-                              <span className="absolute left-4 top-3.5 text-slate-500 font-medium">₹</span>
-                              <input
-                                type="number"
-                                min="0"
-                                className={`${inputClass} pl-9`}
-                                value={serviceForm.price}
-                                onChange={(e) => setServiceForm({ ...serviceForm, price: e.target.value })}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <label className={labelClass}>MRP / full price (₹) — optional</label>
-                            <div className="relative">
-                              <span className="absolute left-4 top-3.5 text-slate-500 font-medium">₹</span>
-                              <input
-                                type="number"
-                                min="0"
-                                className={`${inputClass} pl-9`}
-                                value={serviceForm.mrp}
-                                onChange={(e) => setServiceForm({ ...serviceForm, mrp: e.target.value })}
-                                placeholder="Shown struck-through when higher than price"
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <label className={labelClass}>Duration</label>
-                            <input
-                              className={inputClass}
-                              value={serviceForm.duration}
-                              onChange={(e) => setServiceForm({ ...serviceForm, duration: e.target.value })}
-                              placeholder="e.g. 45 Mins"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Badge Text</label>
-                            <input
-                              className={inputClass}
-                              value={serviceForm.badge}
-                              onChange={(e) => setServiceForm({ ...serviceForm, badge: e.target.value })}
-                              placeholder="e.g. Bestseller"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          <div>
-                            <label className={labelClass}>Description</label>
-                            <textarea
-                              rows={4}
-                              className={`${inputClass} resize-none`}
-                              value={serviceForm.desc}
-                              onChange={(e) => setServiceForm({ ...serviceForm, desc: e.target.value })}
-                              required
-                              placeholder="What mysteries will this unravel?"
-                            />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Highlights (Bullet Points)</label>
-                            <textarea
-                              rows={4}
-                              className={`${inputClass} resize-none text-sm leading-relaxed`}
-                              value={serviceForm.highlightsText}
-                              onChange={(e) => setServiceForm({ ...serviceForm, highlightsText: e.target.value })}
-                              placeholder="Enter one highlight per line..."
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
-
-                          {/* Image Upload Area */}
-                          <div className="lg:col-span-5 p-4 rounded-2xl bg-white/40 border border-white/60 shadow-sm transition-all h-[110px] flex items-center gap-4">
-                            {serviceForm.img ? (
-                              <div className="relative group w-[78px] h-[78px] shrink-0 rounded-xl overflow-hidden shadow-md">
-                                <img src={serviceForm.img} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </div>
-                            ) : (
-                              <div className="w-[78px] h-[78px] shrink-0 rounded-xl border-2 border-dashed border-violet-200 flex flex-col items-center justify-center text-violet-400 bg-white/50">
-                                <UploadCloud className="w-6 h-6 mb-1" />
-                              </div>
-                            )}
-                            <div className="flex-1 space-y-2">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                id="img-upload"
-                                className="hidden"
-                                onChange={handleImageUpload}
-                                disabled={uploading}
-                              />
-                              <label
-                                htmlFor="img-upload"
-                                className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-white border border-violet-100 shadow-sm hover:shadow-md rounded-lg text-xs font-bold text-violet-700 cursor-pointer hover:bg-violet-50 transition-all"
-                              >
-                                {uploading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <UploadCloud className="w-3.5 h-3.5" />}
-                                {uploading ? 'Uploading...' : 'Choose Cover'}
-                              </label>
-                              <input
-                                className={`${inputClass} !py-1.5 !px-3 !text-[11px]`}
-                                value={serviceForm.img}
-                                onChange={(e) => setServiceForm({ ...serviceForm, img: e.target.value })}
-                                placeholder="Or image URL..."
-                              />
-                            </div>
-                          </div>
-
-                          <div className="lg:col-span-2">
-                            <label className={labelClass}>Badge Color</label>
-                            <select
-                              className={inputClass}
-                              value={serviceForm.badgeColor}
-                              onChange={(e) => setServiceForm({ ...serviceForm, badgeColor: e.target.value })}
-                            >
-                              {['purple', 'pink', 'orange', 'red', 'green', 'blue', 'indigo'].map((c) => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
-                            </select>
-                          </div>
-
-                          <div className="lg:col-span-2">
-                            <label className={labelClass}>Sort Order</label>
-                            <input
-                              type="number"
-                              className={inputClass}
-                              value={serviceForm.sortOrder}
-                              onChange={(e) => setServiceForm({ ...serviceForm, sortOrder: e.target.value })}
-                            />
-                          </div>
-
-                          <div className="lg:col-span-3 flex items-center h-[52px] px-4 bg-white/40 border border-white rounded-xl shadow-sm">
-                            <input
-                              id="svc-active"
-                              type="checkbox"
-                              className="w-5 h-5 text-violet-600 rounded-md border-slate-300 focus:ring-violet-500 transition-colors"
-                              checked={serviceForm.isActive}
-                              onChange={(e) => setServiceForm({ ...serviceForm, isActive: e.target.checked })}
-                            />
-                            <label htmlFor="svc-active" className="ml-3 block text-sm font-semibold text-slate-700 cursor-pointer">
-                              Active & Visible
-                            </label>
-                          </div>
-                        </div>
-
-                        <div className="pt-4 flex justify-end">
-                          <button
-                            type="submit"
-                            className="w-full md:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white px-10 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
-                            disabled={saving}
-                          >
-                            {saving ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                            {saving ? 'Saving...' : 'Save Service'}
-                          </button>
-                        </div>
-                      </form>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* LIST SECTION - Bottom */}
-          <div className="w-full">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white/70 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-white/80 overflow-hidden"
-            >
-              <div className="px-8 py-6 border-b border-white/60 flex items-center justify-between bg-gradient-to-r from-white/40 to-transparent">
-                <h3 className="font-extrabold text-xl text-slate-800">
-                  {activePanel === 'categories' ? 'Your Categories' : 'Your Services'}
-                </h3>
-                <div className="flex items-center gap-2 bg-white/80 px-4 py-1.5 rounded-full border border-white shadow-sm font-bold text-sm text-violet-700">
-                  <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-                  {activePanel === 'categories' ? categories.length : services.length} Items
+                  <div>
+                    <label className={labelClass}>Sort Order</label>
+                    <input
+                      type="number"
+                      className={`${inputClass} max-w-[10rem]`}
+                      value={serviceForm.sortOrder}
+                      onChange={(e) => setServiceForm({ ...serviceForm, sortOrder: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-6 lg:p-8">
-                <AnimatePresence mode="wait">
-                  {activePanel === 'categories' ? (
-                    <motion.div
-                      key="cats"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    >
-                      {categories.length === 0 ? (
-                        <div className="col-span-full py-16 text-center text-slate-400 bg-white/40 rounded-2xl border border-dashed border-slate-300">
-                          <Layers className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                          <p className="font-medium">No categories crafted yet.</p>
-                        </div>
-                      ) : (
-                        categories.map((cat, idx) => (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.05 }}
-                            key={cat.slug || cat.id}
-                            className="group bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-violet-500/5 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
-                          >
-                            <div className={`absolute top-0 left-0 w-1.5 h-full ${cat.isActive !== false ? 'bg-emerald-400' : 'bg-slate-300'}`} />
-                            <div className="flex justify-between items-start pl-2">
-                              <div>
-                                <h4 className="font-bold text-lg text-slate-900">{cat.name}</h4>
-                                <p className="text-xs font-mono text-slate-400 mt-1 mb-4">{cat.slug || cat.id}</p>
-                                <span className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-violet-50 text-violet-700 border border-violet-100">
-                                  {cat.cards?.length ?? 0} Services
-                                </span>
-                              </div>
-                              <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
-                                <button
-                                  onClick={() => editCategory(cat)}
-                                  className="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-sm"
-                                  title="Edit"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                </button>
-                                <button
-                                  onClick={() => deleteCategory(cat.slug || cat.id)}
-                                  className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl transition-colors shadow-sm"
-                                  title="Delete"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))
-                      )}
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="svcs"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
-                    >
-                      {services.length === 0 ? (
-                        <div className="col-span-full py-16 text-center text-slate-400 bg-white/40 rounded-2xl border border-dashed border-slate-300">
-                          <Sparkles className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                          <p className="font-medium">No magical services added yet.</p>
-                        </div>
-                      ) : (
-                        services.map((svc, idx) => (
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: idx * 0.05 }}
-                            key={svc.slug || svc.id}
-                            className="group flex flex-col bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-violet-500/10 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
-                          >
-                            <div className={`absolute left-0 top-0 bottom-0 w-1 ${svc.isActive !== false ? 'bg-emerald-400' : 'bg-slate-300'}`} />
-
-                            <div className="flex items-start gap-4 mb-4 ml-2">
-                              {svc.img ? (
-                                <img src={svc.img} alt="" className="w-16 h-16 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" />
-                              ) : (
-                                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-violet-50 to-indigo-50 flex items-center justify-center border border-violet-100 shadow-sm shrink-0">
-                                  <Sparkles className="w-6 h-6 text-violet-300" />
-                                </div>
-                              )}
-                              <div className="flex-1 min-w-0 pr-8">
-                                <h4 className="font-bold text-slate-900 text-base line-clamp-2 leading-snug">{svc.title}</h4>
-                                <div className="text-xs font-medium text-slate-500 mt-1.5 flex items-center gap-2">
-                                  <span className="bg-slate-100 px-2 py-0.5 rounded-md">{svc.category}</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="mt-auto ml-2 flex items-center justify-between border-t border-slate-100 pt-4">
-                              <div>
-                                <div className="flex items-baseline gap-2">
-                                  <span className="font-extrabold text-lg text-violet-700">{svc.priceLabel || `₹${svc.price}`}</span>
-                                  {Number(svc.mrp) > Number(svc.price) && (
-                                    <span className="text-xs font-semibold text-slate-400 line-through">₹{svc.mrp}</span>
-                                  )}
-                                </div>
-                                {svc.duration && <div className="text-xs font-semibold text-slate-400 mt-0.5">{svc.duration}</div>}
-                              </div>
-
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => editService(svc)}
-                                  className="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-sm"
-                                  title="Edit"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                </button>
-                                <button
-                                  onClick={() => deleteService(svc.slug || svc.id)}
-                                  className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl transition-colors shadow-sm"
-                                  title="Delete"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                <div className="flex shrink-0 flex-col-reverse gap-3 border-t border-slate-100 bg-white p-4 sm:flex-row sm:justify-end sm:px-6">
+                  <button type="button" className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 transition" disabled={saving} onClick={closeServiceModal}>
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2"
+                    disabled={saving}
+                  >
+                    {saving ? <RefreshCw className="w-5 h-5 animate-spin" /> : null}
+                    {saving ? 'Saving...' : 'Save Service'}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
-
-        </div>
-      </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
