@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
 import { invalidateCoursesCache } from '../hooks/useCourses';
@@ -7,12 +7,7 @@ import CourseInitialVideosPanel from '../components/admin/CourseInitialVideosPan
 import { btnPrimary, btnSecondary, fieldInput, fieldLabel, fieldHint } from '../components/admin/courseFormUi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
-import {
-  COURSE_LEVELS,
-  DURATION_UNITS,
-  formatCourseDuration,
-  parseCourseDuration,
-} from '../utils/courseDuration';
+import { COURSE_LEVELS } from '../utils/courseDuration';
 import { countEnrolledVideos, mergeCourseVideosFromApi } from '../utils/courseVideoApi';
 import { formatINR } from '../utils/currency';
 
@@ -24,11 +19,12 @@ const EMPTY_COURSE_FORM = {
   longDesc: '',
   courseType: 'Recorded',
   level: 'Beginner',
-  durationValue: '',
-  durationUnit: 'weeks',
+  duration: '',
   instructor: '',
   topics: [],
   price: '',
+  mrp: '',
+  tier: '',
   validityDays: '',
   thumbnailUrl: '',
 };
@@ -42,6 +38,9 @@ const COURSE_TYPE_CONFIG = {
     flow: 'Now: ENQUIRE NOW → Lead. Later: BUY NOW → Payment → Dashboard',
     priceLabel: 'Selling price (Rs.)',
     priceHint: 'Shown on course page. Used at checkout once payment keys are configured.',
+    mrpLabel: 'MRP / full price (Rs.) — optional',
+    mrpHint: 'Shown struck-through next to the selling price when higher than it.',
+    tierOptions: ['Lead Magnet', 'Entry', 'Mid', 'Comprehensive'],
     validityLabel: 'Access validity (days)',
     validityHint: 'How long enrolled students can watch videos after purchase.',
     frontendCta: 'BUY NOW (or ENQUIRE NOW until payment live)',
@@ -55,6 +54,9 @@ const COURSE_TYPE_CONFIG = {
     flow: 'Listing → Course detail → ENQUIRE NOW → Lead in admin panel',
     priceLabel: 'Indicative price (Rs.)',
     priceHint: 'Display-only reference price. Payment is not collected online for live courses.',
+    mrpLabel: 'MRP / full price (Rs.) — optional',
+    mrpHint: 'Shown struck-through next to the indicative price when higher than it.',
+    tierOptions: ['Foundation', 'Specialist', 'Advanced', 'FLAGSHIP'],
     validityLabel: 'Program duration (days)',
     validityHint: 'Approximate batch length for display (e.g. 30–60 days). Not used for video access.',
     frontendCta: 'ENQUIRE NOW',
@@ -183,6 +185,7 @@ function VideoEntryForm({
 
 function AdminCourses() {
   const [courses, setCourses] = useState([]);
+  const [courseTypeFilter, setCourseTypeFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
@@ -207,7 +210,6 @@ function AdminCourses() {
 
   const [formData, setFormData] = useState(EMPTY_COURSE_FORM);
   const [topicInput, setTopicInput] = useState('');
-  const [durationLegacy, setDurationLegacy] = useState('');
   const [courseCategories, setCourseCategories] = useState([]);
   const [showCategoryPanel, setShowCategoryPanel] = useState(false);
   
@@ -327,6 +329,14 @@ function AdminCourses() {
 
   const totalVideos = courses.reduce((count, course) => count + getCourseVideoCount(course), 0);
   const activeCourses = courses.filter((course) => course.isActive).length;
+  const liveCourseCount = courses.filter((course) => course.courseType === 'Live').length;
+  const recordedCourseCount = courses.filter((course) => course.courseType !== 'Live').length;
+  const filteredCourses = useMemo(() => {
+    if (courseTypeFilter === 'All') return courses;
+    return courses.filter((course) =>
+      courseTypeFilter === 'Live' ? course.courseType === 'Live' : course.courseType !== 'Live'
+    );
+  }, [courses, courseTypeFilter]);
   const [supabaseStatus, setSupabaseStatus] = useState({ ready: false, bucket: '', issues: ['Checking upload configuration...'] });
 
   const fetchCourses = async () => {
@@ -957,7 +967,6 @@ function AdminCourses() {
     const method = editingCourse ? 'PUT' : 'POST';
 
     try {
-      const { durationValue, durationUnit, ...coursePayload } = formData;
       const res = await fetch(url, {
         method,
         headers: {
@@ -965,10 +974,12 @@ function AdminCourses() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          ...coursePayload,
-          duration: formatCourseDuration(durationValue, durationUnit) || durationLegacy || '',
+          ...formData,
+          duration: String(formData.duration || '').trim(),
           courseType: formData.courseType === 'Live' ? 'Live' : 'Recorded',
           price: Math.round(parseInt(String(formData.price).replace(/[^0-9]/g, ''), 10)) || 0,
+          mrp: Math.round(parseInt(String(formData.mrp).replace(/[^0-9]/g, ''), 10)) || 0,
+          tier: formData.tier || '',
           validityDays: Math.round(parseInt(String(formData.validityDays).replace(/[^0-9]/g, ''), 10)) || 0,
         })
       });
@@ -1069,8 +1080,6 @@ function AdminCourses() {
       setVideoForm({ ...DEFAULT_VIDEO_FORM });
       setVideoFile(null);
       setEditVideoDrafts([]);
-      const parsedDuration = parseCourseDuration(course.duration || '');
-      setDurationLegacy(parsedDuration.legacy);
       setFormData({
         title: course.title,
         slug: course.slug || '',
@@ -1079,11 +1088,12 @@ function AdminCourses() {
         longDesc: course.longDesc || '',
         courseType: course.courseType || 'Recorded',
         level: COURSE_LEVELS.includes(course.level) ? course.level : 'Beginner',
-        durationValue: parsedDuration.value,
-        durationUnit: parsedDuration.unit,
+        duration: course.duration || '',
         instructor: typeof course.instructor === 'string' ? course.instructor : course.instructor?.name || '',
         topics: Array.isArray(course.topics) ? course.topics : [],
         price: course.price,
+        mrp: course.mrp || '',
+        tier: course.tier || '',
         validityDays: course.validityDays,
         thumbnailUrl: course.thumbnailUrl || '',
       });
@@ -1100,7 +1110,6 @@ function AdminCourses() {
     } else {
       setEditingCourse(null);
       setFormData(EMPTY_COURSE_FORM);
-      setDurationLegacy('');
       setTopicInput('');
       initialVideosRef.current?.reset();
       setEditVideoDrafts([]);
@@ -1188,12 +1197,42 @@ function AdminCourses() {
             <h3>Course Library</h3>
             <p>Edit a course to add, replace, update, or delete videos. Use the camera button only to preview saved videos.</p>
           </div>
+          <div className="lms-type-filter-tabs" style={{ display: 'flex', gap: 8 }}>
+            {[
+              { key: 'All', label: 'All', count: courses.length, bg: '#f1f5f9', color: '#334155' },
+              { key: 'Live', label: 'Live', count: liveCourseCount, bg: '#fff7ed', color: '#c2410c' },
+              { key: 'Recorded', label: 'Recorded', count: recordedCourseCount, bg: '#eef2ff', color: '#4338ca' },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setCourseTypeFilter(tab.key)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '4px 12px',
+                  borderRadius: 999,
+                  fontWeight: 700,
+                  letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  background: tab.bg,
+                  color: tab.color,
+                  border: courseTypeFilter === tab.key ? `2px solid ${tab.color}` : '2px solid transparent',
+                  opacity: courseTypeFilter === tab.key ? 1 : 0.55,
+                }}
+              >
+                {tab.label} ({tab.count})
+              </button>
+            ))}
+          </div>
         </div>
         <table className="lms-table">
           <thead>
             <tr>
               <th>Course Title</th>
               <th>Type</th>
+              <th>Duration</th>
               <th>Price</th>
               <th>Validity</th>
               <th>Videos</th>
@@ -1202,14 +1241,18 @@ function AdminCourses() {
             </tr>
           </thead>
           <tbody>
-            {courses.length === 0 ? (
+            {filteredCourses.length === 0 ? (
               <tr>
-                <td colSpan="7">
-                  <div className="lms-empty-row">No courses found in the database.</div>
+                <td colSpan="8">
+                  <div className="lms-empty-row">
+                    {courses.length === 0
+                      ? 'No courses found in the database.'
+                      : `No ${courseTypeFilter.toLowerCase()} courses found.`}
+                  </div>
                 </td>
               </tr>
             ) : (
-              courses.map(course => (
+              filteredCourses.map(course => (
                 <tr key={course._id}>
                   <td>
                     <div className="lms-course-cell">
@@ -1224,11 +1267,45 @@ function AdminCourses() {
                     </div>
                   </td>
                   <td>
-                    <span className={`lms-type-badge ${getCourseTypeConfig(course.courseType).badgeClass}`}>
-                      {getCourseTypeConfig(course.courseType).badge}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
+                      <span className={`lms-type-badge ${getCourseTypeConfig(course.courseType).badgeClass}`}>
+                        {getCourseTypeConfig(course.courseType).badge}
+                      </span>
+                      {course.tier ? (
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            padding: '2px 8px',
+                            borderRadius: 999,
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            letterSpacing: '0.02em',
+                            whiteSpace: 'nowrap',
+                            background: course.tier === 'FLAGSHIP' ? '#fef3c7' : '#f1f5f9',
+                            color: course.tier === 'FLAGSHIP' ? '#b45309' : '#475569',
+                          }}
+                        >
+                          {course.tier}
+                        </span>
+                      ) : null}
+                    </div>
+                  </td>
+                  <td>
+                    <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                      {course.duration || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not set</span>}
                     </span>
                   </td>
-                  <td className="lms-price">{formatINR(course.price)}</td>
+                  <td className="lms-price">
+                    <div>
+                      <div>{formatINR(course.price)}</div>
+                      {Number(course.mrp) > Number(course.price) && (
+                        <div style={{ fontSize: '11px', fontWeight: 400, color: '#94a3b8', textDecoration: 'line-through' }}>
+                          {formatINR(course.mrp)}
+                        </div>
+                      )}
+                    </div>
+                  </td>
                   <td>{course.validityDays} days</td>
                   <td>
                     <span className="lms-video-count">
@@ -1368,34 +1445,16 @@ function AdminCourses() {
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">Duration</label>
-                        <div style={{ display: 'flex', gap: 8 }}>
-                          <input
-                            type="number"
-                            name="durationValue"
-                            min={1}
-                            value={formData.durationValue}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            placeholder="e.g. 8"
-                            style={{ flex: '0 0 96px' }}
-                          />
-                          <select
-                            name="durationUnit"
-                            value={formData.durationUnit}
-                            onChange={handleInputChange}
-                            className="form-input"
-                            style={{ flex: 1 }}
-                          >
-                            {DURATION_UNITS.map((unit) => (
-                              <option key={unit.value} value={unit.value}>{unit.label}</option>
-                            ))}
-                          </select>
-                        </div>
-                        {durationLegacy ? (
-                          <p className="form-hint">Current saved value: {durationLegacy}. Set a number above to replace it.</p>
-                        ) : (
-                          <p className="form-hint">Shown on course cards and detail page (e.g. 8 Weeks).</p>
-                        )}
+                        <input
+                          type="text"
+                          name="duration"
+                          value={formData.duration}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder="e.g. 12 classes · ~18 hrs or 8 Weeks"
+                          required
+                        />
+                        <p className="form-hint">Free text — shown as-is on course cards and detail page. Supports rich formats like "12 classes · ~18 hrs".</p>
                       </div>
                     </div>
                     <div className="form-col">
@@ -1524,6 +1583,43 @@ function AdminCourses() {
                           required
                         />
                         <p className="form-hint">{getCourseTypeConfig(formData.courseType).priceHint}</p>
+                      </div>
+                    </div>
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">{getCourseTypeConfig(formData.courseType).mrpLabel}</label>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="^[0-9]+$"
+                          name="mrp"
+                          value={formData.mrp}
+                          onChange={handleInputChange}
+                          onBlur={e => {
+                            const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10);
+                            if (!isNaN(v)) setFormData(prev => ({ ...prev, mrp: String(v) }));
+                          }}
+                          className="form-input"
+                          placeholder="e.g. 4500"
+                        />
+                        <p className="form-hint">{getCourseTypeConfig(formData.courseType).mrpHint}</p>
+                      </div>
+                    </div>
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">Pricing tier</label>
+                        <select
+                          name="tier"
+                          value={formData.tier}
+                          onChange={handleInputChange}
+                          className="form-input"
+                        >
+                          <option value="">— None —</option>
+                          {getCourseTypeConfig(formData.courseType).tierOptions.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                        <p className="form-hint">Shown as a badge on the course card ({getCourseTypeConfig(formData.courseType).tierOptions.join(' / ')}).</p>
                       </div>
                     </div>
                     <div className="form-col">

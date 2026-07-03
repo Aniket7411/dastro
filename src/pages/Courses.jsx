@@ -47,6 +47,7 @@ const PAGE_META = {
 function Courses({ mode = 'all' }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortValue, setSortValue] = useState('newest');
 
   const meta = PAGE_META[mode] || PAGE_META.all;
   const apiCourseType = mode === 'live' ? 'Live' : mode === 'recorded' ? 'Recorded' : undefined;
@@ -62,6 +63,7 @@ function Courses({ mode = 'all' }) {
     window.scrollTo(0, 0);
     setSelectedCategory('All');
     setSearchTerm('');
+    setSortValue('newest');
   }, [mode]);
 
   const categoryCounts = useMemo(() => {
@@ -98,8 +100,20 @@ function Courses({ mode = 'all' }) {
     });
   }, [dbCourses, searchTerm, selectedCategory]);
 
+  const sortedCourses = useMemo(() => {
+    const list = [...filteredCourses];
+    list.sort((a, b) => {
+      if (sortValue === 'price-desc') return (Number(b.price) || 0) - (Number(a.price) || 0);
+      if (sortValue === 'price-asc') return (Number(a.price) || 0) - (Number(b.price) || 0);
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return sortValue === 'oldest' ? aTime - bTime : bTime - aTime;
+    });
+    return list;
+  }, [filteredCourses, sortValue]);
+
   const resultLabel =
-    filteredCourses.length === 1 ? meta.typeLabel : (meta.typeLabelPlural ?? `${meta.typeLabel}s`);
+    sortedCourses.length === 1 ? meta.typeLabel : (meta.typeLabelPlural ?? `${meta.typeLabel}s`);
 
   const resultText =
     searchTerm.trim() || selectedCategory !== 'All'
@@ -123,7 +137,7 @@ function Courses({ mode = 'all' }) {
 
       <CourseFilterBar
         loading={loading}
-        resultCount={filteredCourses.length}
+        resultCount={sortedCourses.length}
         resultLabel={resultText}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -131,14 +145,16 @@ function Courses({ mode = 'all' }) {
         categoryFilters={categoryFilters}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
+        sortValue={sortValue}
+        onSortChange={setSortValue}
       />
 
       <div className={`${PAGE_WRAP} pb-10 pt-6 sm:pb-12 sm:pt-8`}>
         {loading ? (
           <CourseGridSkeleton count={mode === 'all' ? 8 : 6} />
-        ) : filteredCourses.length > 0 ? (
+        ) : sortedCourses.length > 0 ? (
           <ul className={COURSE_GRID}>
-            {filteredCourses.map((course) => (
+            {sortedCourses.map((course) => (
               <li key={course.id} className={COURSE_GRID_ITEM}>
                 <CourseListingCard course={course} />
               </li>

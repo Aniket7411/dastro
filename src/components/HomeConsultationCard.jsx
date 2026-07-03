@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Clock, Phone } from 'lucide-react';
+import { getPriceDisplay } from '../utils/pricing';
 
 const CARD_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
@@ -14,6 +15,10 @@ const BTN_OUTLINE = `${CARD_LINK} ${BTN_BASE} inline-flex min-w-0 flex-1 items-c
 const BTN_PRIMARY = `${CARD_LINK} ${BTN_BASE} inline-flex min-w-0 flex-1 items-center justify-center gap-0.5 border-0 bg-site-primary px-2.5 py-1.5 text-[10px] font-bold !text-white visited:!text-white shadow-sm transition hover:!bg-site-accent-dark hover:!text-white`;
 
 export default function HomeConsultationCard({ item, onBook }) {
+  // item.price stays a preformatted "₹NNNN" string — it's reused as the Razorpay amount source.
+  // priceValue/mrp are separate raw numbers used only for the strikethrough/Save% display.
+  const priceDisplay = getPriceDisplay({ price: item.priceValue, mrp: item.mrp });
+
   return (
     <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-[0_10px_28px_rgba(139,74,30,0.12)]">
       <Link
@@ -37,8 +42,13 @@ export default function HomeConsultationCard({ item, onBook }) {
         ) : null}
 
         {item.price ? (
-          <span className="absolute bottom-1.5 left-1.5 rounded-md bg-white/95 px-1.5 py-0.5 font-price text-[11px] font-extrabold tabular-nums text-site-primary shadow-sm sm:bottom-2 sm:left-2 sm:rounded-lg sm:px-2 sm:text-sm">
+          <span className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-white/95 px-1.5 py-0.5 font-price text-[11px] font-extrabold tabular-nums text-site-primary shadow-sm sm:bottom-2 sm:left-2 sm:rounded-lg sm:px-2 sm:text-sm">
             {item.price}
+            {priceDisplay.hasDiscount ? (
+              <span className="font-body text-[8px] font-bold tracking-tight text-emerald-700 sm:text-[9px]">
+                {priceDisplay.savePercent}% off
+              </span>
+            ) : null}
           </span>
         ) : null}
 

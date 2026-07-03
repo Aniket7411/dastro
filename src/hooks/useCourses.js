@@ -39,7 +39,10 @@ export function mapCourseFromApi(course) {
     instructor: instructorName,
     modulesCount: course.modulesCount || course.videoCount || 0,
     category: course.category || 'Astrology',
+    tier: course.tier || '',
     price: course.price,
+    mrp: course.mrp || 0,
+    createdAt: course.createdAt || null,
     courseType,
     isPremium: courseType === 'Recorded' && Number(course.price) > 0,
   };

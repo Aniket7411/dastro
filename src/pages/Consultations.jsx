@@ -28,8 +28,10 @@ const GUIDELINES = [
 
 const SORT_OPTIONS = [
   { value: 'sortOrder:asc', label: 'Recommended' },
-  { value: 'price:asc', label: 'Price: Low to High' },
   { value: 'price:desc', label: 'Price: High to Low' },
+  { value: 'price:asc', label: 'Price: Low to High' },
+  { value: 'createdAt:desc', label: 'Newest first' },
+  { value: 'createdAt:asc', label: 'Oldest first' },
   { value: 'title:asc', label: 'Name: A–Z' },
 ];
 

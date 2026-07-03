@@ -20,6 +20,7 @@ import {
   CouponControls,
 } from '../components/CourseDetailModals';
 import { BTN, TYPE, PAGE_WRAP } from '../components/consultation/tokens';
+import { getPriceDisplay } from '../utils/pricing';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
 import CourseTimer from '../components/CourseTimer';
@@ -593,6 +594,17 @@ function CourseDetail() {
             <div className="min-w-0">
               <div className="mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
+                {course.tier ? (
+                  <span
+                    className={`m-0 inline-flex items-center rounded-full px-2.5 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-[0.1em] ${
+                      course.tier === 'FLAGSHIP'
+                        ? 'bg-amber-500/15 text-amber-700'
+                        : 'bg-site-primary/10 text-site-primary'
+                    }`}
+                  >
+                    {course.tier}
+                  </span>
+                ) : null}
                 <MetaChip>{isLiveCourse ? 'Live batch' : 'Recorded'}</MetaChip>
                 {course.schedule ? (
                   <MetaChip>
@@ -838,9 +850,16 @@ function CourseDetail() {
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="!m-0 truncate font-body text-xs text-white/70">{course.title}</p>
-            <p className="!m-0 font-price text-base font-bold tabular-nums tracking-tight text-white">
-              {canPayOnline ? `₹${getPayableAmount()}` : course.price ? `₹${Number(course.price).toLocaleString('en-IN')}` : 'Enquire'}
-            </p>
+            <div className="flex items-baseline gap-1.5">
+              <p className="!m-0 font-price text-base font-bold tabular-nums tracking-tight text-white">
+                {canPayOnline ? `₹${getPayableAmount()}` : course.price ? `₹${Number(course.price).toLocaleString('en-IN')}` : 'Enquire'}
+              </p>
+              {!appliedCoupon && getPriceDisplay({ price: course.price, mrp: course.mrp }).hasDiscount ? (
+                <span className="font-body text-[11px] text-white/55 line-through">
+                  ₹{getPriceDisplay({ price: course.price, mrp: course.mrp }).mrpLabel}
+                </span>
+              ) : null}
+            </div>
           </div>
           <button
             type="button"
@@ -918,7 +937,15 @@ function EnrollPanel({
           <p className="!mt-1 font-body text-xs text-emerald-700">
             Saved ₹{getDiscountAmount()} · was ₹{getCoursePrice().toLocaleString('en-IN')}
           </p>
-        ) : null}
+        ) : (() => {
+          const priceDisplay = getPriceDisplay({ price: getCoursePrice(), mrp: course.mrp });
+          return priceDisplay.hasDiscount ? (
+            <p className="!mt-1 font-body text-xs text-site-soft">
+              <span className="line-through decoration-site-soft/60">₹{priceDisplay.mrpLabel}</span>{' '}
+              <span className="font-semibold text-emerald-700">Save {priceDisplay.savePercent}%</span>
+            </p>
+          ) : null;
+        })()}
         <p className="!mt-1 font-body text-xs text-site-muted">
           {canPayOnline
             ? 'Instant access after payment.'

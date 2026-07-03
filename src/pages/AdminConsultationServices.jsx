@@ -21,6 +21,7 @@ const EMPTY_SERVICE = {
   short: '',
   desc: '',
   price: '',
+  mrp: '',
   duration: '',
   badge: '',
   badgeColor: 'purple',
@@ -126,6 +127,7 @@ export default function AdminConsultationServices() {
       const payload = {
         ...serviceForm,
         price: Number(serviceForm.price),
+        mrp: Number(serviceForm.mrp) || 0,
         sortOrder: Number(serviceForm.sortOrder) || 0,
         highlights: serviceForm.highlightsText
           .split('\n')
@@ -180,6 +182,7 @@ export default function AdminConsultationServices() {
       short: svc.short || '',
       desc: svc.desc || '',
       price: String(svc.price ?? ''),
+      mrp: String(svc.mrp ?? ''),
       duration: svc.duration || '',
       badge: svc.badge || '',
       badgeColor: svc.badgeColor || 'purple',
@@ -510,6 +513,20 @@ export default function AdminConsultationServices() {
                             </div>
                           </div>
                           <div>
+                            <label className={labelClass}>MRP / full price (₹) — optional</label>
+                            <div className="relative">
+                              <span className="absolute left-4 top-3.5 text-slate-500 font-medium">₹</span>
+                              <input
+                                type="number"
+                                min="0"
+                                className={`${inputClass} pl-9`}
+                                value={serviceForm.mrp}
+                                onChange={(e) => setServiceForm({ ...serviceForm, mrp: e.target.value })}
+                                placeholder="Shown struck-through when higher than price"
+                              />
+                            </div>
+                          </div>
+                          <div>
                             <label className={labelClass}>Duration</label>
                             <input
                               className={inputClass}
@@ -755,7 +772,12 @@ export default function AdminConsultationServices() {
 
                             <div className="mt-auto ml-2 flex items-center justify-between border-t border-slate-100 pt-4">
                               <div>
-                                <div className="font-extrabold text-lg text-violet-700">{svc.priceLabel || `₹${svc.price}`}</div>
+                                <div className="flex items-baseline gap-2">
+                                  <span className="font-extrabold text-lg text-violet-700">{svc.priceLabel || `₹${svc.price}`}</span>
+                                  {Number(svc.mrp) > Number(svc.price) && (
+                                    <span className="text-xs font-semibold text-slate-400 line-through">₹{svc.mrp}</span>
+                                  )}
+                                </div>
                                 {svc.duration && <div className="text-xs font-semibold text-slate-400 mt-0.5">{svc.duration}</div>}
                               </div>
 

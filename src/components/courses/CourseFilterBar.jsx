@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import CategoryChip from './CategoryChip';
-import { FILTER_BAR, PAGE_WRAP } from '../consultation/tokens';
+import { FILTER_BAR, PAGE_WRAP, SELECT } from '../consultation/tokens';
 
 const SCROLL_HIDE = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
+
+export const COURSE_SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest first' },
+  { value: 'oldest', label: 'Oldest first' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+];
 
 export default function CourseFilterBar({
   loading,
@@ -15,6 +22,9 @@ export default function CourseFilterBar({
   categoryFilters,
   selectedCategory,
   onSelectCategory,
+  sortValue,
+  onSortChange,
+  sortOptions = COURSE_SORT_OPTIONS,
 }) {
   const [catOpen, setCatOpen] = useState(false);
   const hasActiveCategory = selectedCategory && selectedCategory !== 'All';
@@ -43,7 +53,7 @@ export default function CourseFilterBar({
               )}
             </p>
 
-            {/* Search + category toggle grouped right */}
+            {/* Search + sort + category toggle grouped right */}
             <div className="flex items-center gap-2">
               <div className="relative w-36 sm:w-44 md:w-52 lg:w-60">
                 <Search
@@ -59,6 +69,22 @@ export default function CourseFilterBar({
                   className="h-8 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-8 pr-3 font-body text-[0.6875rem] font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-[0.6875rem] placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:h-9 sm:pl-10 sm:text-xs sm:placeholder:text-xs"
                 />
               </div>
+
+              {onSortChange ? (
+                <div className="relative shrink-0">
+                  <select
+                    value={sortValue}
+                    onChange={(e) => onSortChange(e.target.value)}
+                    className={SELECT}
+                    aria-label="Sort courses"
+                  >
+                    {sortOptions.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={10} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:right-2.5 sm:size-[11px]" aria-hidden />
+                </div>
+              ) : null}
 
               {/* Category toggle — mobile only */}
               {categoryFilters.length > 1 && (

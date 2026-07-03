@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Clock, Phone } from 'lucide-react';
-import { TYPE } from './consultation/tokens';
+import PriceBlock from './PriceBlock';
 
 const BADGE_STYLES = {
   purple: 'bg-violet-600/95 text-white',
@@ -59,8 +59,8 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
         )}
 
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-site-accent-dark/10 pt-2.5">
-          <div className="min-w-0 leading-none">
-            <p className={TYPE.priceCard}>{card.priceLabel}</p>
+          <div className="min-w-0">
+            <PriceBlock price={card.price} mrp={card.mrp} size="card" />
           </div>
 
           <Link

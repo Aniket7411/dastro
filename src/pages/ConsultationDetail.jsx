@@ -18,6 +18,7 @@ import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
 import { OverlayLoader } from '../components/PageLoader';
 import { PAGE, PAGE_WRAP, TYPE, BTN } from '../components/consultation/tokens';
+import PriceBlock from '../components/PriceBlock';
 import { useConsultationService } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
@@ -85,7 +86,7 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
             <p className="!m-0 font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">
               Session fee
             </p>
-            <p className={`${TYPE.price} !mt-0.5 !text-[clamp(1.25rem,2.5vw,1.625rem)]`}>{service.priceLabel}</p>
+            <PriceBlock price={service.price} mrp={service.mrp} size="detail" />
             {service.duration ? (
               <p className={`${TYPE.caption} !mt-0.5 !text-[0.75rem]`}>{service.duration} consultation</p>
             ) : null}

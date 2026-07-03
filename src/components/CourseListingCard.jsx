@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Clock, Radio, User, Video } from 'lucide-react';
 import { formatINR } from '../utils/currency';
+import PriceBlock from './PriceBlock';
 
 const CARD_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
@@ -85,10 +86,23 @@ export default function CourseListingCard({ course }) {
       </Link>
 
       <div className="flex flex-1 flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
-        {course.category ? (
-          <p className="mb-1 truncate text-[9px] font-bold uppercase tracking-wider text-site-accent-dark sm:text-[10px]">
-            {course.category}
-          </p>
+        {(course.category || course.tier) ? (
+          <div className="mb-1 flex flex-wrap items-center gap-1">
+            {course.category ? (
+              <p className="truncate text-[9px] font-bold uppercase tracking-wider text-site-accent-dark sm:text-[10px]">
+                {course.category}
+              </p>
+            ) : null}
+            {course.tier ? (
+              <span
+                className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide sm:text-[9px] ${
+                  course.tier === 'FLAGSHIP' ? 'bg-amber-500/15 text-amber-700' : 'bg-site-primary/10 text-site-primary'
+                }`}
+              >
+                {course.tier}
+              </span>
+            ) : null}
+          </div>
         ) : null}
 
         <Link to={detailPath} className={`${TITLE_LINK} mb-1 line-clamp-2 font-body text-xs font-bold leading-snug sm:text-sm`}>
@@ -116,16 +130,12 @@ export default function CourseListingCard({ course }) {
         <div className="mt-auto flex flex-col gap-2 border-t border-site-accent-dark/10 pt-2.5 sm:flex-row sm:items-center sm:justify-between sm:pt-3">
           <div className="min-w-0">
             {priceLabel ? (
-              <div className="leading-none">
-                {isLive ? (
-                  <p className="mb-0.5 hidden font-body text-[10px] font-medium tracking-wide text-site-soft sm:block">
-                    From
-                  </p>
-                ) : null}
-                <p className="font-price text-sm font-bold leading-none tracking-tight text-site-primary tabular-nums transition-colors group-hover:text-site-accent-dark sm:text-[1.0625rem]">
-                  ₹{priceLabel}
-                </p>
-              </div>
+              <PriceBlock
+                price={course.price}
+                mrp={course.mrp}
+                size="card"
+                prefix={isLive ? 'From' : undefined}
+              />
             ) : (
               <p className="font-body text-[10px] font-semibold text-site-primary sm:text-xs">
                 {isLive ? 'Enquire for fees' : 'Free preview'}

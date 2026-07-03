@@ -1,45 +1,58 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getPriceDisplay } from '../utils/pricing';
 
+// price stays a preformatted "₹NNNN" string — it's reused as the Razorpay amount source in Home.jsx.
+// priceValue/mrp are separate raw numbers used only for the Save% badge.
 export const CONSULTATION_SERVICE_SLIDES = [
   {
     title: 'Career Consultation',
     img: '/images/consultations/career.png',
     desc: 'Jobs, promotions, business growth & foreign opportunities.',
-    duration: '30–40 min',
+    duration: '40 min',
     price: '₹3600',
+    priceValue: 3600,
+    mrp: 4500,
     link: '/consultations/career',
   },
   {
     title: 'Education Guidance',
     img: '/images/consultations/education.png',
     desc: 'Study paths, exams, higher education & academic success.',
-    duration: '30 min',
+    duration: '40 min',
     price: '₹3600',
+    priceValue: 3600,
+    mrp: 4500,
     link: '/consultations/other',
   },
   {
     title: 'Health & Wellness',
     img: '/images/consultations/health.png',
     desc: 'Planetary insights for recovery, vitality & emotional balance.',
-    duration: '30–40 min',
-    price: '₹3400',
-    link: '/consultations/other',
+    duration: '40 min',
+    price: '₹3600',
+    priceValue: 3600,
+    mrp: 4500,
+    link: '/consultations/health-business',
   },
   {
     title: 'Love & Relationship',
     img: '/images/consultations/love.png',
     desc: 'Compatibility, loyalty, marriage timing & relationship clarity.',
-    duration: '30–40 min',
-    price: '₹3400',
+    duration: '40 min',
+    price: '₹3600',
+    priceValue: 3600,
+    mrp: 4500,
     link: '/consultations/relationship',
   },
   {
     title: 'Vastu Consultation',
     img: '/images/consultations/vastu.png',
     desc: 'Home & workspace harmony for prosperity and peace.',
-    duration: '45 min',
+    duration: '40 min',
     price: '₹3600',
+    priceValue: 3600,
+    mrp: 4500,
     link: '/consultations/other',
   },
 ];
@@ -49,6 +62,8 @@ function stopCarouselPointer(e) {
 }
 
 function ServiceSlide({ item, onBook }) {
+  const priceDisplay = getPriceDisplay({ price: item.priceValue, mrp: item.mrp });
+
   return (
     <article className="csc-card">
       <Link
@@ -60,7 +75,12 @@ function ServiceSlide({ item, onBook }) {
         <div className="csc-img-wrap">
           <img src={item.img} alt="" loading="lazy" decoding="async" draggable={false} />
           <span className="csc-duration">{item.duration}</span>
-          <span className="csc-price">{item.price}</span>
+          <span className="csc-price">
+            {item.price}
+            {priceDisplay.hasDiscount ? (
+              <span className="csc-save">{priceDisplay.savePercent}% off</span>
+            ) : null}
+          </span>
         </div>
       </Link>
       <div className="csc-body">
@@ -288,7 +308,17 @@ export default function ConsultationServicesCarousel({ onBook }) {
         .csc-price {
           top: 0.65rem;
           right: 0.65rem;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
           background: linear-gradient(135deg, #c8832a, #8b4a1e);
+        }
+
+        .csc-save {
+          font-size: 0.55rem;
+          font-weight: 800;
+          color: #d7ffe4;
+          letter-spacing: 0;
         }
 
         .csc-body {

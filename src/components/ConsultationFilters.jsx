@@ -6,8 +6,10 @@ const SCROLL_HIDE = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 
 const SORT_OPTIONS_DEFAULT = [
   { value: 'sortOrder:asc', label: 'Recommended' },
-  { value: 'price:asc', label: 'Price: Low to High' },
   { value: 'price:desc', label: 'Price: High to Low' },
+  { value: 'price:asc', label: 'Price: Low to High' },
+  { value: 'createdAt:desc', label: 'Newest first' },
+  { value: 'createdAt:asc', label: 'Oldest first' },
   { value: 'title:asc', label: 'Name: A–Z' },
 ];
 
