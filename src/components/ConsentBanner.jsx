@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function CookieConsent() {
+export default function ConsentBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { Suspense, lazy, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SettingsProvider } from './context/SettingsContext';
-import CookieConsent from './components/CookieConsent';
+import ConsentBanner from './components/ConsentBanner';
 import { DeferredGlobalWidgets } from './components/DeferredSiteWidgets';
 import { HelmetProvider } from 'react-helmet-async';
 import { loadScript, loadStylesheet, runWhenIdle } from './utils/loadScript';
@@ -123,7 +123,7 @@ function App() {
             theme="colored"
             style={{ zIndex: 99999 }}
           />
-          <CookieConsent />
+          <ConsentBanner />
           <DeferredGlobalWidgets />
           <Suspense fallback={null}>
             <Routes>
