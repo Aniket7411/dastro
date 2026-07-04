@@ -290,3 +290,13 @@
 .Toastify__toast-container {
   z-index: 20050 !important;
 }
+
+/* Fix visibility of native date, time, and datetime-local pickers on mobile (iOS/Safari/Android) */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  min-height: 2.25rem; /* Ensure clickable height */
+}

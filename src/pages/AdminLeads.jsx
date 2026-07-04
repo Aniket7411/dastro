@@ -272,6 +272,18 @@ function AdminLeads({ activeFilter }) {
 
   return (
     <div className="admin-leads-content">
+      <style>{`
+        .excel-export-dropdown {
+          left: 0 !important;
+          right: auto !important;
+        }
+        @media (min-width: 992px) {
+          .excel-export-dropdown {
+            left: auto !important;
+            right: 0 !important;
+          }
+        }
+      `}</style>
       {/* Search & filters */}
       <div className="mb-4 space-y-3">
         <div className="search-bar w-full max-w-full bg-[var(--surface)] sm:max-w-md">
@@ -351,8 +363,8 @@ function AdminLeads({ activeFilter }) {
 
                 {exportMenuOpen && (
                   <div
-                    className="action-dropdown shadow-lg"
-                    style={{ right: 0, top: 'calc(100% + 4px)', minWidth: '210px', display: 'block', zIndex: 9999 }}
+                    className="action-dropdown shadow-lg excel-export-dropdown"
+                    style={{ top: 'calc(100% + 4px)', minWidth: '210px', display: 'block', zIndex: 9999 }}
                   >
                     <div className="px-3 py-2" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid var(--border)' }}>
                       Download Excel
