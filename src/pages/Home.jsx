@@ -613,7 +613,7 @@ function Home() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/blogs`);
+        const res = await fetch(`${API_BASE}/api/blogs?limit=3`);
         const data = await res.json();
         if (data.success) setBlogs(data.blogs.slice(0, 3));
       } catch (err) {

@@ -55,6 +55,7 @@ export default function AdminConsultationServices() {
   const [serviceCategoryFilter, setServiceCategoryFilter] = useState('All');
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [resyncing, setResyncing] = useState(false);
 
   const filteredServices = useMemo(() => {
     if (serviceCategoryFilter === 'All') return services;
@@ -258,6 +259,27 @@ export default function AdminConsultationServices() {
     }
   };
 
+  const resyncFromFile = async () => {
+    setResyncing(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/consultation-catalog/resync`, {
+        method: 'POST',
+        headers: authHeaders(),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(`Resynced ${data.count ?? ''} services from file`);
+        loadCatalog();
+      } else {
+        toast.error(data.message || 'Resync failed');
+      }
+    } catch {
+      toast.error('Resync failed');
+    } finally {
+      setResyncing(false);
+    }
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -368,14 +390,26 @@ export default function AdminConsultationServices() {
                   : 'Click Edit to open a service in the editor, or add a new one.'}
               </p>
             </div>
-            <button
-              type="button"
-              className="lms-primary-action"
-              onClick={activePanel === 'categories' ? openNewCategory : openNewService}
-            >
-              <Plus className="w-4 h-4" />
-              <span>{activePanel === 'categories' ? 'New Category' : 'New Service'}</span>
-            </button>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                className="lms-secondary-action"
+                onClick={resyncFromFile}
+                disabled={resyncing}
+                title="Reload src/data/consultationCatalog.js into the database"
+              >
+                <RefreshCw className={`w-4 h-4 ${resyncing ? 'animate-spin' : ''}`} />
+                <span>{resyncing ? 'Resyncing...' : 'Resync from file'}</span>
+              </button>
+              <button
+                type="button"
+                className="lms-primary-action"
+                onClick={activePanel === 'categories' ? openNewCategory : openNewService}
+              >
+                <Plus className="w-4 h-4" />
+                <span>{activePanel === 'categories' ? 'New Category' : 'New Service'}</span>
+              </button>
+            </div>
           </div>
 
           {activePanel === 'services' && categories.length > 0 && (

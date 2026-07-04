@@ -55,10 +55,10 @@ export default function AdminNotifications({ onNavigate }) {
     finally { setLoading(false); }
   };
 
-  // Poll unread count every 30s
+  // Poll unread count every 60s (runs for the whole admin session regardless of tab, so keep it lightweight)
   useEffect(() => {
     fetchUnreadCount();
-    const iv = setInterval(fetchUnreadCount, 30000);
+    const iv = setInterval(fetchUnreadCount, 60000);
     return () => clearInterval(iv);
   }, []);
 

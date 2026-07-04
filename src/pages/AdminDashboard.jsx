@@ -170,12 +170,12 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && activeTab === 'dashboard') {
       fetchStats();
       const interval = setInterval(fetchStats, 30000);
       return () => clearInterval(interval);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, activeTab]);
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');

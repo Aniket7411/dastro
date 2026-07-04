@@ -1,6 +1,18 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import API_BASE from './api';
 
+const CACHE_TTL_MS = 60_000;
+let sharedCache = {
+  key: '',
+  data: null,
+  fetchedAt: 0,
+  promise: null,
+};
+
+export function invalidateConsultationCache() {
+  sharedCache = { key: '', data: null, fetchedAt: 0, promise: null };
+}
+
 function buildCatalogQuery(filters = {}) {
   const params = new URLSearchParams();
   const {
@@ -27,19 +39,47 @@ function buildCatalogQuery(filters = {}) {
   return qs ? `?${qs}` : '';
 }
 
-export async function fetchConsultationCatalog(filters = {}) {
-  const res = await fetch(`${API_BASE}/api/consultations/services${buildCatalogQuery(filters)}`);
-  const data = await res.json();
-  if (!data.success) {
-    throw new Error(data.message || data.error || 'Failed to load consultation catalog');
+export async function fetchConsultationCatalog(filters = {}, { force = false } = {}) {
+  const query = buildCatalogQuery(filters);
+  const cacheKey = query || 'all';
+  const now = Date.now();
+
+  if (
+    !force
+    && sharedCache.key === cacheKey
+    && sharedCache.data
+    && now - sharedCache.fetchedAt < CACHE_TTL_MS
+  ) {
+    return sharedCache.data;
   }
-  return {
-    categories: data.categories || [],
-    services: data.services || [],
-    total: data.total ?? (data.services || []).length,
-    filters: data.filters || null,
-    appliedFilters: data.appliedFilters || null,
-  };
+
+  if (!force && sharedCache.promise && sharedCache.key === cacheKey) {
+    return sharedCache.promise;
+  }
+
+  sharedCache.key = cacheKey;
+  sharedCache.promise = fetch(`${API_BASE}/api/consultations/services${query}`)
+    .then(async (res) => {
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.message || data.error || 'Failed to load consultation catalog');
+      }
+      const result = {
+        categories: data.categories || [],
+        services: data.services || [],
+        total: data.total ?? (data.services || []).length,
+        filters: data.filters || null,
+        appliedFilters: data.appliedFilters || null,
+      };
+      sharedCache.data = result;
+      sharedCache.fetchedAt = Date.now();
+      return result;
+    })
+    .finally(() => {
+      sharedCache.promise = null;
+    });
+
+  return sharedCache.promise;
 }
 
 export async function fetchConsultationService(serviceId) {
@@ -73,11 +113,11 @@ export function useConsultationCatalog(filters = {}) {
     ]
   );
 
-  const reload = useCallback(async () => {
+  const reload = useCallback(async (force = false) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchConsultationCatalog(filters);
+      const data = await fetchConsultationCatalog(filters, { force });
       setCategories(data.categories);
       setServices(data.services);
       setFilterMeta(data.filters);
@@ -93,7 +133,7 @@ export function useConsultationCatalog(filters = {}) {
   }, [filterKey]);
 
   useEffect(() => {
-    reload();
+    reload(false);
   }, [reload]);
 
   return { categories, services, filterMeta, total, loading, error, reload };
