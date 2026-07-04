@@ -20,7 +20,7 @@ import FixedBottomCTA from '../components/webinar/FixedBottomCTA';
 import RegistrationModal from '../components/webinar/RegistrationModal';
 import FreeWebinarInterestModal from '../components/webinar/FreeWebinarInterestModal';
 import TailwindPage from '../components/layout/TailwindPage';
-import { WB_PAGE, WB_PAGE_NO_CTA } from '../components/webinar/tokens';
+import { WB_PAGE_NO_CTA } from '../components/webinar/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 const CTA_HIDDEN_KEY = 'webinar_fixed_cta_hidden';
@@ -122,10 +122,19 @@ function Webinar() {
     setCtaVisible(false);
   };
 
+  const handleShowCta = () => {
+    try {
+      sessionStorage.removeItem(CTA_HIDDEN_KEY);
+    } catch {
+      /* ignore */
+    }
+    setCtaVisible(true);
+  };
+
   const sectionProps = { onJoinNow: handleOpenPaidModal, onJoinFree: handleOpenFreeModal };
 
   return (
-    <TailwindPage className={ctaVisible ? WB_PAGE : WB_PAGE_NO_CTA}>
+    <TailwindPage className={WB_PAGE_NO_CTA}>
       <HeroSection {...sectionProps} />
       <LogoCarousel />
       <NewsCarousel />
@@ -138,13 +147,13 @@ function Webinar() {
       <MentorSection {...sectionProps} />
       <ItinerarySection />
       <FaqSection />
-      {ctaVisible ? (
-        <FixedBottomCTA
-          onJoinNow={handleOpenPaidModal}
-          onJoinFree={handleOpenFreeModal}
-          onDismiss={handleDismissCta}
-        />
-      ) : null}
+      <FixedBottomCTA
+        visible={ctaVisible}
+        onJoinNow={handleOpenPaidModal}
+        onJoinFree={handleOpenFreeModal}
+        onDismiss={handleDismissCta}
+        onShow={handleShowCta}
+      />
       <RegistrationModal
         isOpen={isModalOpen}
         onClose={handleClosePaidModal}

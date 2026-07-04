@@ -77,7 +77,7 @@ function PatternsSection({ onJoinNow, onJoinFree }) {
               <p className={TYPE.bodySm}>{pattern.desc}</p>
             </div>
           ))}
-          <div className={`${WB_CTA_ROW_TIGHT} sm:col-span-2 lg:col-span-3`}>
+          <div className={`${WB_CTA_ROW_TIGHT} w-full`}>
             <WebinarActionButtons
               onJoinPaid={onJoinNow}
               onJoinFree={onJoinFree}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import API_BASE from '../utils/api';
 import { uploadImage } from '../utils/uploadMedia';
 
@@ -113,6 +114,7 @@ function ImageUploadField({ value, onChange }) {
 function AstrologerModal({ astrologer, onClose, onSave, saving }) {
   const formRef = useRef(null);
   const isEdit  = !!astrologer;
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState(
     isEdit
       ? {
@@ -174,12 +176,23 @@ function AstrologerModal({ astrologer, onClose, onSave, saving }) {
             <label className="block text-xs font-semibold text-slate-600 mb-1">
               {isEdit ? 'New Password (leave blank to keep current)' : 'Initial Password *'}
             </label>
-            <input
-              type="password" value={form.password} onChange={(e) => set('password', e.target.value)}
-              placeholder={isEdit ? '••••••••' : 'Min 6 characters'}
-              required={!isEdit} minLength={6}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'} value={form.password} onChange={(e) => set('password', e.target.value)}
+                placeholder={isEdit ? '••••••••' : 'Min 6 characters'}
+                required={!isEdit} minLength={6}
+                className="w-full border border-slate-200 rounded-lg pl-3 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             {!isEdit && <p className="text-[11px] text-slate-400 mt-1">Share these credentials with the astrologer securely.</p>}
           </div>
 
@@ -427,7 +440,7 @@ function LiveSettingsPanel({ onToast }) {
 /* ─────────────────────────────────────────────────────────
    Astrologer Card
 ───────────────────────────────────────────────────────── */
-function AstrologerCard({ a, onEdit, onDelete, onSuspend, onUnsuspend, onResetPassword, actionLoading }) {
+function AstrologerCard({ a, onEdit, onDelete, onSuspend, onUnsuspend, onToggleLive, onResetPassword, actionLoading }) {
   const isBusy = actionLoading === a._id;
   return (
     <div className={`bg-white border rounded-xl p-4 flex gap-3 hover:shadow-sm transition-shadow ${a.isSuspended ? 'border-amber-200 bg-amber-50/30' : 'border-slate-200'}`}>
@@ -487,6 +500,18 @@ function AstrologerCard({ a, onEdit, onDelete, onSuspend, onUnsuspend, onResetPa
           <button onClick={() => onResetPassword(a)} disabled={isBusy}
             className="px-2.5 py-1 text-[11px] font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors disabled:opacity-50">
             Reset PW
+          </button>
+          <button
+            onClick={() => onToggleLive(a)}
+            disabled={isBusy || (a.isSuspended && !a.isOnline)}
+            title={a.isSuspended && !a.isOnline ? 'Unsuspend before bringing online' : undefined}
+            className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors disabled:opacity-50 ${
+              a.isOnline
+                ? 'text-slate-600 bg-slate-100 hover:bg-slate-200'
+                : 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100'
+            }`}
+          >
+            {isBusy ? '…' : a.isOnline ? 'Set Offline' : 'Go Live'}
           </button>
           {a.isSuspended
             ? <button onClick={() => onUnsuspend(a)} disabled={isBusy}
@@ -597,6 +622,20 @@ export default function AdminAstrologers() {
     finally { setActionLoading(null); }
   };
 
+  /* ── Toggle Live (online / offline) ── */
+  const handleToggleLive = async (a) => {
+    setActionLoading(a._id);
+    try {
+      const res  = await fetch(`${API_BASE}/api/admin/astrologers/${a._id}/live-status`, {
+        method: 'PUT', headers: jsonH(), body: JSON.stringify({ isOnline: !a.isOnline }),
+      });
+      const data = await res.json();
+      if (data.success) { success(data.message); fetchAstrologers(); }
+      else error(data.message || 'Could not update live status');
+    } catch { error('Network error'); }
+    finally { setActionLoading(null); }
+  };
+
   /* ── Reset Password ── */
   const handleResetPassword = async (newPassword) => {
     if (!resetTarget) return;
@@ -661,6 +700,7 @@ export default function AdminAstrologers() {
                 onDelete={(x)         => setDeleteTarget(x)}
                 onSuspend={(x)        => setSuspendTarget(x)}
                 onUnsuspend={handleUnsuspend}
+                onToggleLive={handleToggleLive}
                 onResetPassword={(x)  => setResetTarget(x)}
                 actionLoading={actionLoading}
               />

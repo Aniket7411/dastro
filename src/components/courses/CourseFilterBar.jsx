@@ -34,11 +34,28 @@ export default function CourseFilterBar({
       <div className={PAGE_WRAP}>
         <div className="rounded-2xl border border-site-accent-dark/10 bg-white px-2.5 py-2 shadow-sm sm:px-4 sm:py-3">
 
-          {/* ── Top row: count (left) | search + toggle (right) ── */}
-          <div className="flex items-center justify-between gap-2 sm:gap-3">
+          {/* ── Top row: Search gets its own full-width line on mobile; Results + Sort + Category share the line below.
+                On sm+ everything collapses back onto a single row: Results (left) ... Search Sort Category (right). ── */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 sm:flex-nowrap sm:gap-x-3">
+
+            {/* Search */}
+            <div className="relative order-1 w-full sm:order-2 sm:ml-auto sm:w-44 sm:flex-none md:w-52 lg:w-60">
+              <Search
+                size={15}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:left-3.5"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder={searchPlaceholder}
+                className="h-8 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-8 pr-3 font-body text-[0.6875rem] font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-[0.6875rem] placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:h-9 sm:pl-10 sm:text-xs sm:placeholder:text-xs"
+              />
+            </div>
 
             {/* Results count */}
-            <p className="shrink-0 whitespace-nowrap font-body text-[0.6875rem] font-medium leading-none text-site-muted antialiased sm:text-xs">
+            <p className="order-2 shrink-0 whitespace-nowrap font-body text-[0.6875rem] font-medium leading-none text-site-muted antialiased sm:order-1 sm:text-xs">
               {loading ? 'Loading…' : (
                 <>
                   <span className="md:hidden">
@@ -53,23 +70,8 @@ export default function CourseFilterBar({
               )}
             </p>
 
-            {/* Search + sort + category toggle grouped right */}
-            <div className="flex items-center gap-2">
-              <div className="relative w-36 sm:w-44 md:w-52 lg:w-60">
-                <Search
-                  size={15}
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:left-3.5"
-                  aria-hidden
-                />
-                <input
-                  type="search"
-                  value={searchTerm}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  placeholder={searchPlaceholder}
-                  className="h-8 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-8 pr-3 font-body text-[0.6875rem] font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-[0.6875rem] placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:h-9 sm:pl-10 sm:text-xs sm:placeholder:text-xs"
-                />
-              </div>
-
+            {/* Sort + category toggle, grouped */}
+            <div className="order-3 ml-auto flex shrink-0 items-center gap-2 sm:ml-0">
               {onSortChange ? (
                 <div className="relative shrink-0">
                   <select

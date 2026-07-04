@@ -24,7 +24,8 @@ function AdminSettings() {
     razorpayKeyId: '',
     shopifyStoreUrl: '',
     googleAnalyticsId: '',
-    maintenanceMode: false
+    maintenanceMode: false,
+    announcementText: ''
   });
 
   const fetchSettings = async () => {
@@ -122,7 +123,8 @@ function AdminSettings() {
           <TabButton id="general" label="General Info" icon="fa-info-circle" />
           <TabButton id="social" label="Social Media" icon="fa-share-alt" />
           <TabButton id="content" label="Banners & Materials" icon="fa-layer-group" />
-          
+          <TabButton id="announcement" label="Announcement" icon="fa-bullhorn" />
+
           <div className="sidebar-group-label mt-4">Advanced</div>
           <TabButton id="integrations" label="Integrations" icon="fa-plug" />
           <TabButton id="security" label="Security & Access" icon="fa-shield-alt" />
@@ -326,6 +328,56 @@ function AdminSettings() {
                       />
                       <span className="slider-premium"></span>
                     </label>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'announcement' && (
+                <motion.div
+                  key="announcement"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <h3 className="section-title">Student Dashboard Announcement</h3>
+                  <p className="section-desc">
+                    Shown as a dismissable banner at the top of every student&apos;s dashboard. Leave empty to hide it.
+                  </p>
+
+                  <div className="mt-4 rounded-xl border border-amber-800/15 bg-amber-50/40 p-4 sm:p-5">
+                    <label className="block">
+                      <span className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-amber-900">
+                        <i className="fas fa-bullhorn" />
+                        Announcement text
+                      </span>
+                      <textarea
+                        name="announcementText"
+                        value={settings.announcementText}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder="e.g. New batch for Vedic Astrology starts 15th July — enroll now!"
+                        className="w-full resize-y rounded-lg border border-amber-800/20 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-800 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                      />
+                    </label>
+
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-xs font-semibold text-slate-500">
+                        {settings.announcementText
+                          ? 'Announcement is currently visible to students.'
+                          : 'No announcement is currently shown.'}
+                      </p>
+                      {settings.announcementText && (
+                        <button
+                          type="button"
+                          onClick={() => setSettings((prev) => ({ ...prev, announcementText: '' }))}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50"
+                        >
+                          <i className="fas fa-times" />
+                          Clear announcement
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               )}

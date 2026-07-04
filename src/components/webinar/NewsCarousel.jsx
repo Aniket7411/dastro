@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { WB_WRAP, TYPE } from './tokens';
 
 const newsItems = [
@@ -18,15 +17,7 @@ const NewsCarousel = () => {
           AS FEATURED IN
         </h4>
         <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <motion.div
-            className="flex w-max items-center gap-12 sm:gap-16"
-            animate={{ x: ['-50%', '0%'] }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          >
+          <div className="flex w-max animate-marquee-right items-center gap-12 sm:gap-16">
             {[...newsItems, ...newsItems].map((item, index) => (
               <div
                 key={`${item.name}-${index}`}
@@ -42,7 +33,7 @@ const NewsCarousel = () => {
                 </span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

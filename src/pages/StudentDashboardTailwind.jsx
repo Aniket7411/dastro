@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BadgePercent,
@@ -13,6 +13,7 @@ import {
   Loader2,
   Lock,
   LogOut,
+  Megaphone,
   Package,
   PenLine,
   Plus,
@@ -29,6 +30,9 @@ import useStudentDashboard, {
   formatDashboardDate,
 } from '../hooks/useStudentDashboard';
 import SEO from '../components/SEO';
+import { useSettings } from '../context/SettingsContext';
+
+const ANNOUNCEMENT_DISMISS_KEY = 'dismissedAnnouncementText';
 
 const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 const CARD =
@@ -228,6 +232,25 @@ export default function StudentDashboardTailwind() {
     }
   }, [enrolledCourses, selectedCourseForMaterials, loadMaterials]);
 
+  const { settings: siteSettings } = useSettings();
+  const announcementText = siteSettings?.announcementText || '';
+  const [dismissedAnnouncement, setDismissedAnnouncement] = useState(() => {
+    try {
+      return localStorage.getItem(ANNOUNCEMENT_DISMISS_KEY) || '';
+    } catch {
+      return '';
+    }
+  });
+  const showAnnouncement = Boolean(announcementText) && announcementText !== dismissedAnnouncement;
+  const dismissAnnouncement = () => {
+    try {
+      localStorage.setItem(ANNOUNCEMENT_DISMISS_KEY, announcementText);
+    } catch {
+      // ignore storage errors (private browsing, etc.)
+    }
+    setDismissedAnnouncement(announcementText);
+  };
+
   if (loading) return <DashboardLoading />;
 
   const hour = new Date().getHours();
@@ -285,6 +308,25 @@ export default function StudentDashboardTailwind() {
   return (
     <div className="student-dashboard-ui min-h-screen w-full bg-site-bg font-body text-site-text">
       <SEO title="Student Dashboard" description="Your courses, materials, and account." url="/dashboard" />
+
+      {showAnnouncement && (
+        <div className="relative z-30 w-full bg-amber-400 px-4 py-2.5 sm:px-6">
+          <div className={`${WRAP} flex items-center gap-3 !px-0`}>
+            <Megaphone size={15} className="shrink-0 text-amber-900" />
+            <p className="min-w-0 flex-1 truncate font-body text-xs font-bold text-amber-900 sm:text-sm">
+              {announcementText}
+            </p>
+            <button
+              type="button"
+              onClick={dismissAnnouncement}
+              aria-label="Dismiss announcement"
+              className="shrink-0 rounded-full p-1 text-amber-900/70 transition hover:bg-amber-900/10 hover:text-amber-900"
+            >
+              <X size={15} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <header className="relative w-full overflow-hidden bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark pb-10 sm:pb-12">

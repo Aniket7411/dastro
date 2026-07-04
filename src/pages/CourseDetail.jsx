@@ -583,7 +583,7 @@ function CourseDetail() {
     <div className={PAGE}>
       <SEO title={course.title} description={course.shortDesc} url={`/courses/${course.slug || course.id}`} />
 
-      <section className="border-b border-site-accent-dark/8 py-4 pb-8 sm:py-5 sm:pb-10">
+      <section className="border-b border-site-accent-dark/8 pt-3 pb-8 sm:pt-4 sm:pb-10 lg:pt-5 lg:pb-12">
         <div className={PAGE_WRAP}>
           <Link to={listPath} className={`${TYPE.backLink} !mb-3 sm:!mb-4`}>
             <ArrowLeft size={15} aria-hidden />
@@ -592,6 +592,12 @@ function CourseDetail() {
 
           <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_19rem]">
             <div className="min-w-0">
+              {course.image ? (
+                <div className="relative mb-4 h-40 w-full overflow-hidden rounded-xl border border-site-accent-dark/10 shadow-sm sm:h-48 lg:hidden">
+                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                </div>
+              ) : null}
+
               <div className="mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
                 {course.tier ? (

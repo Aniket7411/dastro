@@ -36,6 +36,28 @@
   margin-top: calc(-1 * var(--spacing-site-header));
 }
 
+/* Pure-CSS infinite marquees — run entirely on the compositor thread
+   (transform-only @keyframes), unlike a JS-driven framer-motion loop which
+   re-runs on every animation frame and competes with scroll for main-thread
+   time. Used by logo/news strips that scroll forever in the background. */
+@keyframes marquee-left {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0%); }
+}
+
+@utility animate-marquee-left {
+  animation: marquee-left 20s linear infinite;
+}
+
+@utility animate-marquee-right {
+  animation: marquee-right 25s linear infinite;
+}
+
 @font-face {
   font-family: 'Playfair Display';
   src: url('/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');

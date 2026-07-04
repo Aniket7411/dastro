@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-const W = 9;
-const H = 16;
-const T = 2.2;
-const G = 0.8;
+// Base 7-segment digit proportions, scaled up for legibility in the bar.
+const SCALE = 1.4;
+const W = 9 * SCALE;
+const H = 16 * SCALE;
+const T = 2.2 * SCALE;
+const G = 0.8 * SCALE;
 const SK = 0;
 
 const SEG_POINTS = {
@@ -58,13 +60,14 @@ function Digit({ char }) {
 }
 
 function SegColon({ visible }) {
-  const dw = 2.2;
-  const dh = 4.5;
-  const cx = 4;
+  const colonW = 8 * SCALE;
+  const dw = 2.2 * SCALE;
+  const dh = 4.5 * SCALE;
+  const cx = colonW / 2;
   const color = visible ? '#ff8c00' : OFF_COLOR;
   const glow = visible ? 'drop-shadow(0 0 3px rgba(255,160,0,0.9))' : 'none';
   return (
-    <svg width={8} height={H} viewBox={`0 0 8 ${H}`} className="block overflow-visible">
+    <svg width={colonW} height={H} viewBox={`0 0 ${colonW} ${H}`} className="block overflow-visible">
       <rect x={cx - dw / 2} y={H * 0.28 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
       <rect x={cx - dw / 2} y={H * 0.72 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
     </svg>
@@ -79,7 +82,7 @@ function DigitPair({ value, label }) {
         <Digit char={str[0]} />
         <Digit char={str[1]} />
       </div>
-      <span className="font-body text-[0.4375rem] font-bold uppercase tracking-wider text-white/35 sm:text-[0.5rem]">
+      <span className="font-body text-[0.5rem] font-bold uppercase tracking-wider text-white/35 sm:text-[0.5625rem]">
         {label}
       </span>
     </div>
@@ -137,18 +140,18 @@ function DigitalTimer() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-0.5">
-      <p className="!m-0 font-body text-[0.4375rem] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[0.5rem]">
+    <div className="flex flex-col items-center gap-1">
+      <p className="!m-0 font-body text-[0.5rem] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[0.5625rem]">
         Offer ends
       </p>
-      <div className="relative overflow-hidden rounded-md border border-orange-500/25 bg-[#0a0a0a]/90 px-1.5 py-0.5 sm:px-2 sm:py-1">
-        <div className="relative z-[1] flex items-center gap-0.5">
+      <div className="relative overflow-hidden rounded-lg border border-orange-500/25 bg-[#0a0a0a]/90 px-3 py-2 sm:px-3.5 sm:py-2.5">
+        <div className="relative z-[1] flex items-center gap-1.5">
           <DigitPair value={time.h} label="HRS" />
-          <div className="-mt-1">
+          <div className="-mt-1.5">
             <SegColon visible={colonOn} />
           </div>
           <DigitPair value={time.m} label="MIN" />
-          <div className="-mt-1">
+          <div className="-mt-1.5">
             <SegColon visible={colonOn} />
           </div>
           <DigitPair value={time.s} label="SEC" />
@@ -188,24 +191,27 @@ function EnrollButton({ onClick, fullWidth }) {
   );
 }
 
-function useIsMobile(breakpoint = 640) {
-  const [mobile, setMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false,
-  );
-  useEffect(() => {
-    const handler = () => setMobile(window.innerWidth < breakpoint);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, [breakpoint]);
-  return mobile;
-}
-
-export default function FixedBottomCTA({ onJoinNow, onJoinFree, onDismiss }) {
-  const isMobile = useIsMobile(640);
+export default function FixedBottomCTA({ visible, onJoinNow, onJoinFree, onDismiss, onShow }) {
+  if (!visible) {
+    return (
+      <button
+        type="button"
+        onClick={onShow}
+        aria-label="Show the ₹99 webinar offer"
+        className="fixed bottom-4 left-4 z-[9999] flex items-center gap-2 rounded-full border border-orange-500/25 bg-[#0c0c0c]/95 py-2.5 pl-3 pr-4 shadow-2xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-orange-500/40"
+      >
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-500 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-500" />
+        </span>
+        <span className="font-body text-xs font-bold text-white">Free webinar — tap to view offer</span>
+      </button>
+    );
+  }
 
   return (
     <div
-      className="wb-fixed-cta wb-fixed-cta__bar fixed bottom-0 left-0 z-[9999] w-full overflow-hidden rounded-t-xl border border-b-0 border-orange-500/20 bg-[#0c0c0c]/95 px-2.5 py-1.5 backdrop-blur-md sm:px-3 sm:py-2"
+      className="wb-fixed-cta fixed bottom-4 left-4 z-[9999] w-[min(90vw,21rem)] overflow-hidden rounded-2xl border border-orange-500/20 bg-[#0c0c0c]/95 p-3.5 shadow-2xl backdrop-blur-md sm:p-4"
       style={{
         backgroundImage:
           'radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.05) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.04) 0%, transparent 55%)',
@@ -214,44 +220,25 @@ export default function FixedBottomCTA({ onJoinNow, onJoinFree, onDismiss }) {
       <button
         type="button"
         onClick={onDismiss}
-        className="absolute right-1.5 top-1.5 z-20 flex h-6 w-6 items-center justify-center rounded-full border-0 bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
+        className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full border-0 bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
         aria-label="Hide offer bar"
       >
         <X size={12} aria-hidden />
       </button>
 
-      <div className="relative z-[1] mx-auto w-full max-w-4xl">
-        {isMobile ? (
-          <div className="flex flex-col items-center gap-1.5 pr-6">
-            <div className="flex w-full items-center justify-center gap-3">
-              <PriceBlock />
-              <DigitalTimer />
-            </div>
-            <EnrollButton onClick={onJoinNow} fullWidth />
-            <button
-              type="button"
-              onClick={onJoinFree}
-              className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline"
-            >
-              Want to join free webinar?
-            </button>
-          </div>
-        ) : (
-          <div className="flex w-full items-center justify-between gap-3 pr-8">
-            <PriceBlock />
-            <DigitalTimer />
-            <div className="flex flex-col items-end gap-1">
-              <EnrollButton onClick={onJoinNow} />
-              <button
-                type="button"
-                onClick={onJoinFree}
-                className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline"
-              >
-                Free webinar instead?
-              </button>
-            </div>
-          </div>
-        )}
+      <div className="relative z-[1] flex flex-col items-center gap-2.5 pr-6">
+        <div className="flex w-full items-center justify-center gap-3">
+          <PriceBlock />
+          <DigitalTimer />
+        </div>
+        <EnrollButton onClick={onJoinNow} fullWidth />
+        <button
+          type="button"
+          onClick={onJoinFree}
+          className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline"
+        >
+          Free webinar instead?
+        </button>
       </div>
     </div>
   );

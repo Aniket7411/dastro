@@ -2,11 +2,117 @@ import { useEffect, useState } from 'react';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 
+function todayISODate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function validityBadgeCls(dateStr) {
+  if (!dateStr) return 'bg-slate-100 text-slate-600 border-slate-200';
+  const days = Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24));
+  if (days <= 0) return 'bg-red-50 text-red-600 border-red-200';
+  if (days <= 7) return 'bg-amber-50 text-amber-700 border-amber-200';
+  return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+}
+
+function formatValidityDate(dateStr) {
+  if (!dateStr) return 'No date set';
+  return new Date(dateStr).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function ValidityModal({ course, studentName, onClose, onSaved }) {
+  const [newDate, setNewDate] = useState(
+    course.validUntil ? new Date(course.validUntil).toISOString().slice(0, 10) : ''
+  );
+  const [saving, setSaving] = useState(false);
+
+  const submitValidity = async (isoDate) => {
+    if (!isoDate) return;
+    setSaving(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`${API_BASE}/api/admin/enrollments/${course.enrollmentId}/validity`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ validUntil: isoDate }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Course validity updated.');
+        onSaved();
+      } else {
+        toast.error(data.message || 'Failed to update validity');
+      }
+    } catch (err) {
+      toast.error('Network error while updating validity');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl sm:p-6">
+        <h3 className="text-base font-bold text-slate-900">Edit course validity</h3>
+        <p className="mt-1 text-sm text-slate-500">
+          {studentName} &middot; <span className="font-semibold text-slate-700">{course.title}</span>
+        </p>
+
+        <label className="mt-4 block">
+          <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">
+            Valid until
+          </span>
+          <input
+            type="date"
+            value={newDate}
+            onChange={(e) => setNewDate(e.target.value)}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-800 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+          />
+        </label>
+
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-between">
+          <button
+            type="button"
+            disabled={saving}
+            onClick={() => submitValidity(todayISODate())}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-60"
+          >
+            <i className="fas fa-ban" />
+            Revoke access now
+          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={saving}
+              className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-60"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={saving || !newDate}
+              onClick={() => submitValidity(newDate)}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-amber-700 disabled:opacity-60"
+            >
+              {saving ? <i className="fas fa-spinner fa-spin" /> : <i className="fas fa-save" />}
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AdminStudents() {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedId, setExpandedId] = useState(null);
+  const [validityModal, setValidityModal] = useState(null); // { studentName, course }
 
   const fetchStudents = async () => {
     setIsLoading(true);
@@ -168,15 +274,32 @@ function AdminStudents() {
                     {isExpanded && courses.length > 0 && (
                       <tr key={`${student._id}-expand`}>
                         <td colSpan="6" style={{ background: '#fffbf5', padding: '0.75rem 1rem 0.75rem 3.5rem', borderTop: 'none' }}>
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          <div className="flex flex-wrap gap-2">
                             {courses.map((c, ci) => (
-                              <span key={ci} style={{
-                                background: '#fff', border: '1px solid rgba(200, 131, 42, 0.25)',
-                                borderRadius: '8px', padding: '4px 12px', fontSize: '0.8rem',
-                                color: '#8B4A1E', fontWeight: 600
-                              }}>
-                                <i className="fas fa-play-circle me-1" style={{ fontSize: '10px', color: '#C8832A' }}></i>
+                              <span
+                                key={ci}
+                                className="inline-flex flex-wrap items-center gap-2 rounded-lg border border-amber-800/20 bg-white px-3 py-1.5 text-sm font-semibold text-amber-900"
+                              >
+                                <i className="fas fa-play-circle text-[10px] text-amber-600" />
                                 {c.title || c.courseTitle || c}
+                                {c.enrollmentId && (
+                                  <>
+                                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${validityBadgeCls(c.validUntil)}`}>
+                                      {formatValidityDate(c.validUntil)}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      title="Edit validity"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setValidityModal({ studentName: student.name, course: c });
+                                      }}
+                                      className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-amber-700 transition hover:bg-amber-100"
+                                    >
+                                      <i className="fas fa-pen text-[11px]" />
+                                    </button>
+                                  </>
+                                )}
                               </span>
                             ))}
                           </div>
@@ -202,6 +325,18 @@ function AdminStudents() {
           </div>
         )}
       </div>
+
+      {validityModal && (
+        <ValidityModal
+          course={validityModal.course}
+          studentName={validityModal.studentName}
+          onClose={() => setValidityModal(null)}
+          onSaved={() => {
+            setValidityModal(null);
+            fetchStudents();
+          }}
+        />
+      )}
     </div>
   );
 }

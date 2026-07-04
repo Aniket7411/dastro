@@ -51,6 +51,9 @@ function FloatingChatAssistant() {
   const [answer, setAnswer] = useState('Hi, I can help with courses, consultations, shop remedies, student login, and payments.');
 
   const shouldHide = pathname.startsWith('/admin') || pathname.startsWith('/student/course');
+  // Course detail pages show a fixed price/CTA bar at the bottom on
+  // mobile/tablet — lift this FAB clear of it so they don't overlap.
+  const hasMobileStickyBar = pathname.startsWith('/courses/');
   const whatsappNumber = useMemo(() => normalizeWhatsappNumber(settings?.whatsappNumber), [settings?.whatsappNumber]);
 
   if (shouldHide) return null;
@@ -87,24 +90,39 @@ function FloatingChatAssistant() {
     ? suggestedQuestions.filter((item) => item.keywords.some((keyword) => keyword.includes(lowerQuestion) || lowerQuestion.includes(keyword)))
     : [];
 
+  const wrapperPositionCls = hasMobileStickyBar ? 'bottom-24 lg:bottom-5' : 'bottom-[0.9rem] sm:bottom-5';
+
   return (
-    <div className="floating-chat-assistant">
+    <div className={`fixed z-[1040] right-[0.9rem] sm:right-5 ${wrapperPositionCls}`}>
       {isOpen && (
-        <div className="chat-panel" role="dialog" aria-label="Website help chat">
-          <div className="chat-head">
+        <div
+          role="dialog"
+          aria-label="Website help chat"
+          className="absolute bottom-16 right-0 w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-site-accent-dark/[0.14] bg-white shadow-[0_22px_55px_rgba(42,15,2,0.18)] sm:bottom-[4.2rem]"
+        >
+          <div className="flex items-center justify-between gap-3 bg-gradient-to-br from-site-primary to-site-accent-dark p-4 text-white">
             <div>
-              <span>Website Help</span>
-              <strong>How can we guide you?</strong>
+              <span className="block text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-white/80">
+                Website Help
+              </span>
+              <strong className="mt-[0.2rem] block text-base font-bold leading-tight">
+                How can we guide you?
+              </strong>
             </div>
-            <button type="button" onClick={() => setIsOpen(false)} aria-label="Close chat">
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close chat"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white"
+            >
               <i className="fas fa-times"></i>
             </button>
           </div>
 
           {!isTyping && (
-            <div className="chat-body">
-              <p>{answer}</p>
-              <div className="chat-suggestions">
+            <div className="p-4">
+              <p className="mb-[0.85rem] text-[0.92rem] leading-[1.55] text-site-muted">{answer}</p>
+              <div className="flex flex-wrap gap-[0.45rem]">
                 {suggestedQuestions.map((item) => (
                   <button
                     type="button"
@@ -114,6 +132,7 @@ function FloatingChatAssistant() {
                       setIsTyping(false);
                       answerQuestion(item.question);
                     }}
+                    className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-[0.62rem] py-[0.42rem] text-[0.78rem] font-extrabold text-site-primary"
                   >
                     {item.label}
                   </button>
@@ -123,8 +142,8 @@ function FloatingChatAssistant() {
           )}
 
           {isTyping && liveMatches.length > 0 && (
-            <div className="chat-body">
-              <div className="chat-suggestions">
+            <div className="p-4">
+              <div className="flex flex-wrap gap-[0.45rem]">
                 {liveMatches.map((item) => (
                   <button
                     type="button"
@@ -134,6 +153,7 @@ function FloatingChatAssistant() {
                       setIsTyping(false);
                       answerQuestion(item.question);
                     }}
+                    className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-[0.62rem] py-[0.42rem] text-[0.78rem] font-extrabold text-site-primary"
                   >
                     {item.label}
                   </button>
@@ -142,7 +162,10 @@ function FloatingChatAssistant() {
             </div>
           )}
 
-          <form className="chat-form" onSubmit={handleSubmit}>
+          <form
+            className="grid grid-cols-[1fr_auto] gap-2 border-t border-site-accent-dark/[0.14] p-[0.85rem]"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               value={question}
@@ -152,13 +175,22 @@ function FloatingChatAssistant() {
                 setIsTyping(value.trim().length > 0);
               }}
               placeholder="Ask about courses, payment, shop..."
+              className="min-w-0 rounded-full border border-site-accent-dark/[0.14] px-[0.82rem] py-[0.62rem] text-[0.88rem] text-site-text outline-none focus:border-site-accent focus:ring-[3px] focus:ring-site-accent/[0.12]"
             />
-            <button type="submit" aria-label="Ask question">
+            <button
+              type="submit"
+              aria-label="Ask question"
+              className="flex h-[2.45rem] w-[2.45rem] items-center justify-center rounded-full border-0 bg-site-primary text-white"
+            >
               <i className="fas fa-paper-plane"></i>
             </button>
           </form>
 
-          <button type="button" className="chat-whatsapp" onClick={() => openWhatsApp(question)}>
+          <button
+            type="button"
+            onClick={() => openWhatsApp(question)}
+            className="flex w-full items-center justify-center gap-2 border-0 border-t border-[rgba(15,118,64,0.14)] bg-[#e9fff2] p-[0.85rem] text-sm font-extrabold text-[#0f7640]"
+          >
             <i className="fab fa-whatsapp"></i>
             Continue on WhatsApp
           </button>
@@ -168,177 +200,13 @@ function FloatingChatAssistant() {
       {!isOpen && (
         <button
           type="button"
-          className="chat-fab"
           onClick={() => setIsOpen(true)}
           aria-label="Open help chat"
+          className="flex h-[3.4rem] w-[3.4rem] items-center justify-center rounded-full border border-white/[0.18] bg-site-primary text-white shadow-[0_16px_35px_rgba(42,15,2,0.28)] transition hover:-translate-y-0.5 hover:bg-[#6b3514]"
         >
           <i className="fas fa-comments"></i>
         </button>
       )}
-
-      <style>{`
-        .floating-chat-assistant {
-          bottom: 1.25rem;
-          position: fixed;
-          right: 1.25rem;
-          z-index: 1040;
-        }
-
-        .chat-fab {
-          align-items: center;
-          background: var(--site-primary, #2a0f02);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 999px;
-          box-shadow: 0 16px 35px rgba(42, 15, 2, 0.28);
-          color: #fff;
-          display: flex;
-          height: 3.4rem;
-          justify-content: center;
-          width: 3.4rem;
-          transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        .chat-fab:hover {
-          background: var(--site-primary-hover, #6b3514);
-          transform: translateY(-2px);
-        }
-
-        .chat-panel {
-          background: #fff;
-          border: 1px solid var(--site-border, rgba(139, 74, 30, 0.14));
-          border-radius: 14px;
-          bottom: 4.2rem;
-          box-shadow: 0 22px 55px rgba(42, 15, 2, 0.18);
-          overflow: hidden;
-          position: absolute;
-          right: 0;
-          width: min(21rem, calc(100vw - 2rem));
-        }
-
-        .chat-head {
-          align-items: center;
-          background: linear-gradient(135deg, #2a0f02, #8b4a1e);
-          color: #fff;
-          display: flex;
-          justify-content: space-between;
-          padding: 1rem;
-        }
-
-        .chat-head span {
-          display: block;
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-          opacity: 0.78;
-          text-transform: uppercase;
-        }
-
-        .chat-head strong {
-          display: block;
-          font-size: 1rem;
-          line-height: 1.2;
-          margin-top: 0.2rem;
-        }
-
-        .chat-head button,
-        .chat-form button {
-          align-items: center;
-          border: 0;
-          border-radius: 999px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .chat-head button {
-          background: rgba(255, 255, 255, 0.12);
-          color: #fff;
-          height: 2rem;
-          width: 2rem;
-        }
-
-        .chat-body {
-          padding: 1rem;
-        }
-
-        .chat-body p {
-          color: var(--site-text-muted, #5c3d26);
-          font-size: 0.92rem;
-          line-height: 1.55;
-          margin-bottom: 0.85rem;
-        }
-
-        .chat-suggestions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.45rem;
-        }
-
-        .chat-suggestions button {
-          background: #fff7ee;
-          border: 1px solid var(--site-border, rgba(139, 74, 30, 0.14));
-          border-radius: 999px;
-          color: var(--site-primary, #2a0f02);
-          font-size: 0.78rem;
-          font-weight: 800;
-          padding: 0.42rem 0.62rem;
-        }
-
-        .chat-form {
-          border-top: 1px solid var(--site-border, rgba(139, 74, 30, 0.14));
-          display: grid;
-          gap: 0.5rem;
-          grid-template-columns: 1fr auto;
-          padding: 0.85rem;
-        }
-
-        .chat-form input {
-          border: 1px solid var(--site-border, rgba(139, 74, 30, 0.14));
-          border-radius: 999px;
-          color: var(--site-text, #2a0f02);
-          font-size: 0.88rem;
-          min-width: 0;
-          outline: none;
-          padding: 0.62rem 0.82rem;
-        }
-
-        .chat-form input:focus {
-          border-color: var(--site-accent, #c8832a);
-          box-shadow: 0 0 0 3px rgba(200, 131, 42, 0.12);
-        }
-
-        .chat-form button {
-          background: var(--site-primary, #2a0f02);
-          color: #fff;
-          height: 2.45rem;
-          width: 2.45rem;
-        }
-
-        .chat-whatsapp {
-          align-items: center;
-          background: #e9fff2;
-          border: 0;
-          border-top: 1px solid rgba(15, 118, 64, 0.14);
-          color: #0f7640;
-          display: flex;
-          font-size: 0.9rem;
-          font-weight: 800;
-          gap: 0.5rem;
-          justify-content: center;
-          padding: 0.85rem;
-          width: 100%;
-        }
-
-        @media (max-width: 520px) {
-          .floating-chat-assistant {
-            bottom: 0.9rem;
-            right: 0.9rem;
-          }
-
-          .chat-panel {
-            bottom: 4rem;
-          }
-        }
-      `}</style>
     </div>
   );
 }

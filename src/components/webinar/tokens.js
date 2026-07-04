@@ -42,12 +42,12 @@ export const WB_WHY_ICON = 'shrink-0 pt-0.5 text-base text-[#EE6662] sm:text-lg'
 export const WB_WHY_FOOTER = '!mt-4 !mb-0 flex flex-col items-center gap-3 text-center';
 
 export const WB_PATTERN_CARD =
-  '!m-0 rounded-lg border border-slate-100 bg-white !p-4 !text-left shadow-sm sm:!p-4';
+  '!m-0 flex w-full min-w-0 flex-col items-center rounded-lg border border-slate-100 bg-white !p-4 !text-center shadow-sm sm:basis-[calc(50%-0.4375rem)] sm:!p-4 lg:basis-[calc(33.333%-0.6667rem)]';
 
 export const WB_PATTERN_ICON = 'mb-2 text-2xl text-[#3B2261] sm:mb-2.5';
 
 export const WB_PATTERN_GRID =
-  '!mt-4 grid gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-3 lg:!mt-5 lg:gap-4';
+  '!mt-4 flex flex-wrap justify-center gap-3 sm:gap-3.5 lg:!mt-5 lg:gap-4';
 
 export const WB_LEARN_GRID = 'mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4';
 

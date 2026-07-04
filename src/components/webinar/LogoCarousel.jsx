@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { WB_WRAP } from './tokens';
 
 const logos = [
@@ -18,15 +17,7 @@ const LogoCarousel = () => {
       <div className={`${WB_WRAP} relative`}>
         <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-16 bg-gradient-to-r from-[#F8FAFC] to-transparent sm:w-28" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-16 bg-gradient-to-l from-[#F8FAFC] to-transparent sm:w-28" />
-        <motion.div
-          className="flex w-max items-center gap-10 sm:gap-14"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        >
+        <div className="flex w-max animate-marquee-left items-center gap-10 sm:gap-14">
           {[...logos, ...logos].map((logo, index) => (
             <div
               key={`${logo}-${index}`}
@@ -39,7 +30,7 @@ const LogoCarousel = () => {
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

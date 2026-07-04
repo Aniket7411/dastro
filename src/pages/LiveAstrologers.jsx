@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_BASE from '../utils/api';
+import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 
 const DEFAULT_AVATAR = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff&size=128&bold=true`;
 
@@ -103,7 +104,15 @@ function UserInfoModal({ astrologer, freeMinutes, onStart, onClose }) {
   const submit = (e) => {
     e.preventDefault();
     if (!name.trim()) { setErr('Please enter your name to start the chat.'); return; }
-    onStart({ name: name.trim(), email: email.trim(), phone: phone.trim() });
+    if (phone.trim() && !isValidIndianMobile(phone)) {
+      setErr('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+    onStart({
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim() ? normalizeIndianMobile(phone) : '',
+    });
   };
 
   return (
@@ -136,8 +145,9 @@ function UserInfoModal({ astrologer, freeMinutes, onStart, onClose }) {
               className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Phone <span className="font-normal text-slate-400">(optional)</span></label>
-            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 99999 99999"
+            <label className="block text-xs font-semibold text-slate-600 mb-1">Phone <span className="font-normal text-slate-400">(optional, 10-digit Indian number)</span></label>
+            <input type="tel" value={phone} onChange={(e) => { setPhone(e.target.value); setErr(''); }} placeholder="98765 43210"
+              inputMode="numeric" maxLength={15}
               className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
           </div>
           {err && <p className="text-xs text-rose-500 font-medium">{err}</p>}

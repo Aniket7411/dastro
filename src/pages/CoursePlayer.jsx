@@ -54,6 +54,7 @@ function CoursePlayer() {
   });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [accessPending, setAccessPending] = useState(false);
+  const [existingConsultation, setExistingConsultation] = useState(null);
   const videoRef = useRef(null);
 
   const token = localStorage.getItem('studentToken');
@@ -194,6 +195,20 @@ function CoursePlayer() {
             if (profileData.success) setStudentProfile(profileData.profile);
           })
           .catch(() => {});
+
+        fetch(`${API_BASE}/api/student/consultations`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => res.json())
+          .then((consultData) => {
+            if (consultData.success) {
+              const forThisCourse = (consultData.consultations || []).find(
+                (c) => String(c.courseId) === String(id)
+              );
+              if (forThisCourse) setExistingConsultation(forThisCourse);
+            }
+          })
+          .catch(() => {});
       } catch (err) {
         toast.error(err.message || 'Network error loading course');
         navigate('/dashboard');
@@ -328,6 +343,13 @@ function CoursePlayer() {
       if (data.success) {
         toast.success('Consultation request submitted! We will contact you soon.');
         setShowConsultForm(false);
+        setExistingConsultation({
+          courseId: id,
+          preferredDatetime: consultData.preferredDatetime,
+          notes: consultData.notes,
+          status: data.consultation?.status || 'Pending',
+          bookedAt: data.consultation?.bookedAt || new Date().toISOString(),
+        });
       } else {
         toast.error(data.message || 'Failed to book consultation');
       }
@@ -533,7 +555,7 @@ function CoursePlayer() {
                       Complete the course first — then book to get the most from your session.
                     </p>
                   </div>
-                  {!showConsultForm && (
+                  {!existingConsultation && !showConsultForm && (
                     <button
                       type="button"
                       onClick={() => setShowConsultForm(true)}
@@ -545,7 +567,37 @@ function CoursePlayer() {
                   )}
                 </div>
 
-                {showConsultForm && (
+                {existingConsultation && (
+                  <div className="mt-5 border-t border-white/10 pt-5">
+                    <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl bg-white/10 px-4 py-3.5">
+                      <div className="min-w-0">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-300">
+                          <CheckCircle2 size={11} />
+                          {existingConsultation.status || 'Pending'}
+                        </span>
+                        <p className="mt-2 font-body text-sm font-bold text-white">
+                          Your consultation request has been received.
+                        </p>
+                        <p className="mt-1 flex items-center gap-1.5 font-body text-xs text-white/70">
+                          <CalendarClock size={12} />
+                          {existingConsultation.preferredDatetime
+                            ? new Date(existingConsultation.preferredDatetime).toLocaleString('en-IN', {
+                                dateStyle: 'medium',
+                                timeStyle: 'short',
+                              })
+                            : 'Preferred time not specified'}
+                        </p>
+                        {existingConsultation.notes && (
+                          <p className="mt-1 font-body text-xs text-white/60">
+                            Notes: {existingConsultation.notes}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!existingConsultation && showConsultForm && (
                   <form
                     onSubmit={handleConsultSubmit}
                     className="mt-5 border-t border-white/10 pt-5"
