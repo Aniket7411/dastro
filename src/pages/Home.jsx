@@ -2629,94 +2629,96 @@ function Home() {
         }
 
         .img-box01 {
-          position: relative;
-          height: 550px;
-          width: 100%;
+          display: grid !important;
+          grid-template-columns: 1.10fr 0.90fr !important;
+          gap: 16px !important;
+          height: 500px !important;
+          margin-bottom: 60px !important;
+          position: relative !important;
+          width: 100% !important;
         }
 
-        .moon-img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 85%;
-          height: 220px;
-          border-radius: 40px;
-          box-shadow: var(--premium-shadow);
-          overflow: hidden;
-          z-index: 1;
-          margin: 0;
-        }
-
-        .moon-img img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .floating-element {
-          position: absolute;
-          top: 120px;
-          right: 0;
-          width: 60%;
-          height: 350px;
-          z-index: 2;
-          margin: 0;
-        }
-
-        .floating-element img {
-          width: 100%;
-          height: 100%;
-          border-radius: 30px;
-          object-fit: cover;
-          box-shadow: var(--premium-shadow);
-          transform: perspective(1000px) rotateY(-5deg);
+        .img-box01 figure {
+          position: static !important;
+          width: 100% !important;
+          height: 100% !important;
+          margin: 0 !important;
+          transform: none !important;
+          overflow: hidden !important;
         }
 
         .bottom-img {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 55%;
-          height: 280px;
-          z-index: 3;
-          margin: 0;
+          grid-column: 1 !important;
+          grid-row: 1 / span 2 !important;
         }
 
         .bottom-img img {
-          width: 100%;
-          height: 100%;
-          border-radius: 20px;
-          object-fit: cover;
+          border-radius: 24px !important;
+          transform: none !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
           box-shadow: var(--premium-shadow);
-          transform: perspective(1000px) rotateY(5deg);
+        }
+
+        .moon-img {
+          grid-column: 2 !important;
+          grid-row: 1 !important;
+        }
+
+        .moon-img img {
+          border-radius: 24px !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          box-shadow: var(--premium-shadow);
+        }
+
+        .floating-element {
+          grid-column: 2 !important;
+          grid-row: 2 !important;
+        }
+
+        .floating-element img {
+          border-radius: 24px !important;
+          transform: none !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          box-shadow: var(--premium-shadow);
         }
 
         .experience-badge {
-          background: #2A0F02;
-          padding: 20px 30px;
-          border-radius: 30px;
-          border: 1px solid var(--accent-color);
-          box-shadow: 0 15px 35px rgba(200, 131, 42, 0.2);
-          position: absolute;
-          bottom: 20px;
-          right: 20px;
-          z-index: 5;
+          background: #2A0F02 !important;
+          padding: 14px 28px !important;
+          border-radius: 20px !important;
+          border: 1px solid var(--accent-color) !important;
+          box-shadow: 0 15px 35px rgba(200, 131, 42, 0.2) !important;
+          position: absolute !important;
+          left: 50% !important;
+          bottom: -35px !important;
+          transform: translateX(-50%) !important;
+          width: max-content !important;
+          z-index: 10 !important;
+          box-sizing: border-box !important;
+          text-align: center !important;
         }
 
         .experience-badge h4 { 
-          font-size: 2.8rem; 
-          font-weight: 700; 
-          color: var(--accent-color);
-          margin: 0; 
-          font-family: var(--font-serif);
+          font-size: 2.2rem !important; 
+          font-weight: 700 !important; 
+          color: var(--accent-color) !important;
+          margin: 0 !important; 
+          font-family: var(--font-serif) !important;
+          line-height: 1 !important;
         }
         .experience-badge span { 
-          font-size: 0.9rem; 
-          font-weight: 600; 
-          text-transform: uppercase; 
-          letter-spacing: 1px; 
-          color: #FDF6EE; 
-          font-family: var(--font-sans);
+          font-size: 0.85rem !important; 
+          font-weight: 600 !important; 
+          text-transform: uppercase !important; 
+          letter-spacing: 1px !important; 
+          color: #FDF6EE !important; 
+          font-family: var(--font-sans) !important;
         }
 
         /* Services */
@@ -3011,8 +3013,30 @@ function Home() {
         @media (max-width: 991px) {
           .banner-section { text-align: center; }
           .banner-desc { margin: 0 auto 1rem; max-width: 36rem; }
-          .img-box01 { margin-bottom: 80px; height: 450px; }
-          .experience-badge { left: 50%; transform: translateX(-50%); bottom: 20px; }
+          
+          /* Offset Grid Collage for Mobile */
+          .img-box01 {
+            gap: 12px !important;
+            height: 300px !important;
+            margin-bottom: 60px !important;
+          }
+          .bottom-img img,
+          .moon-img img,
+          .floating-element img {
+            border-radius: 16px !important;
+          }
+          .experience-badge {
+            bottom: -30px !important;
+            padding: 8px 16px !important;
+            border-radius: 14px !important;
+          }
+          .experience-badge h4 {
+            font-size: 1.6rem !important;
+          }
+          .experience-badge span {
+            font-size: 0.75rem !important;
+          }
+
           .banner-section .cosmic-orbit-container .icon-block { width: 46px; height: 46px; }
           .banner-btn-row { justify-content: center; }
         }
@@ -3033,7 +3057,7 @@ function Home() {
             padding-top: clamp(1.75rem, 4vw, 2.5rem);
           }
           .banner-section .cosmic-orbit-container .icon-block { width: 40px; height: 40px; }
-          .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: 20px; z-index: 5; }
+          .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: -30px; z-index: 5; }
           .experience-badge h4 { font-size: 1.8rem; }
           .banner-btn-row {
             display: grid;
@@ -3052,7 +3076,6 @@ function Home() {
           .banner-btn-row .focus-70 {
             grid-column: 1 / -1;
           }
-          .img-box01 { height: 400px; }
         }
 
         @media (max-width: 576px) {
@@ -3079,11 +3102,8 @@ function Home() {
             padding: 0.75rem 2.5rem !important;
             font-size: 0.95rem !important;
           }
-          .experience-badge { width: 140px; padding: 12px; }
+          .experience-badge { width: max-content !important; padding: 8px 16px !important; }
           .experience-badge h4 { font-size: 1.6rem; }
-          .moon-img { height: 160px; }
-          .floating-element { top: 80px; height: 280px; }
-          .bottom-img { height: 200px; }
         }
 
         /* Careful home banner refinements without changing the original visual style */
