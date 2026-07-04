@@ -997,7 +997,7 @@ function Home() {
                 <div className="hidden lg:flex mt-5">
                   <Link
                     to="/about"
-                    className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-7 py-3 font-body text-sm font-semibold text-site-primary no-underline shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                    className="about-more-btn"
                   >
                     More About Us
                   </Link>
@@ -1027,7 +1027,7 @@ function Home() {
               <div className="col-12 order-3 flex justify-center lg:hidden">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-site-primary bg-white px-6 py-2 font-body text-sm font-semibold text-site-primary no-underline shadow-sm transition duration-200 hover:bg-site-primary hover:text-white hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                  className="about-more-btn"
                 >
                   More About Us
                 </Link>
@@ -1173,11 +1173,11 @@ function Home() {
           </Suspense>
         </LazyOnView>
 
-        <LazyOnView minHeight="260px">
+        {/* <LazyOnView minHeight="260px">
           <Suspense fallback={null}>
             <ConsultationTestimonials />
           </Suspense>
-        </LazyOnView>
+        </LazyOnView> */}
 
         <LazyOnView minHeight="220px">
           <HomeFinalCTA />
@@ -1245,6 +1245,36 @@ function Home() {
       <style>{`
         html {
           scroll-behavior: smooth;
+        }
+
+        .about-more-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 0.5rem !important;
+          border-radius: 9999px !important;
+          border: 2px solid #8B4A1E !important;
+          background-color: #ffffff !important;
+          padding: 0.75rem 1.75rem !important;
+          font-family: 'Plus Jakarta Sans', sans-serif !important;
+          font-size: 0.875rem !important;
+          font-weight: 600 !important;
+          color: #8B4A1E !important;
+          text-decoration: none !important;
+          box-shadow: 0 4px 24px rgba(139, 74, 30, 0.08) !important;
+          transition: all 0.2s ease !important;
+        }
+
+        .about-more-btn:hover {
+          background-color: #8B4A1E !important;
+          color: #ffffff !important;
+          transform: translateY(-2px) !important;
+          box-shadow: 0 4px 12px rgba(139, 74, 30, 0.2) !important;
+        }
+
+        @media (max-width: 991px) {
+          .about-more-btn {
+            padding: 0.5rem 1.5rem !important;
+          }
         }
 
         /* Home typography & section rhythm */

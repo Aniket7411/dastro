@@ -10,6 +10,7 @@ import {
   Play,
   Shield,
   EyeOff,
+  Check,
 } from 'lucide-react';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
@@ -107,16 +108,20 @@ function CoursePlayer() {
     activeVideo?.videoId === vid.videoId ||
     activeVideo?.id === vid.id;
 
-  const updateVideoProgress = async (videoId, isCompleted = false) => {
+  const updateVideoProgress = async (videoId, isCompleted) => {
     if (!videoId) return;
     try {
+      const body = { courseId: id, videoId };
+      if (isCompleted !== undefined) {
+        body.isCompleted = isCompleted;
+      }
       await fetch(`${API_BASE}/api/student/video/progress`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ courseId: id, videoId, isCompleted }),
+        body: JSON.stringify(body),
       });
     } catch {
       // optional
@@ -126,7 +131,55 @@ function CoursePlayer() {
   const handleSelectVideo = (video) => {
     setActiveVideo(video);
     const videoId = video.videoId || video._id || video.id;
-    updateVideoProgress(videoId, false);
+    updateVideoProgress(videoId);
+  };
+
+  const handleVideoEnded = async (video) => {
+    const videoId = video.videoId || video._id || video.id;
+    if (video.isCompleted) return; // already completed
+    await updateVideoProgress(videoId, true);
+
+    setVideos((prevVideos) =>
+      prevVideos.map((vid) =>
+        (vid.videoId || vid._id || vid.id) === videoId
+          ? { ...vid, isCompleted: true }
+          : vid
+      )
+    );
+
+    setActiveVideo((prevActive) =>
+      prevActive && (prevActive.videoId || prevActive._id || prevActive.id) === videoId
+        ? { ...prevActive, isCompleted: true }
+        : prevActive
+    );
+
+    toast.success('Lesson completed!');
+  };
+
+  const handleToggleComplete = async (video) => {
+    const videoId = video.videoId || video._id || video.id;
+    const nextState = !video.isCompleted;
+    await updateVideoProgress(videoId, nextState);
+
+    setVideos((prevVideos) =>
+      prevVideos.map((vid) =>
+        (vid.videoId || vid._id || vid.id) === videoId
+          ? { ...vid, isCompleted: nextState }
+          : vid
+      )
+    );
+
+    setActiveVideo((prevActive) =>
+      prevActive && (prevActive.videoId || prevActive._id || prevActive.id) === videoId
+        ? { ...prevActive, isCompleted: nextState }
+        : prevActive
+    );
+
+    if (nextState) {
+      toast.success('Lesson marked as completed!');
+    } else {
+      toast.info('Lesson marked as incomplete');
+    }
   };
 
   useEffect(() => {
@@ -434,6 +487,7 @@ function CoursePlayer() {
                       onContextMenu={(e) => e.preventDefault()}
                       className="h-full w-full bg-black transition-[filter] duration-200"
                       style={{ filter: isWindowFocused ? 'none' : 'blur(14px)' }}
+                      onEnded={() => handleVideoEnded(activeVideo)}
                     />
                   ) : (
                     <iframe
@@ -492,9 +546,25 @@ function CoursePlayer() {
                   </p>
                 )}
 
-                <h1 className="font-heading text-lg font-extrabold leading-snug text-site-primary sm:text-xl">
-                  {activeVideo ? activeVideo.title : course.title}
-                </h1>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <h1 className="font-heading text-lg font-extrabold leading-snug text-site-primary sm:text-xl">
+                    {activeVideo ? activeVideo.title : course.title}
+                  </h1>
+                  {activeVideo && (
+                    <button
+                      type="button"
+                      onClick={() => handleToggleComplete(activeVideo)}
+                      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl px-4 py-2 font-body text-xs font-bold transition shadow-sm border ${
+                        activeVideo.isCompleted
+                          ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100/70'
+                          : 'bg-white border-site-accent-dark/15 text-site-muted hover:border-site-accent/40 hover:text-site-primary'
+                      }`}
+                    >
+                      <CheckCircle2 size={13} className={activeVideo.isCompleted ? 'text-emerald-600' : 'text-site-muted'} />
+                      {activeVideo.isCompleted ? 'Completed' : 'Mark as completed'}
+                    </button>
+                  )}
+                </div>
 
                 <p className="mt-2 font-body text-sm leading-relaxed text-site-muted">
                   {course.description}
@@ -713,12 +783,20 @@ function CoursePlayer() {
                     >
                       <span
                         className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition ${
-                          active
+                          vid.isCompleted
+                            ? 'bg-emerald-600 text-white shadow-sm'
+                            : active
                             ? 'bg-site-accent text-white shadow-sm'
                             : 'bg-site-accent-dark/8 text-site-muted'
                         }`}
                       >
-                        {active ? <Play size={11} strokeWidth={3} /> : index + 1}
+                        {vid.isCompleted ? (
+                          <Check size={11} strokeWidth={3} />
+                        ) : active ? (
+                          <Play size={11} strokeWidth={3} />
+                        ) : (
+                          index + 1
+                        )}
                       </span>
                       <span
                         className={`min-w-0 flex-1 font-body text-[0.8125rem] leading-snug ${
