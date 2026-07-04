@@ -479,7 +479,7 @@ export default function Astrologer() {
   const showResults = !loading && !error;
 
   return (
-    <div className="tw-page">
+    <>
       <SEO
         title="Consult Expert Astrologers"
         description="Connect with certified Vedic astrologers for personalised guidance."
@@ -648,6 +648,6 @@ export default function Astrologer() {
           onClose={() => setShowConfirm(false)}
         />
       )}
-    </div>
+    </>
   );
 }

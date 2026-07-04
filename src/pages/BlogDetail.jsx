@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { Calendar, User, ChevronRight } from 'lucide-react';
 import toast from '@/utils/toast';
 import SEO from '../components/SEO';
-import TailwindPage from '../components/layout/TailwindPage';
 import {
   SITE_BTN_PRIMARY,
   SITE_CONTAINER,
@@ -44,31 +43,27 @@ function BlogDetail() {
 
   if (isLoading) {
     return (
-      <TailwindPage>
-        <div className={`${SITE_CONTAINER} py-16 text-center`}>
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-site-accent border-t-transparent" />
-          <p className="mt-3 text-sm text-site-muted">Loading article…</p>
-        </div>
-      </TailwindPage>
+      <div className={`${SITE_CONTAINER} py-16 text-center`}>
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-site-accent border-t-transparent" />
+        <p className="mt-3 text-sm text-site-muted">Loading article…</p>
+      </div>
     );
   }
 
   if (!blog) {
     return (
-      <TailwindPage>
-        <div className={`${SITE_CONTAINER} py-16 text-center`}>
-          <h2 className={SITE_TITLE}>Insight Not Found</h2>
-          <p className="mt-2 text-site-muted">The requested article could not be found.</p>
-          <Link to="/blog" className={`${SITE_BTN_PRIMARY} mt-4 inline-flex`}>
-            Back to Blogs
-          </Link>
-        </div>
-      </TailwindPage>
+      <div className={`${SITE_CONTAINER} py-16 text-center`}>
+        <h2 className={SITE_TITLE}>Insight Not Found</h2>
+        <p className="mt-2 text-site-muted">The requested article could not be found.</p>
+        <Link to="/blog" className={`${SITE_BTN_PRIMARY} mt-4 inline-flex`}>
+          Back to Blogs
+        </Link>
+      </div>
     );
   }
 
   return (
-    <TailwindPage>
+    <>
       <SEO title={`${blog.title} | DS Astrology Blog`} description={blog.excerpt || blog.title} />
 
       <article className={`${SITE_CONTAINER} py-8 sm:py-10`}>
@@ -163,7 +158,7 @@ function BlogDetail() {
           </div>
         </footer>
       </article>
-    </TailwindPage>
+    </>
   );
 }
 

@@ -1,10 +1,10 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_SECTION_PATTERNS,
+  WB_SECTION,
   WB_SECTION_INTRO,
-  WB_SECTION_INTRO_SUB,
-  WB_TITLE_CENTER,
+  WB_INTRO_TITLE,
+  WB_INTRO_BODY,
   WB_PATTERN_CARD,
   WB_PATTERN_ICON,
   WB_PATTERN_GRID,
@@ -49,14 +49,14 @@ function PatternsSection({ onJoinNow, onJoinFree }) {
   ];
 
   return (
-    <section className={`${WB_SECTION_PATTERNS} bg-[#FAF9F6]`}>
+    <section className={`${WB_SECTION} bg-[#FAF9F6]`}>
       <div className={WB_WRAP}>
         <div className={WB_SECTION_INTRO}>
-          <h2 className={WB_TITLE_CENTER}>
+          <h2 className={WB_INTRO_TITLE}>
             Astrology is not about predictions. It&apos;s about{' '}
             <span className={WB_HIGHLIGHT}>PATTERNS.</span>
           </h2>
-          <p className={`${TYPE.bodyCenter} ${WB_SECTION_INTRO_SUB}`}>
+          <p className={WB_INTRO_BODY}>
             Planets ki positions, houses ka system, signs ka energy—ye sab ek framework hai jo
             explain karta hai:
           </p>

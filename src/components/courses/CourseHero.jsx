@@ -1,3 +1,5 @@
+import { PAGE_WRAP, TW_H1, TW_BODY, TW_BODY_SM } from '../../utils/siteTokens';
+
 export default function CourseHero({
   heading,
   subtitle,
@@ -23,15 +25,15 @@ export default function CourseHero({
             className="absolute inset-x-0 bottom-0 top-site-header-sticky bg-gradient-to-r from-black/60 via-black/40 to-black/20"
             aria-hidden
           />
-          <div className="relative z-10 mx-auto w-full max-w-[90rem] px-4 pb-6 sm:px-6 sm:pb-8 lg:px-12">
-            <h1 className="font-heading text-3xl font-bold leading-tight text-white drop-shadow-md sm:text-4xl lg:text-5xl">
+          <div className={`relative z-10 ${PAGE_WRAP} pb-8 sm:pb-10`}>
+            <h1 className={`${TW_H1} text-white drop-shadow-md`}>
               {heading}
             </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+            <p className={`mt-3 max-w-2xl ${TW_BODY} text-white/85`}>
               {subtitle}
             </p>
             {!loading && (
-              <p className="mt-3 text-xs font-medium text-white/60">
+              <p className={`mt-4 ${TW_BODY_SM} text-white/65`}>
                 <span className="font-bold tabular-nums text-white/90">{courseCount}</span>
                 {' '}
                 {countLabel}
@@ -54,15 +56,15 @@ export default function CourseHero({
   }
 
   return (
-    <header className="mx-auto w-full max-w-[90rem] border-b border-site-accent-dark/10 px-4 pb-3 pt-5 sm:px-6 sm:pb-4 sm:pt-6 lg:px-12">
-      <h1 className="font-heading text-2xl font-bold leading-tight text-site-primary sm:text-3xl lg:text-4xl">
+    <header className={`${PAGE_WRAP} border-b border-site-accent-dark/10 pb-4 pt-6 sm:pb-5 sm:pt-8`}>
+      <h1 className={TW_H1}>
         {heading}
       </h1>
-      <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-site-muted sm:text-base">
+      <p className={`mt-2 max-w-2xl ${TW_BODY}`}>
         {subtitle}
       </p>
       {!loading && (
-        <p className="mt-2 text-xs font-medium text-site-muted">
+        <p className={`mt-3 ${TW_BODY_SM}`}>
           <span className="font-bold tabular-nums text-site-primary">{courseCount}</span>
           {' '}
           {countLabel}

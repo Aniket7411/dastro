@@ -149,7 +149,7 @@ export default function AstrologyCoursesSection() {
 
   return (
     <section
-      className="relative m-0 overflow-hidden bg-site-bg py-[clamp(2rem,5vw,3.5rem)] font-body text-site-text [&_a]:decoration-transparent"
+      className="relative m-0 overflow-hidden bg-white py-[clamp(2.5rem,5vw,3.5rem)] font-body text-site-text [&_a]:decoration-transparent"
       aria-labelledby="astro-courses-heading"
     >
       <div className="pointer-events-none absolute -left-8 top-8 text-[4.5rem] text-site-accent-dark/5" aria-hidden>
@@ -167,6 +167,7 @@ export default function AstrologyCoursesSection() {
           titleHighlight="Courses"
           subtitle="Ancient wisdom, modern teaching — live batches and self-paced programs for every level."
           subtitleClassName="lg:whitespace-nowrap"
+          showAccent
         />
 
         {loading ? (

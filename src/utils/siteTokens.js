@@ -1,13 +1,29 @@
-/** Shared Tailwind class tokens — replaces index.css utility classes */
+/**
+ * Tailwind-only design tokens — single source of truth for public pages.
+ *
+ * New page checklist (MainLayout auto-applies Bootstrap isolation via tw-page):
+ *   1. import { PAGE_WRAP, TW_H1, TW_BODY, SECTION_PY, SITE_BTN_PRIMARY } from '@/utils/siteTokens'
+ *   2. Use flex/grid layouts — no Bootstrap classes, no inline <style>, no custom CSS files
+ *   3. Wrap content sections in PAGE_WRAP; use PageSection for vertical rhythm
+ *   4. Optional: <TailwindPage className="..."> only when you need extra page-level classes
+ */
 
 export const PAGE_WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 
 export const SITE_PAGE = 'min-h-screen w-full bg-site-bg font-body text-site-text';
 
-/** Use on new/migrated pages — pairs with <TailwindPage> and tw-page.css Bootstrap isolation */
+/** Applied by MainLayout / StandaloneLayout — blocks Bootstrap reboot inside page content */
+export const TW_PAGE_ROOT = 'tw-page w-full min-h-full antialiased';
+
+/** Full page shell when not using MainLayout (rare) */
 export const TAILWIND_PAGE =
   'tw-page min-h-screen w-full overflow-x-hidden bg-site-bg font-body text-site-text antialiased';
 
+/** Routes that manage their own page shell (legacy Bootstrap or custom theme like /webinar) */
+export const SKIP_LAYOUT_TW_PAGE_PATHS = new Set(['/', '/webinar']);
+
+/** @deprecated use SKIP_LAYOUT_TW_PAGE_PATHS */
+export const LEGACY_BOOTSTRAP_PATHS = SKIP_LAYOUT_TW_PAGE_PATHS;
 /** Standard form field wrappers (styles live in src/styles/tw-page.css) */
 export const TW_FIELD = 'tw-field';
 export const TW_FIELD_LABEL = 'tw-field__label';
@@ -29,6 +45,33 @@ export const SITE_TITLE_LG =
   'm-0 font-heading text-[clamp(1.75rem,3vw,2.25rem)] font-extrabold leading-[1.12] tracking-normal text-site-primary';
 
 export const SITE_SUBTITLE = 'text-base leading-relaxed text-site-muted';
+
+/** Shared vertical rhythm for public pages */
+export const SECTION_PY = 'py-10 sm:py-12 lg:py-14';
+export const SECTION_PY_SM = 'py-8 sm:py-10';
+
+/** Standard type scale — use on all Tailwind public pages */
+export const TW_KICKER =
+  'mb-2 inline-block text-xs font-extrabold uppercase tracking-[0.12em] text-site-accent';
+
+export const TW_H1 =
+  'font-heading text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.12] tracking-tight text-site-primary';
+
+export const TW_H2 =
+  'font-heading text-[clamp(1.5rem,2.8vw,2rem)] font-extrabold leading-[1.2] text-site-primary';
+
+export const TW_H3 = 'font-heading text-lg font-bold leading-snug text-site-primary sm:text-xl';
+
+export const TW_BODY =
+  'text-[0.9375rem] leading-[1.65] text-site-muted sm:text-base sm:leading-relaxed';
+
+export const TW_BODY_SM = 'text-sm leading-relaxed text-site-muted';
+
+export const TW_LEAD =
+  'max-w-xl text-base leading-relaxed text-site-muted sm:text-lg sm:leading-relaxed';
+
+export const TW_STACK = 'flex flex-col gap-4';
+export const TW_STACK_SM = 'flex flex-col gap-3';
 
 export const SITE_PRICE =
   'font-price text-[clamp(1.375rem,3vw,2rem)] font-bold leading-none tracking-tight text-site-accent-dark tabular-nums';

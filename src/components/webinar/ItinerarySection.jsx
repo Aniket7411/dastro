@@ -2,8 +2,8 @@ import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_SECTION,
-  WB_SECTION_HEADER,
-  WB_TITLE_CENTER,
+  WB_SECTION_INTRO,
+  WB_INTRO_TITLE,
   WB_STACK,
   TYPE,
 } from './tokens';
@@ -37,8 +37,8 @@ function ItinerarySection() {
   return (
     <section className={`${WB_SECTION} bg-white`}>
       <div className={WB_WRAP}>
-        <div className={WB_SECTION_HEADER}>
-          <h2 className={WB_TITLE_CENTER}>
+        <div className={`${WB_SECTION_INTRO} mb-6 sm:mb-8`}>
+          <h2 className={WB_INTRO_TITLE}>
             2-Day <span className={WB_HIGHLIGHT}>Itinerary</span>
           </h2>
         </div>

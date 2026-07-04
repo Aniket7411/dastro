@@ -7,9 +7,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SettingsProvider } from './context/SettingsContext';
 import CookieConsent from './components/CookieConsent';
-import FloatingChatAssistant from './components/FloatingChatAssistant';
-import AstrologerChatFab from './components/AstrologerChatFab';
+import { DeferredGlobalWidgets } from './components/DeferredSiteWidgets';
 import { HelmetProvider } from 'react-helmet-async';
+import { loadScript, loadStylesheet, runWhenIdle } from './utils/loadScript';
 
 const Home = lazy(() => import('./pages/Home'));
 const Consultations = lazy(() => import('./pages/Consultations'));
@@ -76,13 +76,29 @@ function LazyImageLoader() {
   return null;
 }
 
-// Global AOS init — called once so pages don't each add their own scroll listeners
+// Global AOS init — CSS/JS loaded after idle so they don't block first paint
 let aosInitialised = false;
 function GlobalAOS() {
   useEffect(() => {
-    if (aosInitialised || !window.AOS) return;
-    aosInitialised = true;
-    window.AOS.init({ duration: 1000, once: true, offset: 50 });
+    if (aosInitialised) return undefined;
+
+    const bootAOS = async () => {
+      try {
+        await loadStylesheet('https://unpkg.com/aos@next/dist/aos.css');
+        await loadScript('https://unpkg.com/aos@next/dist/aos.js');
+        if (window.AOS && !aosInitialised) {
+          aosInitialised = true;
+          window.AOS.init({ duration: 1000, once: true, offset: 50 });
+          window.dispatchEvent(new Event('aos:ready'));
+        }
+      } catch {
+        // Non-critical — page works without scroll animations
+      }
+    };
+
+    return runWhenIdle(() => {
+      bootAOS();
+    }, 2500);
   }, []);
   return null;
 }
@@ -108,8 +124,7 @@ function App() {
             style={{ zIndex: 99999 }}
           />
           <CookieConsent />
-          <AstrologerChatFab />
-          <FloatingChatAssistant />
+          <DeferredGlobalWidgets />
           <Suspense fallback={null}>
             <Routes>
               <Route path="/" element={<MainLayout />}>

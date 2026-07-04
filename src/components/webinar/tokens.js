@@ -4,42 +4,49 @@ export { TW_FIELD, TW_FIELD_LABEL, TW_FIELD_INPUT };
 
 export const WB_WRAP = PAGE_WRAP;
 
-export const WB_PAGE =
-  '!bg-[#F8FAFC] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-[length:24px_24px] pb-[3.25rem] font-body text-slate-800 antialiased sm:pb-[3.5rem]';
+export const WB_PAGE = 'pb-28 sm:pb-32';
 
-export const WB_PAGE_NO_CTA =
-  '!bg-[#F8FAFC] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-[length:24px_24px] pb-8 font-body text-slate-800 antialiased sm:pb-10';
+/** Bottom padding when fixed CTA bar is dismissed */
+export const WB_PAGE_NO_CTA = 'pb-10 sm:pb-12';
+
+/** Page root classes — pass bottom padding token from Webinar.jsx based on CTA visibility */
+export const WB_PAGE_SHELL = 'tw-page wb-page min-h-full w-full antialiased';
+
+/** @deprecated use WB_PAGE_SHELL + WB_PAGE or WB_PAGE_NO_CTA */
+export const WB_PAGE_ROOT = `${WB_PAGE_SHELL} ${WB_PAGE_NO_CTA}`;
 
 export const WB_HIGHLIGHT = '!text-[#EE6662]';
 export const WB_PURPLE = '!text-[#3B2261]';
 export const WB_WHITE = '!text-white';
 
-/** Section rhythm — compact, consistent vertical padding */
-export const WB_SECTION = 'py-8 sm:py-10 lg:py-11';
-export const WB_SECTION_HERO = 'pt-6 pb-8 sm:pt-8 sm:pb-10 lg:pt-9 lg:pb-11';
-/** Tighter section joins — less gap between Why → Patterns */
-export const WB_SECTION_WHY = 'pt-8 pb-4 sm:pt-10 sm:pb-5 lg:pt-11 lg:pb-6';
-export const WB_SECTION_PATTERNS = 'pt-4 pb-8 sm:pt-5 sm:pb-10 lg:pt-6 lg:pb-11';
-export const WB_SECTION_HEADER = 'mb-5 text-center sm:mb-6';
-export const WB_STACK = 'mt-5 sm:mt-6';
-export const WB_CTA_ROW = 'mt-5 text-center sm:mt-6';
-export const WB_CTA_ROW_TIGHT = '!mt-3 !mb-0 text-center';
+/** Section rhythm — matches site SECTION_PY scale */
+export const WB_SECTION = 'py-10 sm:py-12 lg:py-14';
+export const WB_SECTION_HERO = 'pt-8 pb-10 sm:pt-10 sm:pb-12 lg:pt-12 lg:pb-14';
+/** Logo / news strips between sections */
+export const WB_SECTION_STRIP = 'py-10 sm:py-12';
+export const WB_SECTION_HEADER = 'mb-6 text-center sm:mb-8';
+export const WB_STACK = 'mt-6 sm:mt-8';
+export const WB_CTA_ROW = 'mt-6 text-center sm:mt-8';
+export const WB_CTA_ROW_TIGHT = 'mt-4 text-center sm:mt-5';
 
-/** Centered intro block (title + subtitle) — Tailwind-only, no custom CSS */
+/** Centered section intro — flex column keeps title + subtitle aligned */
 export const WB_SECTION_INTRO =
-  '!mx-auto !w-full !max-w-3xl !text-center [&_h2]:!m-0 [&_h2]:!mb-0 [&_h2]:!text-center [&_p]:!m-0 [&_p]:!text-center';
+  'mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-center sm:gap-4';
 
-export const WB_SECTION_INTRO_SUB =
-  '!mt-2 !mb-0 !mx-auto !block !w-full !max-w-2xl !text-center';
+export const WB_INTRO_TITLE =
+  'w-full font-heading text-[clamp(1.125rem,2.2vw,1.625rem)] font-extrabold leading-snug tracking-tight text-[#3B2261] text-balance';
 
-export const WB_WHY_GRID = 'mt-4 grid gap-2.5 sm:grid-cols-2 sm:gap-3';
+export const WB_INTRO_BODY =
+  'w-full max-w-2xl font-body text-[0.9375rem] leading-relaxed text-slate-600 sm:text-base';
+
+export const WB_WHY_GRID = 'mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4';
 
 export const WB_WHY_CARD =
-  '!m-0 flex items-start gap-2.5 rounded-lg border border-violet-100 bg-white !p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-[#EE6662] hover:shadow-md sm:!gap-3 sm:!p-3.5';
+  '!m-0 flex items-start gap-3 rounded-lg border border-violet-100 bg-white !p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#EE6662] hover:shadow-md sm:!p-4';
 
 export const WB_WHY_ICON = 'shrink-0 pt-0.5 text-base text-[#EE6662] sm:text-lg';
 
-export const WB_WHY_FOOTER = '!mt-4 !mb-0 flex flex-col items-center gap-3 text-center';
+export const WB_WHY_FOOTER = 'mt-6 flex flex-col items-center gap-4 text-center sm:mt-8';
 
 export const WB_PATTERN_CARD =
   '!m-0 flex w-full min-w-0 flex-col items-center rounded-lg border border-slate-100 bg-white !p-4 !text-center shadow-sm sm:basis-[calc(50%-0.4375rem)] sm:!p-4 lg:basis-[calc(33.333%-0.6667rem)]';
@@ -47,9 +54,9 @@ export const WB_PATTERN_CARD =
 export const WB_PATTERN_ICON = 'mb-2 text-2xl text-[#3B2261] sm:mb-2.5';
 
 export const WB_PATTERN_GRID =
-  '!mt-4 flex flex-wrap justify-center gap-3 sm:gap-3.5 lg:!mt-5 lg:gap-4';
+  'mt-6 flex flex-wrap justify-center gap-3 sm:mt-8 sm:gap-4 lg:gap-5';
 
-export const WB_LEARN_GRID = 'mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4';
+export const WB_LEARN_GRID = 'mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-5';
 
 export const WB_LEARN_CARD =
   '!m-0 flex items-start gap-3 rounded-lg border border-violet-100 bg-[#FDF4FF] !p-3.5 sm:!gap-3.5 sm:!p-4';
@@ -89,8 +96,8 @@ export const TYPE = {
 
 export const WB_SUBTITLE = TYPE.kicker;
 export const WB_TITLE = TYPE.h2;
-export const WB_TITLE_CENTER = TYPE.h2Center;
-export const WB_TITLE_LG = TYPE.h2Center;
+export const WB_TITLE_CENTER = WB_INTRO_TITLE;
+export const WB_TITLE_LG = WB_INTRO_TITLE;
 export const WB_TITLE_HERO = TYPE.h1Center;
 export const WB_UNDERLINE = 'mx-auto mt-2.5 h-0.5 w-12 rounded-full bg-[#EE6662]';
 

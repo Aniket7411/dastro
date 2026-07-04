@@ -1,23 +1,25 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from '@/utils/toast';
-import ConsultationModal from '../components/ConsultationModal';
-import SuccessModal from '../components/SuccessModal';
-
-
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
-import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
-import ConsultationServicesCarousel from '../components/ConsultationServicesCarousel';
 import HomeConsultationCard from '../components/HomeConsultationCard';
 import HomeBannerCTAs from '../components/HomeBannerCTAs';
 import HomeSectionHeader, { HomeSubsectionHeader } from '../components/home/HomeSectionHeader';
-import StudentTestimonials from '../components/StudentTestimonials';
-import ConsultationTestimonials from '../components/ConsultationTestimonials';
+import HomeFinalCTA from '../components/home/HomeFinalCTA';
+import LazyOnView from '../components/LazyOnView';
 import { COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
+import { runWhenIdle } from '../utils/loadScript';
+
+const AstrologyCoursesSection = lazy(() => import('../components/AstrologyCoursesSection'));
+const ConsultationServicesCarousel = lazy(() => import('../components/ConsultationServicesCarousel'));
+const StudentTestimonials = lazy(() => import('../components/StudentTestimonials'));
+const ConsultationTestimonials = lazy(() => import('../components/ConsultationTestimonials'));
+const ConsultationModal = lazy(() => import('../components/ConsultationModal'));
+const SuccessModal = lazy(() => import('../components/SuccessModal'));
 
 const HOME_FEATURED_CONSULTATIONS = [
   {
@@ -457,7 +459,6 @@ const AstrologyCourses = ({ onEnroll }) => {
 
 const BANNER_SLIDES = [
   {
-    badge: 'Ancient Wisdom · Modern Guidance',
     title1: 'Illuminate Your Path With',
     title2: 'Expert Vedic Astrology',
     desc: 'Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.',
@@ -466,16 +467,6 @@ const BANNER_SLIDES = [
     overlayGlass: true,
   },
   {
-    badge: 'Mystic Insights · Divine Truth',
-    title1: 'Unlock The Secrets Of',
-    title2: 'Your Celestial Destiny',
-    desc: 'Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.',
-    primaryCta: { label: 'Explore Consultations', path: '/consultations', icon: 'fas fa-calendar-check' },
-    bgImage: '/banner.jpg',
-    overlayGlass: true,
-  },
-  {
-    badge: 'Master Vedic Astrology',
     title1: 'Ancient Wisdom for',
     title2: 'A Modern Lifestyle',
     desc: 'Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.',
@@ -484,7 +475,6 @@ const BANNER_SLIDES = [
     overlayGlass: true,
   },
   {
-    badge: 'Master Vedic Astrology',
     title1: 'Align Your Life With',
     title2: 'The Stars & Planets',
     desc: 'Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.',
@@ -527,7 +517,7 @@ const BANNER_ORBIT_IMAGES = [
   '/images/as1.png', '/images/as2.png', '/images/as3.png',
 ];
 
-const BANNER_BG_IMAGES = ['/banner.jpg', '/banner1.jpg', '/banner2.webp'];
+const BANNER_BG_IMAGES = ['/banner1.jpg', '/banner2.webp'];
 
 const preloadImages = (urls) =>
   Promise.all(
@@ -608,21 +598,6 @@ function Home() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const [blogs, setBlogs] = useState([]);
-
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/blogs?limit=3`);
-        const data = await res.json();
-        if (data.success) setBlogs(data.blogs.slice(0, 3));
-      } catch (err) {
-        console.error('Error fetching blogs for home');
-      }
-    };
-    fetchBlogs();
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -699,6 +674,7 @@ function Home() {
   const [carouselPaused, setCarouselPaused] = useState(false);
   const slideIndexRef = useRef(0);
   const transitioningRef = useRef(false);
+  const bannerVideoRef = useRef(null);
   const activeSlide = BANNER_SLIDES[currentSlide];
   const isThemedSlide = Boolean(
     (activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan) && !activeSlide.bgImage,
@@ -746,18 +722,19 @@ function Home() {
   useEffect(() => {
     let cancelled = false;
 
-    const prepareBanner = async () => {
-      await preloadImages([...BANNER_ORBIT_IMAGES, ...BANNER_BG_IMAGES]);
-      if (!cancelled) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => setBannerReady(true));
-        });
-      }
-    };
+    // Paint the hero immediately; warm image caches in the background.
+    requestAnimationFrame(() => {
+      if (!cancelled) setBannerReady(true);
+    });
 
-    prepareBanner();
+    preloadImages(BANNER_BG_IMAGES);
+    const cancelIdle = runWhenIdle(() => {
+      if (!cancelled) preloadImages(BANNER_ORBIT_IMAGES);
+    }, 3000);
+
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, []);
 
@@ -768,8 +745,20 @@ function Home() {
   }, [bannerReady, carouselPaused, nextSlide]);
 
   useEffect(() => {
-    if (window.AOS) window.AOS.refresh();
+    const onAosReady = () => window.AOS?.refresh();
+    window.addEventListener('aos:ready', onAosReady);
+    if (window.AOS) onAosReady();
+    return () => window.removeEventListener('aos:ready', onAosReady);
   }, []);
+
+  useEffect(() => {
+    if (!bannerReady) return;
+    const video = bannerVideoRef.current;
+    if (!video) return;
+    video.preload = 'auto';
+    video.load();
+    video.play().catch(() => {});
+  }, [bannerReady]);
 
   return (
     <>
@@ -790,13 +779,14 @@ function Home() {
       >
         <div className="banner-bg-layers" aria-hidden="true">
           <video
+            ref={bannerVideoRef}
             className={`banner-bg-layer banner-bg-video ${currentSlide === 0 ? 'is-active' : ''}`}
             src="/bannervideo.mp4"
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="none"
           />
           {BANNER_SLIDES.map((slide, index) =>
             slide.bgImage ? (
@@ -823,11 +813,6 @@ function Home() {
                   <div className="ethereal-sparkle s-1">✦</div>
                   <div className="ethereal-sparkle s-2">✧</div>
 
-                  {/* <div className="cosmic-badge">
-                    <span className="badge-glow"></span>
-                    <i className="fas fa-moon me-2"></i> {activeSlide.badge}
-                  </div> */}
-
                   <h1 className="banner-title my-2">
                     {activeSlide.title1}<br />
                     <span className="text-gradient drop-glow">{activeSlide.title2}</span>
@@ -835,11 +820,11 @@ function Home() {
 
                   <p className="banner-desc mb-2">{activeSlide.desc}</p>
 
-                  {/* <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
+                  <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
                     <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
                     <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
-                  </ul> */}
+                  </ul>
 
                   <HomeBannerCTAs
                     primaryCta={activeSlide.primaryCta}
@@ -994,7 +979,7 @@ function Home() {
 
       {/* About Section */}
       <main className="w-100 body-main">
-        <section className="about-part-section w-100 py-5 mt-5 mt-lg-5 pt-lg-5">
+        <section className="about-part-section w-100 home-section-pad home-section-pad--first">
           <div className="container">
             <div className="row align-items-center g-4 g-lg-5">
 
@@ -1052,9 +1037,15 @@ function Home() {
           </div>
         </section>
 
+        <LazyOnView minHeight="320px">
+          <Suspense fallback={null}>
+            <AstrologyCoursesSection />
+          </Suspense>
+        </LazyOnView>
+
         {/* Services Section */}
-        {/* Services Section */}
-        <section className="services-section w-100">
+        <LazyOnView minHeight="420px">
+        <section className="services-section home-section-warm w-100">
           <div className="container">
             <HomeSectionHeader
               kicker="Our Expertise"
@@ -1062,6 +1053,7 @@ function Home() {
               titleHighlight="Through Life"
               subtitle="Our astrologers are dedicated to providing clarity and direction for every chapter of your journey."
               subtitleClassName="lg:whitespace-nowrap"
+              showAccent
             />
 
             <div className="row g-3 g-lg-4 align-items-center mt-3 mt-lg-4">
@@ -1123,20 +1115,12 @@ function Home() {
             </div>
           </div>
         </section>
-
-
-
-        <StudentTestimonials />
-
-
-                {/* Astrology Courses Section — Tailwind */}
-        <AstrologyCoursesSection />
-
-
+        </LazyOnView>
 
         {/* Expert Consultations Section */}
+        <LazyOnView minHeight="480px">
         <section
-          className="consultation-home-section py-5"
+          className="consultation-home-section home-section-pad"
           aria-labelledby="consultation-home-heading"
         >
           <div className="container">
@@ -1147,9 +1131,12 @@ function Home() {
               titleHighlight="Consultations"
               subtitle="Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey."
               subtitleClassName="lg:whitespace-nowrap"
+              showAccent
             />
 
-            <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
+            <Suspense fallback={null}>
+              <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
+            </Suspense>
 
             <HomeSubsectionHeader
               className="mt-1 sm:mt-2"
@@ -1157,6 +1144,7 @@ function Home() {
               titleHighlight="Sessions"
               subtitle="Our most booked consultations — request a callback or learn more about each service."
               subtitleClassName="lg:whitespace-nowrap"
+              showAccent
             />
 
             <ul className={COURSE_GRID} data-aos="fade-up">
@@ -1167,7 +1155,7 @@ function Home() {
               ))}
             </ul>
 
-            <div className="text-center mt-5" data-aos="fade-up">
+            <div className="text-center mt-6 sm:mt-8" data-aos="fade-up">
               <Link
                 to="/consultations"
                 className="btn mystic-btn-outline px-5 !no-underline visited:!no-underline hover:!no-underline"
@@ -1177,8 +1165,23 @@ function Home() {
             </div>
           </div>
         </section>
+        </LazyOnView>
 
-        <ConsultationTestimonials />
+        <LazyOnView minHeight="260px">
+          <Suspense fallback={null}>
+            <StudentTestimonials />
+          </Suspense>
+        </LazyOnView>
+
+        <LazyOnView minHeight="260px">
+          <Suspense fallback={null}>
+            <ConsultationTestimonials />
+          </Suspense>
+        </LazyOnView>
+
+        <LazyOnView minHeight="220px">
+          <HomeFinalCTA />
+        </LazyOnView>
 
         {/* Latest Blogs Section */}
         {/* {blogs.length > 0 && (
@@ -1214,26 +1217,52 @@ function Home() {
 
       </main>
 
-      <ConsultationModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        formData={formData}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
-        isFixedService={!!formData.consultationType}
-      />
+      {isModalOpen ? (
+        <Suspense fallback={null}>
+          <ConsultationModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            formData={formData}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            isFixedService={!!formData.consultationType}
+          />
+        </Suspense>
+      ) : null}
 
-      <SuccessModal
-        isOpen={isSuccessOpen}
-        onClose={() => setIsSuccessOpen(false)}
-        title="Cosmic Connection Established!"
-        message="Your consultation booking is successful. India's top astrology mentor will review your birth chart soon. Expect a call for session scheduling within 24 hours."
-      />
+      {isSuccessOpen ? (
+        <Suspense fallback={null}>
+          <SuccessModal
+            isOpen={isSuccessOpen}
+            onClose={() => setIsSuccessOpen(false)}
+            title="Cosmic Connection Established!"
+            message="Your consultation booking is successful. India's top astrology mentor will review your birth chart soon. Expect a call for session scheduling within 24 hours."
+          />
+        </Suspense>
+      ) : null}
 
       <style>{`
         html {
           scroll-behavior: smooth;
+        }
+
+        /* Home typography & section rhythm */
+        .home-section-pad {
+          padding-top: clamp(2.5rem, 5vw, 3.5rem);
+          padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+        }
+
+        .home-section-pad--first {
+          padding-top: clamp(2rem, 4vw, 3rem);
+        }
+
+        .home-section-warm {
+          background: #fff8f0 !important;
+        }
+
+        .about-part-section {
+          background: var(--bg-color);
         }
 
         body {
@@ -1244,35 +1273,38 @@ function Home() {
         
         .section-title {
           font-family: var(--font-serif) !important;
+          font-size: clamp(1.625rem, 3vw, 2.25rem) !important;
           font-weight: 700 !important;
           color: var(--text-heading) !important;
           line-height: 1.2;
+          letter-spacing: -0.01em;
         }
 
         .section-subtitle {
           font-family: var(--font-sans) !important;
-          font-weight: 500 !important;
+          font-weight: 700 !important;
           color: var(--text-muted) !important;
-          text-transform: none !important;
-          letter-spacing: 0.04em !important;
+          font-size: 0.75rem !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.1em !important;
           font-style: normal !important;
-          margin-bottom: 15px;
+          margin-bottom: 0;
           display: block;
         }
 
         .expertise-subtitle {
           color: var(--primary-color) !important;
-          font-size: var(--text-kicker) !important;
+          font-size: 0.75rem !important;
           font-weight: 700 !important;
-          letter-spacing: 0.08em !important;
+          letter-spacing: 0.1em !important;
           text-transform: uppercase !important;
           font-family: var(--font-sans) !important;
         }
 
         .section-desc {
           color: var(--text-content) !important;
-          font-size: var(--body-size);
-          line-height: 1.6;
+          font-size: clamp(0.9375rem, 1.6vw, 1rem);
+          line-height: 1.65;
           font-weight: 500;
           font-family: var(--font-sans);
         }
@@ -1281,7 +1313,7 @@ function Home() {
           font-family: var(--font-serif) !important;
           font-weight: 700 !important;
           color: var(--text-heading) !important;
-          font-size: clamp(1.125rem, 2.2vw, 1.5rem) !important;
+          font-size: clamp(1.25rem, 2.2vw, 1.5rem) !important;
           line-height: 1.25 !important;
         }
 
@@ -1860,7 +1892,7 @@ function Home() {
 
         .banner-title {
           font-family: var(--font-serif) !important;
-          font-size: clamp(1.65rem, 3.5vw, 2.75rem);
+          font-size: clamp(1.75rem, 3.5vw, 2.75rem);
           font-weight: 700;
           line-height: 1.15;
           color: #3A1900;
@@ -1874,13 +1906,13 @@ function Home() {
         }
 
         .banner-desc {
-          font-size: 1rem;
+          font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
           color: #5C3D26 !important;
-          line-height: 1.7;
+          line-height: 1.65;
           max-width: 42rem;
           font-weight: 500;
           font-family: var(--font-sans);
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.875rem;
         }
 
         .cosmic-badge {
@@ -2659,12 +2691,11 @@ function Home() {
 
         /* Services */
         .services-section {
-          padding: clamp(2.5rem, 5vw, 4.5rem) 0;
-          background: var(--bg-color);
+          padding: clamp(2.5rem, 5vw, 3.5rem) 0;
         }
 
         .services-section .section-desc {
-          font-size: 0.9375rem;
+          font-size: clamp(0.9375rem, 1.6vw, 1rem);
           line-height: 1.65;
           color: #5C3D26 !important;
         }
@@ -2681,6 +2712,7 @@ function Home() {
           position: relative;
           overflow: hidden;
           text-align: left;
+          min-height: 13.5rem;
         }
 
         /* Top accent line — fades in on hover */
@@ -2717,10 +2749,10 @@ function Home() {
 
         .service-card-desc {
           font-family: var(--font-body);
-          font-size: 0.8125rem;
+          font-size: 0.875rem;
           color: #5C3D26;
-          line-height: 1.55;
-          margin: 0.4rem 0 0.65rem;
+          line-height: 1.6;
+          margin: 0.5rem 0 0.75rem;
           font-weight: 500;
         }
 
@@ -2738,10 +2770,10 @@ function Home() {
           align-items: flex-start;
           gap: 0.5rem;
           font-family: var(--font-body);
-          font-size: 0.75rem;
+          font-size: 0.8125rem;
           color: #3D1A08;
           font-weight: 600;
-          line-height: 1.45;
+          line-height: 1.5;
         }
 
         .service-card-features li i {
@@ -2887,7 +2919,7 @@ function Home() {
 
         @media (max-width: 767px) {
           .services-section .section-title {
-            font-size: 1.65rem !important;
+            font-size: clamp(1.5rem, 5vw, 1.75rem) !important;
           }
 
           .services-section .service-center-col {
@@ -2947,8 +2979,8 @@ function Home() {
 
         /* Responsive Breakpoints */
         @media (max-width: 991px) {
-          .banner-section { text-align: center; padding: 120px 0 80px; }
-          .banner-desc { margin: 0 auto 30px; }
+          .banner-section { text-align: center; }
+          .banner-desc { margin: 0 auto 1rem; max-width: 36rem; }
           .img-box01 { margin-bottom: 80px; height: 450px; }
           .experience-badge { left: 50%; transform: translateX(-50%); bottom: 20px; }
           .banner-section .cosmic-orbit-container .icon-block { width: 46px; height: 46px; }
@@ -2961,7 +2993,15 @@ function Home() {
             padding-bottom: clamp(3.5rem, 10vw, 4.5rem) !important;
             min-height: clamp(460px, calc(100svh - var(--spacing-site-header)), 780px) !important;
           }
-          .about-part-section, .services-section { padding: 60px 0; }
+          .about-part-section,
+          .services-section,
+          .consultation-home-section.home-section-pad {
+            padding-top: clamp(2.25rem, 5vw, 3rem);
+            padding-bottom: clamp(2.25rem, 5vw, 3rem);
+          }
+          .about-part-section.home-section-pad--first {
+            padding-top: clamp(1.75rem, 4vw, 2.5rem);
+          }
           .banner-section .cosmic-orbit-container .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: 20px; z-index: 5; }
           .experience-badge h4 { font-size: 1.8rem; }

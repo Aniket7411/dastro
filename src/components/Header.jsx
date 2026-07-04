@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense, lazy } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ConsultationModal from './ConsultationModal';
-import SuccessModal from './SuccessModal';
 import SiteNavbar from './SiteNavbar';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+
+const ConsultationModal = lazy(() => import('./ConsultationModal'));
+const SuccessModal = lazy(() => import('./SuccessModal'));
 
 function Header() {
   const location = useLocation();
@@ -171,22 +172,30 @@ function Header() {
       <div className="mobile-backcanvas">...</div>
       */}
 
-      <ConsultationModal
-        isOpen={isConsultModalOpen}
-        onClose={() => setIsConsultModalOpen(false)}
-        formData={formData}
-        handleChange={handleConsultChange}
-        handleSubmit={handleConsultSubmit}
-        isSubmitting={isSubmitting}
-        isFixedService={!!formData.consultationType}
-      />
+      {isConsultModalOpen ? (
+        <Suspense fallback={null}>
+          <ConsultationModal
+            isOpen={isConsultModalOpen}
+            onClose={() => setIsConsultModalOpen(false)}
+            formData={formData}
+            handleChange={handleConsultChange}
+            handleSubmit={handleConsultSubmit}
+            isSubmitting={isSubmitting}
+            isFixedService={!!formData.consultationType}
+          />
+        </Suspense>
+      ) : null}
 
-      <SuccessModal
-        isOpen={isSuccessOpen}
-        onClose={() => setIsSuccessOpen(false)}
-        title="Consultation Booked!"
-        message="Your consultation request has been received. Our team will contact you shortly to confirm the schedule."
-      />
+      {isSuccessOpen ? (
+        <Suspense fallback={null}>
+          <SuccessModal
+            isOpen={isSuccessOpen}
+            onClose={() => setIsSuccessOpen(false)}
+            title="Consultation Booked!"
+            message="Your consultation request has been received. Our team will contact you shortly to confirm the schedule."
+          />
+        </Suspense>
+      ) : null}
     </>
   );
 }

@@ -1,9 +1,9 @@
 import {
   WB_WRAP,
   WB_HIGHLIGHT,
-  WB_SECTION_WHY,
+  WB_SECTION,
   WB_SECTION_INTRO,
-  WB_TITLE_CENTER,
+  WB_INTRO_TITLE,
   WB_WHY_GRID,
   WB_WHY_CARD,
   WB_WHY_ICON,
@@ -24,10 +24,10 @@ function WhySection({ onJoinNow, onJoinFree }) {
   ];
 
   return (
-    <section className={`${WB_SECTION_WHY} bg-white`}>
+    <section className={`${WB_SECTION} bg-white`}>
       <div className={WB_WRAP}>
         <div className={WB_SECTION_INTRO} data-aos="fade-up">
-          <h2 className={WB_TITLE_CENTER}>
+          <h2 className={WB_INTRO_TITLE}>
             Kabhi socha hai{' '}
             <span className={WB_HIGHLIGHT}>&ldquo;Why does this keep happening to me?&rdquo;</span>
           </h2>

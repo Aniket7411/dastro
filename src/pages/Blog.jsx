@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Search, X, Calendar, User, ArrowRight } from 'lucide-react';
 import toast from '@/utils/toast';
 import SEO from '../components/SEO';
-import TailwindPage from '../components/layout/TailwindPage';
 import {
   SITE_CONTAINER,
   SITE_KICKER,
@@ -145,7 +144,7 @@ function Blog() {
   const noPublished = isEmpty && !searchQuery && selectedCategory === 'All' && allBlogs.length === 0;
 
   return (
-    <TailwindPage>
+    <>
       <SEO
         title="Cosmic Blog | DS Astrology"
         description="Explore Vedic astrology, numerology, tarot, and spiritual wisdom for modern life."
@@ -331,7 +330,7 @@ function Blog() {
           </aside>
         </div>
       </div>
-    </TailwindPage>
+    </>
   );
 }
 

@@ -1,16 +1,21 @@
 import { TAILWIND_PAGE } from '../../utils/siteTokens';
 
 /**
- * Wrap any new/migrated page in this component so Bootstrap global styles
- * do not affect layout, forms, or typography inside the page.
+ * Optional page wrapper — MainLayout already applies `tw-page` on all routes except Home.
+ * Use this when you need extra page-level classes or on routes outside MainLayout.
  *
- * @example
+ * @example — typical new page (no wrapper needed):
  * export default function MyPage() {
  *   return (
- *     <TailwindPage>
- *       <SEO ... />
- *       ...
- *     </TailwindPage>
+ *     <>
+ *       <SEO title="My Page" url="/my-page" />
+ *       <PageSection>
+ *         <div className={PAGE_WRAP}>
+ *           <h1 className={TW_H1}>Title</h1>
+ *           <p className={TW_BODY}>Body copy</p>
+ *         </div>
+ *       </PageSection>
+ *     </>
  *   );
  * }
  */

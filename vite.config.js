@@ -40,7 +40,16 @@ export default defineConfig({
             if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('react-toastify')) {
               return 'ui';
             }
+            if (id.includes('razorpay')) {
+              return 'payments';
+            }
+            if (id.includes('react-helmet')) {
+              return 'helmet';
+            }
             return 'modules';
+          }
+          if (id.includes('/pages/AdminDashboard') || id.includes('/pages/Admin')) {
+            return 'admin';
           }
         }
       }

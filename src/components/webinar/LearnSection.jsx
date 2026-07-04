@@ -2,7 +2,8 @@ import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_SECTION,
-  WB_TITLE_CENTER,
+  WB_SECTION_INTRO,
+  WB_INTRO_TITLE,
   WB_CTA_ROW,
   WB_LEARN_GRID,
   WB_LEARN_CARD,
@@ -59,9 +60,11 @@ function LearnSection({ onJoinNow, onJoinFree }) {
   return (
     <section className={`${WB_SECTION} bg-white`}>
       <div className={WB_WRAP}>
-        <h2 className={WB_TITLE_CENTER}>
-          What <span className={WB_HIGHLIGHT}>You Will Learn</span> In 2 Days
-        </h2>
+        <div className={WB_SECTION_INTRO}>
+          <h2 className={WB_INTRO_TITLE}>
+            What <span className={WB_HIGHLIGHT}>You Will Learn</span> In 2 Days
+          </h2>
+        </div>
         <div className={WB_LEARN_GRID}>
           {learningPoints.map((item) => (
             <div key={item.title} className={WB_LEARN_CARD} data-aos="fade-up">

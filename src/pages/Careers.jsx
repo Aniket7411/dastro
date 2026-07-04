@@ -13,7 +13,6 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import PageBanner from '../components/PageBanner';
 import { PAGE_BANNERS } from '../data/pageBanners';
 import SEO from '../components/SEO';
-import TailwindPage from '../components/layout/TailwindPage';
 import {
   BANNER_CONTENT_GAP,
   SITE_CONTAINER,
@@ -279,16 +278,16 @@ export default function Careers() {
 
   if (loading) {
     return (
-      <TailwindPage className="flex min-h-[50vh] items-center justify-center">
+      <div className="flex min-h-[50vh] items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent" />
-      </TailwindPage>
+      </div>
     );
   }
 
   const salaryLabel = getJobSalaryLabel(selectedJob);
 
   return (
-    <TailwindPage>
+    <>
       <SEO
         title="Careers"
         description="Join DS Astrology — explore open roles in astrology, technology, and creative teams."
@@ -728,6 +727,6 @@ export default function Careers() {
           </div>
         </div>
       </div>
-    </TailwindPage>
+    </>
   );
 }

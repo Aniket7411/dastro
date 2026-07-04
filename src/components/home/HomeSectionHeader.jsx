@@ -11,12 +11,13 @@ export default function HomeSectionHeader({
   id,
   align = 'center',
   className = '',
+  showAccent = false,
 }) {
   const center = align === 'center';
 
   return (
     <header
-      className={`mb-5 sm:mb-6 ${center ? 'text-center' : 'text-left'} ${className}`}
+      className={`mb-6 sm:mb-8 ${center ? 'text-center' : 'text-left'} ${className}`}
       data-aos="fade-up"
     >
       {kicker ? (
@@ -25,7 +26,7 @@ export default function HomeSectionHeader({
         </h5>
       ) : null}
 
-      <h2 id={id} className="section-title mt-2">
+      <h2 id={id} className="section-title mt-2 sm:mt-3">
         {title}
         {titleHighlight ? (
           <>
@@ -35,10 +36,17 @@ export default function HomeSectionHeader({
         ) : null}
       </h2>
 
+      {center && showAccent ? (
+        <div
+          className="mx-auto mt-3 h-1 w-14 rounded-full bg-gradient-to-r from-site-accent via-site-accent-dark to-site-accent sm:mt-4"
+          aria-hidden
+        />
+      ) : null}
+
       {subtitle ? (
         <p
-          className={`section-desc mt-3 ${center ? 'mx-auto' : ''} ${subtitleClassName}`}
-          style={center && !subtitleClassName ? { maxWidth: '650px' } : undefined}
+          className={`section-desc mt-3 sm:mt-4 ${center ? 'mx-auto' : ''} ${subtitleClassName}`}
+          style={center && !subtitleClassName ? { maxWidth: '42rem' } : undefined}
         >
           {subtitle}
         </p>
@@ -48,9 +56,16 @@ export default function HomeSectionHeader({
 }
 
 /** Smaller heading block inside a home section (e.g. carousel vs grid). */
-export function HomeSubsectionHeader({ title, titleHighlight, subtitle, subtitleClassName = '', className = '' }) {
+export function HomeSubsectionHeader({
+  title,
+  titleHighlight,
+  subtitle,
+  subtitleClassName = '',
+  className = '',
+  showAccent = false,
+}) {
   return (
-    <div className={`mb-4 text-center sm:mb-5 ${className}`} data-aos="fade-up">
+    <div className={`mb-5 text-center sm:mb-6 ${className}`} data-aos="fade-up">
       <h3 className="home-subsection-title m-0">
         {title}
         {titleHighlight ? (
@@ -60,10 +75,16 @@ export function HomeSubsectionHeader({ title, titleHighlight, subtitle, subtitle
           </>
         ) : null}
       </h3>
+      {showAccent ? (
+        <div
+          className="mx-auto mt-2 h-0.5 w-10 rounded-full bg-gradient-to-r from-site-accent to-site-accent-dark"
+          aria-hidden
+        />
+      ) : null}
       {subtitle ? (
         <p
-          className={`section-desc mx-auto mt-2 mb-0 ${subtitleClassName}`}
-          style={{ maxWidth: subtitleClassName ? undefined : '560px', fontSize: '0.92rem' }}
+          className={`section-desc mx-auto mt-2 mb-0 sm:mt-3 ${subtitleClassName}`}
+          style={{ maxWidth: subtitleClassName ? undefined : '36rem' }}
         >
           {subtitle}
         </p>

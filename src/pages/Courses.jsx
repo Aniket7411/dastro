@@ -7,6 +7,7 @@ import CourseFilterBar from '../components/courses/CourseFilterBar';
 import CourseEmptyState from '../components/courses/CourseEmptyState';
 import { useCourses, useCourseCategories } from '../hooks/useCourses';
 import { PAGE_WRAP, COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
+import { SECTION_PY } from '../utils/siteTokens';
 import toast from '@/utils/toast';
 
 const PAGE_META = {
@@ -121,7 +122,7 @@ function Courses({ mode = 'all' }) {
       : `${resultLabel} shown`;
 
   return (
-    <div className="min-h-screen w-full bg-site-bg font-body text-site-text">
+    <>
       <SEO title={meta.title} description={meta.description} url={meta.url} />
 
       <CourseHero
@@ -149,7 +150,7 @@ function Courses({ mode = 'all' }) {
         onSortChange={setSortValue}
       />
 
-      <div className={`${PAGE_WRAP} pb-10 pt-6 sm:pb-12 sm:pt-8`}>
+      <div className={`${PAGE_WRAP} ${SECTION_PY}`}>
         {loading ? (
           <CourseGridSkeleton count={mode === 'all' ? 8 : 6} />
         ) : sortedCourses.length > 0 ? (
@@ -171,7 +172,7 @@ function Courses({ mode = 'all' }) {
           />
         )}
       </div>
-    </div>
+    </>
   );
 }
 

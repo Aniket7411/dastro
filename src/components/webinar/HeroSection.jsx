@@ -26,7 +26,7 @@ function HeroSection({ onJoinNow, onJoinFree }) {
   return (
     <section className={`relative ${WB_SECTION_HERO}`}>
       <div className={WB_WRAP}>
-        <div className="mb-4 flex justify-center sm:mb-5" data-aos="fade-up">
+        <div className="mb-6 flex justify-center sm:mb-8" data-aos="fade-up">
           <div className={WB_BADGE}>
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-calendar-alt" aria-hidden="true" />

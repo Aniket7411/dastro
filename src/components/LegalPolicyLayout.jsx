@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import PageBanner from './PageBanner';
 import SEO from './SEO';
-import { BANNER_CONTENT_GAP, PAGE_WRAP, POLICY_MAIN, SITE_PAGE } from '../utils/siteTokens';
+import { BANNER_CONTENT_GAP, PAGE_WRAP, POLICY_MAIN } from '../utils/siteTokens';
 
 const SCROLL_OFFSET = 108;
 
@@ -50,7 +50,7 @@ function LegalPolicyLayout({ seo, banner, sections, children }) {
   }, []);
 
   return (
-    <div className={`${SITE_PAGE} w-full`}>
+    <>
       <SEO {...seo} />
       <PageBanner {...banner} />
 
@@ -82,7 +82,7 @@ function LegalPolicyLayout({ seo, banner, sections, children }) {
 
         <main className={POLICY_MAIN}>{children}</main>
       </div>
-    </div>
+    </>
   );
 }
 

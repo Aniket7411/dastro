@@ -9,7 +9,8 @@ import ConsultationServiceCard from '../components/ConsultationServiceCard';
 import { ConsultationFilterBar } from '../components/ConsultationFilters';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
-import { PAGE, PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST, CARD_FLEX_LIST, CARD_FLEX_ITEM } from '../components/consultation/tokens';
+import { PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST, CARD_FLEX_LIST, CARD_FLEX_ITEM } from '../components/consultation/tokens';
+import { SECTION_PY } from '../utils/siteTokens';
 import { useConsultationCatalog, toggleInList } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
@@ -212,17 +213,16 @@ function Consultations() {
         url="/book-consultation"
       />
 
-      <div className={PAGE}>
-        <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-4 pt-6 sm:pb-5 sm:pt-7`}>
+      <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-5 pt-8 sm:pb-6 sm:pt-10`}>
           <h1 className={TYPE.h1}>Book a Consultation</h1>
-          <p className={`${TYPE.bodySm} !mt-1.5 max-w-xl !text-[0.8125rem]`}>
+          <p className={`${TYPE.bodySm} mt-2 max-w-xl`}>
             Browse sessions by category, filter by duration or price, and book online.
           </p>
         </header>
 
         <ConsultationFilterBar {...filterBarProps} />
 
-        <div className={`${PAGE_WRAP} py-4 sm:py-5`}>
+        <div className={`${PAGE_WRAP} ${SECTION_PY}`}>
           {hasActiveFilters && (
             <div className="mb-4 flex flex-wrap items-center gap-1.5 sm:mb-5 sm:gap-2">
               {selectedCategories.map((id) => {
@@ -268,7 +268,7 @@ function Consultations() {
                         <span>{cat.name}</span>
                       </h2>
                       {cat.description && (
-                        <p className={`${TYPE.bodySm} !mt-1 line-clamp-2 max-w-3xl !text-[0.8125rem]`}>{cat.description}</p>
+                        <p className={`${TYPE.bodySm} mt-1 line-clamp-2 max-w-3xl`}>{cat.description}</p>
                       )}
                     </div>
                     <CardGrid cards={cat.cards} />
@@ -325,7 +325,6 @@ function Consultations() {
             </>
           )}
         </div>
-      </div>
 
       <ConsultationModal
         isOpen={isModalOpen}

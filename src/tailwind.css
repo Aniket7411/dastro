@@ -82,6 +82,8 @@
   body {
     @apply m-0 bg-site-bg font-body text-site-text antialiased;
     font-feature-settings: 'kern' 1, 'liga' 1;
+    background-color: var(--bg-color);
+    color: var(--text-content);
   }
 
   h1,
@@ -91,6 +93,26 @@
     text-wrap: balance;
   }
 
+  /* Legacy link defaults — in @layer base so Tailwind text-* utilities win on migrated pages */
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: var(--primary-color);
+  }
+
+  .tw-page a,
+  .tw-page a:hover,
+  .tw-page a:visited {
+    color: inherit;
+  }
 }
 
 @layer utilities {
@@ -135,18 +157,6 @@
  * utility names — so there is no class-name collision in practice.
  * ─────────────────────────────────────────────────────────────────────────────
  */
-
-/* ── Body defaults ── */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-content);
-  font-family: var(--font-body);
-}
-
-/* ── Links — replace Bootstrap's default blue ── */
-a             { color: var(--primary-color); text-decoration: none; }
-a:hover       { color: var(--accent-color);  text-decoration: none; }
-a:visited     { color: var(--primary-color); }
 
 /* ── Container — generous side padding matching the site design ──
    Padding matches the Contact page pattern (px-4 → px-6 → px-12).

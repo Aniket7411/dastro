@@ -1,4 +1,4 @@
-import { WB_WRAP } from './tokens';
+import { WB_WRAP, WB_SECTION_STRIP } from './tokens';
 
 const logos = [
   '/images/10350949.png',
@@ -13,7 +13,7 @@ const logos = [
 
 const LogoCarousel = () => {
   return (
-    <div className="relative overflow-hidden bg-white/[0.02] py-8 sm:py-10">
+    <div className={`relative overflow-hidden bg-white/[0.02] ${WB_SECTION_STRIP}`}>
       <div className={`${WB_WRAP} relative`}>
         <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-16 bg-gradient-to-r from-[#F8FAFC] to-transparent sm:w-28" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-16 bg-gradient-to-l from-[#F8FAFC] to-transparent sm:w-28" />

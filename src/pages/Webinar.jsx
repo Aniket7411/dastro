@@ -19,8 +19,8 @@ import FaqSection from '../components/webinar/FaqSection';
 import FixedBottomCTA from '../components/webinar/FixedBottomCTA';
 import RegistrationModal from '../components/webinar/RegistrationModal';
 import FreeWebinarInterestModal from '../components/webinar/FreeWebinarInterestModal';
-import TailwindPage from '../components/layout/TailwindPage';
-import { WB_PAGE_NO_CTA } from '../components/webinar/tokens';
+import SEO from '../components/SEO';
+import { WB_PAGE, WB_PAGE_NO_CTA, WB_PAGE_SHELL } from '../components/webinar/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 const CTA_HIDDEN_KEY = 'webinar_fixed_cta_hidden';
@@ -132,9 +132,15 @@ function Webinar() {
   };
 
   const sectionProps = { onJoinNow: handleOpenPaidModal, onJoinFree: handleOpenFreeModal };
+  const pageBottomPad = ctaVisible ? WB_PAGE : WB_PAGE_NO_CTA;
 
   return (
-    <TailwindPage className={WB_PAGE_NO_CTA}>
+    <div className={`${WB_PAGE_SHELL} ${pageBottomPad}`}>
+      <SEO
+        title="2-Day Mega Astrology Webinar"
+        description="Join our live astrology webinar — learn practical Vedic techniques for career, relationships, and finances. Register for ₹99."
+        url="/webinar"
+      />
       <HeroSection {...sectionProps} />
       <LogoCarousel />
       <NewsCarousel />
@@ -168,7 +174,7 @@ function Webinar() {
         onClose={handleCloseFreeModal}
         source="webinar-page"
       />
-    </TailwindPage>
+    </div>
   );
 }
 

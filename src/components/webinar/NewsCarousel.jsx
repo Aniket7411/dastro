@@ -1,4 +1,4 @@
-import { WB_WRAP, TYPE } from './tokens';
+import { WB_WRAP, WB_SECTION_STRIP, TYPE } from './tokens';
 
 const newsItems = [
   { name: 'Aaj Tak', logo: '/images/5005806.png' },
@@ -11,7 +11,7 @@ const newsItems = [
 
 const NewsCarousel = () => {
   return (
-    <div className="border-y border-white/5 bg-[#0b1220] py-10 sm:py-12">
+    <div className={`border-y border-white/5 bg-[#0b1220] ${WB_SECTION_STRIP}`}>
       <div className={WB_WRAP}>
         <h4 className={`${TYPE.kicker} mb-6 text-center !text-orange-500 sm:mb-8`}>
           AS FEATURED IN

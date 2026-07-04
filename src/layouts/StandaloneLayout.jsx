@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { PageLoader } from '../components/PageLoader';
 import { motion } from 'framer-motion';
 import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
+import { TW_PAGE_ROOT } from '../utils/siteTokens';
 
 const SHELL_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
@@ -200,7 +201,9 @@ function StandaloneLayout() {
 
       <main className="contextual-main min-h-[calc(100vh-174px)]">
         <Suspense fallback={<PageLoader label="Loading…" />}>
-          <Outlet />
+          <div className={TW_PAGE_ROOT}>
+            <Outlet />
+          </div>
         </Suspense>
       </main>
 

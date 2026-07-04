@@ -50,12 +50,12 @@ export default function CourseFilterBar({
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="h-8 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-8 pr-3 font-body text-[0.6875rem] font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-[0.6875rem] placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:h-9 sm:pl-10 sm:text-xs sm:placeholder:text-xs"
+                className="h-9 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-9 pr-3 font-body text-xs font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-xs placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:pl-10 sm:text-sm sm:placeholder:text-sm"
               />
             </div>
 
             {/* Results count */}
-            <p className="order-2 shrink-0 whitespace-nowrap font-body text-[0.6875rem] font-medium leading-none text-site-muted antialiased sm:order-1 sm:text-xs">
+            <p className="order-2 shrink-0 whitespace-nowrap font-body text-xs font-medium leading-none text-site-muted antialiased sm:order-1 sm:text-sm">
               {loading ? 'Loading…' : (
                 <>
                   <span className="md:hidden">
@@ -93,7 +93,7 @@ export default function CourseFilterBar({
                 <button
                   type="button"
                   onClick={() => setCatOpen(v => !v)}
-                  className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1.5 font-body text-[0.6875rem] font-bold leading-none transition sm:hidden ${
+                  className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 font-body text-xs font-bold leading-none transition sm:hidden ${
                     hasActiveCategory
                       ? 'border-site-accent-dark bg-site-accent-dark text-white'
                       : 'border-site-accent-dark/15 bg-site-bg text-site-accent-dark'

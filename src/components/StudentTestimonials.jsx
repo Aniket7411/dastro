@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { MapPin, Star } from 'lucide-react';
 import { PAGE_WRAP } from './consultation/tokens';
 import HomeSectionHeader from './home/HomeSectionHeader';
 
@@ -54,75 +54,81 @@ const STUDENTS = [
   },
 ];
 
+const MARQUEE_ITEMS = [...STUDENTS, ...STUDENTS];
+
+const CARD_W = 'w-[17.5rem] sm:w-[18.5rem]';
+const CARD_H = 'h-[15.75rem] sm:h-[16.25rem]';
+
 function Stars({ rating }) {
   return (
     <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}
-          className={`h-3.5 w-3.5 ${i < rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200'}`}
+          className={`h-3 w-3 ${i < rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200'}`}
           aria-hidden
         />
       ))}
-      <span className="ml-1 font-body text-xs font-bold text-site-muted">{rating}.0</span>
     </div>
   );
 }
 
-function TestimonialCard({ item }) {
+function TestimonialCard({ item, index }) {
   return (
-    <article className="st-card flex h-full min-h-full w-[min(100%,18.5rem)] shrink-0 snap-start flex-col rounded-2xl border border-site-accent-dark/12 bg-white p-4 shadow-[0_4px_18px_rgba(42,15,2,0.07)] transition hover:-translate-y-0.5 hover:border-site-accent/30 hover:shadow-[0_12px_28px_rgba(42,15,2,0.1)] sm:w-[min(100%,20rem)] sm:p-5">
-      <span className="font-serif text-4xl leading-none text-site-accent/25" aria-hidden>
-        "
-      </span>
-      <p className="m-0 flex-1 text-sm leading-relaxed text-site-muted">{item.text}</p>
-      <Stars rating={item.rating} />
-      <div className="mt-3 flex items-center gap-3 border-t border-site-accent-dark/10 pt-3">
-        <img
-          src={item.img}
-          alt=""
-          className="h-11 w-11 shrink-0 rounded-full border-2 border-site-accent object-cover"
-          loading="lazy"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=8B4A1E&color=fff`;
-          }}
-        />
-        <div className="min-w-0">
-          <p className="m-0 truncate font-heading text-sm font-bold text-site-primary">{item.name}</p>
-          <p className="m-0 mt-0.5 flex items-center gap-1 text-xs text-site-muted">
-            <MapPin className="h-3 w-3 shrink-0" aria-hidden />
-            <span className="truncate">{item.location}</span>
-          </p>
-        </div>
-      </div>
-      <span className="mt-3 inline-flex w-fit rounded-full bg-site-accent/10 px-2.5 py-1 font-body text-[0.625rem] font-bold uppercase tracking-wide text-site-accent-dark">
+    <article
+      className={`st-card flex ${CARD_H} ${CARD_W} shrink-0 flex-col rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.06)] transition hover:border-site-accent/25 hover:shadow-[0_8px_24px_rgba(42,15,2,0.08)]`}
+      aria-label={`Review from ${item.name}`}
+    >
+      <span className="mb-2 inline-flex w-fit max-w-full truncate rounded-full bg-site-primary/6 px-2 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-wide text-site-primary">
         {item.course}
       </span>
+
+      <p className="m-0 line-clamp-4 flex-1 text-sm leading-snug text-site-muted">{item.text}</p>
+
+      <div className="mt-3 border-t border-site-accent-dark/8 pt-3">
+        <Stars rating={item.rating} />
+        <div className="mt-2.5 flex items-center gap-2.5">
+          <img
+            src={item.img}
+            alt=""
+            className="h-9 w-9 shrink-0 rounded-full border border-site-accent/30 object-cover"
+            loading={index < 4 ? 'eager' : 'lazy'}
+            decoding="async"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=8B4A1E&color=fff`;
+            }}
+          />
+          <div className="min-w-0">
+            <p className="m-0 truncate text-sm font-bold text-site-primary">{item.name}</p>
+            <p className="m-0 mt-0.5 flex items-center gap-1 text-[0.6875rem] text-site-soft">
+              <MapPin className="h-2.5 w-2.5 shrink-0" aria-hidden />
+              <span className="truncate">{item.location}</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </article>
   );
 }
 
 export default function StudentTestimonials() {
-  const trackRef = useRef(null);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [held, setHeld] = useState(false);
 
-  const scroll = (dir) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector('.st-card');
-    const gap = 16;
-    const amount = (card?.offsetWidth || 300) + gap;
-    track.scrollBy({ left: dir === 'next' ? amount : -amount, behavior: 'smooth' });
-  };
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
 
   return (
     <section
-      className="relative overflow-hidden border-t border-site-accent-dark/10 bg-white py-[clamp(2.5rem,6vw,4.5rem)]"
+      className="border-t border-site-accent-dark/8 bg-white py-[clamp(2.5rem,5vw,3.5rem)]"
       aria-labelledby="student-testimonials-heading"
     >
-      <div className="pointer-events-none absolute -right-16 top-8 h-48 w-48 rounded-full bg-site-accent/5" aria-hidden />
-      <div className="pointer-events-none absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-site-accent-dark/5" aria-hidden />
-
       <div className={PAGE_WRAP}>
         <HomeSectionHeader
           id="student-testimonials-heading"
@@ -130,41 +136,39 @@ export default function StudentTestimonials() {
           title="What Our"
           titleHighlight="Students Say"
           subtitle="Trusted by thousands of satisfied students across the globe."
+          showAccent
         />
 
-        <div className="relative px-1 sm:px-2">
-          <button
-            type="button"
-            onClick={() => scroll('prev')}
-            aria-label="Previous testimonials"
-            className="absolute -left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-site-accent-dark/15 bg-white text-site-primary shadow-md transition hover:bg-site-primary hover:text-white sm:flex md:-left-3"
-          >
-            <ChevronLeft className="h-5 w-5" aria-hidden />
-          </button>
-
-          <div
-            ref={trackRef}
-            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {STUDENTS.map((item) => (
-              <TestimonialCard key={item.name} item={item} />
-            ))}
+        <div
+          className="st-marquee relative"
+          onMouseEnter={() => setHeld(true)}
+          onMouseLeave={() => setHeld(false)}
+          onTouchStart={() => setHeld(true)}
+          onTouchEnd={() => setHeld(false)}
+          onTouchCancel={() => setHeld(false)}
+        >
+          <div className="st-marquee-viewport overflow-hidden" aria-label="Student testimonials">
+            <div
+              className={`st-marquee-track flex w-max items-stretch gap-3.5 sm:gap-4 ${
+                reduceMotion
+                  ? 'flex-wrap justify-center gap-4'
+                  : 'animate-[marquee-right_52s_linear_infinite] hover:[animation-play-state:paused] active:[animation-play-state:paused]'
+              } ${held && !reduceMotion ? '[animation-play-state:paused]' : ''}`}
+            >
+              {(reduceMotion ? STUDENTS : MARQUEE_ITEMS).map((item, index) => (
+                <TestimonialCard key={`${item.name}-${index}`} item={item} index={index} />
+              ))}
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => scroll('next')}
-            aria-label="Next testimonials"
-            className="absolute -right-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-site-accent-dark/15 bg-white text-site-primary shadow-md transition hover:bg-site-primary hover:text-white sm:flex md:-right-3"
-          >
-            <ChevronRight className="h-5 w-5" aria-hidden />
-          </button>
         </div>
-
-        <p className="m-0 mt-4 text-center text-xs text-site-soft sm:hidden">
-          Swipe to read more stories →
-        </p>
       </div>
+
+      <style>{`
+        .st-marquee-viewport {
+          mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+        }
+      `}</style>
     </section>
   );
 }
