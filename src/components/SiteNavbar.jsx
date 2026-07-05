@@ -389,19 +389,12 @@ export default function SiteNavbar({
         <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline z-20" aria-label={`${SITE_NAME} home`}>
-            <div className="premium-logo-wrapper relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-[62px] lg:h-[62px] rounded-full bg-gradient-to-br from-[#2a0f02] via-[#240d02] to-[#120601] border-2 border-site-accent/30 shadow-[0_4px_16px_rgba(42,15,2,0.16)] transition-all duration-300 hover:border-site-accent hover:shadow-[0_6px_24px_rgba(200,131,42,0.25)] hover:scale-105">
-              {/* Celestial Astrolabe Orbits */}
-              <div className="absolute -inset-1.5 rounded-full border border-dashed border-site-accent/35 animate-spin-slow pointer-events-none" />
-              <div className="absolute -inset-0.5 rounded-full border border-double border-site-accent/15 animate-spin-reverse-slow pointer-events-none" />
-              <div className="absolute inset-0 rounded-full bg-site-accent/6 opacity-0 blur-md transition-opacity duration-300 logo-glow pointer-events-none" />
-              
-              <img
-                src={SITE_LOGO}
-                alt={SITE_LOGO_ALT}
-                className="h-9 w-auto object-contain sm:h-10 lg:h-[44px] relative z-10"
-                fetchPriority="high"
-              />
-            </div>
+            <img
+              src={SITE_LOGO}
+              alt={SITE_LOGO_ALT}
+              className="h-11 w-11 sm:h-12 sm:w-12 lg:h-[52px] lg:w-[52px] object-cover shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+              fetchPriority="high"
+            />
           </Link>
 
           {/* Desktop navigation — centered */}
