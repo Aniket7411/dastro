@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
-import { isValidEmail } from '../utils/validation';
+import { isValidEmail, getPasswordValidationError } from '../utils/validation';
 import LoginBrandMark, { LOGIN_CARD_CLASS, LOGIN_PAGE_WRAP, LOGIN_PANEL_CLASS } from '../components/LoginBrandMark';
 
 const adminInputClass =
@@ -12,12 +12,19 @@ const adminInputClass =
 const adminSubmitClass =
   'flex min-h-11 w-full items-center justify-center gap-2 rounded-[0.625rem] border-0 bg-gradient-to-br from-site-primary to-site-accent-dark px-5 py-2.5 text-[0.9375rem] font-extrabold text-white shadow-[0_14px_30px_rgba(139,74,30,0.22)] transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-70';
 
+const adminSubmitSecondaryClass =
+  'flex min-h-11 w-full flex-1 items-center justify-center gap-2 rounded-[0.625rem] border border-site-accent/20 bg-[#fff7ed] px-5 py-2.5 text-[0.9375rem] font-extrabold text-[#6b3514] shadow-none transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-70';
+
 function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [viewState, setViewState] = useState('LOGIN'); // 'LOGIN', 'FORGOT', 'RESET'
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +72,133 @@ function AdminLogin() {
     }
   };
 
+  const requestPasswordResetOtp = async () => {
+    if (!isValidEmail(email)) {
+      toast.error('Please enter your registered admin email address');
+      return false;
+    }
+
+    setIsLoading(true);
+    setLoginError('');
+
+    try {
+      const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Password reset email sent. Please check your inbox.');
+        return true;
+      }
+
+      toast.error(data.message || 'Failed to process request');
+      return false;
+    } catch {
+      toast.error('Network error. Please try again.');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    const sent = await requestPasswordResetOtp();
+    if (sent) setViewState('RESET');
+  };
+
+  const handleResendOtp = async () => {
+    await requestPasswordResetOtp();
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    if (!otp) {
+      toast.error('Please enter the 6-digit OTP from your email');
+      return;
+    }
+
+    const passwordError = getPasswordValidationError(newPassword, confirmPassword);
+    if (passwordError) {
+      toast.error(passwordError);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), otp: otp.trim(), newPassword }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Password reset successful! You can now login.');
+        setViewState('LOGIN');
+        setPassword('');
+        setOtp('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        toast.error(data.message || 'Invalid OTP or expired');
+      }
+    } catch {
+      toast.error('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderPasswordField = (value, onChange, id, label = 'Password') => (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor={id}>
+          {label}
+        </label>
+        {viewState === 'LOGIN' ? (
+          <button
+            type="button"
+            className="border-0 bg-transparent p-0 text-xs font-bold text-site-accent-dark hover:text-site-primary"
+            onClick={() => {
+              setViewState('FORGOT');
+              setLoginError('');
+            }}
+          >
+            Forgot password?
+          </button>
+        ) : null}
+      </div>
+      <div className="relative flex items-center">
+        <i className="fas fa-lock pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
+        <input
+          id={id}
+          type={showPassword ? 'text' : 'password'}
+          className={adminInputClass}
+          placeholder="••••••••"
+          value={value}
+          onChange={onChange}
+          required
+        />
+        <button
+          type="button"
+          className="absolute right-2.5 border-0 bg-transparent p-1 text-sm text-[#b58b66] hover:text-site-accent"
+          onClick={() => setShowPassword(!showPassword)}
+          aria-label="Toggle password"
+        >
+          <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className={LOGIN_PAGE_WRAP}>
       <div
@@ -79,87 +213,194 @@ function AdminLogin() {
         className={LOGIN_CARD_CLASS}
       >
         <div className={LOGIN_PANEL_CLASS}>
-          <div className="mb-8">
-            <LoginBrandMark badge="Admin Portal" />
-            <h1 className="mt-3 font-heading text-[1.65rem] font-bold leading-tight text-site-primary">
-              Welcome back, Admin!
-            </h1>
-            <p className="mt-1.5 text-sm text-site-muted">
-              Securely sign in to manage the platform.
-            </p>
-          </div>
-          <form className="flex flex-col gap-4" onSubmit={handleLogin} aria-label="Admin sign in">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-email">
-                Email Address
-              </label>
-              <div className="relative flex items-center">
-                <i className="fas fa-envelope pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
-                <input
-                  id="admin-email"
-                  type="email"
-                  className={adminInputClass}
-                  placeholder="admin@dsastroinstitute.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoFocus
-                />
+          {viewState === 'LOGIN' && (
+            <>
+              <div className="mb-8">
+                <LoginBrandMark badge="Admin Portal" />
+                <h1 className="mt-3 font-heading text-[1.65rem] font-bold leading-tight text-site-primary">
+                  Welcome back, Admin!
+                </h1>
+                <p className="mt-1.5 text-sm text-site-muted">
+                  Securely sign in to manage the platform.
+                </p>
               </div>
-            </div>
+              <form className="flex flex-col gap-4" onSubmit={handleLogin} aria-label="Admin sign in">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-email">
+                    Email Address
+                  </label>
+                  <div className="relative flex items-center">
+                    <i className="fas fa-envelope pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
+                    <input
+                      id="admin-email"
+                      type="email"
+                      className={adminInputClass}
+                      placeholder="admin@dsastroinstitute.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoFocus
+                    />
+                  </div>
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-password">
-                Password
-              </label>
-              <div className="relative flex items-center">
-                <i className="fas fa-lock pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
-                <input
-                  id="admin-password"
-                  type={showPassword ? 'text' : 'password'}
-                  className={adminInputClass}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  className="absolute right-2.5 border-0 bg-transparent p-1 text-sm text-[#b58b66] hover:text-site-accent"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true" />
+                {renderPasswordField(password, (e) => setPassword(e.target.value), 'admin-password')}
+
+                <AnimatePresence>
+                  {loginError && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex items-center gap-2 rounded-lg border border-red-600/25 bg-red-100/50 px-3.5 py-2.5 text-[0.8125rem] text-red-700"
+                      role="alert"
+                    >
+                      <i className="fas fa-exclamation-circle" aria-hidden="true" />
+                      <span>{loginError}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <button type="submit" className={adminSubmitClass} disabled={isLoading}>
+                  {isLoading ? (
+                    <span
+                      className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    'Sign in'
+                  )}
                 </button>
+              </form>
+            </>
+          )}
+
+          {viewState === 'FORGOT' && (
+            <>
+              <div className="mb-6">
+                <LoginBrandMark badge="Admin Recovery" />
+                <h1 className="mt-3 font-heading text-xl font-bold text-site-primary sm:text-2xl">
+                  Reset password
+                </h1>
+                <p className="mt-1 text-sm text-site-muted">
+                  Enter your registered admin email to receive an OTP.
+                </p>
               </div>
-            </div>
 
-            <AnimatePresence>
-              {loginError && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-2 rounded-lg border border-red-600/25 bg-red-100/50 px-3.5 py-2.5 text-[0.8125rem] text-red-700"
-                  role="alert"
-                >
-                  <i className="fas fa-exclamation-circle" aria-hidden="true" />
-                  <span>{loginError}</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-forgot-email">
+                    Registered email
+                  </label>
+                  <div className="relative flex items-center">
+                    <i className="fas fa-envelope pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
+                    <input
+                      id="admin-forgot-email"
+                      type="email"
+                      className={adminInputClass}
+                      placeholder="admin@dsastroinstitute.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoFocus
+                    />
+                  </div>
+                </div>
 
-            <button type="submit" className={adminSubmitClass} disabled={isLoading}>
-              {isLoading ? (
-                <span
-                  className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white"
-                  aria-hidden="true"
-                />
-              ) : (
-                'Sign in'
-              )}
-            </button>
-          </form>
+                <div className="mt-2 flex gap-3">
+                  <button
+                    type="button"
+                    className={adminSubmitSecondaryClass}
+                    onClick={() => setViewState('LOGIN')}
+                    disabled={isLoading}
+                  >
+                    Back
+                  </button>
+                  <button type="submit" className={`${adminSubmitClass} mt-0 flex-1`} disabled={isLoading}>
+                    {isLoading ? (
+                      <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white" aria-hidden="true" />
+                    ) : 'Send OTP'}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+
+          {viewState === 'RESET' && (
+            <>
+              <div className="mb-6">
+                <LoginBrandMark badge="Admin Reset" />
+                <h1 className="mt-3 font-heading text-xl font-bold text-site-primary sm:text-2xl">
+                  Set new password
+                </h1>
+                <p className="mt-1 text-sm text-site-muted">
+                  Enter the 6-digit OTP sent to{' '}
+                  <span className="font-semibold text-site-primary">{email}</span>
+                </p>
+              </div>
+
+              <form className="flex flex-col gap-4" onSubmit={handleResetPassword}>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-muted" htmlFor="admin-reset-otp">
+                    6-digit OTP
+                  </label>
+                  <div className="relative flex items-center">
+                    <i className="fas fa-key pointer-events-none absolute left-3.5 text-[0.8125rem] text-[#b58b66]" aria-hidden="true" />
+                    <input
+                      id="admin-reset-otp"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      className={adminInputClass}
+                      placeholder="123456"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      required
+                      maxLength={6}
+                      autoFocus
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="self-start border-0 bg-transparent p-0 text-xs font-bold text-site-accent-dark hover:text-site-primary disabled:opacity-60"
+                    onClick={handleResendOtp}
+                    disabled={isLoading}
+                  >
+                    Resend OTP
+                  </button>
+                </div>
+
+                {renderPasswordField(newPassword, (e) => setNewPassword(e.target.value), 'admin-new-password', 'New password')}
+                {renderPasswordField(
+                  confirmPassword,
+                  (e) => setConfirmPassword(e.target.value),
+                  'admin-confirm-password',
+                  'Confirm password'
+                )}
+
+                <div className="mt-2 flex gap-3">
+                  <button
+                    type="button"
+                    className={adminSubmitSecondaryClass}
+                    onClick={() => {
+                      setViewState('LOGIN');
+                      setOtp('');
+                      setNewPassword('');
+                      setConfirmPassword('');
+                    }}
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className={`${adminSubmitClass} mt-0 flex-1`} disabled={isLoading}>
+                    {isLoading ? (
+                      <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white" aria-hidden="true" />
+                    ) : 'Reset password'}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
         </div>
 
         <div className="relative hidden min-[860px]:block min-[860px]:flex-1 overflow-hidden bg-gradient-to-br from-site-primary to-site-accent-dark" aria-hidden="true">
