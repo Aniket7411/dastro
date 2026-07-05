@@ -390,9 +390,9 @@ export default function SiteNavbar({
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline z-20" aria-label={`${SITE_NAME} home`}>
             <img
-              src={SITE_LOGO}
+              src={`${SITE_LOGO}?v=3`}
               alt={SITE_LOGO_ALT}
-              className="h-11 w-11 sm:h-12 sm:w-12 lg:h-[52px] lg:w-[52px] object-cover shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+              className="h-11 w-11 sm:h-12 sm:w-12 lg:h-[52px] lg:w-[52px] object-cover bg-transparent"
               fetchPriority="high"
             />
           </Link>
@@ -440,7 +440,7 @@ export default function SiteNavbar({
       >
         <div className="flex items-center justify-between border-b border-site-accent-dark/15 px-4 py-3">
           <Link to="/" onClick={closeMobile} className="flex items-center gap-2 no-underline">
-            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-10 w-auto" />
+            <img src={`${SITE_LOGO}?v=3`} alt={SITE_LOGO_ALT} className="h-10 w-auto" />
             <span className="font-heading text-sm font-bold text-site-accent-dark">{SITE_NAME}</span>
           </Link>
           <button

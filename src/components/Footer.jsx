@@ -446,7 +446,7 @@ function Footer() {
           <div className="fb-grid">
             <div>
               <Link to="/" className="fb-logo">
-                <img className="fb-logo-img" src={SITE_LOGO} alt={SITE_LOGO_ALT} />
+                <img className="fb-logo-img" src={`${SITE_LOGO}?v=3`} alt={SITE_LOGO_ALT} />
               </Link>
               <p className="fb-desc" style={{ marginBottom: '15px' }}>India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
               
@@ -573,7 +573,7 @@ function Footer() {
 
           {/* Logo */}
           <Link to="/" className="fb-logo">
-            <img className="fb-logo-img" src={SITE_LOGO} alt={SITE_LOGO_ALT} />
+            <img className="fb-logo-img" src={`${SITE_LOGO}?v=3`} alt={SITE_LOGO_ALT} />
           </Link>
 
           {/* Description */}

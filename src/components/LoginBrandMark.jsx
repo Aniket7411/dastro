@@ -11,7 +11,7 @@ export default function LoginBrandMark({ badge, className = '' }) {
     >
       <span className="flex h-9 w-[7.25rem] shrink-0 items-center justify-start sm:h-10 sm:w-[8rem]">
         <img
-          src={SITE_LOGO}
+          src={`${SITE_LOGO}?v=3`}
           alt={SITE_LOGO_ALT}
           className="!block !h-full !w-full !max-h-full !max-w-full object-contain object-left"
         />

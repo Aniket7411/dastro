@@ -252,7 +252,7 @@ function AdminDashboard() {
             aria-label="Go to website home"
           >
             <img
-              src={SITE_LOGO}
+              src={`${SITE_LOGO}?v=3`}
               alt={SITE_LOGO_ALT}
               className="h-8 w-auto max-w-[120px] shrink-0 rounded-md bg-white/95 object-contain px-1.5 py-0.5 sm:h-9"
             />
