@@ -1010,8 +1010,11 @@ function Home() {
                   <figure className="about-img-left" data-aos="fade-right" data-aos-once="true">
                     <img alt="Damini with Akshay Kumar" src="/images/about_akshay.png" loading="lazy" decoding="async" />
                   </figure>
-                  <figure className="about-img-right" data-aos="fade-left" data-aos-once="true" data-aos-delay="150">
+                  <figure className="about-img-right-top" data-aos="fade-left" data-aos-once="true" data-aos-delay="100">
                     <img alt="Damini with Aly Goni" src="/images/about_aly.jpg" loading="lazy" decoding="async" />
+                  </figure>
+                  <figure className="about-img-right-bottom" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
+                    <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
                     <h4>16+</h4>
@@ -2630,8 +2633,9 @@ function Home() {
         .img-box01 {
           display: grid !important;
           grid-template-columns: 1.10fr 0.90fr !important;
+          grid-template-rows: 1fr 1fr !important;
           gap: 16px !important;
-          height: 500px !important;
+          height: 520px !important;
           margin-bottom: 60px !important;
           position: relative !important;
           width: 100% !important;
@@ -2648,7 +2652,7 @@ function Home() {
 
         .about-img-left {
           grid-column: 1 !important;
-          grid-row: 1 !important;
+          grid-row: 1 / span 2 !important;
           height: 100% !important;
           margin: 0 !important;
           overflow: hidden !important;
@@ -2669,15 +2673,31 @@ function Home() {
           transform: scale(1.03) !important;
         }
 
-        .about-img-right {
+        .about-img-right-top {
           grid-column: 2 !important;
           grid-row: 1 !important;
-          height: 90% !important;
-          margin: 10% 0 0 0 !important;
-          overflow: hidden !important;
         }
 
-        .about-img-right img {
+        .about-img-right-top img {
+          border-radius: 24px !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          object-position: center !important;
+          box-shadow: var(--premium-shadow);
+          transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        }
+
+        .about-img-right-top:hover img {
+          transform: scale(1.03) !important;
+        }
+
+        .about-img-right-bottom {
+          grid-column: 2 !important;
+          grid-row: 2 !important;
+        }
+
+        .about-img-right-bottom img {
           border-radius: 24px !important;
           transform: none !important;
           width: 100% !important;
@@ -2688,7 +2708,7 @@ function Home() {
           transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
         }
 
-        .about-img-right:hover img {
+        .about-img-right-bottom:hover img {
           transform: scale(1.03) !important;
         }
 
@@ -3018,14 +3038,17 @@ function Home() {
           .banner-section { text-align: center; }
           .banner-desc { margin: 0 auto 1rem; max-width: 36rem; }
           
-          /* Offset Grid Collage for Mobile */
+          /* Offset Grid Collage for Tablet */
           .img-box01 {
+            grid-template-columns: 1.10fr 0.90fr !important;
+            grid-template-rows: 1fr 1fr !important;
             gap: 12px !important;
-            height: 300px !important;
+            height: 380px !important;
             margin-bottom: 60px !important;
           }
           .about-img-left img,
-          .about-img-right img {
+          .about-img-right-top img,
+          .about-img-right-bottom img {
             border-radius: 16px !important;
           }
           .experience-badge {
@@ -3045,6 +3068,33 @@ function Home() {
         }
 
         @media (max-width: 767px) {
+          .img-box01 {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: auto auto !important;
+            gap: 12px !important;
+            height: auto !important;
+            margin-bottom: 40px !important;
+          }
+          .about-img-left {
+            grid-column: 1 / span 2 !important;
+            grid-row: 1 !important;
+            height: 260px !important;
+          }
+          .about-img-right-top {
+            grid-column: 1 !important;
+            grid-row: 2 !important;
+            height: 160px !important;
+          }
+          .about-img-right-bottom {
+            grid-column: 2 !important;
+            grid-row: 2 !important;
+            height: 160px !important;
+          }
+          .experience-badge {
+            bottom: -20px !important;
+          }
+
           .banner-section {
             padding-top: clamp(0.85rem, 2.5vw, 1.25rem) !important;
             padding-bottom: clamp(3.5rem, 10vw, 4.5rem) !important;
