@@ -283,6 +283,27 @@ function AdminLeads({ activeFilter }) {
             right: 0 !important;
           }
         }
+        .date-input-container {
+          position: relative;
+          width: 100%;
+        }
+        .date-input-empty {
+          color: transparent !important;
+        }
+        .date-input-placeholder {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #94a3b8;
+          pointer-events: none;
+          font-size: 13px;
+        }
+        @media (max-width: 640px) {
+          .date-input-placeholder {
+            font-size: 12px;
+          }
+        }
       `}</style>
       {/* Search & filters */}
       <div className="mb-4 space-y-3">
@@ -322,22 +343,32 @@ function AdminLeads({ activeFilter }) {
             <option value="FAILED">Failed</option>
             <option value="NOT REQUIRED">Not Required</option>
           </select>
-          <input
-            type="date"
-            name="startDate"
-            value={filters.startDate}
-            onChange={handleFilterChange}
-            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
-            title="Start date"
-          />
-          <input
-            type="date"
-            name="endDate"
-            value={filters.endDate}
-            onChange={handleFilterChange}
-            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
-            title="End date"
-          />
+          <div className="date-input-container">
+            <input
+              type="date"
+              name="startDate"
+              value={filters.startDate}
+              onChange={handleFilterChange}
+              className={`h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.startDate ? 'date-input-empty' : ''}`}
+              title="Start date"
+            />
+            {!filters.startDate && (
+              <span className="date-input-placeholder">Start Date</span>
+            )}
+          </div>
+          <div className="date-input-container">
+            <input
+              type="date"
+              name="endDate"
+              value={filters.endDate}
+              onChange={handleFilterChange}
+              className={`h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.endDate ? 'date-input-empty' : ''}`}
+              title="End date"
+            />
+            {!filters.endDate && (
+              <span className="date-input-placeholder">End Date</span>
+            )}
+          </div>
           <div className="col-span-2 flex gap-2 sm:col-span-1 lg:col-span-1 lg:ml-auto">
               {/* Excel export dropdown */}
               <div className="position-relative" ref={exportBtnRef}>
