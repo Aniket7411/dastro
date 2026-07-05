@@ -1007,14 +1007,11 @@ function Home() {
               {/* Image — second on mobile (inward), first on desktop */}
               <div className="col-lg-6 order-2 order-lg-1 px-4 px-sm-5 px-lg-3">
                 <div className="img-box01 position-relative">
-                  <figure className="moon-img" data-aos="fade-right" data-aos-once="true">
-                    <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
-                  </figure>
-                  <figure className="floating-element" data-aos="fade-left" data-aos-once="true" data-aos-delay="100">
-                    <img alt="Damini with Aly Goni" src="/images/about_aly.jpg" loading="lazy" decoding="async" />
-                  </figure>
-                  <figure className="bottom-img" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
+                  <figure className="about-img-left" data-aos="fade-right" data-aos-once="true">
                     <img alt="Damini with Akshay Kumar" src="/images/about_akshay.png" loading="lazy" decoding="async" />
+                  </figure>
+                  <figure className="about-img-right" data-aos="fade-left" data-aos-once="true" data-aos-delay="150">
+                    <img alt="Damini with Aly Goni" src="/images/about_aly.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
                     <h4>16+</h4>
@@ -2649,12 +2646,15 @@ function Home() {
           overflow: hidden !important;
         }
 
-        .bottom-img {
+        .about-img-left {
           grid-column: 1 !important;
-          grid-row: 1 / span 2 !important;
+          grid-row: 1 !important;
+          height: 100% !important;
+          margin: 0 !important;
+          overflow: hidden !important;
         }
 
-        .bottom-img img {
+        .about-img-left img {
           border-radius: 24px !important;
           transform: none !important;
           width: 100% !important;
@@ -2662,33 +2662,34 @@ function Home() {
           object-fit: cover !important;
           object-position: top !important;
           box-shadow: var(--premium-shadow);
+          transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
         }
 
-        .moon-img {
+        .about-img-left:hover img {
+          transform: scale(1.03) !important;
+        }
+
+        .about-img-right {
           grid-column: 2 !important;
           grid-row: 1 !important;
+          height: 90% !important;
+          margin: 10% 0 0 0 !important;
+          overflow: hidden !important;
         }
 
-        .moon-img img {
-          border-radius: 24px !important;
-          width: 100% !important;
-          height: 100% !important;
-          object-fit: cover !important;
-          box-shadow: var(--premium-shadow);
-        }
-
-        .floating-element {
-          grid-column: 2 !important;
-          grid-row: 2 !important;
-        }
-
-        .floating-element img {
+        .about-img-right img {
           border-radius: 24px !important;
           transform: none !important;
           width: 100% !important;
           height: 100% !important;
           object-fit: cover !important;
+          object-position: center !important;
           box-shadow: var(--premium-shadow);
+          transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        }
+
+        .about-img-right:hover img {
+          transform: scale(1.03) !important;
         }
 
         .experience-badge {
@@ -3023,9 +3024,8 @@ function Home() {
             height: 300px !important;
             margin-bottom: 60px !important;
           }
-          .bottom-img img,
-          .moon-img img,
-          .floating-element img {
+          .about-img-left img,
+          .about-img-right img {
             border-radius: 16px !important;
           }
           .experience-badge {
