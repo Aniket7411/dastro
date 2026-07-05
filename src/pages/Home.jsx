@@ -1011,10 +1011,10 @@ function Home() {
                     <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <figure className="floating-element" data-aos="fade-left" data-aos-once="true" data-aos-delay="100">
-                    <img alt="woman" src="/images/bg-bannerpic.jpg" loading="lazy" decoding="async" />
+                    <img alt="Damini with Aly Goni" src="/images/about_aly.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <figure className="bottom-img" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
-                    <img alt="tarot" src="/images/premium_tarot.png" loading="lazy" decoding="async" />
+                    <img alt="Damini with Akshay Kumar" src="/images/about_akshay.png" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
                     <h4>16+</h4>
@@ -1388,6 +1388,8 @@ function Home() {
           fill: currentColor;
           flex-shrink: 0;
         }
+
+
 
         .mystic-btn-outline {
           background: #FFFFFF;
@@ -2658,6 +2660,7 @@ function Home() {
           width: 100% !important;
           height: 100% !important;
           object-fit: cover !important;
+          object-position: top !important;
           box-shadow: var(--premium-shadow);
         }
 
