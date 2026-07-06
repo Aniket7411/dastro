@@ -43,7 +43,7 @@ const NAV_ACTION_BTN =
   'inline-flex items-center justify-center gap-1.5 !rounded-full border-0 px-4 py-2 text-[0.6875rem] font-bold uppercase tracking-[0.06em] transition hover:-translate-y-px sm:px-[1.125rem] sm:py-2.5 sm:text-xs';
 
 const COURSE_LINKS = [
-  { label: 'Live Classes', to: '/live-courses', Icon: Radio },
+  { label: 'Live Courses', to: '/live-courses', Icon: Radio },
   { label: 'Recorded Courses', to: '/recorded-courses', Icon: PlayCircle },
 ];
 
