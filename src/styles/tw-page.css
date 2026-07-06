@@ -14,23 +14,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.tw-page :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote) {
-  margin: 0;
-  font-family: inherit;
-}
+/* In @layer base so Tailwind gap / py / pt / pb utilities always win */
+@layer base {
+  .tw-page :where(h1, h2, h3, h4, h5, h6) {
+    margin: 0;
+  }
 
-.tw-page .wb-hero-title {
-  display: block !important;
-  width: 100% !important;
-  max-width: 42rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
+  .tw-page :where(p, ul, ol, li, figure, blockquote, dl, dt, dd) {
+    margin: 0;
+    font-family: inherit;
+  }
 
-.tw-page :where(a) {
-  color: inherit;
-  text-decoration: none;
+  .tw-page :where(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .tw-page :where(button) {
+    margin: 0;
+    letter-spacing: normal;
+    text-transform: none;
+  }
 }
 
 /* Webinar landing — own palette; opt out of site cream theme */
@@ -57,8 +61,13 @@
   text-align: center !important;
 }
 
-.tw-page :where(button, input, select, textarea) {
-  font-family: var(--font-body) !important;
+.tw-page .wb-hero-title {
+  display: block !important;
+  width: 100% !important;
+  max-width: 42rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
 }
 
 .tw-page :where(label) {
@@ -73,10 +82,8 @@
   margin: 0 !important;
 }
 
-.tw-page :where(button) {
-  margin: 0;
-  letter-spacing: normal;
-  text-transform: none;
+.tw-page :where(button, input, select, textarea) {
+  font-family: var(--font-body) !important;
 }
 
 /* Form field pattern — label + input with consistent rhythm */

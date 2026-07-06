@@ -41,11 +41,14 @@ function MetaChip({ children }) {
   );
 }
 
+const SECTION_TITLE =
+  'font-heading text-base font-bold leading-snug text-site-primary sm:text-lg';
+
 function Section({ title, children }) {
   if (!children) return null;
   return (
-    <section className="border-t border-site-accent-dark/8 pt-3.5 first:border-t-0 first:pt-0 sm:pt-4">
-      <h2 className={`${TYPE.h2} !mb-2 !text-base sm:!text-lg`}>{title}</h2>
+    <section className="flex flex-col gap-1.5">
+      <h2 className={SECTION_TITLE}>{title}</h2>
       {children}
     </section>
   );
@@ -61,11 +64,11 @@ function CourseFacts({ course }) {
   if (!items.length) return null;
 
   return (
-    <dl className="!m-0 !mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">
+    <dl className="flex flex-wrap gap-x-4 gap-y-1.5">
       {items.map(({ label, value }) => (
         <div key={label} className="inline-flex min-w-0 items-baseline gap-1.5">
           <dt className="font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">{label}</dt>
-          <dd className="!m-0 font-body text-sm font-semibold text-site-primary">{value}</dd>
+          <dd className="font-body text-sm font-semibold text-site-primary">{value}</dd>
         </div>
       ))}
     </dl>
@@ -561,7 +564,7 @@ function CourseDetail() {
   const overviewSection =
     course.longDesc && course.longDesc !== course.shortDesc ? (
       <Section title="Overview">
-        <p className={`${TYPE.bodySm} whitespace-pre-line !text-sm leading-relaxed`}>{course.longDesc}</p>
+        <p className={`${TYPE.bodySm} whitespace-pre-line text-sm leading-relaxed`}>{course.longDesc}</p>
       </Section>
     ) : null;
 
@@ -583,22 +586,26 @@ function CourseDetail() {
     <div className={PAGE}>
       <SEO title={course.title} description={course.shortDesc} url={`/courses/${course.slug || course.id}`} />
 
-      <section className="border-b border-site-accent-dark/8 pt-3 pb-8 sm:pt-4 sm:pb-10 lg:pt-5 lg:pb-12">
+      <section className="border-b border-site-accent-dark/8 py-4 sm:py-5">
         <div className={PAGE_WRAP}>
-          <Link to={listPath} className={`${TYPE.backLink} !mb-3 sm:!mb-4`}>
+          <Link
+            to={listPath}
+            className="mb-2 inline-flex items-center gap-1.5 font-body text-xs font-semibold text-site-accent-dark no-underline transition hover:text-site-accent sm:mb-2.5 sm:text-sm"
+          >
             <ArrowLeft size={15} aria-hidden />
             {isLiveCourse ? 'All live classes' : 'All recorded courses'}
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_19rem]">
-            <div className="min-w-0">
-              {course.image ? (
-                <div className="relative mb-4 h-40 w-full overflow-hidden rounded-xl border border-site-accent-dark/10 shadow-sm sm:h-48 lg:hidden">
-                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
-                </div>
-              ) : null}
+          <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_19rem]">
+            <div className="flex min-w-0 flex-col">
+              <div className="flex flex-col gap-2">
+                {course.image ? (
+                  <div className="relative h-40 w-full overflow-hidden rounded-xl border border-site-accent-dark/10 shadow-sm sm:h-48 lg:hidden">
+                    <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                  </div>
+                ) : null}
 
-              <div className="mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
                 {course.tier ? (
                   <span
@@ -628,13 +635,14 @@ function CourseDetail() {
 
               <h1 className={TYPE.h1}>{course.title}</h1>
               {course.shortDesc ? (
-                <p className={`${TYPE.bodySm} !mt-2 max-w-2xl !text-sm`}>{course.shortDesc}</p>
+                <p className={`${TYPE.bodySm} max-w-2xl text-sm`}>{course.shortDesc}</p>
               ) : null}
               <CourseFacts course={course} />
+              </div>
 
               {(previewLoading || previewVideos.length > 0) && (
-                <div className="mt-4">
-                  <p className="!mb-2 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
+                <div className="mt-3 flex flex-col gap-1.5">
+                  <p className="font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
                     Introductory video
                   </p>
                   <CoursePreviewPlayer
@@ -646,18 +654,16 @@ function CourseDetail() {
                 </div>
               )}
 
-              {overviewSection ? <div className="mt-4 lg:hidden">{overviewSection}</div> : null}
-
-              <div className="mt-4 rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-sm lg:hidden">
+              <div className="mt-3 rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-sm lg:hidden">
                 <EnrollPanel {...enrollPanelProps} />
               </div>
 
-              <div className="mt-4 space-y-4 sm:mt-5">
-                {overviewSection ? <div className="hidden lg:block">{overviewSection}</div> : null}
+              <div className="mt-3 flex flex-col gap-4 sm:gap-5">
+                {overviewSection}
 
                 {course.topics?.length > 0 ? (
                   <Section title="What you will learn">
-                    <ul className="m-0 grid list-none gap-1.5 p-0 sm:grid-cols-2 sm:gap-2">
+                    <ul className="grid list-none gap-2 p-0 sm:grid-cols-2 sm:gap-3">
                       {course.topics.map((topic) => (
                         <li key={topic} className="flex items-start gap-2 font-body text-sm text-site-primary">
                           <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
@@ -678,18 +684,18 @@ function CourseDetail() {
 
                 {course.curriculum?.length > 0 ? (
                   <Section title="Curriculum">
-                    <ul className="m-0 space-y-3 p-0">
+                    <ul className="flex list-none flex-col gap-2.5 p-0 sm:gap-3">
                       {course.curriculum.map((module, i) => (
                         <li
                           key={module.title || i}
                           className="rounded-lg border border-site-accent-dark/10 bg-white p-3.5 sm:p-4"
                         >
-                          <p className="!m-0 flex items-center gap-2 font-heading text-sm font-bold text-site-primary">
+                          <p className="flex items-center gap-2 font-heading text-sm font-bold text-site-primary">
                             <Layers size={14} className="text-site-accent-dark" aria-hidden />
                             {module.title}
                           </p>
                           {module.lessons?.length > 0 ? (
-                            <ul className="!mt-2 !mb-0 list-disc space-y-1 pl-5 font-body text-xs text-site-muted sm:text-sm">
+                            <ul className="mt-3 list-disc space-y-1.5 pl-5 font-body text-xs text-site-muted sm:text-sm">
                               {module.lessons.map((lesson, j) => (
                                 <li key={j}>{lesson}</li>
                               ))}
@@ -703,7 +709,7 @@ function CourseDetail() {
 
                 {isLiveCourse && course.batchDetails ? (
                   <Section title="Batch details">
-                    <dl className="m-0 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {course.batchDetails.startDate ? (
                         <div className="rounded-lg border border-site-accent-dark/10 bg-white px-3 py-2.5">
                           <dt className="font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">Start date</dt>
@@ -743,9 +749,9 @@ function CourseDetail() {
                         />
                       ) : null}
                       <div>
-                        <p className="!m-0 font-heading text-base font-bold text-site-primary">{course.instructor}</p>
+                        <p className="font-heading text-base font-bold text-site-primary">{course.instructor}</p>
                         {course.instructorBio ? (
-                          <p className={`${TYPE.bodySm} !mt-1 !text-sm`}>{course.instructorBio}</p>
+                          <p className={`${TYPE.bodySm} mt-1 text-sm`}>{course.instructorBio}</p>
                         ) : null}
                       </div>
                     </div>
@@ -754,11 +760,11 @@ function CourseDetail() {
 
                 {course.faqs?.length > 0 ? (
                   <Section title="FAQs">
-                    <div className="space-y-3">
+                    <div className="flex flex-col gap-2.5">
                       {course.faqs.map((faq, i) => (
                         <div key={faq.question || i} className="rounded-lg border border-site-accent-dark/10 bg-white p-3.5">
-                          <p className="!m-0 font-body text-sm font-bold text-site-primary">{faq.question}</p>
-                          <p className={`${TYPE.bodySm} !mt-1 !text-sm`}>{faq.answer}</p>
+                          <p className="font-body text-sm font-bold text-site-primary">{faq.question}</p>
+                          <p className={`${TYPE.bodySm} mt-1.5 text-sm`}>{faq.answer}</p>
                         </div>
                       ))}
                     </div>
@@ -771,13 +777,13 @@ function CourseDetail() {
                       {course.testimonials.map((t, i) => (
                         <blockquote
                           key={t.name || i}
-                          className="!m-0 rounded-lg border border-site-accent-dark/10 bg-white p-3.5"
+                          className="rounded-lg border border-site-accent-dark/10 bg-white p-3.5"
                         >
-                          <p className="!m-0 font-body text-sm italic leading-relaxed text-site-muted">
+                          <p className="font-body text-sm italic leading-relaxed text-site-muted">
                             &ldquo;{t.quote || t.text || t.message}&rdquo;
                           </p>
                           {(t.name || t.author) && (
-                            <footer className="!mt-2 font-body text-xs font-bold text-site-primary">
+                            <footer className="mt-2 font-body text-xs font-bold text-site-primary">
                               — {t.name || t.author}
                             </footer>
                           )}

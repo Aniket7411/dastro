@@ -66,7 +66,7 @@ export function ConsultationFilterBar({
   return (
     <div className={FILTER_BAR}>
       <div className={PAGE_WRAP}>
-        <div className="py-2 lg:py-3">
+        <div className="py-1.5 lg:py-2">
 
           {/* ── Top row: Categories toggle + Results | Sort ── */}
           <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 sm:gap-x-3">

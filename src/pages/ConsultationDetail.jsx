@@ -37,6 +37,9 @@ const BADGE_STYLES = {
   green: 'border-emerald-200 bg-emerald-50 text-emerald-800',
 };
 
+const SECTION_TITLE = 'font-heading text-base font-bold leading-snug text-site-primary sm:text-lg';
+const SUBSECTION_TITLE = 'font-heading text-sm font-bold leading-snug text-site-primary sm:text-base';
+
 const TRUST_POINTS = [
   { icon: Shield, title: 'Private session', desc: 'Your chart and conversation stay confidential.' },
   { icon: FileText, title: 'Structured review', desc: 'Focused analysis on your chosen life area.' },
@@ -80,15 +83,15 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
         </div>
       ) : null}
 
-      <div className={`space-y-2 ${compact ? 'p-3 sm:p-3.5' : 'p-3.5'}`}>
-        <div className={compact ? 'flex flex-wrap items-end justify-between gap-3' : ''}>
+      <div className={`space-y-2.5 ${compact ? 'p-3' : 'p-3.5'}`}>
+        <div className={compact ? 'flex flex-wrap items-end justify-between gap-2.5' : ''}>
           <div>
-            <p className="!m-0 font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">
+            <p className="font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">
               Session fee
             </p>
             <PriceBlock price={service.price} mrp={service.mrp} size="detail" />
             {service.duration ? (
-              <p className={`${TYPE.caption} !mt-0.5 !text-[0.75rem]`}>{service.duration} consultation</p>
+              <p className={`${TYPE.caption} mt-0.5 text-[0.75rem]`}>{service.duration} consultation</p>
             ) : null}
           </div>
           {compact ? (
@@ -161,7 +164,7 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
         ) : null}
 
         {paymentNote && ONLINE_PAYMENT_ENABLED ? (
-          <p className={`${TYPE.caption} !flex items-start gap-1.5 !text-[0.6875rem]`}>
+          <p className={`${TYPE.caption} flex items-start gap-1.5 text-[0.6875rem]`}>
             <Info size={12} className="mt-0.5 shrink-0 text-site-accent-dark" aria-hidden />
             {paymentNote}
           </p>
@@ -291,37 +294,65 @@ function ConsultationDetail() {
 
       <section className="border-b border-site-accent-dark/8 py-4 sm:py-5">
         <div className={PAGE_WRAP}>
-          <Link to="/book-consultation" className={`${TYPE.backLink} !mb-3 sm:!mb-3.5`}>
+          <Link
+            to="/book-consultation"
+            className="mb-2 inline-flex items-center gap-1.5 font-body text-xs font-semibold text-site-accent-dark no-underline transition hover:text-site-accent sm:mb-2.5 sm:text-sm"
+          >
             <ArrowLeft size={14} aria-hidden />
             All consultations
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_16.5rem] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_18rem]">
-            <div className="min-w-0">
-              <div className="mb-2 flex flex-wrap items-center gap-1.5">
-                {service.category ? <span className={TYPE.kicker}>{service.category}</span> : null}
-                {service.badge ? (
-                  <MetaChip className={`!border ${badgeStyle}`}>{service.badge}</MetaChip>
+          <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1fr)_16.5rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
+            <div className="flex min-w-0 flex-col">
+              <div className="flex flex-col gap-2">
+                {service.img ? (
+                  <div className="relative h-32 w-full overflow-hidden rounded-xl border border-site-accent-dark/10 shadow-sm sm:h-36 lg:hidden">
+                    <img
+                      src={service.img}
+                      alt={displayTitle}
+                      className="block h-full w-full object-cover"
+                    />
+                    {service.badge ? (
+                      <span
+                        className={`absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white shadow-sm sm:text-[10px] ${badgeBg(service.badgeColor)}`}
+                      >
+                        {service.badge}
+                      </span>
+                    ) : null}
+                    {service.duration ? (
+                      <span className="absolute bottom-2 right-2 inline-flex items-center gap-0.5 rounded-full bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm sm:text-[10px]">
+                        <Clock size={9} aria-hidden />
+                        {service.duration}
+                      </span>
+                    ) : null}
+                  </div>
                 ) : null}
-                {service.duration ? (
-                  <MetaChip>
-                    <Clock size={10} className="text-site-accent" aria-hidden />
-                    {service.duration}
-                  </MetaChip>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {service.category ? <span className={TYPE.kicker}>{service.category}</span> : null}
+                  {service.badge ? (
+                    <MetaChip className={`border ${badgeStyle}`}>{service.badge}</MetaChip>
+                  ) : null}
+                  {service.duration ? (
+                    <MetaChip>
+                      <Clock size={10} className="text-site-accent" aria-hidden />
+                      {service.duration}
+                    </MetaChip>
+                  ) : null}
+                </div>
+
+                <h1 className={TYPE.h1}>{displayTitle}</h1>
+                {showFullTitle ? (
+                  <p className={`${TYPE.caption} text-[0.75rem] text-site-muted`}>{service.title}</p>
                 ) : null}
+
+                <p className="max-w-2xl font-body text-[0.8125rem] leading-snug text-site-muted sm:text-sm">
+                  {service.desc}
+                </p>
               </div>
 
-              <h1 className={TYPE.h1}>{displayTitle}</h1>
-              {showFullTitle ? (
-                <p className={`${TYPE.caption} !mt-1 !text-[0.75rem] !text-site-muted`}>{service.title}</p>
-              ) : null}
-
-              <p className="!m-0 !mt-2 max-w-2xl font-body text-[0.8125rem] leading-snug text-site-muted sm:text-sm">
-                {service.desc}
-              </p>
-
               <BookingPanel
-                className="mt-4 lg:hidden"
+                className="mt-3 lg:hidden"
                 service={service}
                 displayTitle={displayTitle}
                 paymentNote={paymentNote}
@@ -331,9 +362,9 @@ function ConsultationDetail() {
               />
 
               {service.highlights?.length > 0 ? (
-                <div className="mt-4 sm:mt-4">
-                  <h2 className={`${TYPE.h3} !mb-2 !text-sm`}>This session covers</h2>
-                  <ul className="m-0 grid list-none gap-1.5 p-0 sm:grid-cols-2 sm:gap-x-3 sm:gap-y-1.5">
+                <div className="mt-3 flex flex-col gap-2 sm:mt-4">
+                  <h2 className={SUBSECTION_TITLE}>This session covers</h2>
+                  <ul className="grid list-none gap-1.5 p-0 sm:grid-cols-2 sm:gap-x-3 sm:gap-y-1.5">
                     {service.highlights.map((item) => (
                       <li
                         key={item}
@@ -369,18 +400,18 @@ function ConsultationDetail() {
 
       <section className="bg-site-surface/60 py-4 sm:py-5">
         <div className={PAGE_WRAP}>
-          <h2 className={`${TYPE.h2} !mb-3 !text-[clamp(1rem,2vw,1.25rem)]`}>Every session includes</h2>
-          <div className="grid grid-cols-1 gap-2.5 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-3">
+          <h2 className={`${SECTION_TITLE} mb-2.5 sm:mb-3`}>Every session includes</h2>
+          <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-2.5">
             {TRUST_POINTS.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="rounded-xl border border-site-accent-dark/10 bg-white p-3"
+                className="flex flex-col gap-1.5 rounded-xl border border-site-accent-dark/10 bg-white p-3"
               >
-                <div className="mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg bg-site-accent/12 text-site-accent-dark">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-site-accent/12 text-site-accent-dark">
                   <Icon size={15} strokeWidth={2} aria-hidden />
                 </div>
-                <h3 className={`${TYPE.h3} !text-[0.8125rem]`}>{title}</h3>
-                <p className="!m-0 !mt-0.5 font-body text-[0.6875rem] leading-snug text-site-muted sm:text-xs">
+                <h3 className={SUBSECTION_TITLE}>{title}</h3>
+                <p className="font-body text-[0.6875rem] leading-snug text-site-muted sm:text-xs">
                   {desc}
                 </p>
               </div>

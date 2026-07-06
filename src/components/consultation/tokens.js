@@ -78,10 +78,10 @@ export const CARD =
 export const FILTER_BAR =
   'sticky top-site-header-sticky z-[1010] border-b border-site-accent-dark/10 bg-site-bg pb-2 shadow-[0_4px_14px_rgba(139,74,30,0.08)] sm:pb-3';
 
-export const CARD_FLEX_LIST = 'm-0 flex list-none flex-wrap gap-3 p-0 sm:gap-4';
+export const CARD_FLEX_LIST =
+  'm-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-4 lg:gap-4';
 
-export const CARD_FLEX_ITEM =
-  'flex w-full min-w-0 min-[480px]:w-[calc(50%-0.5rem)] min-[480px]:max-w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] lg:max-w-[calc(25%-0.75rem)]';
+export const CARD_FLEX_ITEM = 'min-w-0';
 
 export const SELECT =
   'm-0 cursor-pointer appearance-none rounded-full border border-site-accent-dark/15 bg-site-bg py-1.5 pl-3 pr-8 font-body text-xs font-semibold leading-none text-site-muted antialiased outline-none transition hover:border-site-accent/40 focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:text-sm sm:py-2 sm:pl-3.5';

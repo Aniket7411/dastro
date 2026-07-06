@@ -1,5 +1,7 @@
 import { Lock, PlayCircle, ShieldCheck } from 'lucide-react';
-import { TYPE } from '../consultation/tokens';
+
+const SECTION_TITLE =
+  'font-heading text-base font-bold leading-snug text-site-primary sm:text-lg';
 
 export default function CourseLockedLessons({
   lessons = [],
@@ -12,11 +14,11 @@ export default function CourseLockedLessons({
   if (!count) return null;
 
   return (
-    <section className="border-t border-site-accent-dark/8 pt-3.5 sm:pt-4">
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 className={`${TYPE.h2} !mb-1 !text-base sm:!text-lg`}>Main course lessons</h2>
-          <p className="!m-0 font-body text-xs text-site-muted sm:text-sm">
+    <section className="flex flex-col gap-1.5">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <h2 className={SECTION_TITLE}>Main course lessons</h2>
+          <p className="font-body text-xs text-site-muted sm:text-sm">
             {count} lesson{count === 1 ? '' : 's'} included — unlocked after enrolment and admin approval.
           </p>
         </div>
@@ -32,16 +34,16 @@ export default function CourseLockedLessons({
         ) : null}
       </div>
 
-      <div className="rounded-xl border border-site-accent-dark/10 bg-gradient-to-br from-site-bg to-white px-4 py-4">
+      <div className="rounded-xl border border-site-accent-dark/10 bg-gradient-to-br from-site-bg to-white px-4 py-3.5">
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-site-primary/10 text-site-primary">
             <ShieldCheck size={18} aria-hidden />
           </span>
-          <div>
-            <p className="!m-0 font-body text-sm font-semibold text-site-primary">
+          <div className="flex flex-col gap-1">
+            <p className="font-body text-sm font-semibold text-site-primary">
               {count} full lesson video{count === 1 ? '' : 's'} after you enrol
             </p>
-            <p className="!mt-1 !mb-0 font-body text-xs leading-relaxed text-site-muted sm:text-sm">
+            <p className="font-body text-xs leading-relaxed text-site-muted sm:text-sm">
               Lesson videos are not shown on this page. After purchase or enquiry, our team verifies your enrolment
               and unlocks access in your student dashboard.
             </p>
@@ -50,7 +52,7 @@ export default function CourseLockedLessons({
       </div>
 
       {showTitles && lessons.length > 0 ? (
-        <ul className="!mt-3 m-0 list-none space-y-2 p-0">
+        <ul className="flex list-none flex-col gap-2 p-0">
           {lessons.map((lesson, index) => (
             <li
               key={lesson._id || index}
@@ -59,7 +61,7 @@ export default function CourseLockedLessons({
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-site-bg font-body text-xs font-bold text-site-muted">
                 {index + 1}
               </span>
-              <p className="!m-0 min-w-0 flex-1 truncate font-body text-sm font-semibold text-site-primary">
+              <p className="min-w-0 flex-1 truncate font-body text-sm font-semibold text-site-primary">
                 {lesson.title || `Lesson ${index + 1}`}
               </p>
               <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-site-bg px-2 py-1 font-body text-[0.625rem] font-bold uppercase tracking-wide text-site-soft">
@@ -71,7 +73,7 @@ export default function CourseLockedLessons({
         </ul>
       ) : null}
 
-      <p className="!mt-3 !mb-0 flex items-start gap-2 font-body text-xs text-site-muted sm:text-sm">
+      <p className="flex items-start gap-2 font-body text-xs text-site-muted sm:text-sm">
         <PlayCircle size={14} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
         Watch the free introductory video above to preview the teaching style before you enrol.
       </p>

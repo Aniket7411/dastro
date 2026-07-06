@@ -10,7 +10,6 @@ import { ConsultationFilterBar } from '../components/ConsultationFilters';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
 import { PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST, CARD_FLEX_LIST, CARD_FLEX_ITEM } from '../components/consultation/tokens';
-import { SECTION_PY } from '../utils/siteTokens';
 import { useConsultationCatalog, toggleInList } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
@@ -65,6 +64,8 @@ function CardGrid({ cards }) {
     </ul>
   );
 }
+
+const CATEGORY_TITLE = 'font-heading text-lg font-bold leading-snug text-site-primary sm:text-xl';
 
 function Consultations() {
   const navigate = useNavigate();
@@ -213,18 +214,18 @@ function Consultations() {
         url="/book-consultation"
       />
 
-      <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-5 pt-8 sm:pb-6 sm:pt-10`}>
+      <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 py-4 sm:py-5`}>
           <h1 className={TYPE.h1}>Book a Consultation</h1>
-          <p className={`${TYPE.bodySm} mt-2 max-w-xl`}>
+          <p className={`${TYPE.bodySm} mt-1.5 max-w-xl text-sm`}>
             Browse sessions by category, filter by duration or price, and book online.
           </p>
         </header>
 
         <ConsultationFilterBar {...filterBarProps} />
 
-        <div className={`${PAGE_WRAP} ${SECTION_PY}`}>
+        <div className={`${PAGE_WRAP} py-4 sm:py-5`}>
           {hasActiveFilters && (
-            <div className="mb-4 flex flex-wrap items-center gap-1.5 sm:mb-5 sm:gap-2">
+            <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
               {selectedCategories.map((id) => {
                 const label = filterMeta?.categories?.find((c) => c.id === id)?.name || id;
                 return (
@@ -257,18 +258,18 @@ function Consultations() {
             <ResultsSkeleton />
           ) : total > 0 ? (
             showGrouped ? (
-              <div className="flex flex-col gap-7 sm:gap-8">
+              <div className="flex flex-col gap-5 sm:gap-6">
                 {consultationCategories.map((cat, idx) => (
                   <section key={cat.slug ?? idx} aria-labelledby={`cat-${idx}`}>
-                    <div className="mb-3 sm:mb-4">
-                      <h2 id={`cat-${idx}`} className={`${TYPE.h2} flex flex-wrap items-baseline gap-x-2 gap-y-0.5`}>
+                    <div className="mb-2 flex flex-col gap-1 sm:mb-2.5">
+                      <h2 id={`cat-${idx}`} className={`${CATEGORY_TITLE} flex flex-wrap items-baseline gap-x-2 gap-y-0.5`}>
                         <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-md bg-site-accent/15 px-1.5 py-0.5 font-body text-xs font-bold tabular-nums text-site-accent-dark">
                           {cat.cards.length}
                         </span>
                         <span>{cat.name}</span>
                       </h2>
                       {cat.description && (
-                        <p className={`${TYPE.bodySm} mt-1 line-clamp-2 max-w-3xl`}>{cat.description}</p>
+                        <p className={`${TYPE.bodySm} line-clamp-2 max-w-3xl text-sm`}>{cat.description}</p>
                       )}
                     </div>
                     <CardGrid cards={cat.cards} />
@@ -294,28 +295,28 @@ function Consultations() {
           {!catalogLoading && total > 0 && (
             <>
               <section
-                className="mt-10 overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-sm sm:mt-12"
+                className="mt-6 overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-sm sm:mt-8"
                 aria-labelledby="consult-guidelines"
               >
-                <div className="border-b border-site-accent-dark/8 bg-gradient-to-r from-site-bg to-site-surface px-6 py-5 sm:px-8 sm:py-6">
-                  <div className="flex items-center gap-3.5">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-site-accent/12 text-site-accent-dark">
-                      <Sparkles size={18} aria-hidden />
+                <div className="border-b border-site-accent-dark/8 bg-gradient-to-r from-site-bg to-site-surface px-4 py-3.5 sm:px-6 sm:py-4">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-site-accent/12 text-site-accent-dark">
+                      <Sparkles size={16} aria-hidden />
                     </span>
-                    <h2 id="consult-guidelines" className={TYPE.h2}>
+                    <h2 id="consult-guidelines" className={CATEGORY_TITLE}>
                       Important Guidelines
                     </h2>
                   </div>
                 </div>
-                <ul className="m-0 grid list-none grid-cols-1 divide-y divide-site-accent-dark/6 p-0 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5 lg:divide-x lg:divide-y-0">
+                <ul className="grid list-none grid-cols-1 divide-y divide-site-accent-dark/6 p-0 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5 lg:divide-x lg:divide-y-0">
                   {GUIDELINES.map(({ icon: Icon, title, text }) => (
-                    <li key={title} className="flex gap-3.5 p-5 sm:p-6">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-site-accent/10 text-site-accent-dark">
-                        <Icon size={16} strokeWidth={2} aria-hidden />
+                    <li key={title} className="flex gap-3 p-4 sm:p-5">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-site-accent/10 text-site-accent-dark">
+                        <Icon size={15} strokeWidth={2} aria-hidden />
                       </span>
-                      <div>
-                        <p className="!m-0 font-body text-sm font-bold text-site-primary">{title}</p>
-                        <p className={`${TYPE.caption} !mt-1`}>{text}</p>
+                      <div className="flex flex-col gap-0.5">
+                        <p className="font-body text-sm font-bold text-site-primary">{title}</p>
+                        <p className={TYPE.caption}>{text}</p>
                       </div>
                     </li>
                   ))}
