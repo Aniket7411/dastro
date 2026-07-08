@@ -45,7 +45,7 @@ export default function CourseListingCard({ course }) {
     <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
       <Link
         to={detailPath}
-        className={`${CARD_LINK} relative block h-[118px] overflow-hidden min-[480px]:h-[135px] sm:h-[150px]`}
+        className={`${CARD_LINK} relative block h-[148px] overflow-hidden min-[480px]:h-[158px] sm:h-[162px]`}
         tabIndex={-1}
         aria-hidden
       >

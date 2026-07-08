@@ -83,7 +83,7 @@ function CourseCard({ course }) {
     <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
       <Link
         to={detailPath}
-        className={`${CARD_LINK} relative block h-[118px] overflow-hidden min-[480px]:h-[135px] sm:h-[150px]`}
+        className={`${CARD_LINK} relative block h-[148px] overflow-hidden min-[480px]:h-[158px] sm:h-[162px]`}
         tabIndex={-1}
         aria-hidden
       >
@@ -197,7 +197,7 @@ function CoursesSectionIntro() {
           <img
             src={COURSES_HERO_IMG}
             alt="Astrology mentor guiding students"
-            className="aspect-[5/4] w-full object-cover object-[center_20%] sm:aspect-[4/3]"
+            className="aspect-[3/2] w-full object-cover object-[center_20%] sm:aspect-[16/10]"
             loading="lazy"
           />
         </div>
