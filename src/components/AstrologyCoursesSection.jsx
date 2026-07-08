@@ -3,19 +3,40 @@ import { Link } from 'react-router-dom';
 import {
   Award,
   ArrowRight,
-  BookOpen,
   ChevronRight,
-  Clock,
   GraduationCap,
   Headphones,
+  PlayCircle,
   Radio,
   Users,
   Video,
 } from 'lucide-react';
 import { fetchCourses } from '../hooks/useCourses';
+import { getPriceDisplay } from '../utils/pricing';
 import { CourseGridSkeleton } from './PageLoader';
-import HomeSectionHeader from './home/HomeSectionHeader';
+import CourseCardDurationBar from './courses/CourseCardDurationBar';
+import CourseLiveBadge from './courses/CourseLiveBadge';
 import { COURSE_GRID, COURSE_GRID_ITEM, PAGE_WRAP } from './consultation/tokens';
+import {
+  SITE_BTN_CARD,
+  SITE_BTN_COPPER_COMPACT,
+  SITE_BTN_TONAL_COMPACT,
+  SITE_COURSE_CARD,
+  SITE_COURSE_CARD_BADGE,
+  SITE_COURSE_CARD_BADGE_META,
+  SITE_COURSE_CARD_BADGE_RECORDED,
+  SITE_COURSE_CARD_BODY,
+  SITE_COURSE_CARD_DESC,
+  SITE_COURSE_CARD_FOOTER,
+  SITE_COURSE_CARD_KICKER,
+  SITE_COURSE_CARD_TITLE,
+  TW_BODY,
+  TW_H2,
+  TW_KICKER,
+} from '../utils/siteTokens';
+
+const COURSES_HERO_IMG = '/images/mentor_promo.png';
+const COURSES_HERO_ACCENT = '/images/vedic_thumbnail.png';
 
 const FEATURES = [
   { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
@@ -27,9 +48,7 @@ const FEATURES = [
 const CARD_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
 
-const TITLE_LINK = `${CARD_LINK} !text-site-primary visited:!text-site-primary transition-colors hover:!text-site-accent-dark`;
-
-const BTN_LINK = `${CARD_LINK} !text-white visited:!text-white`;
+const HOME_COURSE_LIMIT = 4;
 
 /** Collapse obvious duplicate placeholder descriptions from the API */
 function cleanShortDesc(text = '') {
@@ -54,81 +73,88 @@ function CourseCard({ course }) {
   const isLive = course.courseType === 'Live';
   const detailPath = `/courses/${course.slug || course.id}`;
   const description = cleanShortDesc(course.shortDesc);
-  const price =
-    course.price && Number(course.price) > 0
-      ? Number(course.price).toLocaleString('en-IN')
-      : null;
+  const hasPrice = Number(course.price) > 0;
+  const { hasDiscount, priceLabel, mrpLabel } = getPriceDisplay({
+    price: course.price,
+    mrp: course.mrp,
+  });
 
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-[0_10px_28px_rgba(139,74,30,0.12)]">
-      <Link to={detailPath} className={`${CARD_LINK} relative block aspect-[2/1] overflow-hidden`} tabIndex={-1} aria-hidden>
+    <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
+      <Link
+        to={detailPath}
+        className={`${CARD_LINK} relative block h-[100px] overflow-hidden min-[480px]:h-[130px] sm:h-[150px]`}
+        tabIndex={-1}
+        aria-hidden
+      >
         <img
           src={course.image}
           alt=""
           className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
           loading="lazy"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2a0f02]/50 via-transparent to-transparent opacity-80" />
 
-        <span
-          className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm ${
-            isLive ? 'bg-site-primary' : 'bg-site-accent-dark'
-          }`}
-        >
-          {isLive ? <Radio size={9} aria-hidden /> : <Video size={9} aria-hidden />}
-          {isLive ? 'Live' : 'Recorded'}
-        </span>
-
-        {course.level ? (
-          <span className="absolute right-2 top-2 rounded-full bg-white/95 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-site-primary ring-1 ring-site-accent/25">
+        {isLive ? (
+          <CourseLiveBadge />
+        ) : course.level ? (
+          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META}`}>
             {course.level}
           </span>
         ) : null}
 
-        {course.duration ? (
-          <span className="absolute bottom-2 right-2 inline-flex items-center gap-0.5 rounded-full bg-black/55 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm">
-            <Clock size={9} aria-hidden />
-            {course.duration}
+        {!isLive ? (
+          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED}`}>
+            Recorded
+          </span>
+        ) : course.level ? (
+          <span
+            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 top-1.5 sm:right-2 sm:top-2`}
+          >
+            {course.level}
           </span>
         ) : null}
+
+        <CourseCardDurationBar course={course} />
       </Link>
 
-      <div className="flex flex-1 flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
-        {course.category ? (
-          <p className="mb-1 truncate text-[10px] font-bold uppercase tracking-wider text-site-accent-dark">
-            {course.category}
-          </p>
-        ) : null}
+      <div className={SITE_COURSE_CARD_BODY}>
+        {course.category ? <p className={SITE_COURSE_CARD_KICKER}>{course.category}</p> : null}
 
-        <Link to={detailPath} className={`${TITLE_LINK} mb-1 line-clamp-2 font-heading text-sm font-bold leading-snug sm:text-[0.9375rem]`}>
+        <Link to={detailPath} className={`${SITE_COURSE_CARD_TITLE} mb-2 line-clamp-2`}>
           {course.title}
         </Link>
 
-        {description ? (
-          <p className="mb-2 line-clamp-2 flex-1 text-xs leading-relaxed text-site-muted">
-            {description}
-          </p>
-        ) : (
-          <div className="mb-2 flex-1" />
-        )}
+        {description ? <p className={SITE_COURSE_CARD_DESC}>{description}</p> : null}
 
-        <div className="mt-auto flex flex-col gap-2 border-t border-site-accent-dark/10 pt-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0 leading-none">
-            {price ? (
-              <p className="font-price text-base font-bold tracking-tight text-site-accent-dark tabular-nums sm:text-lg">
-                ₹{price}
-              </p>
+        <div className={SITE_COURSE_CARD_FOOTER}>
+          <div className="min-w-0">
+            {hasPrice ? (
+              <div>
+                <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+                  <p className="font-price text-sm font-semibold leading-none tracking-tight text-site-text tabular-nums min-[480px]:text-base sm:text-[1.3125rem]">
+                    <span className="text-[0.85em] font-medium text-site-muted">₹</span>
+                    {priceLabel}
+                  </p>
+                  {hasDiscount ? (
+                    <span className="font-body text-[10px] text-site-soft line-through decoration-site-soft/60 min-[480px]:text-xs">
+                      ₹{mrpLabel}
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-0.5 hidden font-body text-[10px] font-medium text-site-muted min-[480px]:block">
+                  {isLive ? 'batch pricing' : 'lifetime access'}
+                </p>
+              </div>
             ) : (
-              <p className="text-xs font-semibold text-site-primary">Enquire for pricing</p>
+              <p className="font-body text-[11px] font-medium text-site-muted min-[480px]:text-sm sm:text-[15px]">
+                Enquire for pricing
+              </p>
             )}
           </div>
 
-          <Link
-            to={detailPath}
-            className={`${BTN_LINK} inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-full bg-site-primary px-3 py-1.5 text-[11px] font-bold shadow-sm transition hover:bg-site-accent-dark group-hover:bg-site-accent-dark sm:w-auto`}
-          >
-            Explore
-            <ArrowRight size={11} strokeWidth={2.5} className="transition group-hover:translate-x-0.5" aria-hidden />
+          <Link to={detailPath} className={`${SITE_BTN_CARD} !text-white visited:!text-white`}>
+            {isLive ? 'Enquire' : 'Explore'}
+            <ArrowRight size={11} strokeWidth={2.5} className="shrink-0 min-[480px]:size-3" aria-hidden />
           </Link>
         </div>
       </div>
@@ -136,20 +162,167 @@ function CourseCard({ course }) {
   );
 }
 
+function CoursesSectionIntro() {
+  return (
+    <div
+      className="mb-8 grid items-center gap-6 sm:mb-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10"
+      data-aos="fade-up"
+    >
+      <header className="text-left">
+        <p className={`${TW_KICKER} mb-2`}>Featured Programs</p>
+        <h2 id="astro-courses-heading" className={`${TW_H2} leading-[1.08]`}>
+          Astrology <span className="text-site-accent">Courses</span>
+        </h2>
+        <div
+          className="mt-3 h-1 w-14 rounded-full bg-gradient-to-r from-site-accent via-site-accent-dark to-site-accent"
+          aria-hidden
+        />
+        <p className={`${TW_BODY} mt-4 max-w-xl text-site-muted`}>
+          Ancient wisdom, modern teaching — live batches and self-paced programs for every level.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2.5">
+          <Link to="/live-courses" className={`${SITE_BTN_TONAL_COMPACT} !no-underline`}>
+            <Radio size={14} aria-hidden />
+            Live batches
+          </Link>
+          <Link to="/recorded-courses" className={`${SITE_BTN_COPPER_COMPACT} !no-underline`}>
+            Recorded programs
+            <ChevronRight size={14} aria-hidden />
+          </Link>
+        </div>
+      </header>
+
+      <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+        <div className="overflow-hidden rounded-2xl border border-site-border bg-site-surface shadow-[0_14px_40px_rgba(51,37,26,0.10)]">
+          <img
+            src={COURSES_HERO_IMG}
+            alt="Astrology mentor guiding students"
+            className="aspect-[5/4] w-full object-cover object-[center_20%] sm:aspect-[4/3]"
+            loading="lazy"
+          />
+        </div>
+        <div className="absolute -bottom-3 left-3 overflow-hidden rounded-xl border border-site-border bg-site-surface shadow-md sm:-bottom-4 sm:left-4">
+          <img
+            src={COURSES_HERO_ACCENT}
+            alt=""
+            className="h-16 w-24 object-cover sm:h-[4.5rem] sm:w-28"
+            loading="lazy"
+            aria-hidden
+          />
+        </div>
+        <div className="absolute -right-1 top-3 rounded-xl border border-site-border bg-site-surface/95 px-3 py-2 shadow-md backdrop-blur-sm sm:right-0 sm:top-4 sm:px-4 sm:py-2.5">
+          <p className="m-0 font-heading text-base font-bold leading-none text-site-text sm:text-lg">
+            15,000+
+          </p>
+          <p className="m-0 mt-1 text-[11px] font-medium text-site-muted sm:text-xs">students trained</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CourseRowHeader({ icon: Icon, title, titleHighlight, subtitle }) {
+  return (
+    <div className="mb-4 flex items-start gap-3 border-b border-site-border pb-4 sm:mb-5 sm:gap-4">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border sm:h-11 sm:w-11">
+        <Icon size={18} strokeWidth={1.75} aria-hidden />
+      </div>
+      <div className="min-w-0 pt-0.5">
+        <h3 className="m-0 font-heading text-lg font-bold leading-snug text-site-text sm:text-xl">
+          {title}{' '}
+          <span className="text-site-accent">{titleHighlight}</span>
+        </h3>
+        <p className={`${TW_BODY} m-0 mt-1.5 max-w-2xl text-sm text-site-muted sm:text-[15px]`}>
+          {subtitle}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CourseBlock({
+  icon,
+  title,
+  titleHighlight,
+  subtitle,
+  courses,
+  loading,
+  emptyText,
+  ctaTo,
+  ctaLabel,
+  ctaVariant = 'tonal',
+}) {
+  const CtaIcon = ctaVariant === 'copper' ? ChevronRight : GraduationCap;
+  const ctaClass = ctaVariant === 'copper' ? SITE_BTN_COPPER_COMPACT : SITE_BTN_TONAL_COMPACT;
+
+  return (
+    <div className="mt-10 first:mt-0 sm:mt-12 first:sm:mt-0">
+      <CourseRowHeader
+        icon={icon}
+        title={title}
+        titleHighlight={titleHighlight}
+        subtitle={subtitle}
+      />
+
+      {loading ? (
+        <CourseGridSkeleton count={HOME_COURSE_LIMIT} />
+      ) : courses.length > 0 ? (
+        <ul className={COURSE_GRID}>
+          {courses.map((course) => (
+            <li key={course.id} className={COURSE_GRID_ITEM}>
+              <CourseCard course={course} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="m-0 text-center text-sm text-site-muted">{emptyText}</p>
+      )}
+
+      <div className="mt-4 flex justify-center sm:mt-5">
+        <Link to={ctaTo} className={`${ctaClass} !no-underline`}>
+          {ctaVariant === 'tonal' ? <CtaIcon size={14} aria-hidden /> : null}
+          {ctaLabel}
+          {ctaVariant === 'copper' ? <CtaIcon size={14} aria-hidden /> : null}
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function AstrologyCoursesSection() {
-  const [courses, setCourses] = useState([]);
+  const [liveCourses, setLiveCourses] = useState([]);
+  const [recordedCourses, setRecordedCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCourses({ limit: 4 })
-      .then(setCourses)
-      .catch(() => setCourses([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    Promise.all([
+      fetchCourses({ courseType: 'Live', limit: HOME_COURSE_LIMIT }),
+      fetchCourses({ courseType: 'Recorded', limit: HOME_COURSE_LIMIT }),
+    ])
+      .then(([live, recorded]) => {
+        if (cancelled) return;
+        setLiveCourses(live);
+        setRecordedCourses(recorded);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLiveCourses([]);
+        setRecordedCourses([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
     <section
-      className="relative m-0 overflow-hidden bg-white py-[clamp(2.5rem,5vw,3.5rem)] font-body text-site-text [&_a]:decoration-transparent"
+      className="relative m-0 overflow-hidden bg-site-bg py-[clamp(2.5rem,5vw,3.5rem)] font-body text-site-text [&_a]:decoration-transparent"
       aria-labelledby="astro-courses-heading"
     >
       <div className="pointer-events-none absolute -left-8 top-8 text-[4.5rem] text-site-accent-dark/5" aria-hidden>
@@ -160,57 +333,42 @@ export default function AstrologyCoursesSection() {
       </div>
 
       <div className={PAGE_WRAP}>
-        <HomeSectionHeader
-          id="astro-courses-heading"
-          kicker="Featured Programs"
-          title="Astrology"
+        <CoursesSectionIntro />
+
+        <CourseBlock
+          icon={Radio}
+          title="Live"
           titleHighlight="Courses"
-          subtitle="Ancient wisdom, modern teaching — live batches and self-paced programs for every level."
-          subtitleClassName="lg:whitespace-nowrap"
-          showAccent
+          subtitle="Instructor-led batches with mentor support — enquire for schedule and fees."
+          courses={liveCourses}
+          loading={loading}
+          emptyText="New live batches are coming soon. Check back or enquire with our team."
+          ctaTo="/live-courses"
+          ctaLabel="View All Live Classes"
+          ctaVariant="tonal"
         />
 
-        {loading ? (
-          <CourseGridSkeleton count={4} />
-        ) : courses.length > 0 ? (
-          <ul className={COURSE_GRID}>
-            {courses.map((course) => (
-              <li key={course.id} className={COURSE_GRID_ITEM}>
-                <CourseCard course={course} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="m-0 text-center text-sm text-site-muted">
-            New courses are on the way. Browse live and recorded programs below.
-          </p>
-        )}
+        <CourseBlock
+          icon={PlayCircle}
+          title="Recorded"
+          titleHighlight="Courses"
+          subtitle="Self-paced programs with structured modules and lifetime dashboard access."
+          courses={recordedCourses}
+          loading={loading}
+          emptyText="New recorded courses are on the way. Browse again soon."
+          ctaTo="/recorded-courses"
+          ctaLabel="Browse All Recorded Courses"
+          ctaVariant="copper"
+        />
 
-        <div className="mt-6 flex flex-col items-stretch justify-center gap-2.5 sm:mt-8 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
-          <Link
-            to="/live-courses"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-site-accent-dark/25 bg-white px-4 py-2 text-sm font-bold !text-site-primary !no-underline shadow-sm transition visited:!text-site-primary hover:border-site-accent hover:bg-[#fffaf4] hover:!text-site-accent-dark"
-          >
-            <GraduationCap size={16} />
-            Live Classes
-          </Link>
-          <Link
-            to="/recorded-courses"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-site-primary px-4 py-2 text-sm font-bold !text-white !no-underline shadow-sm transition visited:!text-white hover:bg-site-accent-dark"
-          >
-            Browse All Courses
-            <ChevronRight size={16} />
-          </Link>
-        </div>
-
-        <div className="mt-8 grid grid-cols-2 gap-3 border-t border-site-accent-dark/10 pt-6 sm:gap-4 md:grid-cols-4 md:pt-8">
+        <div className="mt-8 grid grid-cols-2 gap-3 border-t border-site-border pt-6 sm:gap-4 md:grid-cols-4 md:pt-8">
           {FEATURES.map(({ icon: Icon, title, sub }) => (
             <div key={title} className="flex flex-col items-center gap-1.5 text-center sm:gap-2">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-site-accent/10 text-site-accent-dark ring-1 ring-site-accent/20 sm:h-12 sm:w-12 sm:rounded-2xl">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border sm:h-12 sm:w-12 sm:rounded-2xl">
                 <Icon size={20} strokeWidth={1.75} />
               </div>
-              <p className="m-0 text-xs font-bold text-site-primary sm:text-sm">{title}</p>
-              <p className="m-0 text-[10px] leading-snug text-site-muted sm:text-xs">{sub}</p>
+              <p className="m-0 font-heading text-sm font-semibold text-site-text">{title}</p>
+              <p className="m-0 text-[15px] leading-snug text-site-muted">{sub}</p>
             </div>
           ))}
         </div>

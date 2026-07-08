@@ -4,7 +4,13 @@ import toast from '@/utils/toast';
 import { invalidateCoursesCache } from '../hooks/useCourses';
 import AdminCourseCategories from './AdminCourseCategories';
 import CourseInitialVideosPanel from '../components/admin/CourseInitialVideosPanel';
+import CourseExtendedFields from '../components/admin/CourseExtendedFields';
 import { btnPrimary, btnSecondary, fieldInput, fieldLabel, fieldHint } from '../components/admin/courseFormUi';
+import {
+  buildCourseApiPayload,
+  courseToFormData,
+  EMPTY_BATCH_DETAILS,
+} from '../utils/courseFormPayload';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
 import { COURSE_LEVELS } from '../utils/courseDuration';
@@ -14,7 +20,7 @@ import { formatINR } from '../utils/currency';
 const EMPTY_COURSE_FORM = {
   title: '',
   slug: '',
-  category: 'Astrology',
+  category: '',
   description: '',
   longDesc: '',
   courseType: 'Recorded',
@@ -27,6 +33,9 @@ const EMPTY_COURSE_FORM = {
   tier: '',
   validityDays: '',
   thumbnailUrl: '',
+  curriculum: [],
+  batchDetails: { ...EMPTY_BATCH_DETAILS },
+  faqs: [],
 };
 
 const COURSE_TYPE_CONFIG = {
@@ -950,6 +959,11 @@ function AdminCourses() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!String(formData.title || '').trim()) {
+      toast.error('Course title is required.');
+      return;
+    }
+
     if (!editingCourse && initialVideosRef.current?.isUploading()) {
       toast.error('Please wait for video uploads to finish before creating the course.');
       return;
@@ -973,15 +987,7 @@ function AdminCourses() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          ...formData,
-          duration: String(formData.duration || '').trim(),
-          courseType: formData.courseType === 'Live' ? 'Live' : 'Recorded',
-          price: Math.round(parseInt(String(formData.price).replace(/[^0-9]/g, ''), 10)) || 0,
-          mrp: Math.round(parseInt(String(formData.mrp).replace(/[^0-9]/g, ''), 10)) || 0,
-          tier: formData.tier || '',
-          validityDays: Math.round(parseInt(String(formData.validityDays).replace(/[^0-9]/g, ''), 10)) || 0,
-        })
+        body: JSON.stringify(buildCourseApiPayload(formData)),
       });
       const data = await parseApiResponse(res);
       
@@ -1074,31 +1080,31 @@ function AdminCourses() {
     });
   };
 
-  const openModal = (course = null) => {
+  const openModal = async (course = null) => {
     if (course) {
       setEditingCourse(course);
       setVideoForm({ ...DEFAULT_VIDEO_FORM });
       setVideoFile(null);
       setEditVideoDrafts([]);
-      setFormData({
-        title: course.title,
-        slug: course.slug || '',
-        category: course.category || 'Astrology',
-        description: course.description || '',
-        longDesc: course.longDesc || '',
-        courseType: course.courseType || 'Recorded',
-        level: COURSE_LEVELS.includes(course.level) ? course.level : 'Beginner',
-        duration: course.duration || '',
-        instructor: typeof course.instructor === 'string' ? course.instructor : course.instructor?.name || '',
-        topics: Array.isArray(course.topics) ? course.topics : [],
-        price: course.price,
-        mrp: course.mrp || '',
-        tier: course.tier || '',
-        validityDays: course.validityDays,
-        thumbnailUrl: course.thumbnailUrl || '',
-      });
       setTopicInput('');
-      // Fetch videos for this course
+      setShowModal(true);
+      setFormData(EMPTY_COURSE_FORM);
+
+      const token = localStorage.getItem('adminToken');
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/courses/${course._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await parseApiResponse(res);
+        if (data.success && data.course) {
+          setFormData(courseToFormData(data.course));
+        } else {
+          setFormData(courseToFormData(course));
+        }
+      } catch {
+        setFormData(courseToFormData(course));
+      }
+
       setEditingCourseVideosLoading(true);
       loadAdminCourseVideos(course._id)
         .then((videos) => {
@@ -1297,16 +1303,22 @@ function AdminCourses() {
                     </span>
                   </td>
                   <td className="lms-price">
-                    <div>
+                    {Number(course.price) > 0 ? (
                       <div>{formatINR(course.price)}</div>
-                      {Number(course.mrp) > Number(course.price) && (
-                        <div style={{ fontSize: '11px', fontWeight: 400, color: '#94a3b8', textDecoration: 'line-through' }}>
-                          {formatINR(course.mrp)}
-                        </div>
-                      )}
-                    </div>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not set</span>
+                    )}
+                    {Number(course.mrp) > Number(course.price) && Number(course.mrp) > 0 && (
+                      <div style={{ fontSize: '11px', fontWeight: 400, color: '#94a3b8', textDecoration: 'line-through' }}>
+                        {formatINR(course.mrp)}
+                      </div>
+                    )}
                   </td>
-                  <td>{course.validityDays} days</td>
+                  <td>
+                    {course.validityDays != null && course.validityDays > 0
+                      ? `${course.validityDays} days`
+                      : <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Not set</span>}
+                  </td>
                   <td>
                     <span className="lms-video-count">
                       <i className="fas fa-play-circle"></i>
@@ -1411,6 +1423,7 @@ function AdminCourses() {
                       <div className="form-group">
                         <label className="form-label">Subject Category</label>
                         <select name="category" value={formData.category} onChange={handleInputChange} className="form-input">
+                          <option value="">— Select category —</option>
                           {courseCategories.length > 0 ? (
                             courseCategories.map((cat) => (
                               <option key={cat._id} value={cat.name}>{cat.name}</option>
@@ -1452,9 +1465,8 @@ function AdminCourses() {
                           onChange={handleInputChange}
                           className="form-input"
                           placeholder="e.g. 12 classes · ~18 hrs or 8 Weeks"
-                          required
                         />
-                        <p className="form-hint">Free text — shown as-is on course cards and detail page. Supports rich formats like "12 classes · ~18 hrs".</p>
+                        <p className="form-hint">Free text — leave blank until you know the schedule. Shown on cards and the detail page.</p>
                       </div>
                     </div>
                     <div className="form-col">
@@ -1566,21 +1578,18 @@ function AdminCourses() {
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">{getCourseTypeConfig(formData.courseType).priceLabel}</label>
+                        <label className="form-label">
+                          {getCourseTypeConfig(formData.courseType).priceLabel}
+                          <span className="ml-1 font-normal text-site-muted">(optional)</span>
+                        </label>
                         <input
                           type="text"
                           inputMode="numeric"
-                          pattern="^[0-9]+$"
                           name="price"
                           value={formData.price}
                           onChange={handleInputChange}
-                          onBlur={e => {
-                            const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10);
-                            if (!isNaN(v)) setFormData(prev => ({ ...prev, price: String(v) }));
-                          }}
                           className="form-input"
-                          placeholder={formData.courseType === 'Live' ? 'e.g. 15000 (display only)' : 'e.g. 3000'}
-                          required
+                          placeholder={formData.courseType === 'Live' ? 'Leave blank or enter display price' : 'Enter selling price when ready'}
                         />
                         <p className="form-hint">{getCourseTypeConfig(formData.courseType).priceHint}</p>
                       </div>
@@ -1591,16 +1600,11 @@ function AdminCourses() {
                         <input
                           type="text"
                           inputMode="numeric"
-                          pattern="^[0-9]+$"
                           name="mrp"
                           value={formData.mrp}
                           onChange={handleInputChange}
-                          onBlur={e => {
-                            const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10);
-                            if (!isNaN(v)) setFormData(prev => ({ ...prev, mrp: String(v) }));
-                          }}
                           className="form-input"
-                          placeholder="e.g. 4500"
+                          placeholder="Optional MRP"
                         />
                         <p className="form-hint">{getCourseTypeConfig(formData.courseType).mrpHint}</p>
                       </div>
@@ -1624,15 +1628,18 @@ function AdminCourses() {
                     </div>
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">{getCourseTypeConfig(formData.courseType).validityLabel}</label>
+                        <label className="form-label">
+                          {getCourseTypeConfig(formData.courseType).validityLabel}
+                          <span className="ml-1 font-normal text-site-muted">(optional)</span>
+                        </label>
                         <input
                           type="number"
+                          min="0"
                           name="validityDays"
                           value={formData.validityDays}
                           onChange={handleInputChange}
                           className="form-input"
-                          placeholder={formData.courseType === 'Live' ? 'e.g. 60' : 'e.g. 365'}
-                          required
+                          placeholder={formData.courseType === 'Live' ? 'Program length in days' : 'Access days after purchase'}
                         />
                         <p className="form-hint">{getCourseTypeConfig(formData.courseType).validityHint}</p>
                       </div>
@@ -1723,6 +1730,12 @@ function AdminCourses() {
                     )}
                   </div>
                 </div>
+
+                <CourseExtendedFields
+                  formData={formData}
+                  setFormData={setFormData}
+                  isLive={formData.courseType === 'Live'}
+                />
 
                 <div className="form-section">
                   <h4 className="section-title">Course Media</h4>

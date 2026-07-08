@@ -2,61 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPriceDisplay } from '../utils/pricing';
 
-// price stays a preformatted "₹NNNN" string — it's reused as the Razorpay amount source in Home.jsx.
-// priceValue/mrp are separate raw numbers used only for the Save% badge.
-export const CONSULTATION_SERVICE_SLIDES = [
-  {
-    title: 'Career Consultation',
-    img: '/images/consultations/career.png',
-    desc: 'Jobs, promotions, business growth & foreign opportunities.',
-    duration: '40 min',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    link: '/consultations/career',
-  },
-  {
-    title: 'Education Guidance',
-    img: '/images/consultations/education.png',
-    desc: 'Study paths, exams, higher education & academic success.',
-    duration: '40 min',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    link: '/consultations/other',
-  },
-  {
-    title: 'Health & Wellness',
-    img: '/images/consultations/health.png',
-    desc: 'Planetary insights for recovery, vitality & emotional balance.',
-    duration: '40 min',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    link: '/consultations/health-business',
-  },
-  {
-    title: 'Love & Relationship',
-    img: '/images/consultations/love.png',
-    desc: 'Compatibility, loyalty, marriage timing & relationship clarity.',
-    duration: '40 min',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    link: '/consultations/relationship',
-  },
-  {
-    title: 'Vastu Consultation',
-    img: '/images/consultations/vastu.png',
-    desc: 'Home & workspace harmony for prosperity and peace.',
-    duration: '40 min',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    link: '/consultations/other',
-  },
-];
-
 function stopCarouselPointer(e) {
   e.stopPropagation();
 }
@@ -104,7 +49,7 @@ function ServiceSlide({ item, onBook }) {
   );
 }
 
-export default function ConsultationServicesCarousel({ onBook }) {
+export default function ConsultationServicesCarousel({ items = [], onBook }) {
   const [held, setHeld] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [inView, setInView] = useState(true);
@@ -118,7 +63,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
     node._cscIo = io;
   }, []);
 
-  const slides = [...CONSULTATION_SERVICE_SLIDES, ...CONSULTATION_SERVICE_SLIDES];
+  const slides = items.length > 0 ? [...items, ...items] : [];
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -156,7 +101,7 @@ export default function ConsultationServicesCarousel({ onBook }) {
       >
         <div className="csc-track">
           {slides.map((item, index) => (
-            <ServiceSlide key={`${item.title}-${index}`} item={item} onBook={onBook} />
+            <ServiceSlide key={`${item.id || item.title}-${index}`} item={item} onBook={onBook} />
           ))}
         </div>
       </div>

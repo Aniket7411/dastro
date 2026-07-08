@@ -170,3 +170,24 @@ export function useConsultationService(serviceId) {
 export function toggleInList(list, value) {
   return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 }
+
+const HOME_CONSULTATION_FALLBACK_IMG = '/images/consultation_banner.png';
+
+/** Map API consultation service → home card / carousel slide shape */
+export function mapConsultationServiceToHomeCard(service) {
+  const priceValue = Number(service?.price) || 0;
+  const mrp = Number(service?.mrp) || 0;
+
+  return {
+    id: service?.id || service?.slug,
+    title: service?.title || '',
+    img: service?.img || HOME_CONSULTATION_FALLBACK_IMG,
+    desc: service?.short || service?.desc || '',
+    duration: service?.duration || '',
+    price: service?.priceLabel || (priceValue > 0 ? `₹${priceValue.toLocaleString('en-IN')}` : ''),
+    priceValue,
+    mrp,
+    badge: service?.badge || '',
+    link: `/book-consultation/${service?.id || service?.slug}`,
+  };
+}

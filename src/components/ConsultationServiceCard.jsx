@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Clock, Phone } from 'lucide-react';
-import { TYPE } from './consultation/tokens';
+import {
+  SITE_BTN_CARD,
+  SITE_COURSE_CARD,
+  SITE_COURSE_CARD_BODY,
+  SITE_COURSE_CARD_DESC,
+  SITE_COURSE_CARD_TITLE,
+  SITE_PRICE,
+} from '../utils/siteTokens';
 import { getPriceDisplay } from '../utils/pricing';
 
 const BADGE_STYLES = {
@@ -21,7 +28,7 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
   });
 
   return (
-    <article className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_2px_12px_rgba(42,15,2,0.06)] transition hover:border-site-accent/25 hover:shadow-[0_6px_20px_rgba(42,15,2,0.1)]">
+    <article className={`${SITE_COURSE_CARD} w-full`}>
       <Link
         to={url}
         className="relative block aspect-[5/4] overflow-hidden no-underline sm:aspect-[4/3]"
@@ -49,27 +56,27 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col p-2.5 sm:p-3">
+      <div className={`${SITE_COURSE_CARD_BODY} p-3 sm:p-[18px]`}>
         <Link
           to={url}
-          className="mb-1 line-clamp-2 font-body text-[13px] font-bold leading-snug text-site-primary no-underline transition group-hover:text-site-accent-dark sm:text-sm"
+          className={`${SITE_COURSE_CARD_TITLE} mb-2 line-clamp-2 text-base sm:text-xl`}
         >
           {title}
         </Link>
 
         {card.desc ? (
-          <p className="mb-2 line-clamp-2 flex-1 text-[11px] leading-relaxed text-site-muted sm:text-xs">
+          <p className={`${SITE_COURSE_CARD_DESC} mb-3 line-clamp-2 flex-1 text-sm sm:text-[15px]`}>
             {card.desc}
           </p>
         ) : (
-          <div className="mb-2 flex-1" />
+          <div className="mb-3 flex-1" />
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-1.5 border-t border-site-accent-dark/10 pt-2 sm:gap-2 sm:pt-2.5">
+        <div className="mt-auto flex items-end justify-between gap-2">
           <div className="min-w-0">
             <div className="leading-tight">
               <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-                <p className={TYPE.priceCard}>₹{priceLabel}</p>
+                <p className={SITE_PRICE}>₹{priceLabel}</p>
                 {hasDiscount ? (
                   <span className="font-body text-[11px] text-site-soft line-through decoration-site-soft/60">
                     ₹{mrpLabel}
@@ -84,10 +91,7 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
             </div>
           </div>
 
-          <Link
-            to={url}
-            className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#1a0c04] px-2.5 py-1.5 text-[9px] font-bold text-white no-underline shadow-sm transition hover:bg-[#2d1a12] sm:gap-1.5 sm:px-3 sm:py-2 sm:text-[11px]"
-          >
+          <Link to={url} className={`${SITE_BTN_CARD} !text-white visited:!text-white`}>
             <Phone size={10} strokeWidth={2.25} aria-hidden />
             <span className="hidden min-[400px]:inline">Request callback</span>
             <span className="min-[400px]:hidden">Callback</span>

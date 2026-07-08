@@ -47,6 +47,8 @@ const LiveAstrologers = lazy(() => import('./pages/LiveAstrologers'));
 const LiveSession = lazy(() => import('./pages/LiveSession'));
 const AstrologerLogin = lazy(() => import('./pages/AstrologerLogin'));
 const AstrologerDashboard = lazy(() => import('./pages/AstrologerDashboard'));
+const CounsellorLogin = lazy(() => import('./pages/counsellor/CounsellorLogin'));
+const FreeConsultationDesk = lazy(() => import('./pages/counsellor/FreeConsultationDesk'));
 
 // Force a full remount when the URL param changes — guarantees clean state and a fresh API call.
 // Must be defined at module level (not inside App) to keep a stable component identity.
@@ -181,6 +183,8 @@ function App() {
               <Route path="/live/:astrologerId" element={<LiveSession />} />
               <Route path="/astrologer-login" element={<AstrologerLogin />} />
               <Route path="/astrologer-dashboard" element={<AstrologerDashboard />} />
+              <Route path="/counsellor/login" element={<CounsellorLogin />} />
+              <Route path="/counsellor/desk" element={<FreeConsultationDesk />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

@@ -17,6 +17,7 @@ import AdminConsultationServices from './AdminConsultationServices';
 import AdminStudents from './AdminStudents';
 import AdminOrders from './AdminOrders';
 import AdminAstrologers from './AdminAstrologers';
+import AdminFreeConsultationLeads from './AdminFreeConsultationLeads';
 import './Admin.css';
 
 const PAGE_TITLES = {
@@ -34,6 +35,7 @@ const PAGE_TITLES = {
   settings: 'Platform Settings',
   newsletter: 'Newsletter',
   astrologers: 'Astrologers',
+  'free-consultation': 'Free Consultation Leads',
 };
 
 const LEAD_FILTER_LABELS = {
@@ -59,6 +61,7 @@ const PAGE_ICONS = {
   settings: 'fa-sliders-h',
   newsletter: 'fa-paper-plane',
   astrologers: 'fa-user-astronaut',
+  'free-consultation': 'fa-phone-volume',
 };
 
 const NAV_SECTIONS = [
@@ -76,6 +79,7 @@ const NAV_SECTIONS = [
       { id: 'leads', filter: 'Consultation', icon: 'fa-user-md', label: 'Consultation Leads', accent: 'violet' },
       { id: 'leads', filter: 'Webinar', icon: 'fa-video', label: 'Webinar Leads', accent: 'rose' },
       { id: 'leads', filter: 'Contact', icon: 'fa-inbox', label: 'Contact Inbox', accent: 'slate' },
+      { id: 'free-consultation', icon: 'fa-phone-volume', label: 'Free Consultation', accent: 'emerald' },
       { id: 'newsletter', icon: 'fa-paper-plane', label: 'Newsletter', accent: 'indigo' },
     ],
   },
@@ -479,6 +483,7 @@ function AdminDashboard() {
           {activeTab === 'settings'      && <AdminSettings />}
           {activeTab === 'newsletter'    && <AdminNewsletter />}
           {activeTab === 'astrologers'   && <AdminAstrologers />}
+          {activeTab === 'free-consultation' && <AdminFreeConsultationLeads />}
         </main>
       </div>
     </div>

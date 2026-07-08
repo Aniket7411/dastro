@@ -19,7 +19,7 @@ import {
   EnquiryModal,
   CouponControls,
 } from '../components/CourseDetailModals';
-import { BTN, TYPE, PAGE_WRAP } from '../components/consultation/tokens';
+import { BTN, TYPE, PAGE_WRAP, COURSE_GRID } from '../components/consultation/tokens';
 import { getPriceDisplay } from '../utils/pricing';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
@@ -837,7 +837,7 @@ function CourseDetail() {
               </p>
             </div>
 
-            <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-4 lg:grid-cols-4">
+            <ul className={`m-0 ${COURSE_GRID}`}>
               {relatedCourses.map((c) => (
                 <li key={c.id}>
                   <CourseListingCard course={c} />

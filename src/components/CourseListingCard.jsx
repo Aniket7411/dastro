@@ -1,28 +1,30 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Clock, Radio, User, Video } from 'lucide-react';
-import { formatINR } from '../utils/currency';
-import PriceBlock from './PriceBlock';
+import { ArrowRight, BookOpen, Clock, User, Video } from 'lucide-react';
+import CourseCardDurationBar from './courses/CourseCardDurationBar';
+import CourseLiveBadge from './courses/CourseLiveBadge';
+import { getPriceDisplay } from '../utils/pricing';
+import {
+  SITE_BTN_CARD,
+  SITE_COURSE_CARD,
+  SITE_COURSE_CARD_BADGE,
+  SITE_COURSE_CARD_BADGE_META,
+  SITE_COURSE_CARD_BADGE_RECORDED,
+  SITE_COURSE_CARD_BODY,
+  SITE_COURSE_CARD_DESC,
+  SITE_COURSE_CARD_FOOTER,
+  SITE_COURSE_CARD_KICKER,
+  SITE_COURSE_CARD_TITLE,
+} from '../utils/siteTokens';
 
 const CARD_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
 
-const TITLE_LINK = `${CARD_LINK} !text-site-primary visited:!text-site-primary transition-colors duration-200 group-hover:!text-site-accent-dark hover:!underline hover:underline-offset-2`;
-
-const CTA_LINK = `${CARD_LINK} !text-white visited:!text-white`;
-
-function formatPrice(price) {
-  if (price == null || price === '') return null;
-  const amount = Number(price);
-  if (Number.isNaN(amount) || amount <= 0) return null;
-  return formatINR(amount).replace(/^₹/, '');
-}
-
 function MetaChip({ icon: Icon, children }) {
   if (!children) return null;
   return (
-    <span className="inline-flex max-w-full items-center gap-0.5 truncate rounded-md bg-site-bg px-1 py-0.5 text-[9px] font-medium text-site-muted sm:gap-1 sm:px-1.5 sm:text-[10px]">
-      <Icon size={8} className="shrink-0 text-site-accent sm:size-[9px]" aria-hidden />
+    <span className="inline-flex max-w-full items-center gap-1 truncate rounded-md bg-site-bg px-1.5 py-0.5 text-[10px] font-medium text-site-muted sm:text-xs">
+      <Icon size={10} className="shrink-0 text-site-accent-dark" aria-hidden />
       <span className="truncate">{children}</span>
     </span>
   );
@@ -32,14 +34,18 @@ export default function CourseListingCard({ course }) {
   const [imgError, setImgError] = useState(false);
   const isLive = course.courseType === 'Live';
   const detailPath = `/courses/${course.slug || course.id}`;
-  const priceLabel = formatPrice(course.price);
-  const ctaLabel = isLive ? 'Enquire' : 'Request callback';
+  const { hasDiscount, priceLabel, mrpLabel } = getPriceDisplay({
+    price: course.price,
+    mrp: course.mrp,
+  });
+  const hasPrice = Number(course.price) > 0;
+  const ctaLabel = isLive ? 'Enquire' : 'Explore';
 
   return (
-    <article className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-[0_8px_22px_rgba(139,74,30,0.12)]">
+    <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
       <Link
         to={detailPath}
-        className={`${CARD_LINK} relative block aspect-[2/1] overflow-hidden`}
+        className={`${CARD_LINK} relative block h-[100px] overflow-hidden min-[480px]:h-[130px] sm:h-[150px]`}
         tabIndex={-1}
         aria-hidden
       >
@@ -53,69 +59,46 @@ export default function CourseListingCard({ course }) {
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 bg-gradient-to-br from-site-primary to-site-accent-dark/85">
-            <BookOpen size={28} className="text-white/25" aria-hidden />
+            <BookOpen size={24} className="text-white/25 sm:size-7" aria-hidden />
             {course.category && (
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-white/35">
+              <span className="text-[9px] font-semibold uppercase tracking-wider text-white/35 sm:text-[10px]">
                 {course.category}
               </span>
             )}
           </div>
         )}
 
-        <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-site-primary/35 via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-          aria-hidden
-        />
+        {isLive ? (
+          <CourseLiveBadge />
+        ) : (
+          <span
+            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} left-1.5 top-1.5 right-auto sm:left-2 sm:top-2`}
+          >
+            <Video size={9} aria-hidden className="mr-0.5 inline shrink-0 sm:size-2.5" />
+            <span className="hidden min-[400px]:inline">Rec</span>
+            <span className="min-[400px]:hidden">R</span>
+          </span>
+        )}
 
-        <span
-          className={`absolute left-1.5 top-1.5 inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white shadow-sm sm:left-2 sm:top-2 sm:gap-1 sm:px-2 sm:text-[10px] ${
-            isLive ? 'bg-site-primary' : 'bg-site-accent-dark'
-          }`}
-        >
-          {isLive ? <Radio size={8} aria-hidden className="sm:size-[9px]" /> : <Video size={8} aria-hidden className="sm:size-[9px]" />}
-          <span className="sm:hidden">{isLive ? 'Live' : 'Rec'}</span>
-          <span className="hidden sm:inline">{isLive ? 'Live' : 'Recorded'}</span>
-        </span>
-
-        {course.duration ? (
-          <span className="absolute bottom-1.5 right-1.5 inline-flex items-center gap-0.5 rounded-full bg-black/55 px-1 py-0.5 text-[9px] font-semibold text-white backdrop-blur-sm sm:bottom-2 sm:right-2 sm:px-1.5 sm:text-[10px]">
-            <Clock size={8} aria-hidden className="sm:size-[9px]" />
-            {course.duration}
+        {course.tier ? (
+          <span
+            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 max-w-[4.5rem] truncate sm:right-2 sm:max-w-[5rem]`}
+          >
+            {course.tier}
           </span>
         ) : null}
+
+        <CourseCardDurationBar course={course} />
       </Link>
 
-      <div className="flex flex-1 flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
-        {(course.category || course.tier) ? (
-          <div className="mb-1 flex flex-wrap items-center gap-1">
-            {course.category ? (
-              <p className="truncate text-[9px] font-bold uppercase tracking-wider text-site-accent-dark sm:text-[10px]">
-                {course.category}
-              </p>
-            ) : null}
-            {course.tier ? (
-              <span
-                className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide sm:text-[9px] ${
-                  course.tier === 'FLAGSHIP' ? 'bg-amber-500/15 text-amber-700' : 'bg-site-primary/10 text-site-primary'
-                }`}
-              >
-                {course.tier}
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+      <div className={SITE_COURSE_CARD_BODY}>
+        {course.category ? <p className={SITE_COURSE_CARD_KICKER}>{course.category}</p> : null}
 
-        <Link to={detailPath} className={`${TITLE_LINK} mb-1 line-clamp-2 font-body text-xs font-bold leading-snug sm:text-sm`}>
+        <Link to={detailPath} className={`${SITE_COURSE_CARD_TITLE} mb-1.5 line-clamp-2 min-[480px]:mb-2`}>
           {course.title}
         </Link>
 
-        {course.shortDesc ? (
-          <p className="mb-2 line-clamp-2 flex-1 text-[10px] leading-snug text-site-muted sm:text-xs sm:leading-relaxed">
-            {course.shortDesc}
-          </p>
-        ) : (
-          <div className="mb-2 flex-1" />
-        )}
+        {course.shortDesc ? <p className={SITE_COURSE_CARD_DESC}>{course.shortDesc}</p> : null}
 
         {(course.instructor || (!isLive && course.modulesCount > 0) || (isLive && course.schedule)) && (
           <div className="mb-2 hidden flex-wrap gap-1 sm:flex">
@@ -127,34 +110,37 @@ export default function CourseListingCard({ course }) {
           </div>
         )}
 
-        <div className="mt-auto flex flex-col gap-2 border-t border-site-accent-dark/10 pt-2.5 sm:flex-row sm:items-center sm:justify-between sm:pt-3">
+        <div className={SITE_COURSE_CARD_FOOTER}>
           <div className="min-w-0">
-            {priceLabel ? (
-              <PriceBlock
-                price={course.price}
-                mrp={course.mrp}
-                size="card"
-                prefix={isLive ? 'From' : undefined}
-              />
+            {hasPrice ? (
+              <div>
+                <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+                  <p className="font-price text-sm font-semibold leading-none tracking-tight text-site-text tabular-nums min-[480px]:text-base sm:text-[1.3125rem]">
+                    <span className="text-[0.85em] font-medium text-site-muted">₹</span>
+                    {priceLabel}
+                  </p>
+                  {hasDiscount ? (
+                    <span className="font-body text-[10px] text-site-soft line-through decoration-site-soft/60 min-[480px]:text-xs">
+                      ₹{mrpLabel}
+                    </span>
+                  ) : null}
+                </div>
+                {!isLive ? (
+                  <p className="mt-0.5 hidden font-body text-[10px] font-medium text-site-muted min-[480px]:block">
+                    lifetime access
+                  </p>
+                ) : null}
+              </div>
             ) : (
-              <p className="font-body text-[10px] font-semibold text-site-primary sm:text-xs">
-                {isLive ? 'Enquire for fees' : 'Free preview'}
+              <p className="font-body text-[11px] font-medium text-site-muted min-[480px]:text-sm sm:text-[15px]">
+                {isLive ? 'Enquire' : 'Preview'}
               </p>
             )}
           </div>
 
-          <Link
-            to={detailPath}
-            className={`${CTA_LINK} inline-flex w-full shrink-0 items-center justify-center gap-0.5 rounded-full bg-site-primary px-2.5 py-1.5 text-[10px] font-bold shadow-sm transition duration-200 hover:bg-site-accent-dark group-hover:bg-site-accent-dark group-hover:shadow-md sm:w-auto sm:gap-1 sm:px-3 sm:py-2 sm:text-[11px]`}
-          >
-            <span className="sm:hidden">{isLive ? 'Enquire' : 'View'}</span>
-            <span className="hidden sm:inline">{ctaLabel}</span>
-            <ArrowRight
-              size={10}
-              strokeWidth={2.5}
-              aria-hidden
-              className="transition-transform duration-200 group-hover:translate-x-0.5 sm:size-[11px]"
-            />
+          <Link to={detailPath} className={`${SITE_BTN_CARD} !text-white visited:!text-white`}>
+            <span className="truncate">{ctaLabel}</span>
+            <ArrowRight size={12} strokeWidth={2.5} className="shrink-0 sm:size-3.5" aria-hidden />
           </Link>
         </div>
       </div>

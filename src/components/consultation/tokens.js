@@ -16,9 +16,9 @@ import {
 export { PAGE_WRAP };
 
 export const COURSE_GRID =
-  'm-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-4 lg:gap-4';
+  'm-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4';
 
-export const COURSE_GRID_ITEM = 'min-w-0';
+export const COURSE_GRID_ITEM = 'min-w-0 w-full';
 
 /** @deprecated Layout provides tw-page — use a fragment at page root instead */
 export const PAGE = 'w-full';

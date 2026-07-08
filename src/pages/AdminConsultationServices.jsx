@@ -41,6 +41,75 @@ const authHeaders = () => ({
 const inputClass = "w-full px-4 py-2.5 bg-white/60 backdrop-blur-md border border-white/40 shadow-inner rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 focus:bg-white outline-none transition-all duration-300 text-slate-800 placeholder-slate-400";
 const labelClass = "block text-sm font-semibold text-slate-700 mb-1.5 ml-1 flex items-center gap-1.5";
 
+function ServiceThumbnailUploader({ svc, uploading, onUpload, onRemove }) {
+  const slug = svc.slug || svc.id;
+  const inputId = `svc-thumb-${slug}`;
+
+  const handleChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) onUpload(slug, file);
+    e.target.value = '';
+  };
+
+  return (
+    <div
+      className="relative shrink-0"
+      style={{ width: 46, height: 46 }}
+      title="Click to upload or replace thumbnail"
+    >
+      {svc.img ? (
+        <img
+          src={svc.img}
+          alt={svc.title}
+          className="h-full w-full rounded-[var(--r-sm)] border border-[var(--border)] object-cover"
+        />
+      ) : (
+        <div
+          className="flex h-full w-full items-center justify-center rounded-[var(--r-sm)] border border-dashed border-violet-200 bg-[#f5f3ff]"
+        >
+          <UploadCloud className="h-5 w-5 text-violet-300" />
+        </div>
+      )}
+
+      <label
+        htmlFor={inputId}
+        className={`absolute inset-0 flex cursor-pointer items-center justify-center rounded-[var(--r-sm)] bg-black/45 text-white opacity-0 transition hover:opacity-100 ${uploading ? 'pointer-events-none opacity-100' : ''}`}
+      >
+        {uploading ? (
+          <RefreshCw className="h-4 w-4 animate-spin" />
+        ) : (
+          <UploadCloud className="h-4 w-4" />
+        )}
+      </label>
+
+      <input
+        id={inputId}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleChange}
+        disabled={uploading}
+      />
+
+      {svc.img ? (
+        <button
+          type="button"
+          title="Remove thumbnail"
+          className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold leading-none text-white shadow"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (window.confirm('Remove this thumbnail?')) onRemove(slug);
+          }}
+          disabled={uploading}
+        >
+          ×
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export default function AdminConsultationServices() {
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -56,6 +125,7 @@ export default function AdminConsultationServices() {
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [resyncing, setResyncing] = useState(false);
+  const [uploadingThumbSlug, setUploadingThumbSlug] = useState(null);
 
   const filteredServices = useMemo(() => {
     if (serviceCategoryFilter === 'All') return services;
@@ -161,6 +231,7 @@ export default function AdminConsultationServices() {
     try {
       const payload = {
         ...serviceForm,
+        img: String(serviceForm.img || '').trim(),
         price: Number(serviceForm.price),
         mrp: Number(serviceForm.mrp) || 0,
         sortOrder: Number(serviceForm.sortOrder) || 0,
@@ -287,11 +358,63 @@ export default function AdminConsultationServices() {
     try {
       const url = await uploadImage(file, 'consultation-services');
       setServiceForm((prev) => ({ ...prev, img: url }));
-      toast.success('Image uploaded');
+      toast.success('Image uploaded — save the service to apply');
     } catch (err) {
       toast.error(err.message || 'Upload failed');
     } finally {
       setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const persistServiceImage = async (slug, imgUrl) => {
+    const res = await fetch(`${API_BASE}/api/admin/consultation-services/${slug}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ img: imgUrl }),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.message || 'Failed to update thumbnail');
+    }
+    return data.service;
+  };
+
+  const handleTableThumbnailUpload = async (slug, file) => {
+    if (!slug || !file) return;
+    setUploadingThumbSlug(slug);
+    try {
+      const url = await uploadImage(file, 'consultation-services');
+      const updated = await persistServiceImage(slug, url);
+      setServices((prev) =>
+        prev.map((svc) =>
+          (svc.slug || svc.id) === slug ? { ...svc, img: updated?.img || url } : svc
+        )
+      );
+      toast.success('Thumbnail updated');
+    } catch (err) {
+      toast.error(err.message || 'Thumbnail upload failed');
+    } finally {
+      setUploadingThumbSlug(null);
+    }
+  };
+
+  const removeServiceImage = async (slug) => {
+    if (!slug) return;
+    setUploadingThumbSlug(slug);
+    try {
+      await persistServiceImage(slug, '');
+      setServices((prev) =>
+        prev.map((svc) => ((svc.slug || svc.id) === slug ? { ...svc, img: '' } : svc))
+      );
+      if ((editingServiceSlug || '') === slug) {
+        setServiceForm((prev) => ({ ...prev, img: '' }));
+      }
+      toast.success('Thumbnail removed');
+    } catch (err) {
+      toast.error(err.message || 'Failed to remove thumbnail');
+    } finally {
+      setUploadingThumbSlug(null);
     }
   };
 
@@ -526,17 +649,12 @@ export default function AdminConsultationServices() {
                     <tr key={svc.slug || svc.id}>
                       <td>
                         <div className="lms-course-cell">
-                          {svc.img ? (
-                            <img src={svc.img} alt={svc.title} />
-                          ) : (
-                            <div style={{
-                              width: 46, height: 46, flexShrink: 0, borderRadius: 'var(--r-sm)',
-                              border: '1px solid var(--border)', display: 'flex', alignItems: 'center',
-                              justifyContent: 'center', background: '#f5f3ff',
-                            }}>
-                              <Sparkles className="w-5 h-5 text-violet-300" />
-                            </div>
-                          )}
+                          <ServiceThumbnailUploader
+                            svc={svc}
+                            uploading={uploadingThumbSlug === (svc.slug || svc.id)}
+                            onUpload={handleTableThumbnailUpload}
+                            onRemove={removeServiceImage}
+                          />
                           <div>
                             <strong>{svc.title}</strong>
                             <span>{svc.desc || 'No description added yet'}</span>
@@ -859,38 +977,60 @@ export default function AdminConsultationServices() {
                     {/* Image Upload Area */}
                     <div className="lg:col-span-5">
                       <label className={labelClass}>Cover Image</label>
-                      <div className="flex items-center gap-4 py-2.5 px-4 rounded-xl bg-white/40 border border-white/60 shadow-sm">
-                        {serviceForm.img ? (
-                          <div className="relative group w-[54px] h-[54px] shrink-0 rounded-lg overflow-hidden shadow-md">
-                            <img src={serviceForm.img} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="space-y-3 rounded-xl border border-white/60 bg-white/40 p-4 shadow-sm">
+                        <div className="flex items-start gap-4">
+                          {serviceForm.img ? (
+                            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-violet-100 shadow-md">
+                              <img
+                                src={serviceForm.img}
+                                alt=""
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-violet-200 bg-white/50 text-violet-400">
+                              <UploadCloud className="h-8 w-8" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1 space-y-2">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="img-upload"
+                              className="hidden"
+                              onChange={handleImageUpload}
+                              disabled={uploading}
+                            />
+                            <label
+                              htmlFor="img-upload"
+                              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-violet-100 bg-white px-3 py-2 text-xs font-bold text-violet-700 shadow-sm transition hover:bg-violet-50 hover:shadow-md"
+                            >
+                              {uploading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <UploadCloud className="h-3.5 w-3.5" />}
+                              {uploading ? 'Uploading...' : serviceForm.img ? 'Replace image' : 'Upload image'}
+                            </label>
+                            {serviceForm.img ? (
+                              <button
+                                type="button"
+                                className="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
+                                onClick={() => setServiceForm((prev) => ({ ...prev, img: '' }))}
+                              >
+                                Remove image
+                              </button>
+                            ) : null}
+                            <p className="m-0 text-[11px] leading-snug text-slate-500">
+                              Upload a cover image for this consultation. It appears on the public catalog and detail pages.
+                            </p>
                           </div>
-                        ) : (
-                          <div className="w-[54px] h-[54px] shrink-0 rounded-lg border-2 border-dashed border-violet-200 flex items-center justify-center text-violet-400 bg-white/50">
-                            <UploadCloud className="w-5 h-5" />
-                          </div>
-                        )}
-                        <div className="flex-1 space-y-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            id="img-upload"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                            disabled={uploading}
-                          />
-                          <label
-                            htmlFor="img-upload"
-                            className="w-full inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-white border border-violet-100 shadow-sm hover:shadow-md rounded-lg text-xs font-bold text-violet-700 cursor-pointer hover:bg-violet-50 transition-all"
-                          >
-                            {uploading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <UploadCloud className="w-3.5 h-3.5" />}
-                            {uploading ? 'Uploading...' : 'Choose Cover'}
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                            Or paste image URL
                           </label>
                           <input
-                            className={`${inputClass} !py-1.5 !px-3 !text-[11px]`}
+                            className={`${inputClass} !py-2 !text-xs`}
                             value={serviceForm.img}
                             onChange={(e) => setServiceForm({ ...serviceForm, img: e.target.value })}
-                            placeholder="Or image URL..."
+                            placeholder="https://..."
                           />
                         </div>
                       </div>

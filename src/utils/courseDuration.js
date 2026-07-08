@@ -36,13 +36,11 @@ export function parseCourseDuration(durationStr = '') {
   return { value, unit, legacy: '' };
 }
 
-/** Prefer structured fields from API, then duration string, then validity fallback */
+/** Prefer explicit duration string only — do not infer from validityDays */
 export function resolveCourseDuration(course) {
   if (course?.durationValue && course?.durationUnit) {
     return formatCourseDuration(course.durationValue, course.durationUnit);
   }
   if (course?.duration) return course.duration;
-  const days = Number(course?.validityDays);
-  if (days > 0) return formatCourseDuration(days, 'days');
   return '';
 }

@@ -260,3 +260,86 @@
   height: auto;
   border-radius: 0.75rem;
 }
+
+/* Student dashboard — unified Jakarta UI; beat Bootstrap reboot */
+.tw-page .student-dashboard-ui {
+  font-family: var(--font-body) !important;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tw-page .student-dashboard-ui :where(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  font-family: var(--font-body) !important;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+}
+
+.tw-page .student-dashboard-ui .font-body {
+  font-family: var(--font-body) !important;
+}
+
+.tw-page .student-dashboard-ui .font-price {
+  font-family: var(--font-price) !important;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  letter-spacing: -0.03em;
+}
+
+.tw-page .student-dashboard-ui :where(p, ul, ol, li, dl, dt, dd, figure, blockquote) {
+  margin: 0;
+}
+
+.tw-page .student-dashboard-ui :where(a, a:visited, a:hover) {
+  text-decoration: none;
+}
+
+.tw-page .student-dashboard-ui :where(button, .sd-btn) {
+  margin: 0;
+  letter-spacing: normal;
+  text-transform: none;
+  font-family: var(--font-body);
+  appearance: none;
+  background-image: none;
+  line-height: inherit;
+}
+
+.tw-page .student-dashboard-ui :where(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  margin: 0;
+  font-family: var(--font-body);
+  appearance: none;
+  box-shadow: none;
+}
+
+.tw-page .student-dashboard-ui :where(label) {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.tw-page .student-dashboard-ui :where(code) {
+  font-family: var(--font-body);
+  color: inherit;
+  background: transparent;
+  padding: 0;
+}
+
+/* Counsellor free-consultation desk — form field isolation */
+.tw-page :where(.sd-field) {
+  margin: 0;
+  font-family: var(--font-body);
+  appearance: none;
+  box-shadow: none;
+}
+
+.tw-page :where(.sd-btn) {
+  margin: 0;
+  letter-spacing: normal;
+  text-transform: none;
+  font-family: var(--font-body);
+  appearance: none;
+}

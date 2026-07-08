@@ -2,18 +2,23 @@
 @import "./styles/tw-page.css";
 
 @theme {
-  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
-  --font-price: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  /* Manuscript & Brass — ds-astrology-design-system.html */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-price: 'IBM Plex Sans', system-ui, sans-serif;
 
-  --color-site-bg: #fdf6ee;
-  --color-site-surface: #ffffff;
-  --color-site-text: #2a0f02;
-  --color-site-muted: #5c3d26;
-  --color-site-soft: #7b6254;
-  --color-site-primary: #2a0f02;
-  --color-site-accent: #c8832a;
-  --color-site-accent-dark: #8b4a1e;
+  --color-site-bg: #fbf5ea;
+  --color-site-surface: #f4e9d6;
+  --color-site-sand: #ebddc4;
+  --color-site-border: #e0cfb0;
+  --color-site-text: #241c14;
+  --color-site-muted: #574636;
+  --color-site-soft: #6b5848;
+  --color-site-primary: #33251a;
+  --color-site-accent: #a25e2a;
+  --color-site-accent-dark: #8a4a1c;
+  --color-site-gold: #c49a4a;
+  --color-site-cream: #fbf5ea;
 
   --spacing-site-header: calc(2.25rem + 4rem);
 }
@@ -58,20 +63,61 @@
   animation: marquee-right 25s linear infinite;
 }
 
-@font-face {
-  font-family: 'Playfair Display';
-  src: url('/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
+/* Live course badge — light flow / shimmer across the pill */
+@keyframes course-live-shine {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(220%) skewX(-18deg);
+    opacity: 0;
+  }
 }
 
-@font-face {
-  font-family: 'Playfair Display';
-  src: url('/Playfair_Display/PlayfairDisplay-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 900;
-  font-style: italic;
-  font-display: swap;
+@keyframes course-live-dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+@layer components {
+  .course-live-badge__shine {
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255, 255, 255, 0.12) 45%,
+      rgba(255, 40, 40, 0.75) 50%,
+      rgba(255, 255, 255, 0.35) 55%,
+      transparent 62%,
+      transparent 100%
+    );
+    animation: course-live-shine 2.4s ease-in-out infinite;
+  }
+
+  .course-live-badge__dot {
+    animation: course-live-dot-pulse 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course-live-badge__shine,
+    .course-live-badge__dot {
+      animation: none;
+    }
+  }
 }
 
 @layer base {
@@ -80,16 +126,15 @@
   }
 
   body {
-    @apply m-0 bg-site-bg font-body text-site-text antialiased;
+    @apply m-0 bg-site-bg font-body text-lg font-normal leading-relaxed text-site-text antialiased;
     font-feature-settings: 'kern' 1, 'liga' 1;
-    background-color: var(--bg-color);
-    color: var(--text-content);
   }
 
   h1,
   h2,
   h3,
   h4 {
+    @apply font-heading text-site-text;
     text-wrap: balance;
   }
 

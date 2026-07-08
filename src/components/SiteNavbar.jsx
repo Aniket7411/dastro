@@ -18,6 +18,7 @@ import {
   X,
 } from 'lucide-react';
 import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME } from '../utils/brandAssets';
+import { SITE_BTN_NAV, SITE_NAV_LINK, SITE_NAV_LINK_ACTIVE, SITE_NAV_LINK_MOBILE } from '../utils/siteTokens';
 import FreeWebinarInterestModal from './webinar/FreeWebinarInterestModal';
 
 const REPORT_ITEMS = [
@@ -28,19 +29,15 @@ const REPORT_ITEMS = [
   '2026 Love Horoscope Based on Your Birth Chart',
 ];
 
-const mobileNavItemClass =
-  'block px-4 py-3.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] !text-site-text !no-underline transition hover:!text-site-accent-dark hover:!no-underline';
+const mobileNavItemClass = SITE_NAV_LINK_MOBILE;
 
-const NAV_LINK_BASE =
-  'relative inline-flex items-center gap-1 px-2.5 py-2 text-[0.6875rem] font-bold uppercase tracking-[0.08em] !no-underline decoration-transparent transition-colors hover:!no-underline hover:!text-site-accent-dark sm:px-3 sm:text-xs';
+const NAV_LINK_BASE = SITE_NAV_LINK;
 
-const NAV_LINK_ACTIVE =
-  '!text-site-accent-dark visited:!text-site-accent-dark after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[70%] after:-translate-x-1/2 after:rounded-full after:bg-site-accent-dark';
+const NAV_LINK_ACTIVE = SITE_NAV_LINK_ACTIVE;
 
-const NAV_LINK_IDLE = '!text-site-text visited:!text-site-text';
+const NAV_LINK_IDLE = '';
 
-const NAV_ACTION_BTN =
-  'inline-flex items-center justify-center gap-1.5 !rounded-full border-0 px-4 py-2 text-[0.6875rem] font-bold uppercase tracking-[0.06em] transition hover:-translate-y-px sm:px-[1.125rem] sm:py-2.5 sm:text-xs';
+const NAV_ACTION_BTN = SITE_BTN_NAV;
 
 const COURSE_LINKS = [
   { label: 'Live Courses', to: '/live-courses', Icon: Radio },
@@ -84,13 +81,13 @@ function CoursesDropdown({ coursesActive }) {
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        <ul className="overflow-hidden rounded-xl border border-site-accent-dark/15 bg-white py-1 shadow-lg">
+        <ul className="overflow-hidden rounded-xl border border-site-border bg-site-surface py-1 shadow-lg">
           {COURSE_LINKS.map(({ label, to, Icon }) => (
             <li key={to}>
               <Link
                 to={to}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-[#fff8ef] hover:!text-site-accent-dark"
+                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-site-sand hover:!text-site-accent-dark"
               >
                 <Icon className="h-4 w-4 shrink-0 opacity-60" />
                 {label}
@@ -133,13 +130,13 @@ function FreeToolsDropdown({ toolsActive }) {
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        <ul className="overflow-hidden rounded-xl border border-site-accent-dark/15 bg-white py-1 shadow-lg">
+        <ul className="overflow-hidden rounded-xl border border-site-border bg-site-surface py-1 shadow-lg">
           {FREE_TOOL_LINKS.map(({ label, to, Icon }) => (
             <li key={`${label}-${to}`}>
               <Link
                 to={to}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-[#fff8ef] hover:!text-site-accent-dark"
+                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-site-sand hover:!text-site-accent-dark"
               >
                 <Icon className="h-4 w-4 shrink-0 opacity-60" />
                 {label}
@@ -274,7 +271,7 @@ export default function SiteNavbar({
       {authState.isAdmin && (
         <Link
           to="/admin"
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-accent-dark/15 bg-[#fffaf4] px-3 py-2 text-xs font-bold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent hover:bg-white"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
         >
           <Shield className="h-3.5 w-3.5" />
           Admin
@@ -284,7 +281,7 @@ export default function SiteNavbar({
         <div className="flex items-center gap-1.5">
           <Link
             to="/dashboard"
-            className="inline-flex max-w-[9rem] items-center justify-center gap-1.5 overflow-hidden rounded-xl border border-site-accent-dark/15 bg-[#fffaf4] px-3 py-2 text-xs font-bold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent hover:bg-white"
+            className="inline-flex max-w-[9rem] items-center justify-center gap-1.5 overflow-hidden rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
           >
             <GraduationCap className="h-3.5 w-3.5 shrink-0" />
             <span className="truncate">{authState.studentName}</span>
@@ -292,7 +289,7 @@ export default function SiteNavbar({
           <button
             type="button"
             onClick={onStudentLogout}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-site-accent-dark/15 bg-white text-site-accent-dark transition hover:border-site-accent hover:bg-[#fff3ea]"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-site-border bg-site-surface text-site-accent-dark transition hover:border-site-accent-dark/40 hover:bg-site-sand"
             aria-label="Logout"
           >
             <LogOut className="h-4 w-4" />
@@ -301,7 +298,7 @@ export default function SiteNavbar({
       ) : !isLoginPage ? (
         <Link
           to="/login"
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-accent-dark/15 bg-[#fffaf4] px-3 py-2 text-xs font-bold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent hover:bg-white"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
         >
           <User className="h-3.5 w-3.5" />
           Student Login
@@ -310,7 +307,7 @@ export default function SiteNavbar({
       <button
         type="button"
         onClick={onBookConsultation}
-        className={`${NAV_ACTION_BTN} bg-gradient-to-br from-site-primary to-site-accent-dark text-white shadow-md hover:shadow-lg`}
+        className={`${NAV_ACTION_BTN} !no-underline`}
       >
         <CalendarCheck className="h-3.5 w-3.5" />
         Book Consultation
@@ -333,7 +330,7 @@ export default function SiteNavbar({
   return (
     <div
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-[1020] w-full bg-site-bg shadow-[0_1px_0_0_rgba(139,74,30,0.08)] [&_a]:!no-underline [&_a:hover]:!no-underline [&_a:visited]:!no-underline"
+      className="fixed top-0 left-0 right-0 z-[1020] w-full border-b border-site-border bg-site-bg shadow-[0_1px_0_0_rgba(51,37,26,0.06)] [&_a]:!no-underline [&_a:hover]:!no-underline [&_a:visited]:!no-underline"
     >
       <style>{`
         @keyframes logo-spin {
@@ -382,8 +379,8 @@ export default function SiteNavbar({
 
       {/* Main navbar */}
       <header
-        className={`border-b border-site-accent-dark/15 bg-site-bg transition-shadow ${
-          scrolled ? 'shadow-[0_4px_20px_rgba(139,74,30,0.12)]' : 'shadow-[0_2px_8px_rgba(139,74,30,0.06)]'
+        className={`border-b border-site-border bg-site-bg transition-shadow ${
+          scrolled ? 'shadow-[0_4px_20px_rgba(51,37,26,0.10)]' : 'shadow-[0_2px_8px_rgba(51,37,26,0.06)]'
         }`}
       >
         <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
@@ -410,7 +407,7 @@ export default function SiteNavbar({
 
             <button
               type="button"
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-site-primary bg-white text-site-primary shadow-sm transition hover:border-site-accent hover:bg-[#fffaf4] xl:hidden"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-site-border bg-site-surface text-site-primary shadow-sm transition hover:border-site-accent-dark hover:bg-site-sand xl:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
               aria-expanded={mobileOpen}
@@ -640,7 +637,7 @@ export default function SiteNavbar({
                 closeMobile();
                 onBookConsultation();
               }}
-              className="flex items-center justify-center gap-2 !rounded-full bg-gradient-to-br from-site-accent-dark to-site-primary px-4 py-3 text-xs font-bold uppercase tracking-wide text-white shadow-md"
+              className={`${SITE_BTN_NAV} flex w-full items-center justify-center gap-2 !no-underline`}
             >
               <CalendarCheck className="h-4 w-4" />
               Book Consultation

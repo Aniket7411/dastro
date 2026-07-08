@@ -6,72 +6,18 @@ import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
-import HomeConsultationCard from '../components/HomeConsultationCard';
 import HomeBannerCTAs from '../components/HomeBannerCTAs';
-import HomeSectionHeader, { HomeSubsectionHeader } from '../components/home/HomeSectionHeader';
+import HomeSectionHeader from '../components/home/HomeSectionHeader';
 import HomeFinalCTA from '../components/home/HomeFinalCTA';
 import LazyOnView from '../components/LazyOnView';
-import { COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
 import { runWhenIdle } from '../utils/loadScript';
 
 const AstrologyCoursesSection = lazy(() => import('../components/AstrologyCoursesSection'));
-const ConsultationServicesCarousel = lazy(() => import('../components/ConsultationServicesCarousel'));
+const HomeConsultationsSection = lazy(() => import('../components/home/HomeConsultationsSection'));
 const StudentTestimonials = lazy(() => import('../components/StudentTestimonials'));
 const ConsultationTestimonials = lazy(() => import('../components/ConsultationTestimonials'));
 const ConsultationModal = lazy(() => import('../components/ConsultationModal'));
 const SuccessModal = lazy(() => import('../components/SuccessModal'));
-
-const HOME_FEATURED_CONSULTATIONS = [
-  {
-    title: 'Tarot Card Reading',
-    img: '/images/tarot_thumbnail.png',
-    desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
-    duration: '30 Minutes',
-    icon: 'magic',
-    price: '₹2500',
-    priceValue: 2500,
-    mrp: 3200,
-    badge: 'INTUITION EXPERT',
-    link: '/consultations/phone-session',
-  },
-  {
-    title: 'Career Consultation',
-    img: '/images/consultations/career.png',
-    desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
-    duration: '40 Min',
-    icon: 'briefcase',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    badge: 'CAREER EXPERT',
-    link: '/consultations/career',
-  },
-  {
-    title: 'Divorce Consultation',
-    img: '/images/consultations/health.png',
-    desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
-    duration: '40 Min',
-    icon: 'heart-broken',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    badge: 'RECOVERY EXPERT',
-    link: '/consultations/divorce',
-  },
-  {
-    title: 'Affair & Relationship',
-    img: '/images/consultations/love.png',
-    desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
-    duration: '40 Min',
-    icon: 'heart',
-    price: '₹3600',
-    priceValue: 3600,
-    mrp: 4500,
-    badge: 'RELATIONSHIP EXPERT',
-    popular: true,
-    link: '/consultations/relationship',
-  },
-];
 
 /* Legacy AstrologyCourses — inline styles replaced by Tailwind component
 const AstrologyCourses = ({ onEnroll }) => {
@@ -1135,34 +1081,8 @@ function Home() {
             />
 
             <Suspense fallback={null}>
-              <ConsultationServicesCarousel onBook={(item) => handleOpenModal(null, item)} />
+              <HomeConsultationsSection onBook={handleOpenModal} />
             </Suspense>
-
-            <HomeSubsectionHeader
-              className="mt-1 sm:mt-2"
-              title="Featured"
-              titleHighlight="Sessions"
-              subtitle="Our most booked consultations — request a callback or learn more about each service."
-              subtitleClassName="lg:whitespace-nowrap"
-              showAccent
-            />
-
-            <ul className={COURSE_GRID} data-aos="fade-up">
-              {HOME_FEATURED_CONSULTATIONS.map((item, idx) => (
-                <li key={item.link} className={COURSE_GRID_ITEM} data-aos="fade-up" data-aos-delay={idx * 100}>
-                  <HomeConsultationCard item={item} onBook={handleOpenModal} />
-                </li>
-              ))}
-            </ul>
-
-            <div className="text-center mt-6 sm:mt-8" data-aos="fade-up">
-              <Link
-                to="/consultations"
-                className="btn mystic-btn-outline px-5 !no-underline visited:!no-underline hover:!no-underline"
-              >
-                View All Consultations
-              </Link>
-            </div>
           </div>
         </section>
         </LazyOnView>
