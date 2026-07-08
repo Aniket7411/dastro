@@ -2,13 +2,19 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import API_BASE from '../utils/api';
 import { resolveCourseDuration } from '../utils/courseDuration';
 
-const CACHE_TTL_MS = 60_000;
-let sharedCache = {
-  key: '',
-  data: null,
-  fetchedAt: 0,
-  promise: null,
-};
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min public courses
+const CATEGORIES_TTL_MS = 10 * 60 * 1000;
+/** Per-query cache so Live + Recorded (and other keys) don't overwrite each other. */
+const cacheByKey = new Map();
+let categoriesCache = { data: null, fetchedAt: 0, promise: null };
+
+function getCacheEntry(key) {
+  return cacheByKey.get(key) || { data: null, fetchedAt: 0, promise: null };
+}
+
+function setCacheEntry(key, patch) {
+  cacheByKey.set(key, { ...getCacheEntry(key), ...patch });
+}
 
 function buildQuery({ courseType, category, limit } = {}) {
   const params = new URLSearchParams();
@@ -52,39 +58,36 @@ export async function fetchCourses(options = {}, { force = false } = {}) {
   const query = buildQuery(options);
   const cacheKey = query || 'all';
   const now = Date.now();
+  const entry = getCacheEntry(cacheKey);
 
-  if (
-    !force
-    && sharedCache.key === cacheKey
-    && sharedCache.data
-    && now - sharedCache.fetchedAt < CACHE_TTL_MS
-  ) {
-    return sharedCache.data;
+  if (!force && entry.data && now - entry.fetchedAt < CACHE_TTL_MS) {
+    return entry.data;
   }
 
-  if (!force && sharedCache.promise && sharedCache.key === cacheKey) {
-    return sharedCache.promise;
+  if (!force && entry.promise) {
+    return entry.promise;
   }
 
-  sharedCache.key = cacheKey;
-  sharedCache.promise = fetch(`${API_BASE}/api/courses${query}`)
+  const promise = fetch(`${API_BASE}/api/courses${query}`)
     .then(async (res) => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message || 'Failed to load courses');
       const courses = (data.courses || []).map(mapCourseFromApi);
-      sharedCache.data = courses;
-      sharedCache.fetchedAt = Date.now();
+      setCacheEntry(cacheKey, { data: courses, fetchedAt: Date.now(), promise: null });
       return courses;
     })
-    .finally(() => {
-      sharedCache.promise = null;
+    .catch((err) => {
+      setCacheEntry(cacheKey, { promise: null });
+      throw err;
     });
 
-  return sharedCache.promise;
+  setCacheEntry(cacheKey, { promise });
+  return promise;
 }
 
 export function invalidateCoursesCache() {
-  sharedCache = { key: '', data: null, fetchedAt: 0, promise: null };
+  cacheByKey.clear();
+  categoriesCache = { data: null, fetchedAt: 0, promise: null };
 }
 
 export function useCourses(options = {}) {
@@ -116,11 +119,27 @@ export function useCourses(options = {}) {
   return { courses, loading, error, reload };
 }
 
-export async function fetchCourseCategories() {
-  const res = await fetch(`${API_BASE}/api/courses/categories`);
-  const data = await res.json();
-  if (!data.success) throw new Error(data.message || 'Failed to load categories');
-  return data.categories || [];
+export async function fetchCourseCategories({ force = false } = {}) {
+  const now = Date.now();
+  if (!force && categoriesCache.data && now - categoriesCache.fetchedAt < CATEGORIES_TTL_MS) {
+    return categoriesCache.data;
+  }
+  if (!force && categoriesCache.promise) return categoriesCache.promise;
+
+  categoriesCache.promise = fetch(`${API_BASE}/api/courses/categories`)
+    .then(async (res) => {
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'Failed to load categories');
+      const cats = data.categories || [];
+      categoriesCache = { data: cats, fetchedAt: Date.now(), promise: null };
+      return cats;
+    })
+    .catch((err) => {
+      categoriesCache = { ...categoriesCache, promise: null };
+      throw err;
+    });
+
+  return categoriesCache.promise;
 }
 
 export function useCourseCategories() {

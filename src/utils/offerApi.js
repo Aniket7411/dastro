@@ -20,10 +20,99 @@ async function parseJson(res) {
   return json;
 }
 
-export async function fetchPublicOffers() {
-  const res = await fetch(`${API_BASE}/api/offers`, { cache: 'no-store' });
-  const json = await parseJson(res);
-  return Array.isArray(json.offers) ? json.offers : [];
+const PUBLIC_OFFERS_CACHE_KEY = 'ds_public_offers_v1';
+const PUBLIC_OFFERS_TTL_MS = 10 * 60 * 1000; // 10 min
+let publicOffersInFlight = null;
+
+function readOffersCache() {
+  try {
+    const raw = sessionStorage.getItem(PUBLIC_OFFERS_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed?.offers) || !parsed?.fetchedAt) return null;
+    if (Date.now() - parsed.fetchedAt > PUBLIC_OFFERS_TTL_MS) return null;
+    return parsed.offers;
+  } catch {
+    return null;
+  }
+}
+
+function writeOffersCache(offers) {
+  try {
+    sessionStorage.setItem(
+      PUBLIC_OFFERS_CACHE_KEY,
+      JSON.stringify({ offers, fetchedAt: Date.now() })
+    );
+  } catch {
+    // ignore quota / private mode
+  }
+}
+
+/** Marketing surfaces where the offers modal is useful. */
+export const OFFERS_MODAL_PATH_PREFIXES = [
+  '/',
+  '/live-courses',
+  '/recorded-courses',
+  '/courses',
+  '/consultations',
+  '/book-consultation',
+  '/shop',
+  '/astro-shop',
+  '/astrologer',
+  '/live',
+  '/webinar',
+];
+
+export function shouldLoadOffersModal(pathname = '') {
+  const path = (pathname.split('?')[0] || '/').replace(/\/+$/, '') || '/';
+  if (path === '/') return true;
+  // Skip auth / account / legal / tools / admin surfaces
+  const blocked = [
+    '/about',
+    '/contact',
+    '/blog',
+    '/privacy-policy',
+    '/terms-and-conditions',
+    '/refund-policy',
+    '/login',
+    '/dashboard',
+    '/student',
+    '/admin',
+    '/counsellor',
+    '/astrologer-dashboard',
+    '/astrologer-login',
+    '/free-tools',
+    '/numerology',
+    '/tarot',
+    '/love',
+    '/careers',
+  ];
+  if (blocked.some((p) => path === p || path.startsWith(`${p}/`))) return false;
+  return OFFERS_MODAL_PATH_PREFIXES.some(
+    (p) => p !== '/' && (path === p || path.startsWith(`${p}/`))
+  );
+}
+
+export async function fetchPublicOffers({ force = false } = {}) {
+  if (!force) {
+    const cached = readOffersCache();
+    if (cached) return cached;
+    if (publicOffersInFlight) return publicOffersInFlight;
+  }
+
+  publicOffersInFlight = (async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/offers`);
+      const json = await parseJson(res);
+      const offers = Array.isArray(json.offers) ? json.offers : [];
+      writeOffersCache(offers);
+      return offers;
+    } finally {
+      publicOffersInFlight = null;
+    }
+  })();
+
+  return publicOffersInFlight;
 }
 
 export async function fetchAdminOffers(token) {

@@ -189,9 +189,7 @@ function ConsultationDetail() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (ONLINE_PAYMENT_ENABLED) {
-      fetchConsultationPaymentConfig().then(setPaymentConfig);
-    }
+    setPaymentConfig(null);
   }, [serviceId]);
 
   useEffect(() => {
@@ -204,6 +202,17 @@ function ConsultationDetail() {
       }));
     }
   }, [service]);
+
+  // Payment config only when user opens Pay Now — not on every detail page view
+  useEffect(() => {
+    if (!isModalOpen || bookingMode !== BOOKING_MODES.PAY_NOW || !ONLINE_PAYMENT_ENABLED) return;
+    if (paymentConfig) return;
+    let cancelled = false;
+    fetchConsultationPaymentConfig().then((cfg) => {
+      if (!cancelled) setPaymentConfig(cfg);
+    });
+    return () => { cancelled = true; };
+  }, [isModalOpen, bookingMode, paymentConfig]);
 
   if (loading) {
     return (

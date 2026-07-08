@@ -219,10 +219,30 @@ export async function submitConsultationBooking({
 }
 
 export async function fetchConsultationPaymentConfig() {
+  const CACHE_KEY = 'ds_consultation_payment_config_v1';
+  const TTL = 5 * 60 * 1000;
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.data && Date.now() - parsed.fetchedAt < TTL) return parsed.data;
+    }
+  } catch {
+    // ignore
+  }
+
   try {
     const res = await fetch(`${API_BASE}/api/consultations/payment-config`);
     const data = await res.json();
-    return data.success ? data : null;
+    const result = data.success ? data : null;
+    if (result) {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data: result, fetchedAt: Date.now() }));
+      } catch {
+        // ignore
+      }
+    }
+    return result;
   } catch {
     return null;
   }

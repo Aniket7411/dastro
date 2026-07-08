@@ -139,33 +139,26 @@ function CourseDetail() {
   const listPath = isLiveCourse ? '/live-courses' : '/recorded-courses';
 
   useEffect(() => {
-    if (!ONLINE_PAYMENT_ENABLED) return;
-    fetch(`${API_BASE}/api/payment/status`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) setPaymentEnabled(!!data.paymentEnabled);
-      })
-      .catch(() => setPaymentEnabled(false));
-  }, []);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
     let cancelled = false;
     const loadCourse = async () => {
       setLoading(true);
       setPreviewLoading(true);
       setCourse(null);
+      setRelatedCourses([]);
+      setAvailableCoupons([]);
       try {
         const detail = await fetchCourseBySlugOrId(courseId);
         if (cancelled) return;
-        let previews = [];
-        try {
-          previews = await fetchCoursePreviewVideos(courseId);
-        } catch {
-          previews = detail.previewVideos || [];
-        }
-        if (!previews.length && detail.previewVideos?.length) {
-          previews = detail.previewVideos;
+
+        // Prefer previews already returned with course detail — skip extra /preview-videos hit.
+        let previews = Array.isArray(detail.previewVideos) ? detail.previewVideos : [];
+        if (!previews.length) {
+          try {
+            previews = await fetchCoursePreviewVideos(courseId);
+          } catch {
+            previews = [];
+          }
         }
         if (cancelled) return;
         setCourse(mapDetailCourse(detail.course));
@@ -190,19 +183,43 @@ function CourseDetail() {
     return () => { cancelled = true; };
   }, [courseId, navigate]);
 
+  // Payment status — only after we know it's a paid recorded course
   useEffect(() => {
-    if (!courseId) return;
+    if (!ONLINE_PAYMENT_ENABLED || !course || !isRecordedCourse || !(Number(course.price) > 0)) {
+      setPaymentEnabled(false);
+      return;
+    }
     let cancelled = false;
-    fetch(`${API_BASE}/api/courses/${encodeURIComponent(courseId)}/related`)
+    fetch(`${API_BASE}/api/payment/status`)
       .then((res) => res.json())
       .then((data) => {
-        if (!cancelled && data.success && Array.isArray(data.courses)) {
-          setRelatedCourses(data.courses.map(mapCourseFromApi));
-        }
+        if (!cancelled && data.success) setPaymentEnabled(!!data.paymentEnabled);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setPaymentEnabled(false);
+      });
     return () => { cancelled = true; };
-  }, [courseId]);
+  }, [course, isRecordedCourse]);
+
+  // Related courses — deferred so they don't compete with the primary detail fetch
+  useEffect(() => {
+    if (!courseId || loading) return undefined;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      fetch(`${API_BASE}/api/courses/${encodeURIComponent(courseId)}/related`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!cancelled && data.success && Array.isArray(data.courses)) {
+            setRelatedCourses(data.courses.map(mapCourseFromApi));
+          }
+        })
+        .catch(() => {});
+    }, 800);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [courseId, loading]);
 
   useEffect(() => {
     if (!course?.id || !isRecordedCourse || !paymentEnabled) {

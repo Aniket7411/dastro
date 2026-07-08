@@ -240,28 +240,31 @@ function CoursePlayer() {
           || rawCourse.accessStatus === 'pending'
         );
 
-        fetch(`${API_BASE}/api/student/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-          .then((res) => res.json())
-          .then((profileData) => {
-            if (profileData.success) setStudentProfile(profileData.profile);
+        // Secondary: profile + consultation status after player is usable
+        window.setTimeout(() => {
+          fetch(`${API_BASE}/api/student/profile`, {
+            headers: { Authorization: `Bearer ${token}` },
           })
-          .catch(() => {});
+            .then((res) => res.json())
+            .then((profileData) => {
+              if (profileData.success) setStudentProfile(profileData.profile);
+            })
+            .catch(() => {});
 
-        fetch(`${API_BASE}/api/student/consultations`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-          .then((res) => res.json())
-          .then((consultData) => {
-            if (consultData.success) {
-              const forThisCourse = (consultData.consultations || []).find(
-                (c) => String(c.courseId) === String(id)
-              );
-              if (forThisCourse) setExistingConsultation(forThisCourse);
-            }
+          fetch(`${API_BASE}/api/student/consultations`, {
+            headers: { Authorization: `Bearer ${token}` },
           })
-          .catch(() => {});
+            .then((res) => res.json())
+            .then((consultData) => {
+              if (consultData.success) {
+                const forThisCourse = (consultData.consultations || []).find(
+                  (c) => String(c.courseId) === String(id)
+                );
+                if (forThisCourse) setExistingConsultation(forThisCourse);
+              }
+            })
+            .catch(() => {});
+        }, 900);
       } catch (err) {
         toast.error(err.message || 'Network error loading course');
         navigate('/dashboard');

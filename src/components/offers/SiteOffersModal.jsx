@@ -119,6 +119,22 @@ function SiteOffersModal() {
 
     (async () => {
       try {
+        // Skip network if every previously seen offer was dismissed this session
+        // and we already have a cache of offers that would all be filtered out.
+        const cached = (() => {
+          try {
+            const raw = sessionStorage.getItem('ds_public_offers_v1');
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed?.offers) ? parsed.offers : null;
+          } catch {
+            return null;
+          }
+        })();
+        if (cached && filterVisibleOffers(cached).length === 0) {
+          return;
+        }
+
         const list = await fetchPublicOffers();
         if (cancelled) return;
         const visible = filterVisibleOffers(list);

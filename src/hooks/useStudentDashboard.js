@@ -115,16 +115,17 @@ export default function useStudentDashboard() {
       return;
     }
 
+    let cancelled = false;
+    let secondaryTimer;
+
     const loadDashboardData = async () => {
       try {
-        const [profileData, courseData, bannerData, merchData, launchesData, offersData] = await Promise.all([
+        // Critical path only — secondary panels load after first paint
+        const [profileData, courseData] = await Promise.all([
           fetchSection('/api/student/profile'),
           fetchSection('/api/student/courses'),
-          fetchSection('/api/student/banners'),
-          fetchSection('/api/student/merchandise'),
-          fetchSection('/api/student/new-courses'),
-          fetchSection('/api/student/offers'),
         ]);
+        if (cancelled) return;
 
         const profilePayload = profileData.profile || profileData.student || profileData.user || profileData;
         const loadedCourses = courseData.enrollments || courseData.courses || courseData.data || [];
@@ -136,14 +137,32 @@ export default function useStudentDashboard() {
           mobile: profilePayload.mobile || '',
         });
         setCourses(loadedCourses);
-        setBanners(bannerData.banners || bannerData.data || []);
-        setMerchandise(merchData.products || merchData.merchandise || merchData.data || []);
-        setNewCourses(launchesData.courses || launchesData.newCourses || launchesData.data || []);
-        setOffers(offersData.offers || offersData.data || []);
+        setLoading(false);
 
         const courseIds = loadedCourses.map((course) => normalizeCourse(course)?.id).filter(Boolean);
-        await Promise.all(courseIds.map((courseId) => loadCourseValidity(courseId)));
+        // Validity in parallel after courses are visible (non-blocking)
+        Promise.all(courseIds.map((courseId) => loadCourseValidity(courseId))).catch(() => {});
+
+        secondaryTimer = window.setTimeout(async () => {
+          if (cancelled) return;
+          try {
+            const [bannerData, merchData, launchesData, offersData] = await Promise.all([
+              fetchSection('/api/student/banners').catch(() => ({})),
+              fetchSection('/api/student/merchandise').catch(() => ({})),
+              fetchSection('/api/student/new-courses').catch(() => ({})),
+              fetchSection('/api/student/offers').catch(() => ({})),
+            ]);
+            if (cancelled) return;
+            setBanners(bannerData.banners || bannerData.data || []);
+            setMerchandise(merchData.products || merchData.merchandise || merchData.data || []);
+            setNewCourses(launchesData.courses || launchesData.newCourses || launchesData.data || []);
+            setOffers(offersData.offers || offersData.data || []);
+          } catch {
+            // Secondary content is optional
+          }
+        }, 600);
       } catch (error) {
+        if (cancelled) return;
         const errorMessage = error.message || 'Unable to load student dashboard';
         toast.error(errorMessage);
         if (errorMessage.toLowerCase().includes('session') || errorMessage.toLowerCase().includes('token')) {
@@ -151,12 +170,15 @@ export default function useStudentDashboard() {
           localStorage.removeItem('studentName');
           navigate('/login');
         }
-      } finally {
         setLoading(false);
       }
     };
 
     loadDashboardData();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(secondaryTimer);
+    };
   }, [navigate, token]);
 
   const handleLogout = async () => {

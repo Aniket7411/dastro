@@ -1,16 +1,20 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import API_BASE from './api';
 
-const CACHE_TTL_MS = 60_000;
-let sharedCache = {
-  key: '',
-  data: null,
-  fetchedAt: 0,
-  promise: null,
-};
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min public catalog
+/** Per-query cache so Home limit=6 and listing filters don't overwrite each other. */
+const cacheByKey = new Map();
+
+function getCacheEntry(key) {
+  return cacheByKey.get(key) || { data: null, fetchedAt: 0, promise: null };
+}
+
+function setCacheEntry(key, patch) {
+  cacheByKey.set(key, { ...getCacheEntry(key), ...patch });
+}
 
 export function invalidateConsultationCache() {
-  sharedCache = { key: '', data: null, fetchedAt: 0, promise: null };
+  cacheByKey.clear();
 }
 
 function buildCatalogQuery(filters = {}) {
@@ -24,6 +28,7 @@ function buildCatalogQuery(filters = {}) {
     search = '',
     sortBy = 'sortOrder',
     sortOrder = 'asc',
+    limit,
   } = filters;
 
   if (categories.length) params.set('category', categories.join(','));
@@ -34,6 +39,7 @@ function buildCatalogQuery(filters = {}) {
   if (search.trim()) params.set('q', search.trim());
   if (sortBy) params.set('sortBy', sortBy);
   if (sortOrder) params.set('sortOrder', sortOrder);
+  if (limit != null && limit !== '') params.set('limit', String(limit));
 
   const qs = params.toString();
   return qs ? `?${qs}` : '';
@@ -43,22 +49,17 @@ export async function fetchConsultationCatalog(filters = {}, { force = false } =
   const query = buildCatalogQuery(filters);
   const cacheKey = query || 'all';
   const now = Date.now();
+  const entry = getCacheEntry(cacheKey);
 
-  if (
-    !force
-    && sharedCache.key === cacheKey
-    && sharedCache.data
-    && now - sharedCache.fetchedAt < CACHE_TTL_MS
-  ) {
-    return sharedCache.data;
+  if (!force && entry.data && now - entry.fetchedAt < CACHE_TTL_MS) {
+    return entry.data;
   }
 
-  if (!force && sharedCache.promise && sharedCache.key === cacheKey) {
-    return sharedCache.promise;
+  if (!force && entry.promise) {
+    return entry.promise;
   }
 
-  sharedCache.key = cacheKey;
-  sharedCache.promise = fetch(`${API_BASE}/api/consultations/services${query}`)
+  const promise = fetch(`${API_BASE}/api/consultations/services${query}`)
     .then(async (res) => {
       const data = await res.json();
       if (!data.success) {
@@ -71,15 +72,16 @@ export async function fetchConsultationCatalog(filters = {}, { force = false } =
         filters: data.filters || null,
         appliedFilters: data.appliedFilters || null,
       };
-      sharedCache.data = result;
-      sharedCache.fetchedAt = Date.now();
+      setCacheEntry(cacheKey, { data: result, fetchedAt: Date.now(), promise: null });
       return result;
     })
-    .finally(() => {
-      sharedCache.promise = null;
+    .catch((err) => {
+      setCacheEntry(cacheKey, { promise: null });
+      throw err;
     });
 
-  return sharedCache.promise;
+  setCacheEntry(cacheKey, { promise });
+  return promise;
 }
 
 export async function fetchConsultationService(serviceId) {
@@ -110,6 +112,7 @@ export function useConsultationCatalog(filters = {}) {
       filters.search,
       filters.sortBy,
       filters.sortOrder,
+      filters.limit,
     ]
   );
 
@@ -130,7 +133,7 @@ export function useConsultationCatalog(filters = {}) {
     } finally {
       setLoading(false);
     }
-  }, [filterKey]);
+  }, [filterKey]); // eslint-disable-line react-hooks/exhaustive-deps -- filters via filterKey
 
   useEffect(() => {
     reload(false);

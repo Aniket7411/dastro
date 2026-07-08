@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, X, Calendar, User, ArrowRight } from 'lucide-react';
 import toast from '@/utils/toast';
@@ -89,32 +89,28 @@ function Blog() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const loadBlogs = useCallback(async (category, search) => {
-    setIsLoading(true);
-    try {
-      const hasFilter = category !== 'All' || Boolean(search?.trim());
-      if (hasFilter) {
-        const [fullList, filtered] = await Promise.all([
-          fetchBlogs(),
-          fetchBlogs({
-            category: category !== 'All' ? category : undefined,
-            search: search || undefined,
-          }),
-        ]);
-        setAllBlogs(fullList);
-        setBlogs(filtered);
-      } else {
+  // One full-list fetch — filter client-side (sidebar counts need all blogs anyway)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setIsLoading(true);
+      try {
         const data = await fetchBlogs();
-        setAllBlogs(data);
-        setBlogs(data);
+        if (!cancelled) {
+          setAllBlogs(data);
+          setBlogs(data);
+        }
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) {
+          toast.error(err.message || 'Failed to fetch blogs');
+          setBlogs([]);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message || 'Failed to fetch blogs');
-      setBlogs([]);
-    } finally {
-      setIsLoading(false);
-    }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
@@ -127,8 +123,16 @@ function Blog() {
   }, [searchInput]);
 
   useEffect(() => {
-    loadBlogs(selectedCategory, searchQuery);
-  }, [selectedCategory, searchQuery, loadBlogs]);
+    const q = searchQuery.trim().toLowerCase();
+    const filtered = allBlogs.filter((post) => {
+      const catOk = selectedCategory === 'All' || post.category === selectedCategory;
+      if (!catOk) return false;
+      if (!q) return true;
+      const hay = `${post.title || ''} ${post.excerpt || ''} ${blogExcerpt(post) || ''} ${(post.tags || []).join(' ')}`.toLowerCase();
+      return hay.includes(q);
+    });
+    setBlogs(filtered);
+  }, [allBlogs, selectedCategory, searchQuery]);
 
   const categoryCounts = BLOG_CATEGORIES.map((name) => ({
     name,

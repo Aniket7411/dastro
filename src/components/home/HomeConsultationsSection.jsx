@@ -16,7 +16,7 @@ export default function HomeConsultationsSection({ onBook }) {
   useEffect(() => {
     let cancelled = false;
 
-    fetchConsultationCatalog({ sortBy: 'sortOrder', sortOrder: 'asc' })
+    fetchConsultationCatalog({ sortBy: 'sortOrder', sortOrder: 'asc', limit: CAROUSEL_LIMIT })
       .then((data) => {
         if (cancelled) return;
         setServices(data.services || []);
