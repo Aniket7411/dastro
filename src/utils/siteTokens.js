@@ -98,7 +98,7 @@ export const SITE_NAV_LINK_MOBILE =
 export const SITE_COURSE_CARD =
   'group flex h-full flex-col overflow-hidden rounded-2xl border border-site-border bg-site-surface shadow-[0_2px_5px_rgba(51,37,26,0.08)] transition duration-150 hover:-translate-y-px hover:shadow-[0_6px_15px_rgba(51,37,26,0.12)]';
 
-export const SITE_COURSE_CARD_BODY = 'flex flex-1 flex-col p-2.5 sm:p-[18px]';
+export const SITE_COURSE_CARD_BODY = 'flex flex-1 flex-col p-3 min-[480px]:p-3.5 sm:p-[18px]';
 
 export const SITE_COURSE_CARD_FOOTER =
   'mt-auto flex flex-col gap-2 border-t border-site-border/60 pt-2.5 min-[480px]:flex-row min-[480px]:items-end min-[480px]:justify-between min-[480px]:gap-2 min-[480px]:pt-3 sm:pt-4';
@@ -107,7 +107,7 @@ export const SITE_COURSE_CARD_KICKER =
   'mb-1 truncate font-body text-[10px] font-semibold uppercase tracking-[0.12em] text-site-accent-dark sm:mb-1.5 sm:text-xs sm:tracking-[0.14em]';
 
 export const SITE_COURSE_CARD_TITLE =
-  'font-heading text-[0.8125rem] font-bold leading-snug text-site-text no-underline transition hover:text-site-accent-dark min-[480px]:text-base sm:text-xl';
+  'font-heading text-[0.875rem] font-bold leading-snug text-site-text no-underline transition hover:text-site-accent-dark min-[480px]:text-base sm:text-xl';
 
 export const SITE_COURSE_CARD_DESC =
   'mb-2 hidden flex-1 font-body leading-normal text-site-muted min-[480px]:block min-[480px]:line-clamp-2 min-[480px]:text-sm sm:mb-3 sm:text-[15px]';
@@ -123,7 +123,7 @@ export const SITE_COURSE_CARD_BADGE_RECORDED =
 
 /** Duration strip — full-width bar flush to bottom of image (design §03) */
 export const SITE_COURSE_CARD_DURATION =
-  'pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex items-center justify-center gap-1 bg-black/55 px-1.5 py-1 font-body text-[9px] font-medium leading-tight text-white sm:gap-1.5 sm:py-1.5 sm:text-[10px]';
+  'pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex items-center justify-center gap-1 bg-black/55 px-1.5 py-1 font-body text-[9.5px] font-medium leading-tight text-white sm:gap-1.5 sm:py-1.5 sm:text-[10px]';
 
 /** §03 Hero panel — parchment block on cream pages */
 export const SITE_HERO_PANEL =
@@ -175,8 +175,9 @@ export const SITE_BTN_COPPER = [
 /** Compact copper CTA on course cards */
 export const SITE_BTN_CARD = [
   'inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-lg border-2 border-transparent',
-  'bg-site-accent-dark px-2 py-1 font-body text-[10px] font-semibold text-white no-underline',
+  'bg-site-accent-dark px-2.5 py-1.5 font-body text-[11px] font-semibold text-white no-underline',
   'min-[480px]:w-auto min-[480px]:rounded-[10px] min-[480px]:px-2.5 min-[480px]:py-1.5 min-[480px]:text-[11px]',
+  'sm:px-3.5 sm:py-2 sm:text-xs',
   'shadow-[0_2px_4px_rgba(51,37,26,0.08)]',
   SITE_BTN_MOTION,
   SITE_BTN_FOCUS,

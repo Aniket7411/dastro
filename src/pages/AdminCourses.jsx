@@ -588,8 +588,8 @@ function AdminCourses() {
     setVideoModalLoading(true);
     try {
       const videos = await loadAdminCourseVideos(courseId);
-      setCourseVideos(videos);
-      syncCourseVideoCount(courseId, videos);
+        setCourseVideos(videos);
+        syncCourseVideoCount(courseId, videos);
     } catch (err) {
       console.error('Failed to load course videos:', err);
       toast.error(err.message || 'Failed to load course videos');
@@ -811,9 +811,9 @@ function AdminCourses() {
     setEditingCourseVideosLoading(true);
     try {
       const videos = await loadAdminCourseVideos(editingCourse._id);
-      setEditingCourseVideos(videos);
-      syncCourseVideoCount(editingCourse._id, videos);
-      return videos;
+    setEditingCourseVideos(videos);
+    syncCourseVideoCount(editingCourse._id, videos);
+    return videos;
     } catch (err) {
       toast.error(err.message || 'Failed to refresh video list — the video was saved, please close and reopen Edit Course to see it.');
       return [];
@@ -1108,8 +1108,8 @@ function AdminCourses() {
       setEditingCourseVideosLoading(true);
       loadAdminCourseVideos(course._id)
         .then((videos) => {
-          setEditingCourseVideos(videos);
-          syncCourseVideoCount(course._id, videos);
+            setEditingCourseVideos(videos);
+            syncCourseVideoCount(course._id, videos);
         })
         .catch(() => setEditingCourseVideos([]))
         .finally(() => setEditingCourseVideosLoading(false));
@@ -1274,9 +1274,9 @@ function AdminCourses() {
                   </td>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
-                      <span className={`lms-type-badge ${getCourseTypeConfig(course.courseType).badgeClass}`}>
-                        {getCourseTypeConfig(course.courseType).badge}
-                      </span>
+                    <span className={`lms-type-badge ${getCourseTypeConfig(course.courseType).badgeClass}`}>
+                      {getCourseTypeConfig(course.courseType).badge}
+                    </span>
                       {course.tier ? (
                         <span
                           style={{
@@ -1356,7 +1356,7 @@ function AdminCourses() {
             className="fixed inset-0 z-[10050] flex items-end justify-center bg-slate-900/70 p-0 sm:items-center sm:p-4"
             onClick={() => !courseSubmitting && setShowModal(false)}
           >
-            <motion.div
+            <motion.div 
               key="course-form-modal"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1391,7 +1391,7 @@ function AdminCourses() {
                   <i className="fas fa-times" />
                 </button>
               </div>
-
+              
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col"
@@ -1458,12 +1458,12 @@ function AdminCourses() {
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">Duration</label>
-                        <input
+                          <input
                           type="text"
                           name="duration"
                           value={formData.duration}
-                          onChange={handleInputChange}
-                          className="form-input"
+                            onChange={handleInputChange}
+                            className="form-input"
                           placeholder="e.g. 12 classes · ~18 hrs or 8 Weeks"
                         />
                         <p className="form-hint">Free text — leave blank until you know the schedule. Shown on cards and the detail page.</p>
@@ -1757,7 +1757,7 @@ function AdminCourses() {
                               <p className="section-hint" style={{ margin: 0 }}>Free preview shown to all visitors on the course page. No login required.</p>
                             </div>
                           </div>
-                          {editingCourseVideosLoading ? (
+                      {editingCourseVideosLoading ? (
                             <div className="text-center py-3"><div className="lf-spinner" /></div>
                           ) : introVideo ? (
                             <div className="video-preview-item" style={{ borderLeft: '3px solid #22c55e' }}>
@@ -1787,7 +1787,7 @@ function AdminCourses() {
                               <button type="button" className="lms-secondary-action lms-secondary-action--sm" style={{ fontSize: '12px' }} onClick={startAddingIntroVideo}>
                                 <i className="fas fa-plus" style={{ marginRight: '6px' }} />Set Intro Video
                               </button>
-                            </div>
+                        </div>
                           ) : null}
                           {showVideoForm && videoForm.visibility === 'public' && (
                             <VideoEntryForm
@@ -1813,8 +1813,8 @@ function AdminCourses() {
                             <div>
                               <strong>Main Course Videos <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.78rem' }}>({lessonVideos.length} lesson{lessonVideos.length === 1 ? '' : 's'})</span></strong>
                               <p className="section-hint" style={{ margin: 0 }}>Unlocked for students only after admin approves their enrollment.</p>
-                            </div>
-                          </div>
+                        </div>
+                        </div>
                           {editingCourseVideosLoading ? (
                             <div className="text-center py-3"><div className="lf-spinner" /></div>
                           ) : (
@@ -1830,30 +1830,30 @@ function AdminCourses() {
                                         <div className="video-preview-provider">
                                           <span style={{ color: '#dc2626', fontWeight: 600 }}>Enrolled only</span>
                                           {' · '}{getProviderLabel(getVideoProvider(video))}
-                                        </div>
+                          </div>
                                         <div className="video-saved-id">
                                           <span>{getProviderIdLabel(getVideoProvider(video))}</span>
                                           <code>{getVideoValue(video) || 'No video ID saved'}</code>
-                                        </div>
-                                      </div>
+                        </div>
+                        </div>
                                       <div className="video-preview-actions">
                                         <button type="button" className="lms-mini-btn" onClick={() => reorderLessonVideo(video._id, 'up')} disabled={lessonIndex === 0} title="Move up">
                                           <i className="fas fa-arrow-up" />
-                                        </button>
+                        </button>
                                         <button type="button" className="lms-mini-btn" onClick={() => reorderLessonVideo(video._id, 'down')} disabled={lessonIndex === lessonVideos.length - 1} title="Move down">
                                           <i className="fas fa-arrow-down" />
-                                        </button>
+                          </button>
                                         <button type="button" className="lms-mini-btn" onClick={() => openVideoPreview(video, editingCourse._id)} disabled={previewLoadingId === video._id}>
                                           {previewLoadingId === video._id ? 'Loading...' : 'Preview'}
-                                        </button>
+                                </button>
                                         <button type="button" className="lms-mini-btn" onClick={() => copyVideoValue(video)}>Copy ID</button>
                                         <button type="button" className="lms-mini-btn" onClick={() => startEditingVideo(video)}>Edit</button>
                                         <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => confirmDeleteVideo(video, editingCourse._id, refreshVideos)}>Delete</button>
                                       </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                               {showVideoForm && videoForm.visibility === 'enrolled' ? (
                                 <VideoEntryForm
                                   label={editingVideoId ? 'Editing lesson' : 'Adding new lesson'}
@@ -1869,11 +1869,11 @@ function AdminCourses() {
                               ) : (
                                 <button type="button" className="lms-secondary-action lms-secondary-action--sm" style={{ fontSize: '12px', marginTop: lessonVideos.length > 0 ? '10px' : 0 }} onClick={startAddingLesson}>
                                   <i className="fas fa-plus" style={{ marginRight: '6px' }} />Add Lesson
-                                </button>
+                      </button>
                               )}
                             </>
-                          )}
-                        </div>
+                      )}
+                    </div>
                       </>
                     );
                   })() : (

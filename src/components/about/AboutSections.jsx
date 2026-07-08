@@ -1,5 +1,21 @@
 import { Link } from 'react-router-dom';
 import {
+  ArrowRight,
+  BookOpen,
+  CalendarCheck,
+  CheckCircle2,
+  ChevronDown,
+  Globe2,
+  GraduationCap,
+  Hash,
+  Home,
+  Layers,
+  PlayCircle,
+  Star,
+  Store,
+  UserRound,
+} from 'lucide-react';
+import {
   PAGE_WRAP,
   TW_KICKER,
   TW_H1,
@@ -10,16 +26,19 @@ import {
   TW_LEAD,
   TW_STACK,
   TW_STACK_SM,
+  SECTION_PY,
   SITE_BAND,
   SITE_BAND_BODY,
   SITE_BAND_TITLE,
-  SITE_BTN_COPPER_LG,
-  SITE_BTN_TONAL_ON_DARK_LG,
+  SITE_BTN_COPPER_COMPACT,
+  SITE_BTN_TONAL_COMPACT,
+  SITE_BTN_TONAL_ON_DARK,
   SITE_CARD,
 } from '../../utils/siteTokens';
 
-const SECTION = 'py-8 sm:py-10 lg:py-12';
+const SECTION = SECTION_PY;
 const SECTION_ALT = 'border-t border-site-border bg-site-surface';
+const SECTION_MAX = 'mx-auto max-w-3xl';
 
 export const ABOUT_SEO = {
   title: 'About Damini Shukla — Celebrity Astrologer',
@@ -60,28 +79,28 @@ const STATS = [
 const SCIENCES = [
   {
     title: 'Vedic Astrology',
-    text: 'Deep birth-chart analysis, timing (dashas & transits), and life direction.',
-    icon: 'fa-star',
+    text: 'Birth-chart analysis, dashas & transits, and clear life direction.',
+    Icon: Star,
   },
   {
     title: 'Tarot',
-    text: 'Intuitive, question-focused readings for clarity and decision-making.',
-    icon: 'fa-clone',
+    text: 'Focused readings for clarity when decisions feel uncertain.',
+    Icon: Layers,
   },
   {
     title: 'Numerology',
-    text: 'The hidden influence of numbers on name, destiny, and choices.',
-    icon: 'fa-hashtag',
+    text: 'Name and number patterns that shape destiny and choice.',
+    Icon: Hash,
   },
   {
     title: 'Face Reading',
-    text: 'Insight into character and tendencies through the science of the face.',
-    icon: 'fa-user-circle',
+    text: 'Character and tendencies revealed through the face.',
+    Icon: UserRound,
   },
   {
     title: 'Vastu Shastra',
-    text: 'Aligning your home and workspace with positive, prosperous energy.',
-    icon: 'fa-home',
+    text: 'Home and workspace aligned for peace and prosperity.',
+    Icon: Home,
   },
 ];
 
@@ -91,30 +110,35 @@ const OFFERINGS = [
     text: 'Career, love and marriage, business, health, finances, and auspicious timing (muhurat).',
     to: '/consultations',
     cta: 'Book consultation',
+    Icon: CalendarCheck,
   },
   {
     title: 'Live courses',
     text: 'Learn directly from Damini, from beginner foundations to advanced mastery.',
     to: '/live-courses',
     cta: 'View live courses',
+    Icon: GraduationCap,
   },
   {
     title: 'Recorded courses',
     text: 'Study at your own pace, anytime, anywhere in the world.',
     to: '/recorded-courses',
     cta: 'Browse recorded',
+    Icon: PlayCircle,
   },
   {
     title: 'Webinars & masterclasses',
     text: 'Focused sessions on the topics that matter most.',
     to: '/webinar',
     cta: 'Join a webinar',
+    Icon: BookOpen,
   },
   {
     title: 'Astrology shop',
     text: 'Carefully curated remedies, gemstones, yantras, and spiritual essentials.',
     to: '/shop',
     cta: 'Visit shop',
+    Icon: Store,
   },
 ];
 
@@ -126,45 +150,93 @@ const TRUST_POINTS = [
   'A guide who has done it all — a celebrated, celebrity-trusted astrologer in your corner',
 ];
 
-function SectionKicker({ children }) {
+/** Brass rule from design system §signature divider */
+function BrassRule({ className = '' }) {
   return (
-    <span className="mb-2 inline-flex items-center gap-1.5 font-body text-[10px] font-bold uppercase tracking-[0.16em] text-site-accent sm:text-xs">
-      <span className="text-site-accent" aria-hidden>
-        ✦
-      </span>
+    <div
+      className={`my-2 flex items-center gap-3 text-site-gold sm:gap-4 ${className}`}
+      aria-hidden
+    >
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-site-gold to-transparent" />
+      <span className="font-body text-[13px] tracking-[0.4em] text-site-accent-dark">✦</span>
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-site-gold to-transparent" />
+    </div>
+  );
+}
+
+function SectionIntro({ kicker, title, titleHighlight, subtitle, align = 'left', children }) {
+  const centered = align === 'center';
+
+  return (
+    <header className={`${centered ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl text-left'} ${TW_STACK_SM}`}>
+      {kicker ? <p className={`${TW_KICKER} ${centered ? 'mx-auto' : ''}`}>{kicker}</p> : null}
+      <h2 className={TW_H2}>
+        {title}
+        {titleHighlight ? (
+          <>
+            {' '}
+            <span className="text-site-accent">{titleHighlight}</span>
+          </>
+        ) : null}
+      </h2>
+      {centered ? (
+        <div
+          className="mx-auto h-1 w-12 rounded-full bg-gradient-to-r from-site-accent via-site-accent-dark to-site-accent"
+          aria-hidden
+        />
+      ) : (
+        <div
+          className="h-1 w-12 rounded-full bg-gradient-to-r from-site-accent via-site-accent-dark to-site-accent"
+          aria-hidden
+        />
+      )}
+      {subtitle ? (
+        <p className={`${TW_BODY} text-site-muted ${centered ? '' : 'max-w-xl'}`}>{subtitle}</p>
+      ) : null}
       {children}
-    </span>
+    </header>
   );
 }
 
 function AboutHeroImage({ className = '' }) {
   return (
-    <div className={`relative w-full ${className}`}>
-      <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-site-accent/20 blur-3xl" aria-hidden />
-      <img
-        src="/aboutus.webp"
-        alt="Damini Shukla — DS Astro Institute"
-        className="relative z-10 aspect-[4/5] w-full max-w-md rounded-2xl border-4 border-white object-cover object-top shadow-lg sm:aspect-[16/11] lg:max-w-none"
-        loading="lazy"
+    <figure className={`relative mx-auto w-full max-w-[20rem] sm:max-w-sm lg:max-w-[22rem] xl:max-w-md ${className}`}>
+      <span
+        className="pointer-events-none absolute -inset-3 rounded-[1.25rem] bg-site-accent/12 blur-2xl"
+        aria-hidden
       />
-    </div>
+      <div className="relative overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_12px_28px_rgba(51,37,26,0.10)]">
+        <img
+          src="/aboutus.webp"
+          alt="Damini Shukla — DS Astro Institute"
+          className="mx-auto block h-auto max-h-[22rem] w-full object-contain object-center sm:max-h-[24rem] lg:max-h-[26rem]"
+          loading="eager"
+        />
+      </div>
+      <figcaption className="mt-3 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-center shadow-sm sm:px-3.5 sm:py-2.5">
+        <p className="m-0 font-heading text-sm font-bold text-site-text">Damini Shukla</p>
+        <p className="m-0 mt-0.5 font-body text-[12px] text-site-muted">Celebrity Astrologer · Mentor</p>
+      </figcaption>
+    </figure>
   );
 }
 
 export function AboutHero() {
   return (
-    <section className={`relative overflow-hidden border-b border-site-accent-dark/10 bg-site-bg ${SECTION}`}>
+    <section className={`relative overflow-hidden border-b border-site-border bg-site-bg ${SECTION}`}>
       <span
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(200,131,42,0.12),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgba(162,94,42,0.10),transparent_50%)]"
         aria-hidden
       />
       <div className={`${PAGE_WRAP} relative z-10`}>
-        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-10">
-          <div className={`${TW_STACK} gap-4 sm:gap-5`}>
+        <div className="grid items-start gap-7 lg:grid-cols-[1.25fr_0.75fr] lg:items-center lg:gap-10 xl:gap-12">
+          <div className={`${TW_STACK} gap-5`}>
             <div>
-              <p className={`${TW_KICKER} mb-2`}>Astrology · Learning · Guidance</p>
-              <h1 className={TW_H1}>About DS Astro Institute</h1>
-              <p className={`mt-3 ${TW_LEAD}`}>
+              <p className={TW_KICKER}>Astrology · Learning · Guidance</p>
+              <h1 className={`${TW_H1} mt-2`}>
+                About <span className="text-site-accent">DS Astro Institute</span>
+              </h1>
+              <p className={`mt-4 ${TW_LEAD}`}>
                 Guidance rooted in the cosmos — and a decade of devotion.
               </p>
             </div>
@@ -173,21 +245,34 @@ export function AboutHero() {
               <AboutHeroImage />
             </div>
 
-            <p className={TW_BODY}>
-              DS Astro Institute was born from a simple belief: that the wisdom of the stars, when read with
-              honesty and heart, can bring clarity to life&apos;s most uncertain moments. At the centre of it
-              stands <strong className="font-semibold text-site-primary">Damini Shukla</strong> — a celebrated
-              astrologer, teacher, and guide who has spent more than ten years helping people find direction,
-              purpose, and peace.
-            </p>
-            <p className={TW_BODY}>
-              For thousands across India and around the world, DS Astro Institute has become a trusted space
-              — not for fear or superstition, but for genuine understanding, practical remedies, and the quiet
-              confidence that comes from knowing what the stars have to say.
-            </p>
+            <div className={`${TW_STACK} gap-4`}>
+              <p className={TW_BODY}>
+                DS Astro Institute was born from a simple belief: that the wisdom of the stars, when read with
+                honesty and heart, can bring clarity to life&apos;s most uncertain moments. At the centre of it
+                stands <strong className="font-semibold text-site-text">Damini Shukla</strong> — a celebrated
+                astrologer, teacher, and guide who has spent more than ten years helping people find direction,
+                purpose, and peace.
+              </p>
+              <p className={`${TW_BODY} text-site-muted`}>
+                For thousands across India and around the world, DS Astro Institute has become a trusted space
+                — not for fear or superstition, but for genuine understanding, practical remedies, and the quiet
+                confidence that comes from knowing what the stars have to say.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              <Link to="/consultations" className={`${SITE_BTN_COPPER_COMPACT} !no-underline`}>
+                <CalendarCheck size={14} aria-hidden />
+                Book consultation
+              </Link>
+              <Link to="/live-courses" className={`${SITE_BTN_TONAL_COMPACT} !no-underline`}>
+                Explore courses
+                <ArrowRight size={14} aria-hidden />
+              </Link>
+            </div>
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex lg:justify-end">
             <AboutHeroImage />
           </div>
         </div>
@@ -198,18 +283,18 @@ export function AboutHero() {
 
 function AboutDaminiVideo({ className = '' }) {
   return (
-    <figure className={className}>
-      <div className="relative overflow-hidden rounded-2xl border border-site-accent-dark/12 bg-black shadow-md">
+    <figure className={`mx-auto w-full max-w-md lg:max-w-lg ${className}`}>
+      <div className="overflow-hidden rounded-[14px] border border-site-border bg-site-primary shadow-[0_10px_24px_rgba(51,37,26,0.12)]">
         <video
           src="/astrologyvideo.mp4"
           controls
           playsInline
           preload="metadata"
-          className="aspect-video w-full object-cover"
+          className="aspect-video max-h-[15.5rem] w-full object-cover sm:max-h-[16rem] lg:max-h-[18rem]"
           title="About DS Astro Institute"
         />
       </div>
-      <figcaption className={`mt-3 text-center ${TW_BODY_SM}`}>
+      <figcaption className={`mt-2.5 text-center ${TW_BODY_SM}`}>
         Hear how we teach, consult, and support our community
       </figcaption>
     </figure>
@@ -220,28 +305,31 @@ export function AboutDamini() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-10 xl:gap-12">
-          <div className={`${TW_STACK} gap-4 sm:gap-5`}>
-            <div>
-              <SectionKicker>The woman behind the practice</SectionKicker>
-              <h2 className={TW_H2}>Damini Shukla</h2>
-            </div>
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10">
+          <div className={`${TW_STACK} gap-5`}>
+            <SectionIntro
+              kicker="The woman behind the practice"
+              title="Damini"
+              titleHighlight="Shukla"
+            />
+
             <div className={`${TW_STACK} gap-4`}>
               <p className={TW_BODY}>
                 Damini&apos;s connection with astrology began not as a profession, but as a fascination. Even as a
                 child, she was drawn to the language of the planets — the sense that everything in the universe is
                 quietly connected. That early curiosity grew into a lifelong calling.
               </p>
-              <p className={TW_BODY}>
+              <p className={`${TW_BODY} text-site-muted`}>
                 Over the years, she trained under several respected gurus and traditions, refining her craft until
                 she became one of the sought-after names in the field. She has served as a senior astrologer and
                 mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
                 Vidya — guiding both clients and aspiring astrologers alike.
               </p>
-              <p className={TW_BODY}>
+              <p className={`${TW_BODY} text-site-muted`}>
                 Her work has also reached the screen: Damini featured as an astrology consultant on the television
-                show <em className="text-site-primary">Wheel of Fortune</em> alongside Akshay Kumar, and today she is
-                a trusted celebrity astrologer to public figures who value discretion and depth in equal measure.
+                show <em className="not-italic font-semibold text-site-text">Wheel of Fortune</em> alongside Akshay
+                Kumar, and today she is a trusted celebrity astrologer to public figures who value discretion and
+                depth in equal measure.
               </p>
               <p className={TW_BODY}>
                 But ask her what she&apos;s proudest of, and the answer isn&apos;t the fame — it&apos;s the thousands
@@ -251,7 +339,7 @@ export function AboutDamini() {
             </div>
           </div>
 
-          <AboutDaminiVideo className="w-full lg:sticky lg:top-[calc(var(--spacing-site-header)+1.5rem)]" />
+          <AboutDaminiVideo className="w-full lg:sticky lg:top-[calc(var(--spacing-site-header)+1.25rem)]" />
         </div>
       </div>
     </section>
@@ -262,35 +350,38 @@ export function AboutSciences() {
   return (
     <section className={`bg-site-bg ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className={`mx-auto mb-6 max-w-2xl text-center sm:mb-8 ${TW_STACK_SM}`}>
-          <SectionKicker>A rare command of the sacred sciences</SectionKicker>
-          <h2 className={TW_H2}>Breadth that shapes every reading</h2>
-          <p className={TW_BODY}>
-            Where many specialise in a single art, Damini reads across several — allowing her to look at a
-            question from every angle and give guidance that truly fits.
-          </p>
+        <SectionIntro
+          align="center"
+          kicker="A rare command of the sacred sciences"
+          title="Breadth that shapes"
+          titleHighlight="every reading"
+          subtitle="Where many specialise in a single art, Damini reads across several — so every question is seen from every angle."
+        >
           <p className={`${TW_BODY_SM} font-semibold text-site-accent-dark`}>
-            Consultations offered warmly in Hindi and English.
+            Consultations in Hindi and English.
           </p>
-        </div>
+        </SectionIntro>
 
-        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-          {SCIENCES.map((item) => (
-            <article
-              key={item.title}
-              className={`${SITE_CARD} flex h-full flex-col p-4 sm:p-5`}
-            >
-              <span
-                className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-site-accent/10 text-site-accent-dark"
-                aria-hidden
-              >
-                <i className={`fas ${item.icon} text-sm`} />
-              </span>
-              <h3 className={`${TW_H3} text-base sm:text-lg`}>{item.title}</h3>
-              <p className={`mt-2 flex-1 ${TW_BODY_SM}`}>{item.text}</p>
-            </article>
+        <ul className="mt-7 m-0 grid list-none grid-cols-1 gap-3 p-0 min-[480px]:grid-cols-2 sm:mt-8 sm:gap-3.5 lg:grid-cols-3 xl:grid-cols-5">
+          {SCIENCES.map(({ title, text, Icon }) => (
+            <li key={title} className="min-w-0">
+              <article className="flex h-full flex-col rounded-[14px] border border-site-border bg-site-surface p-4 shadow-[0_2px_5px_rgba(51,37,26,0.06)] transition duration-150 hover:-translate-y-px hover:shadow-[0_6px_15px_rgba(51,37,26,0.10)] sm:p-[1.125rem]">
+                <span
+                  className="mb-3.5 flex h-10 w-10 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border"
+                  aria-hidden
+                >
+                  <Icon size={18} strokeWidth={1.75} />
+                </span>
+                <h3 className="m-0 font-heading text-[1.125rem] font-bold leading-snug text-site-text sm:text-lg">
+                  {title}
+                </h3>
+                <p className="m-0 mt-2 flex-1 font-body text-[15px] leading-relaxed text-site-muted">
+                  {text}
+                </p>
+              </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
@@ -300,22 +391,24 @@ export function AboutStats() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className={`mx-auto mb-6 max-w-xl text-center sm:mb-8 ${TW_STACK_SM}`}>
-          <SectionKicker>DS Astro Institute, by the numbers</SectionKicker>
-          <p className={TW_BODY}>
-            Experience isn&apos;t a claim here — it&apos;s a record. And it grows every day.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <SectionIntro
+          align="center"
+          kicker="By the numbers"
+          title="A record that"
+          titleHighlight="grows every day"
+          subtitle="Experience isn’t a claim here — it’s a record."
+        />
+
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-4 lg:grid-cols-4">
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="flex flex-col items-center rounded-xl border border-site-accent-dark/12 bg-site-bg px-3 py-4 text-center shadow-sm sm:px-4 sm:py-5"
+              className="flex flex-col items-center rounded-[14px] border border-site-border bg-site-bg px-3 py-5 text-center shadow-[0_2px_5px_rgba(51,37,26,0.06)] sm:px-4 sm:py-6"
             >
-              <p className="font-price text-2xl font-extrabold tracking-tight text-site-accent-dark sm:text-3xl">
+              <p className="font-heading text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-none tracking-tight text-site-accent-dark tabular-nums">
                 {stat.value}
               </p>
-              <p className="mt-1 font-body text-[10px] font-bold uppercase tracking-wide text-site-muted sm:text-xs">
+              <p className="mt-2 font-body text-[12px] font-semibold uppercase tracking-[0.08em] text-site-muted sm:text-[13px]">
                 {stat.label}
               </p>
             </div>
@@ -330,28 +423,30 @@ export function AboutOfferings() {
   return (
     <section className={`bg-site-bg ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className={`mb-6 sm:mb-8 ${TW_STACK_SM}`}>
-          <SectionKicker>What we offer</SectionKicker>
-          <h2 className={TW_H2}>A path for every seeker</h2>
-          <p className={`max-w-2xl ${TW_BODY}`}>
-            Whether you&apos;re looking for an answer today or a lifelong skill, there&apos;s a path here for you.
-          </p>
-        </div>
+        <SectionIntro
+          kicker="What we offer"
+          title="A path for"
+          titleHighlight="every seeker"
+          subtitle="Whether you’re looking for an answer today or a lifelong skill, there’s a path here for you."
+        />
 
-        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:gap-5">
-          {OFFERINGS.map((item) => (
-            <article
-              key={item.title}
-              className={`${SITE_CARD} flex h-full flex-col p-4 sm:p-5`}
-            >
-              <h3 className={`${TW_H3} text-base`}>{item.title}</h3>
-              <p className={`mt-2 flex-1 ${TW_BODY_SM}`}>{item.text}</p>
-              <Link
-                to={item.to}
-                className="mt-4 inline-flex items-center gap-1.5 font-body text-sm font-bold text-site-accent-dark no-underline transition hover:text-site-accent"
+        <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+          {OFFERINGS.map(({ title, text, to, cta, Icon }) => (
+            <article key={title} className={`${SITE_CARD} flex h-full flex-col p-5 sm:p-6`}>
+              <span
+                className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border"
+                aria-hidden
               >
-                {item.cta}
-                <i className="fas fa-arrow-right text-[10px]" aria-hidden />
+                <Icon size={18} strokeWidth={1.75} />
+              </span>
+              <h3 className={TW_H3}>{title}</h3>
+              <p className={`mt-2 flex-1 ${TW_BODY_SM}`}>{text}</p>
+              <Link
+                to={to}
+                className="mt-5 inline-flex items-center gap-1.5 font-body text-[15px] font-semibold text-site-accent-dark no-underline transition hover:text-site-accent"
+              >
+                {cta}
+                <ArrowRight size={14} aria-hidden />
               </Link>
             </article>
           ))}
@@ -364,14 +459,22 @@ export function AboutOfferings() {
 export function AboutAudience() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
-      <div className={`${PAGE_WRAP} max-w-3xl`}>
-        <SectionKicker>Who we guide</SectionKicker>
-        <h2 className={`${TW_H2} mb-3 sm:mb-4`}>Across India and beyond</h2>
-        <p className={TW_BODY}>
-          DS Astro Institute serves a growing community across India and among Indians settled abroad. Whether
-          you&apos;re navigating a crossroads at home or seeking familiar wisdom from across the seas, distance
-          is never a barrier — genuine guidance travels with you.
-        </p>
+      <div className={`${PAGE_WRAP} ${SECTION_MAX}`}>
+        <div className="rounded-[14px] border border-site-border bg-site-bg p-6 sm:p-8 lg:p-10">
+          <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border">
+            <Globe2 size={20} strokeWidth={1.75} aria-hidden />
+          </div>
+          <SectionIntro
+            kicker="Who we guide"
+            title="Across India"
+            titleHighlight="and beyond"
+          />
+          <p className={`${TW_BODY} mt-4 text-site-muted`}>
+            DS Astro Institute serves a growing community across India and among Indians settled abroad. Whether
+            you&apos;re navigating a crossroads at home or seeking familiar wisdom from across the seas, distance
+            is never a barrier — genuine guidance travels with you.
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -381,19 +484,24 @@ export function AboutTrust() {
   return (
     <section className={`bg-site-bg ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:gap-10">
-          <div className={TW_STACK_SM}>
-            <SectionKicker>Why people trust DS Astro Institute</SectionKicker>
-            <h2 className={TW_H2}>Clarity, not fear</h2>
-            <p className={TW_BODY}>
-              The stars have always been speaking. DS Astro Institute simply helps you listen.
-            </p>
-          </div>
-          <ul className="flex flex-col divide-y divide-site-border rounded-2xl border border-site-border bg-site-surface px-4 shadow-[0_2px_5px_rgba(51,37,26,0.08)] sm:px-5">
+        <div className="grid items-start gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+          <SectionIntro
+            kicker="Why people trust DS Astro Institute"
+            title="Clarity,"
+            titleHighlight="not fear"
+            subtitle="The stars have always been speaking. DS Astro Institute simply helps you listen."
+          />
+
+          <ul className="m-0 flex list-none flex-col divide-y divide-site-border overflow-hidden rounded-[14px] border border-site-border bg-site-surface p-0 shadow-[0_2px_5px_rgba(51,37,26,0.08)]">
             {TRUST_POINTS.map((point) => (
-              <li key={point} className="flex gap-3 py-3.5 first:pt-4 last:pb-4 sm:py-4">
-                <i className="fas fa-check-circle mt-0.5 shrink-0 text-site-accent" aria-hidden />
-                <p className={TW_BODY_SM}>{point}</p>
+              <li key={point} className="flex gap-3 px-4 py-4 sm:gap-3.5 sm:px-5 sm:py-5">
+                <CheckCircle2
+                  size={18}
+                  className="mt-0.5 shrink-0 text-site-accent-dark"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                <p className={`m-0 ${TW_BODY_SM}`}>{point}</p>
               </li>
             ))}
           </ul>
@@ -406,27 +514,31 @@ export function AboutTrust() {
 export function AboutFaq() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
-      <div className={`${PAGE_WRAP} max-w-3xl`}>
-        <div className={`mb-5 sm:mb-6 ${TW_STACK_SM}`}>
-          <SectionKicker>Frequently asked questions</SectionKicker>
-          <h2 className={TW_H2}>Common questions</h2>
-        </div>
-        <div className="flex flex-col gap-2">
+      <div className={`${PAGE_WRAP} ${SECTION_MAX}`}>
+        <SectionIntro
+          align="center"
+          kicker="Frequently asked questions"
+          title="Common"
+          titleHighlight="questions"
+        />
+
+        <div className="mt-8 flex flex-col gap-2.5 sm:mt-10">
           {ABOUT_FAQ.map((item) => (
             <details
               key={item.q}
-              className="group rounded-2xl border border-site-border bg-site-surface px-4 py-1 shadow-[0_2px_5px_rgba(51,37,26,0.08)] open:shadow-[0_6px_15px_rgba(51,37,26,0.12)] sm:px-5"
+              className="group rounded-[14px] border border-site-border bg-site-bg open:bg-site-surface open:shadow-[0_6px_15px_rgba(51,37,26,0.10)]"
             >
-              <summary className="cursor-pointer list-none py-3.5 font-body text-sm font-bold text-site-primary marker:content-none sm:text-base [&::-webkit-details-marker]:hidden">
-                <span className="flex items-center justify-between gap-3">
-                  {item.q}
-                  <i
-                    className="fas fa-chevron-down shrink-0 text-xs text-site-accent transition group-open:rotate-180"
+              <summary className="cursor-pointer list-none px-4 py-4 font-heading text-[15px] font-semibold text-site-text marker:content-none sm:px-5 sm:text-base [&::-webkit-details-marker]:hidden">
+                <span className="flex items-start justify-between gap-3">
+                  <span className="leading-snug">{item.q}</span>
+                  <ChevronDown
+                    size={16}
+                    className="mt-0.5 shrink-0 text-site-accent-dark transition duration-200 group-open:rotate-180"
                     aria-hidden
                   />
                 </span>
               </summary>
-              <p className={`border-t border-site-accent-dark/8 pb-4 pt-3 ${TW_BODY_SM}`}>{item.a}</p>
+              <p className={`border-t border-site-border px-4 pb-4 pt-3 sm:px-5 ${TW_BODY_SM}`}>{item.a}</p>
             </details>
           ))}
         </div>
@@ -437,26 +549,27 @@ export function AboutFaq() {
 
 export function AboutCta() {
   return (
-    <section className="border-t border-site-accent-dark/8 bg-site-bg py-8 sm:py-10">
+    <section className="border-t border-site-border bg-site-bg py-10 sm:py-12 lg:py-14">
       <div className={PAGE_WRAP}>
+        <BrassRule className="mb-8 sm:mb-10" />
         <div className={`${SITE_BAND} mx-auto max-w-3xl ${TW_STACK_SM}`}>
+          <p className="m-0 font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-site-gold">
+            Begin today
+          </p>
           <h2 className={SITE_BAND_TITLE}>Ready to find your direction?</h2>
           <p className={SITE_BAND_BODY}>
             Book a consultation with Damini Shukla today — and let the stars guide the way.
           </p>
-          <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-            <Link
-              to="/consultations"
-              className={`${SITE_BTN_COPPER_LG} w-full !no-underline sm:w-auto`}
-            >
-              <i className="fas fa-calendar-check" aria-hidden />
+          <div className="flex w-full flex-col gap-2.5 pt-1 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center">
+            <Link to="/consultations" className={`${SITE_BTN_COPPER_COMPACT} w-full !no-underline sm:w-auto`}>
+              <CalendarCheck size={14} aria-hidden />
               Book a consultation
             </Link>
             <Link
               to="/live-courses"
-              className={`${SITE_BTN_TONAL_ON_DARK_LG} w-full !no-underline sm:w-auto`}
+              className={`${SITE_BTN_TONAL_ON_DARK} !min-h-9 !rounded-[10px] !px-4 !py-2 !text-sm w-full !no-underline sm:w-auto`}
             >
-              <i className="fas fa-graduation-cap" aria-hidden />
+              <GraduationCap size={14} aria-hidden />
               Explore courses
             </Link>
           </div>

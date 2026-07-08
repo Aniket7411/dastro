@@ -23,7 +23,7 @@ export default function HomeConsultationCard({ item, onBook }) {
     <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-site-accent/35 hover:shadow-[0_10px_28px_rgba(139,74,30,0.12)]">
       <Link
         to={item.link}
-        className={`${CARD_LINK} relative block aspect-[2/1] overflow-hidden`}
+        className={`${CARD_LINK} relative block aspect-[16/9] overflow-hidden sm:aspect-[2/1]`}
         tabIndex={-1}
         aria-hidden
       >
@@ -61,15 +61,15 @@ export default function HomeConsultationCard({ item, onBook }) {
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col p-2 sm:px-3.5 sm:py-3">
+      <div className="flex flex-1 flex-col p-2.5 sm:px-3.5 sm:py-3">
         <Link
           to={item.link}
-          className={`${TITLE_LINK} mb-1 line-clamp-2 font-body text-xs font-bold leading-snug sm:mb-1.5 sm:text-sm`}
+          className={`${TITLE_LINK} mb-1 line-clamp-2 font-body text-[13px] font-bold leading-snug sm:mb-1.5 sm:text-sm`}
         >
           {item.title}
         </Link>
 
-        <p className="mb-2 line-clamp-2 flex-1 text-[10px] leading-relaxed text-site-muted sm:mb-3 sm:text-[13px]">
+        <p className="mb-2.5 line-clamp-2 flex-1 text-[11px] leading-relaxed text-site-muted sm:mb-3 sm:text-[13px]">
           {item.desc}
         </p>
 

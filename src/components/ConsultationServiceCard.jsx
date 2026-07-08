@@ -31,7 +31,7 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
     <article className={`${SITE_COURSE_CARD} w-full`}>
       <Link
         to={url}
-        className="relative block aspect-[5/4] overflow-hidden no-underline sm:aspect-[4/3]"
+        className="relative block aspect-[4/3] overflow-hidden no-underline sm:aspect-[4/3]"
         tabIndex={-1}
         aria-hidden
       >
