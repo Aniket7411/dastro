@@ -20,7 +20,6 @@ import {
   TW_KICKER,
   TW_H1,
   TW_H2,
-  TW_H3,
   TW_BODY,
   TW_BODY_SM,
   TW_LEAD,
@@ -107,21 +106,21 @@ const SCIENCES = [
 const OFFERINGS = [
   {
     title: 'Personal consultations',
-    text: 'Career, love and marriage, business, health, finances, and auspicious timing (muhurat).',
+    text: 'Career · Love & marriage · Business · Health · Finances · Muhurat',
     to: '/consultations',
     cta: 'Book consultation',
     Icon: CalendarCheck,
   },
   {
     title: 'Live courses',
-    text: 'Learn directly from Damini, from beginner foundations to advanced mastery.',
+    text: 'Learn with Damini — foundations through advanced mastery.',
     to: '/live-courses',
     cta: 'View live courses',
     Icon: GraduationCap,
   },
   {
     title: 'Recorded courses',
-    text: 'Study at your own pace, anytime, anywhere in the world.',
+    text: 'Self-paced study, anytime, anywhere.',
     to: '/recorded-courses',
     cta: 'Browse recorded',
     Icon: PlayCircle,
@@ -135,7 +134,7 @@ const OFFERINGS = [
   },
   {
     title: 'Astrology shop',
-    text: 'Carefully curated remedies, gemstones, yantras, and spiritual essentials.',
+    text: 'Remedies, gemstones, yantras, and spiritual essentials.',
     to: '/shop',
     cta: 'Visit shop',
     Icon: Store,
@@ -281,83 +280,40 @@ export function AboutHero() {
   );
 }
 
-function AboutDaminiMedia({ className = '' }) {
-  return (
-    <div className={`mx-auto w-full max-w-md lg:max-w-none ${className}`}>
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-        <figure className="m-0 col-span-2 overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_10px_24px_rgba(51,37,26,0.10)]">
-          <img
-            src="/images/about_akshay.png"
-            alt="Damini Shukla with Akshay Kumar"
-            className="aspect-[5/4] w-full object-cover object-top sm:aspect-[4/3]"
-            loading="lazy"
-          />
-        </figure>
-        <figure className="m-0 overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_8px_20px_rgba(51,37,26,0.08)]">
-          <img
-            src="/images/about_aly.jpg"
-            alt="Damini Shukla with Aly Goni"
-            className="aspect-[4/5] w-full object-cover object-top"
-            loading="lazy"
-          />
-        </figure>
-        <div className="flex flex-col justify-end gap-2 rounded-[14px] border border-site-border bg-site-surface p-3.5 shadow-[0_8px_20px_rgba(51,37,26,0.06)] sm:p-4">
-          <p className="m-0 font-heading text-base font-bold leading-snug text-site-text sm:text-lg">
-            Damini Shukla
-          </p>
-          <p className={`m-0 ${TW_BODY_SM}`}>
-            Trusted celebrity astrologer — screen features with Akshay Kumar, and guidance for public figures.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function AboutDamini() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
-      <div className={PAGE_WRAP}>
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
-          <div className={`${TW_STACK} gap-5`}>
-            <SectionIntro
-              kicker="The woman behind the practice"
-              title="Damini"
-              titleHighlight="Shukla"
-            />
+      <div className={`${PAGE_WRAP} max-w-3xl`}>
+        <div className={`${TW_STACK} gap-5`}>
+          <SectionIntro
+            kicker="The woman behind the practice"
+            title="Damini"
+            titleHighlight="Shukla"
+          />
 
-            <div className="lg:hidden">
-              <AboutDaminiMedia />
-            </div>
-
-            <div className={`${TW_STACK} gap-4`}>
-              <p className={TW_BODY}>
-                Damini&apos;s connection with astrology began not as a profession, but as a fascination. Even as a
-                child, she was drawn to the language of the planets — the sense that everything in the universe is
-                quietly connected. That early curiosity grew into a lifelong calling.
-              </p>
-              <p className={`${TW_BODY} text-site-muted`}>
-                Over the years, she trained under several respected gurus and traditions, refining her craft until
-                she became one of the sought-after names in the field. She has served as a senior astrologer and
-                mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
-                Vidya — guiding both clients and aspiring astrologers alike.
-              </p>
-              <p className={`${TW_BODY} text-site-muted`}>
-                Her work has also reached the screen: Damini featured as an astrology consultant on the television
-                show <em className="not-italic font-semibold text-site-text">Wheel of Fortune</em> alongside Akshay
-                Kumar, and today she is a trusted celebrity astrologer to public figures who value discretion and
-                depth in equal measure.
-              </p>
-              <p className={TW_BODY}>
-                But ask her what she&apos;s proudest of, and the answer isn&apos;t the fame — it&apos;s the thousands
-                of lives she&apos;s helped steady, and the students she&apos;s guided onto their own path as
-                astrologers.
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden lg:block lg:sticky lg:top-[calc(var(--spacing-site-header)+1.25rem)]">
-            <AboutDaminiMedia />
+          <div className={`${TW_STACK} gap-4`}>
+            <p className={TW_BODY}>
+              Damini&apos;s connection with astrology began not as a profession, but as a fascination. Even as a
+              child, she was drawn to the language of the planets — the sense that everything in the universe is
+              quietly connected. That early curiosity grew into a lifelong calling.
+            </p>
+            <p className={`${TW_BODY} text-site-muted`}>
+              Over the years, she trained under several respected gurus and traditions, refining her craft until
+              she became one of the sought-after names in the field. She has served as a senior astrologer and
+              mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
+              Vidya — guiding both clients and aspiring astrologers alike.
+            </p>
+            <p className={`${TW_BODY} text-site-muted`}>
+              Her work has also reached the screen: Damini featured as an astrology consultant on the television
+              show <em className="not-italic font-semibold text-site-text">Wheel of Fortune</em> alongside Akshay
+              Kumar, and today she is a trusted celebrity astrologer to public figures who value discretion and
+              depth in equal measure.
+            </p>
+            <p className={TW_BODY}>
+              But ask her what she&apos;s proudest of, and the answer isn&apos;t the fame — it&apos;s the thousands
+              of lives she&apos;s helped steady, and the students she&apos;s guided onto their own path as
+              astrologers.
+            </p>
           </div>
         </div>
       </div>
@@ -449,23 +405,30 @@ export function AboutOfferings() {
           subtitle="Whether you’re looking for an answer today or a lifelong skill, there’s a path here for you."
         />
 
-        <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+        <div className="mt-7 grid grid-cols-1 gap-2.5 min-[480px]:grid-cols-2 sm:mt-8 lg:grid-cols-3 lg:gap-3">
           {OFFERINGS.map(({ title, text, to, cta, Icon }) => (
-            <article key={title} className={`${SITE_CARD} flex h-full flex-col p-5 sm:p-6`}>
+            <article
+              key={title}
+              className={`${SITE_CARD} flex h-full min-w-0 flex-col p-3.5 sm:p-4`}
+            >
               <span
-                className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-site-sand text-site-accent-dark ring-1 ring-site-border"
+                className="mb-2.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-site-sand text-site-accent-dark ring-1 ring-site-border"
                 aria-hidden
               >
-                <Icon size={18} strokeWidth={1.75} />
+                <Icon size={15} strokeWidth={1.75} />
               </span>
-              <h3 className={TW_H3}>{title}</h3>
-              <p className={`mt-2 flex-1 ${TW_BODY_SM}`}>{text}</p>
+              <h3 className="m-0 font-heading text-[1.05rem] font-bold leading-snug text-site-text sm:text-[1.125rem]">
+                {title}
+              </h3>
+              <p className="m-0 mt-1.5 flex-1 font-body text-[13px] leading-snug text-site-muted sm:text-[14px] sm:leading-relaxed">
+                {text}
+              </p>
               <Link
                 to={to}
-                className="mt-5 inline-flex items-center gap-1.5 font-body text-[15px] font-semibold text-site-accent-dark no-underline transition hover:text-site-accent"
+                className={`${SITE_BTN_TONAL_COMPACT} mt-3 w-full !no-underline`}
               >
                 {cta}
-                <ArrowRight size={14} aria-hidden />
+                <ArrowRight size={13} aria-hidden />
               </Link>
             </article>
           ))}
