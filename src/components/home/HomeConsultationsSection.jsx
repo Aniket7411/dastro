@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import HomeConsultationCard from '../HomeConsultationCard';
 import ConsultationServicesCarousel from '../ConsultationServicesCarousel';
 import { HomeSubsectionHeader } from './HomeSectionHeader';
-import { COURSE_GRID, COURSE_GRID_ITEM } from '../consultation/tokens';
 import { CourseGridSkeleton } from '../PageLoader';
 import { fetchConsultationCatalog, mapConsultationServiceToHomeCard } from '../../utils/consultationApi';
 
@@ -62,11 +61,11 @@ export default function HomeConsultationsSection({ onBook }) {
       {loading ? (
         <CourseGridSkeleton />
       ) : featuredItems.length > 0 ? (
-        <ul className={COURSE_GRID} data-aos="fade-up">
+        <ul className="m-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4" data-aos="fade-up">
           {featuredItems.map((item, idx) => (
             <li
               key={item.id || item.link}
-              className={COURSE_GRID_ITEM}
+              className="min-w-0 w-full"
               data-aos="fade-up"
               data-aos-delay={idx * 100}
             >

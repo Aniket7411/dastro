@@ -181,8 +181,9 @@ export function mapConsultationServiceToHomeCard(service) {
   return {
     id: service?.id || service?.slug,
     title: service?.title || '',
+    short: service?.short || '',
     img: service?.img || HOME_CONSULTATION_FALLBACK_IMG,
-    desc: service?.short || service?.desc || '',
+    desc: service?.desc || '',
     duration: service?.duration || '',
     price: service?.priceLabel || (priceValue > 0 ? `₹${priceValue.toLocaleString('en-IN')}` : ''),
     priceValue,
