@@ -207,7 +207,7 @@ function AboutHeroImage({ className = '' }) {
       />
       <div className="relative overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_12px_28px_rgba(51,37,26,0.10)]">
         <img
-          src="/aboutus.webp"
+          src="/images/damini.webp"
           alt="Damini Shukla — DS Astro Institute"
           className="mx-auto block h-auto max-h-[22rem] w-full object-contain object-center sm:max-h-[24rem] lg:max-h-[26rem]"
           loading="eager"
@@ -281,23 +281,36 @@ export function AboutHero() {
   );
 }
 
-function AboutDaminiVideo({ className = '' }) {
+function AboutDaminiMedia({ className = '' }) {
   return (
-    <figure className={`mx-auto w-full max-w-md lg:max-w-lg ${className}`}>
-      <div className="overflow-hidden rounded-[14px] border border-site-border bg-site-primary shadow-[0_10px_24px_rgba(51,37,26,0.12)]">
-        <video
-          src="/astrologyvideo.mp4"
-          controls
-          playsInline
-          preload="metadata"
-          className="aspect-video max-h-[15.5rem] w-full object-cover sm:max-h-[16rem] lg:max-h-[18rem]"
-          title="About DS Astro Institute"
-        />
+    <div className={`mx-auto w-full max-w-md lg:max-w-none ${className}`}>
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+        <figure className="m-0 col-span-2 overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_10px_24px_rgba(51,37,26,0.10)]">
+          <img
+            src="/images/about_akshay.png"
+            alt="Damini Shukla with Akshay Kumar"
+            className="aspect-[5/4] w-full object-cover object-top sm:aspect-[4/3]"
+            loading="lazy"
+          />
+        </figure>
+        <figure className="m-0 overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_8px_20px_rgba(51,37,26,0.08)]">
+          <img
+            src="/images/about_aly.jpg"
+            alt="Damini Shukla with Aly Goni"
+            className="aspect-[4/5] w-full object-cover object-top"
+            loading="lazy"
+          />
+        </figure>
+        <div className="flex flex-col justify-end gap-2 rounded-[14px] border border-site-border bg-site-surface p-3.5 shadow-[0_8px_20px_rgba(51,37,26,0.06)] sm:p-4">
+          <p className="m-0 font-heading text-base font-bold leading-snug text-site-text sm:text-lg">
+            Damini Shukla
+          </p>
+          <p className={`m-0 ${TW_BODY_SM}`}>
+            Trusted celebrity astrologer — screen features with Akshay Kumar, and guidance for public figures.
+          </p>
+        </div>
       </div>
-      <figcaption className={`mt-2.5 text-center ${TW_BODY_SM}`}>
-        Hear how we teach, consult, and support our community
-      </figcaption>
-    </figure>
+    </div>
   );
 }
 
@@ -305,13 +318,17 @@ export function AboutDamini() {
   return (
     <section className={`${SECTION_ALT} ${SECTION}`}>
       <div className={PAGE_WRAP}>
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
           <div className={`${TW_STACK} gap-5`}>
             <SectionIntro
               kicker="The woman behind the practice"
               title="Damini"
               titleHighlight="Shukla"
             />
+
+            <div className="lg:hidden">
+              <AboutDaminiMedia />
+            </div>
 
             <div className={`${TW_STACK} gap-4`}>
               <p className={TW_BODY}>
@@ -339,7 +356,9 @@ export function AboutDamini() {
             </div>
           </div>
 
-          <AboutDaminiVideo className="w-full lg:sticky lg:top-[calc(var(--spacing-site-header)+1.25rem)]" />
+          <div className="hidden lg:block lg:sticky lg:top-[calc(var(--spacing-site-header)+1.25rem)]">
+            <AboutDaminiMedia />
+          </div>
         </div>
       </div>
     </section>
