@@ -35,8 +35,8 @@ import {
   TW_KICKER,
 } from '../utils/siteTokens';
 
-const COURSES_HERO_IMG = '/images/mentor_promo.png';
-const COURSES_HERO_ACCENT = '/images/vedic_thumbnail.png';
+const COURSES_HERO_IMG = '/images/courses_hero_new.jpg';
+const COURSES_HERO_ACCENT = '/images/vedic_thumbnail_new.jpg';
 
 const FEATURES = [
   { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
