@@ -69,6 +69,14 @@ function cleanShortDesc(text = '') {
   return trimmed.length > 110 ? `${trimmed.slice(0, 107).trim()}…` : trimmed;
 }
 
+function getShortLevel(level) {
+  if (!level) return '';
+  const l = String(level).trim().toLowerCase();
+  if (l === 'intermediate') return 'Int';
+  if (l === 'beginner') return 'Beg';
+  return level;
+}
+
 function CourseCard({ course }) {
   const isLive = course.courseType === 'Live';
   const detailPath = `/courses/${course.slug || course.id}`;
@@ -98,7 +106,7 @@ function CourseCard({ course }) {
           <CourseLiveBadge />
         ) : course.level ? (
           <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META}`}>
-            {course.level}
+            {getShortLevel(course.level)}
           </span>
         ) : null}
 
@@ -110,7 +118,7 @@ function CourseCard({ course }) {
           <span
             className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 top-1.5 sm:right-2 sm:top-2`}
           >
-            {course.level}
+            {getShortLevel(course.level)}
           </span>
         ) : null}
       </Link>
