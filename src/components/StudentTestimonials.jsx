@@ -57,7 +57,7 @@ const STUDENTS = [
 const MARQUEE_ITEMS = [...STUDENTS, ...STUDENTS];
 
 const CARD_W = 'w-[17.5rem] sm:w-[18.5rem]';
-const CARD_H = 'h-[15.75rem] sm:h-[16.25rem]';
+const CARD_MIN_H = 'min-h-[17.5rem] sm:min-h-[18rem]';
 
 function Stars({ rating }) {
   return (
@@ -76,14 +76,14 @@ function Stars({ rating }) {
 function TestimonialCard({ item, index }) {
   return (
     <article
-      className={`st-card flex ${CARD_H} ${CARD_W} shrink-0 flex-col rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.06)] transition hover:border-site-accent/25 hover:shadow-[0_8px_24px_rgba(42,15,2,0.08)]`}
+      className={`st-card flex ${CARD_MIN_H} ${CARD_W} shrink-0 flex-col rounded-xl border border-site-accent-dark/10 bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.06)] transition hover:border-site-accent/25 hover:shadow-[0_8px_24px_rgba(42,15,2,0.08)]`}
       aria-label={`Review from ${item.name}`}
     >
       <span className="mb-2 inline-flex w-fit max-w-full truncate rounded-full bg-site-primary/6 px-2 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-wide text-site-primary">
         {item.course}
       </span>
 
-      <p className="m-0 line-clamp-4 flex-1 text-sm leading-snug text-site-muted">{item.text}</p>
+      <p className="m-0 flex-1 text-sm leading-relaxed text-site-muted">{item.text}</p>
 
       <div className="mt-3 border-t border-site-accent-dark/8 pt-3">
         <Stars rating={item.rating} />
