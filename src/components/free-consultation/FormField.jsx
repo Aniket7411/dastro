@@ -13,6 +13,8 @@ export default function FormField({
   className = '',
   inputMode,
   maxLength,
+  min,
+  max,
   readOnly = false,
   compact = false,
 }) {
@@ -40,6 +42,14 @@ export default function FormField({
             </option>
           ))}
         </select>
+      ) : as === 'display' ? (
+        <div
+          id={fieldId}
+          className={`${fieldClass} flex min-h-[34px] items-center bg-[#f5f5f5] text-[#000] tabular-nums`}
+          aria-live="polite"
+        >
+          {value || <span className="text-[#888]">{placeholder || '—'}</span>}
+        </div>
       ) : (
         <input
           id={fieldId}
@@ -52,6 +62,8 @@ export default function FormField({
           className={fieldClass}
           inputMode={inputMode}
           maxLength={maxLength}
+          min={min}
+          max={max}
         />
       )}
     </div>

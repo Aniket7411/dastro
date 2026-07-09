@@ -9,6 +9,7 @@ import {
   Search,
 } from 'lucide-react';
 import toast from '@/utils/toast';
+import { formatLeadAge } from '../../utils/ageFromDob';
 import ReadingPanel from './ReadingPanel';
 import { counsellorListLeads } from '../../utils/freeConsultationApi';
 import { formatRashiLabel, getRashiHi } from '../../utils/rashi';
@@ -36,6 +37,8 @@ function leadToReportMeta(lead) {
     mobile: lead.mobile,
     dob: lead.dob,
     age: lead.age,
+    ageMonths: lead.ageMonths,
+    ageDisplay: lead.ageDisplay,
     gender: lead.gender,
     reasonForCalling: lead.reasonForCalling,
     counsellorName: lead.counsellorName,

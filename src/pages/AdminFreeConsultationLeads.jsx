@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Eye, FileSpreadsheet, RefreshCw, X } from 'lucide-react';
 import toast from '@/utils/toast';
+import { formatLeadAge } from '../utils/ageFromDob';
 import ReadingPanel from '../components/free-consultation/ReadingPanel';
 import ReadingReportActions from '../components/free-consultation/ReadingReportActions';
 import API_BASE from '../utils/api';
@@ -49,7 +50,7 @@ function ReadingModal({ lead, onClose }) {
                 <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Caller details</p>
                 <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-slate-700">
                   <div><dt className="text-slate-400">DOB</dt><dd className="font-medium">{lead.dob || '—'}</dd></div>
-                  <div><dt className="text-slate-400">Age</dt><dd className="font-medium">{lead.age ?? '—'}</dd></div>
+                  <div><dt className="text-slate-400">Age</dt><dd className="font-medium">{formatLeadAge(lead)}</dd></div>
                   <div><dt className="text-slate-400">Gender</dt><dd className="font-medium">{lead.gender || '—'}</dd></div>
                   <div><dt className="text-slate-400">Counsellor</dt><dd className="font-medium">{lead.counsellorName || '—'}</dd></div>
                   <div><dt className="text-slate-400">Counsellor email</dt><dd className="font-medium">{lead.counsellorEmail || '—'}</dd></div>

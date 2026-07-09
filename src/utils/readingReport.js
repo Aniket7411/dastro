@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME, SITE_NAME_LLP } from './brandAssets';
 import { CONTACT_PHONE_DISPLAY } from './contactInfo';
 import { getRashiHi } from './rashi';
+import { formatLeadAge } from './ageFromDob';
 
 const SITE_WEBSITE = 'https://www.dsastrology.com';
 const SITE_EMAIL = 'info@dsastroinstitute.com';
@@ -236,7 +237,7 @@ export function buildReadingReportHtml(
         <table style="border-collapse:collapse;width:100%;">
           ${metaRow('Mobile', lead.mobile || '—', compact)}
           ${metaRow('Date of birth', lead.dob || '', compact)}
-          ${metaRow('Age', lead.age ? String(lead.age) : '', compact)}
+          ${metaRow('Age', formatLeadAge(lead), compact)}
           ${metaRow('Gender', lead.gender || '', compact)}
           ${metaRow('Reason for call', lead.reasonForCalling || '', compact)}
         </table>

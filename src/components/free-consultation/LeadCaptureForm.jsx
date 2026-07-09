@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Loader2, Phone, RotateCcw } from 'lucide-react';
+import { getAgeFromDob } from '../../utils/ageFromDob';
 import FormField from './FormField';
 import {
   BTN_PRIMARY,
@@ -27,21 +28,22 @@ const INITIAL = {
   consent: false,
 };
 
-function calcAge(dob) {
-  if (!dob) return '';
-  const d = new Date(dob);
-  if (Number.isNaN(d.getTime())) return '';
-  const today = new Date();
-  let age = today.getFullYear() - d.getFullYear();
-  const m = today.getMonth() - d.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < d.getDate())) age -= 1;
-  return age;
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function minDobIso() {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 120);
+  return d.toISOString().slice(0, 10);
 }
 
 export default function LeadCaptureForm({ onSubmit, submitting }) {
   const [form, setForm] = useState(INITIAL);
+  const maxDob = todayIso();
+  const minDob = minDobIso();
 
-  const age = useMemo(() => calcAge(form.dob), [form.dob]);
+  const ageInfo = useMemo(() => getAgeFromDob(form.dob), [form.dob]);
 
   const set = (field) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -59,18 +61,22 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.consent) return;
+    if (!form.consent || !ageInfo.valid) return;
 
     onSubmit({
       ...form,
       mobile: form.mobile.replace(/\D/g, '').slice(-10),
       whatsapp: (form.sameWhatsappAsMobile ? form.mobile : form.whatsapp).replace(/\D/g, '').slice(-10),
-      age: age ? Number(age) : undefined,
+      age: ageInfo.years,
+      ageMonths: ageInfo.years === 0 ? ageInfo.months : undefined,
+      ageDisplay: ageInfo.display,
       tob: form.tobUnknown ? '' : form.tob,
     });
   };
 
   const resetForm = () => setForm(INITIAL);
+
+  const dobInvalid = Boolean(form.dob && !ageInfo.valid);
 
   return (
     <form onSubmit={handleSubmit} className={`${DESK_CARD} flex flex-col gap-2.5 sm:gap-3`}>
@@ -134,15 +140,28 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
             Same as mobile
           </label>
         </div>
-        <FormField compact label="Date of birth" type="date" value={form.dob} onChange={set('dob')} required />
         <FormField
           compact
-          label="Age"
-          value={age ? String(age) : ''}
-          onChange={() => {}}
-          readOnly
-          placeholder="Auto"
+          label="Date of birth"
+          type="date"
+          value={form.dob}
+          onChange={set('dob')}
+          required
+          min={minDob}
+          max={maxDob}
         />
+        <div>
+          <FormField
+            compact
+            label="Age"
+            as="display"
+            value={ageInfo.valid ? ageInfo.display : ''}
+            placeholder={form.dob ? 'Invalid DOB' : 'From DOB'}
+          />
+          <p className={`mt-0.5 font-body text-[10px] ${DESK_MUTED}`}>
+            Auto from DOB · babies show in months
+          </p>
+        </div>
         <FormField
           compact
           label="Gender"
@@ -200,6 +219,12 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
         />
       </div>
 
+      {dobInvalid ? (
+        <p className="font-body text-[11px] font-semibold text-[#b00000]">
+          Date of birth cannot be in the future.
+        </p>
+      ) : null}
+
       <div className={`${DESK_INNER} px-2.5 py-2 sm:px-3`}>
         <p className="mb-1.5 font-['IBM_Plex_Sans_Devanagari',sans-serif] text-[11px] font-medium leading-snug text-[#000] sm:text-xs">
           {CONSENT_TEXT}
@@ -219,7 +244,7 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
       <div className="flex justify-end pt-0.5">
         <button
           type="submit"
-          disabled={submitting || !form.consent}
+          disabled={submitting || !form.consent || dobInvalid}
           className={`${BTN_PRIMARY} !min-h-9 !w-full !text-xs sm:!w-auto sm:!text-sm`}
         >
           {submitting ? (
