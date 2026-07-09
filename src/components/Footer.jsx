@@ -190,7 +190,7 @@ function NewsletterForm({ email, setEmail, loading, onSubmit, idPrefix = 'footer
 function Footer() {
   const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
-  const [authState, setAuthState] = useState({ isStudent: false, isAdmin: false });
+  const [authState, setAuthState] = useState({ isStudent: false, isAdmin: false, isCounsellor: false });
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -205,6 +205,7 @@ function Footer() {
     setAuthState({
       isStudent: Boolean(localStorage.getItem('studentToken')),
       isAdmin: Boolean(localStorage.getItem('adminToken')),
+      isCounsellor: Boolean(localStorage.getItem('counsellorToken')),
     });
   }, []);
 
@@ -317,6 +318,11 @@ function Footer() {
       <li>
         <Link to={authState.isStudent ? '/dashboard' : '/login'} className={FOOTER_LINK}>
           {authState.isStudent ? 'Student Dashboard' : 'Student Login'}
+        </Link>
+      </li>
+      <li>
+        <Link to={authState.isCounsellor ? '/counsellor/desk' : '/counsellor/login'} className={FOOTER_LINK}>
+          {authState.isCounsellor ? 'Counsellor Desk' : 'Counsellor Login'}
         </Link>
       </li>
       {authState.isAdmin && (
