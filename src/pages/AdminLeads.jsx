@@ -292,94 +292,116 @@ function AdminLeads({ activeFilter }) {
         }
         .date-input-placeholder {
           position: absolute;
-          left: 10px;
+          left: 8px;
           top: 50%;
           transform: translateY(-50%);
           color: #94a3b8;
           pointer-events: none;
-          font-size: 13px;
+          font-size: 11px;
         }
-        @media (max-width: 640px) {
-          .date-input-placeholder {
-            font-size: 12px;
+        .leads-toolbar__search {
+          padding: 6px 12px;
+          border-radius: 8px;
+          min-width: 0;
+          box-shadow: none;
+        }
+        .leads-toolbar__search input {
+          font-size: 0.875rem;
+        }
+        .leads-toolbar__control {
+          height: 34px;
+        }
+        .leads-toolbar__btn {
+          height: 34px;
+        }
+        .leads-toolbar__icon-btn {
+          width: 34px;
+          height: 34px;
+        }
+        @media (min-width: 1280px) {
+          .leads-toolbar__control {
+            width: auto;
+            min-width: 118px;
+            max-width: 150px;
           }
         }
       `}</style>
-      {/* Search & filters */}
-      <div className="mb-4 space-y-3">
-        <div className="search-bar w-full max-w-full bg-[var(--surface)] sm:max-w-md">
-          <i className="fas fa-search" />
-          <input
-            type="text"
-            placeholder="Search by name, email, or phone..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full min-w-0"
-          />
-        </div>
+      {/* Compact search & filters */}
+      <div className="leads-toolbar mb-3 rounded-lg border border-slate-200 bg-white p-2 sm:p-2.5">
+        <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:gap-2">
+          <div className="search-bar leads-toolbar__search w-full min-w-0 shrink-0 bg-[var(--surface)] xl:max-w-[280px]">
+            <i className="fas fa-search" />
+            <input
+              type="text"
+              placeholder="Search name, email, phone…"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full min-w-0 text-sm"
+            />
+          </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:items-center lg:gap-2">
-          <select
-            name="sort"
-            value={filters.sort}
-            onChange={handleFilterChange}
-            className="col-span-2 h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:col-span-1 sm:text-sm"
-            title="Sort leads"
-          >
-            <option value="newest">Newest → Oldest</option>
-            <option value="oldest">Oldest → Newest</option>
-            <option value="name_asc">Name A → Z</option>
-            <option value="name_desc">Name Z → A</option>
-          </select>
-          <select
-            name="paymentStatus"
-            value={filters.paymentStatus}
-            onChange={handleFilterChange}
-            className="h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm"
-          >
-            <option value="">All Payments</option>
-            <option value="PAID">Paid</option>
-            <option value="PENDING">Pending</option>
-            <option value="FAILED">Failed</option>
-            <option value="NOT REQUIRED">Not Required</option>
-          </select>
-          <div className="date-input-container">
-            <input
-              type="date"
-              name="startDate"
-              value={filters.startDate}
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-2 xl:flex xl:flex-wrap xl:items-center xl:justify-end xl:gap-2">
+            <select
+              name="sort"
+              value={filters.sort}
               onChange={handleFilterChange}
-              className={`h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.startDate ? 'date-input-empty' : ''}`}
-              title="Start date"
-            />
-            {!filters.startDate && (
-              <span className="date-input-placeholder">Start Date</span>
-            )}
-          </div>
-          <div className="date-input-container">
-            <input
-              type="date"
-              name="endDate"
-              value={filters.endDate}
+              className="leads-toolbar__control col-span-1 w-full min-w-0 rounded border border-slate-200 bg-white px-2 text-xs text-slate-800 sm:text-sm"
+              title="Sort leads"
+            >
+              <option value="newest">Newest → Oldest</option>
+              <option value="oldest">Oldest → Newest</option>
+              <option value="name_asc">Name A → Z</option>
+              <option value="name_desc">Name Z → A</option>
+            </select>
+            <select
+              name="paymentStatus"
+              value={filters.paymentStatus}
               onChange={handleFilterChange}
-              className={`h-[42px] w-full min-w-0 rounded border bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.endDate ? 'date-input-empty' : ''}`}
-              title="End date"
-            />
-            {!filters.endDate && (
-              <span className="date-input-placeholder">End Date</span>
-            )}
-          </div>
-          <div className="col-span-2 flex gap-2 sm:col-span-1 lg:col-span-1 lg:ml-auto">
-              {/* Excel export dropdown */}
+              className="leads-toolbar__control col-span-1 w-full min-w-0 rounded border border-slate-200 bg-white px-2 text-xs text-slate-800 sm:text-sm"
+            >
+              <option value="">All Payments</option>
+              <option value="PAID">Paid</option>
+              <option value="PENDING">Pending</option>
+              <option value="FAILED">Failed</option>
+              <option value="NOT REQUIRED">Not Required</option>
+            </select>
+            <div className="date-input-container col-span-1 min-w-0">
+              <input
+                type="date"
+                name="startDate"
+                value={filters.startDate}
+                onChange={handleFilterChange}
+                className={`leads-toolbar__control w-full min-w-0 rounded border border-slate-200 bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.startDate ? 'date-input-empty' : ''}`}
+                title="Start date"
+              />
+              {!filters.startDate && (
+                <span className="date-input-placeholder">Start</span>
+              )}
+            </div>
+            <div className="date-input-container col-span-1 min-w-0">
+              <input
+                type="date"
+                name="endDate"
+                value={filters.endDate}
+                onChange={handleFilterChange}
+                className={`leads-toolbar__control w-full min-w-0 rounded border border-slate-200 bg-white px-2 text-xs text-slate-800 sm:text-sm ${!filters.endDate ? 'date-input-empty' : ''}`}
+                title="End date"
+              />
+              {!filters.endDate && (
+                <span className="date-input-placeholder">End</span>
+              )}
+            </div>
+
+            <div className="col-span-2 flex shrink-0 items-center justify-end gap-1.5 sm:col-span-4 xl:col-span-1 xl:w-auto">
               <div className="position-relative" ref={exportBtnRef}>
                 <button
                   type="button"
                   onClick={() => setExportMenuOpen(v => !v)}
                   disabled={isExporting}
                   title="Download Excel"
-                  className="d-flex align-items-center gap-2 fw-semibold text-white border-0 rounded-2 px-3"
+                  className="leads-toolbar__btn d-flex align-items-center gap-2 fw-semibold text-white border-0 rounded px-2.5 sm:px-3"
                   style={{
-                    height: '42px', fontSize: '12px', cursor: 'pointer',
+                    fontSize: '12px', cursor: 'pointer',
                     background: isExporting ? '#4ade80' : '#16a34a',
                     transition: 'background 0.15s',
                     opacity: isExporting ? 0.8 : 1,
@@ -424,12 +446,13 @@ function AdminLeads({ activeFilter }) {
                 )}
               </div>
 
-              <button type="button" onClick={handleRefresh} className="topbar-icon-btn shrink-0" title="Reset filters" style={{ height: '42px', width: '42px' }}>
+              <button type="button" onClick={handleRefresh} className="topbar-icon-btn leads-toolbar__icon-btn shrink-0" title="Reset filters">
                 <i className="fas fa-sync-alt"></i>
               </button>
             </div>
           </div>
         </div>
+      </div>
 
       <div className="admin-table-shell" style={{ minHeight: '400px' }}>
         <div className="admin-table-shell__bar">

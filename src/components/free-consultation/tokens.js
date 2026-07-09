@@ -1,25 +1,65 @@
-export const SHELL = 'min-h-screen w-full bg-site-bg font-body text-site-text antialiased';
+/**
+ * Counsellor desk — plain black & white (no gradients / accent colors).
+ */
+
+export const DESK_SHELL =
+  'min-h-screen w-full bg-[#fff] font-body text-[#000] antialiased';
+
+export const SHELL = DESK_SHELL;
 
 export const WRAP = 'mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8';
 
+export const DESK_WRAP = 'mx-auto w-full max-w-6xl px-3 py-2 sm:px-4 sm:py-3 lg:px-5';
+
+export const DESK_SURFACE = '#fff';
+export const DESK_SURFACE_ALT = '#fff';
+export const DESK_SURFACE_DEEP = '#f5f5f5';
+export const DESK_BORDER = '#000';
+export const DESK_BORDER_SOFT = '#ccc';
+
 export const CARD =
-  'rounded-xl border border-site-accent-dark/12 bg-white p-4 shadow-[0_1px_8px_rgba(42,15,2,0.05)] sm:rounded-2xl sm:p-5 lg:p-6';
+  'rounded-lg border border-[#000] bg-[#fff] p-4 sm:rounded-lg sm:p-5 lg:p-6';
+
+export const DESK_CARD =
+  'rounded-lg border border-[#000] bg-[#fff] p-3 sm:p-4';
+
+export const DESK_CARD_READING =
+  'rounded-lg border border-[#000] bg-[#fff] p-3 sm:p-4';
+
+export const DESK_INNER =
+  'rounded-md border border-[#ccc] bg-[#fff]';
+
+export const DESK_INNER_SAGE =
+  'rounded-md border border-[#ccc] bg-[#fafafa]';
 
 export const LABEL =
-  'mb-1.5 block font-body text-xs font-semibold text-site-primary';
+  'mb-1.5 block font-body text-xs font-semibold text-[#000]';
+
+export const DESK_LABEL =
+  'mb-0.5 block font-body text-[11px] font-semibold leading-tight text-[#000] sm:text-xs';
 
 export const INPUT =
-  'sd-field w-full rounded-lg border border-site-accent-dark/18 bg-[#fffcf8] px-3 py-2.5 font-body text-sm text-site-primary outline-none transition focus:border-site-accent focus:bg-white focus:ring-2 focus:ring-site-accent/15 sm:py-3';
+  'sd-field w-full rounded-md border border-[#000] bg-[#fff] px-3 py-2.5 font-body text-sm text-[#000] outline-none focus:border-[#000] focus:ring-1 focus:ring-[#000] sm:py-3';
+
+export const DESK_INPUT =
+  'sd-field w-full rounded-md border border-[#000] bg-[#fff] px-2.5 py-1.5 font-body text-sm text-[#000] outline-none focus:border-[#000] focus:ring-1 focus:ring-[#000] sm:px-3 sm:py-2';
 
 export const SELECT = INPUT;
 
 export const BTN_PRIMARY =
-  'inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-full border-0 bg-site-primary px-5 py-2.5 font-body text-sm font-bold text-white shadow-sm transition hover:bg-site-accent-dark disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto';
+  'inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-[#000] bg-[#000] px-5 py-2.5 font-body text-sm font-bold text-[#fff] transition hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto';
 
 export const BTN_OUTLINE =
-  'inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-site-accent-dark/25 bg-white px-4 py-2.5 font-body text-sm font-bold text-site-primary transition hover:border-site-accent hover:bg-site-bg';
+  'inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-[#000] bg-[#fff] px-4 py-2.5 font-body text-sm font-bold text-[#000] transition hover:bg-[#f5f5f5]';
 
-export const SECTION_TITLE = 'font-body text-base font-extrabold text-site-primary sm:text-lg';
+export const SECTION_TITLE = 'font-body text-base font-extrabold text-[#000] sm:text-lg';
+
+export const DESK_SECTION_TITLE = 'font-body text-sm font-extrabold leading-tight text-[#000] sm:text-base';
+
+export const DESK_MUTED = 'text-[#444]';
+
+export const DESK_STRIP =
+  'rounded-md border border-[#ccc] bg-[#fff] px-2.5 py-1.5 sm:px-3 sm:py-2';
 
 export const CONSENT_TEXT =
   'Aapki di gayi details hum aapko astrology consultation aur DS Astrology ki services ke baare mein contact karne ke liye use karenge. Kya aap iske liye sahmat hain?';

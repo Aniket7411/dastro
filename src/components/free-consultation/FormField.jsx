@@ -1,4 +1,4 @@
-import { LABEL, INPUT, SELECT } from './tokens';
+import { DESK_INPUT, DESK_LABEL, INPUT, LABEL, SELECT } from './tokens';
 
 export default function FormField({
   label,
@@ -14,14 +14,17 @@ export default function FormField({
   inputMode,
   maxLength,
   readOnly = false,
+  compact = false,
 }) {
   const fieldId = id || label?.toLowerCase().replace(/\s+/g, '-');
+  const labelClass = compact ? DESK_LABEL : LABEL;
+  const fieldClass = compact ? DESK_INPUT : INPUT;
 
   return (
     <div className={className}>
-      <label htmlFor={fieldId} className={LABEL}>
+      <label htmlFor={fieldId} className={labelClass}>
         {label}
-        {required ? <span className="text-site-accent"> *</span> : null}
+        {required ? <span className="text-[#000]"> *</span> : null}
       </label>
       {as === 'select' ? (
         <select
@@ -29,7 +32,7 @@ export default function FormField({
           value={value}
           onChange={onChange}
           required={required}
-          className={SELECT}
+          className={fieldClass}
         >
           {options.map((opt) => (
             <option key={opt.value ?? opt} value={opt.value ?? opt}>
@@ -46,7 +49,7 @@ export default function FormField({
           required={required}
           readOnly={readOnly}
           placeholder={placeholder}
-          className={INPUT}
+          className={fieldClass}
           inputMode={inputMode}
           maxLength={maxLength}
         />

@@ -18,6 +18,7 @@ import AdminStudents from './AdminStudents';
 import AdminOrders from './AdminOrders';
 import AdminAstrologers from './AdminAstrologers';
 import AdminFreeConsultationLeads from './AdminFreeConsultationLeads';
+import AdminCounsellors from './AdminCounsellors';
 import './Admin.css';
 
 const PAGE_TITLES = {
@@ -35,6 +36,7 @@ const PAGE_TITLES = {
   settings: 'Platform Settings',
   newsletter: 'Newsletter',
   astrologers: 'Astrologers',
+  counsellors: 'Counsellors',
   'free-consultation': 'Free Consultation Leads',
 };
 
@@ -61,6 +63,7 @@ const PAGE_ICONS = {
   settings: 'fa-sliders-h',
   newsletter: 'fa-paper-plane',
   astrologers: 'fa-user-astronaut',
+  counsellors: 'fa-headset',
   'free-consultation': 'fa-phone-volume',
 };
 
@@ -68,34 +71,35 @@ const NAV_SECTIONS = [
   {
     label: 'Overview',
     items: [
-      { id: 'dashboard', icon: 'fa-chart-pie', label: 'Dashboard', accent: 'blue' },
+      { id: 'dashboard', icon: 'fa-chart-pie', label: 'Dashboard', accent: 'slate' },
     ],
   },
   {
     label: 'Lead Pipeline',
     items: [
-      { id: 'leads', filter: 'Recorded-Course', icon: 'fa-play-circle', label: 'Recorded Courses', accent: 'cyan' },
-      { id: 'leads', filter: 'Course', icon: 'fa-chalkboard-teacher', label: 'Live Course Leads', accent: 'amber' },
+      { id: 'free-consultation', icon: 'fa-phone-volume', label: 'Free Consultation', accent: 'emerald' },
+      { id: 'counsellors', icon: 'fa-headset', label: 'Counsellors', accent: 'teal' },
       { id: 'leads', filter: 'Consultation', icon: 'fa-user-md', label: 'Consultation Leads', accent: 'violet' },
+      { id: 'leads', filter: 'Course', icon: 'fa-chalkboard-teacher', label: 'Live Course Leads', accent: 'amber' },
+      { id: 'leads', filter: 'Recorded-Course', icon: 'fa-play-circle', label: 'Recorded Courses', accent: 'cyan' },
       { id: 'leads', filter: 'Webinar', icon: 'fa-video', label: 'Webinar Leads', accent: 'rose' },
       { id: 'leads', filter: 'Contact', icon: 'fa-inbox', label: 'Contact Inbox', accent: 'slate' },
-      { id: 'free-consultation', icon: 'fa-phone-volume', label: 'Free Consultation', accent: 'emerald' },
       { id: 'newsletter', icon: 'fa-paper-plane', label: 'Newsletter', accent: 'indigo' },
     ],
   },
   {
     label: 'Operations',
     items: [
-      { id: 'students', icon: 'fa-user-graduate', label: 'Students', accent: 'blue' },
       { id: 'orders', icon: 'fa-receipt', label: 'Orders', accent: 'emerald' },
+      { id: 'students', icon: 'fa-user-graduate', label: 'Students', accent: 'blue' },
+      { id: 'consultations', icon: 'fa-handshake', label: 'Student Consultations', accent: 'violet' },
       { id: 'lms', icon: 'fa-graduation-cap', label: 'Course Studio', accent: 'cyan' },
       { id: 'consultation-catalog', icon: 'fa-th-large', label: 'Consultation Catalog', accent: 'orange' },
-      { id: 'consultations', icon: 'fa-handshake', label: 'Student Consultations', accent: 'violet' },
-      { id: 'blogs', icon: 'fa-pen-nib', label: 'Blog & Articles', accent: 'amber' },
-      { id: 'jobs', icon: 'fa-briefcase', label: 'Job Postings', accent: 'indigo' },
+      { id: 'astrologers', icon: 'fa-user-astronaut', label: 'Astrologers', accent: 'indigo' },
       { id: 'coupons', icon: 'fa-percent', label: 'Promo Codes', accent: 'rose' },
-      { id: 'offers', icon: 'fa-gift', label: 'Site Offers', accent: 'emerald' },
-      { id: 'astrologers', icon: 'fa-user-astronaut', label: 'Astrologers', accent: 'violet' },
+      { id: 'offers', icon: 'fa-gift', label: 'Site Offers', accent: 'amber' },
+      { id: 'blogs', icon: 'fa-pen-nib', label: 'Blog & Articles', accent: 'slate' },
+      { id: 'jobs', icon: 'fa-briefcase', label: 'Job Postings', accent: 'slate' },
     ],
   },
   {
@@ -258,7 +262,7 @@ function AdminDashboard() {
             <img
               src={`${SITE_LOGO}?v=3`}
               alt={SITE_LOGO_ALT}
-              className="h-8 w-auto max-w-[120px] shrink-0 rounded-md bg-white/95 object-contain px-1.5 py-0.5 sm:h-9"
+              className="h-8 w-auto max-w-[120px] shrink-0 rounded-md object-contain sm:h-9"
             />
             <div className="sb-logo-text">
               <span className="sb-logo-badge">Admin Console</span>
@@ -483,6 +487,7 @@ function AdminDashboard() {
           {activeTab === 'settings'      && <AdminSettings />}
           {activeTab === 'newsletter'    && <AdminNewsletter />}
           {activeTab === 'astrologers'   && <AdminAstrologers />}
+          {activeTab === 'counsellors'   && <AdminCounsellors />}
           {activeTab === 'free-consultation' && <AdminFreeConsultationLeads />}
         </main>
       </div>

@@ -61,6 +61,15 @@ export function submitFreeConsultationLead(payload) {
   });
 }
 
+export function counsellorListLeads(params = '') {
+  const q = params ? `?${params}` : '';
+  return counsellorFetch(`/leads${q}`);
+}
+
+export function counsellorGetLead(leadId) {
+  return counsellorFetch(`/leads/${leadId}`);
+}
+
 export async function adminExportNeoDove(adminToken, query = '') {
   const res = await fetch(`${API_BASE}/api/admin/free-consultation/export?${query}`, {
     headers: { Authorization: `Bearer ${adminToken}` },
@@ -76,4 +85,69 @@ export async function adminListFreeConsultationLeads(adminToken, query = '') {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || 'Failed to load leads');
   return data;
+}
+
+async function adminFetch(path, adminToken, options = {}) {
+  const res = await fetch(`${API_BASE}/api/admin${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`,
+      ...(options.headers || {}),
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || 'Request failed');
+  return data;
+}
+
+export function adminListCounsellors(adminToken) {
+  return adminFetch('/counsellors', adminToken);
+}
+
+export function adminCreateCounsellor(adminToken, payload) {
+  return adminFetch('/counsellors', adminToken, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function adminUpdateCounsellor(adminToken, id, payload) {
+  return adminFetch(`/counsellors/${id}`, adminToken, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function adminDeleteCounsellor(adminToken, id) {
+  return adminFetch(`/counsellors/${id}`, adminToken, { method: 'DELETE' });
+}
+
+export function adminSuspendCounsellor(adminToken, id) {
+  return adminFetch(`/counsellors/${id}/suspend`, adminToken, { method: 'PUT', body: '{}' });
+}
+
+export function adminUnsuspendCounsellor(adminToken, id) {
+  return adminFetch(`/counsellors/${id}/unsuspend`, adminToken, { method: 'PUT', body: '{}' });
+}
+
+export function adminResetCounsellorPassword(adminToken, id, payload = {}) {
+  return adminFetch(`/counsellors/${id}/reset-password`, adminToken, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function counsellorForgotPassword(email) {
+  return counsellorFetch('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email: email.trim().toLowerCase() }),
+  });
+}
+
+export function counsellorResetPassword(email, otp, newPassword) {
+  return counsellorFetch('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ email: email.trim().toLowerCase(), otp: otp.trim(), newPassword }),
+  });
 }

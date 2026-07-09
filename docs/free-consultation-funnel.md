@@ -418,8 +418,9 @@ backend/src/
 
 ```env
 GEMINI_API_KEY=your-key-from-google-ai-studio
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-1.5-flash
 FREE_CONSULTATION_LLM_TIMEOUT_MS=10000
+GEMINI_MAX_RETRIES=3
 
 COUNSELLOR_BOOTSTRAP_EMAIL=counsellor@example.com
 COUNSELLOR_BOOTSTRAP_PASSWORD=your-secure-password
