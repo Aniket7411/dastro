@@ -8,7 +8,7 @@ import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME, SITE_NAME_LLP } from './brandAsset
 import { CONTACT_PHONE_DISPLAY } from './contactInfo';
 import { getRashiHi } from './rashi';
 
-const SITE_WEBSITE = 'https://dsastroinstitute.com';
+const SITE_WEBSITE = 'https://www.dsastrology.com';
 const SITE_EMAIL = 'info@dsastroinstitute.com';
 const REPORT_WIDTH_PX = 680;
 
