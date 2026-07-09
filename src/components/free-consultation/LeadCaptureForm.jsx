@@ -4,6 +4,7 @@ import toast from '@/utils/toast';
 import { getAgeFromDob } from '../../utils/ageFromDob';
 import { getFreeConsultationLeadValidationError } from '../../utils/validation';
 import FormField from './FormField';
+import DeskPlaceAutocomplete from './DeskPlaceAutocomplete';
 import {
   BTN_PRIMARY,
   CONSENT_TEXT,
@@ -24,6 +25,8 @@ const INITIAL = {
   dob: '',
   tob: '',
   pob: '',
+  pobLat: null,
+  pobLon: null,
   maritalStatus: 'Single',
   reasonForCalling: '',
   consent: false,
@@ -90,6 +93,8 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
       ageDisplay: ageInfo.display,
       tob: form.tob,
       tobUnknown: false,
+      pobLat: form.pobLat ?? undefined,
+      pobLon: form.pobLon ?? undefined,
     });
   };
 
@@ -157,13 +162,16 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
           onChange={set('tob')}
           required
         />
-        <FormField
-          compact
+        <DeskPlaceAutocomplete
           label="Place of birth"
           value={form.pob}
-          onChange={set('pob')}
+          onChange={(pob) => setForm((prev) => ({ ...prev, pob }))}
+          onSelectCoords={(coords) => setForm((prev) => ({
+            ...prev,
+            pobLat: coords?.lat ?? null,
+            pobLon: coords?.lon ?? null,
+          }))}
           required
-          placeholder="City, e.g. Lucknow"
           className="sm:col-span-2 lg:col-span-2"
         />
         <div>

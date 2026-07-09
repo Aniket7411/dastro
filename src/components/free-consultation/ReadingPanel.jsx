@@ -128,8 +128,43 @@ export default function ReadingPanel({ reading, usedFallback, lead }) {
         </div>
       ) : null}
 
+      {reading.moonSign ? (
+        <div className={`${DESK_INNER} flex flex-wrap items-center gap-2 px-3 py-2`}>
+          <Moon size={14} className="shrink-0 text-[#000]" aria-hidden />
+          <div className="leading-tight">
+            <p className="font-body text-[10px] font-bold uppercase tracking-wide text-[#444]">Moon sign / Nakshatra</p>
+            <p className="font-body text-sm font-bold text-[#000]">
+              {reading.moonSign}
+              {reading.nakshatra ? (
+                <span className="ml-2 font-body font-semibold text-[#444]">· {reading.nakshatra}</span>
+              ) : null}
+            </p>
+          </div>
+        </div>
+      ) : null}
+
+      {reading.mahadashaPlanet ? (
+        <div className={`${DESK_INNER} flex flex-wrap items-center gap-2 px-3 py-2`}>
+          <Sparkles size={14} className="shrink-0 text-[#000]" aria-hidden />
+          <div className="leading-tight">
+            <p className="font-body text-[10px] font-bold uppercase tracking-wide text-[#444]">Current Mahadasha</p>
+            <p className="font-body text-sm font-bold text-[#000]">
+              {reading.mahadashaPlanet}
+              {reading.mahadashaPlanetHi ? (
+                <span className="ml-2 font-['IBM_Plex_Sans_Devanagari',sans-serif] font-semibold text-[#444]">
+                  {reading.mahadashaPlanetHi}
+                </span>
+              ) : null}
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className={`${DESK_INNER} flex flex-wrap items-center gap-2 px-3 py-2`}>
+          <span className="font-body text-[10px] font-bold uppercase tracking-wide text-[#444]">Lucky number</span>
+          <span className="font-body text-xs font-bold text-[#000]">{reading.luckyNumber || '—'}</span>
+          <span className="mx-1 text-[#ccc]">|</span>
           <span className="font-body text-[10px] font-bold uppercase tracking-wide text-[#444]">Lucky colour</span>
           <span className="font-body text-xs font-bold text-[#000]">
             {reading.luckyColour || '—'}

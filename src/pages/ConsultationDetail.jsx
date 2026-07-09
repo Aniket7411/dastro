@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -16,10 +16,15 @@ import toast from '@/utils/toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
-import { OverlayLoader } from '../components/PageLoader';
+import { OverlayLoader, CourseGridSkeleton } from '../components/PageLoader';
 import { PAGE, PAGE_WRAP, TYPE, BTN } from '../components/consultation/tokens';
 import PriceBlock from '../components/PriceBlock';
-import { useConsultationService } from '../utils/consultationApi';
+import HomeConsultationCard from '../components/HomeConsultationCard';
+import {
+  useConsultationService,
+  fetchConsultationCatalog,
+  mapConsultationServiceToHomeCard,
+} from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
   BOOKING_MODES,
@@ -186,11 +191,39 @@ function ConsultationDetail() {
   const [successMessage, setSuccessMessage] = useState('');
   const [paymentConfig, setPaymentConfig] = useState(null);
   const [formData, setFormData] = useState(getEmptyConsultationForm());
+  const [relatedServices, setRelatedServices] = useState([]);
+  const [relatedLoading, setRelatedLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setPaymentConfig(null);
   }, [serviceId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setRelatedLoading(true);
+
+    fetchConsultationCatalog({ sortBy: 'sortOrder', sortOrder: 'asc', limit: 5 })
+      .then((data) => {
+        if (cancelled) return;
+        setRelatedServices((data.services || []).filter((s) => (s.id || s.slug) !== serviceId));
+      })
+      .catch(() => {
+        if (!cancelled) setRelatedServices([]);
+      })
+      .finally(() => {
+        if (!cancelled) setRelatedLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [serviceId]);
+
+  const relatedCards = useMemo(
+    () => relatedServices.slice(0, 4).map(mapConsultationServiceToHomeCard),
+    [relatedServices],
+  );
 
   useEffect(() => {
     if (service) {
@@ -428,6 +461,31 @@ function ConsultationDetail() {
           </div>
         </div>
       </section>
+
+      {relatedLoading || relatedCards.length > 0 ? (
+        <section className="py-4 sm:py-5">
+          <div className={PAGE_WRAP}>
+            <h2 className={`${SECTION_TITLE} mb-2.5 sm:mb-3`}>More from us</h2>
+            {relatedLoading ? (
+              <CourseGridSkeleton />
+            ) : (
+              <ul className="m-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:gap-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4">
+                {relatedCards.map((item) => (
+                  <li key={item.id || item.link} className="min-w-0 w-full">
+                    <HomeConsultationCard
+                      item={item}
+                      onBook={(e) => {
+                        if (e) e.preventDefault();
+                        navigate(item.link);
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      ) : null}
 
       <ConsultationModal
         isOpen={isModalOpen}

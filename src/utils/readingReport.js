@@ -138,11 +138,21 @@ export function buildReadingReportHtml(
         : `Rashi: ${reading.sunSign}`)
     : '';
 
+  const moonLine = reading.moonSign
+    ? `Moon sign${reading.nakshatra ? ' / Nakshatra' : ''}: ${reading.moonSign}${reading.nakshatra ? ` · ${reading.nakshatra}` : ''}`
+    : '';
+
+  const dashaLine = reading.mahadashaPlanet
+    ? (lang === 'hi' && reading.mahadashaPlanetHi
+      ? `वर्तमान महादशा: ${reading.mahadashaPlanetHi} (${reading.mahadashaPlanet})`
+      : `Current Mahadasha: ${reading.mahadashaPlanet}${reading.mahadashaPlanetHi ? ` · ${reading.mahadashaPlanetHi}` : ''}`)
+    : '';
+
   const luckyLine = lang === 'hi'
-    ? `रंग: ${blocks.hi?.luckyColour || reading.luckyColourHi || reading.luckyColour || '—'}`
+    ? `भाग्यशाली अंक: ${reading.luckyNumber || '—'}  |  रंग: ${blocks.hi?.luckyColour || reading.luckyColourHi || reading.luckyColour || '—'}`
     : lang === 'en'
-      ? `Lucky Colour: ${blocks.en?.luckyColour || reading.luckyColour || '—'}`
-      : `Lucky Colour: ${reading.luckyColour || '—'}  |  रंग: ${reading.luckyColourHi || '—'}`;
+      ? `Lucky Number: ${reading.luckyNumber || '—'}  |  Lucky Colour: ${blocks.en?.luckyColour || reading.luckyColour || '—'}`
+      : `Lucky Number: ${reading.luckyNumber || '—'}  |  Lucky Colour: ${reading.luckyColour || '—'}  |  रंग: ${reading.luckyColourHi || '—'}`;
 
   let bodySections = '';
 
@@ -165,7 +175,11 @@ export function buildReadingReportHtml(
     }
   }
 
-  const readingType = reading.source === 'fallback' ? 'Template reading' : 'AI-generated preliminary reading';
+  const readingType = reading.source === 'ai'
+    ? 'AI-generated preliminary reading'
+    : reading.source === 'facts-only'
+      ? 'Facts-based template (AI unavailable)'
+      : 'Template reading';
 
   const printButton = includePrintButton
     ? `<div class="no-print" style="padding:12px 22px 18px;text-align:center;border-top:1px solid #ccc;">
@@ -244,6 +258,8 @@ export function buildReadingReportHtml(
           ${metaRow('Reason for call', lead.reasonForCalling || '', compact)}
         </table>
         ${rashiLine ? `<p style="margin:6px 0 0;font-size:11px;font-weight:600;color:#000;line-height:1.4;${lang === 'hi' || rashiHi ? "font-family:'IBM Plex Sans Devanagari',sans-serif;" : ''}">${escapeHtml(rashiLine)}</p>` : ''}
+        ${moonLine ? `<p style="margin:4px 0 0;font-size:11px;font-weight:600;color:#000;line-height:1.4;">${escapeHtml(moonLine)}</p>` : ''}
+        ${dashaLine ? `<p style="margin:4px 0 0;font-size:11px;font-weight:600;color:#000;line-height:1.4;font-family:'IBM Plex Sans Devanagari',sans-serif;">${escapeHtml(dashaLine)}</p>` : ''}
       </div>
 
       <div style="margin:0 0 10px;padding:8px 10px;background:#fff;border-radius:4px;border:1px solid #000;text-align:center;">

@@ -350,7 +350,10 @@ function AdminCourses() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/courses`);
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`${API_BASE}/api/admin/courses`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const data = await parseApiResponse(res);
       if (data.success) {
         setCourses(data.courses);
