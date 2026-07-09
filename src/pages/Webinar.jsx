@@ -23,16 +23,12 @@ import SEO from '../components/SEO';
 import { WB_PAGE, WB_PAGE_NO_CTA, WB_PAGE_SHELL } from '../components/webinar/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
-const CTA_HIDDEN_KEY = 'webinar_fixed_cta_hidden';
-
 function Webinar() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFreeModalOpen, setIsFreeModalOpen] = useState(false);
-  const [ctaVisible, setCtaVisible] = useState(
-    () => typeof window !== 'undefined' && sessionStorage.getItem(CTA_HIDDEN_KEY) !== '1',
-  );
+  const [ctaVisible, setCtaVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,20 +110,10 @@ function Webinar() {
   const handleCloseFreeModal = () => setIsFreeModalOpen(false);
 
   const handleDismissCta = () => {
-    try {
-      sessionStorage.setItem(CTA_HIDDEN_KEY, '1');
-    } catch {
-      /* ignore */
-    }
     setCtaVisible(false);
   };
 
   const handleShowCta = () => {
-    try {
-      sessionStorage.removeItem(CTA_HIDDEN_KEY);
-    } catch {
-      /* ignore */
-    }
     setCtaVisible(true);
   };
 
