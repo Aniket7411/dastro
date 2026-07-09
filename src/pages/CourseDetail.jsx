@@ -7,8 +7,11 @@ import {
   Calendar,
   CheckCircle2,
   Layers,
+  Video,
 } from 'lucide-react';
 import CourseListingCard from '../components/CourseListingCard';
+import CourseCardDurationBar from '../components/courses/CourseCardDurationBar';
+import CourseLiveBadge from '../components/courses/CourseLiveBadge';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
 import SEO from '../components/SEO';
@@ -617,8 +620,19 @@ function CourseDetail() {
             <div className="flex min-w-0 flex-col">
               <div className="flex flex-col gap-2">
                 {course.image ? (
-                  <div className="relative h-40 w-full overflow-hidden rounded-xl border border-site-accent-dark/10 shadow-sm sm:h-48 lg:hidden">
-                    <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                  <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm lg:hidden">
+                    <div className="relative aspect-video w-full overflow-hidden bg-site-sand">
+                      <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                      {isLiveCourse ? (
+                        <CourseLiveBadge />
+                      ) : (
+                        <span className="absolute rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] sm:rounded-md sm:px-2 sm:py-1 sm:text-[11px] sm:tracking-[0.08em] inline-flex w-fit items-center gap-0.5 bg-[#0a0a0a]/95 text-white shadow-[0_1px_4px_rgba(0,0,0,0.3)] left-1.5 top-1.5 z-[2] sm:left-2 sm:top-2">
+                          <Video size={9} aria-hidden className="shrink-0 text-white sm:size-2.5" />
+                          Recorded
+                        </span>
+                      )}
+                    </div>
+                    <CourseCardDurationBar course={course} variant="strip" />
                   </div>
                 ) : null}
 
@@ -814,9 +828,18 @@ function CourseDetail() {
 
             <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
-                <div className="relative aspect-[16/10] overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-site-sand">
                   <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                  {isLiveCourse ? (
+                    <CourseLiveBadge />
+                  ) : (
+                    <span className="absolute rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] sm:rounded-md sm:px-2 sm:py-1 sm:text-[11px] sm:tracking-[0.08em] inline-flex w-fit items-center gap-0.5 bg-[#0a0a0a]/95 text-white shadow-[0_1px_4px_rgba(0,0,0,0.3)] left-1.5 top-1.5 z-[2] sm:left-2 sm:top-2">
+                      <Video size={9} aria-hidden className="shrink-0 text-white sm:size-2.5" />
+                      Recorded
+                    </span>
+                  )}
                 </div>
+                <CourseCardDurationBar course={course} variant="strip" />
                 <div className="p-4">
                   <EnrollPanel
                     course={course}
