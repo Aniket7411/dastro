@@ -5,6 +5,7 @@ import {
   SITE_COURSE_CARD,
   SITE_COURSE_CARD_BODY,
   SITE_COURSE_CARD_DESC,
+  SITE_COURSE_CARD_FOOTER,
   SITE_COURSE_CARD_TITLE,
   SITE_PRICE,
 } from '../utils/siteTokens';
@@ -56,7 +57,7 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
         ) : null}
       </Link>
 
-      <div className={`${SITE_COURSE_CARD_BODY} p-3 sm:p-[18px]`}>
+      <div className={SITE_COURSE_CARD_BODY}>
         <Link
           to={url}
           className={`${SITE_COURSE_CARD_TITLE} mb-2 line-clamp-2 text-base sm:text-xl`}
@@ -72,7 +73,7 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
           <div className="mb-3 flex-1" />
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-2">
+        <div className={SITE_COURSE_CARD_FOOTER}>
           <div className="min-w-0">
             <div className="leading-tight">
               <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
@@ -84,15 +85,18 @@ export default function ConsultationServiceCard({ card, detailPath = '/book-cons
                 ) : null}
               </div>
               {hasDiscount ? (
-                <span className="mt-1 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 font-body text-[10px] font-bold leading-tight text-emerald-700">
+                <span className="mt-1 inline-flex max-w-full items-center rounded-md bg-emerald-50 px-2 py-0.5 font-body text-[10px] font-bold leading-tight text-emerald-700">
                   Save {savePercent}%
                 </span>
               ) : null}
             </div>
           </div>
 
-          <Link to={url} className={`${SITE_BTN_CARD} !text-white visited:!text-white`}>
-            <Phone size={10} strokeWidth={2.25} aria-hidden />
+          <Link
+            to={url}
+            className={`${SITE_BTN_CARD} relative z-[1] !border-0 !bg-site-accent-dark !text-white visited:!text-white hover:!bg-[#743d16] hover:!text-white !no-underline`}
+          >
+            <Phone size={10} strokeWidth={2.25} className="shrink-0" aria-hidden />
             <span className="hidden min-[400px]:inline">Request callback</span>
             <span className="min-[400px]:hidden">Callback</span>
           </Link>

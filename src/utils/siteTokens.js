@@ -174,7 +174,7 @@ export const SITE_BTN_COPPER = [
 
 /** Compact copper CTA on course cards */
 export const SITE_BTN_CARD = [
-  'inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-lg border-2 border-transparent',
+  'inline-flex w-full shrink-0 items-center justify-center gap-1 rounded-lg border-0',
   'bg-site-accent-dark px-2.5 py-1.5 font-body text-[11px] font-semibold text-white no-underline',
   'min-[480px]:w-auto min-[480px]:rounded-[10px] min-[480px]:px-2.5 min-[480px]:py-1.5 min-[480px]:text-[11px]',
   'sm:px-3.5 sm:py-2 sm:text-xs',
@@ -182,6 +182,7 @@ export const SITE_BTN_CARD = [
   SITE_BTN_MOTION,
   SITE_BTN_FOCUS,
   'hover:bg-[#743d16]',
+  '[-webkit-tap-highlight-color:transparent]',
 ].join(' ');
 
 /** Tonal — secondary but still clearly a button (replaces hollow outline) */
