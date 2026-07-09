@@ -594,6 +594,8 @@ export default function SiteNavbar({
                     </span>
                   </Link>
                 </li>
+              </>
+            )}
           </ul>
 
           <div className="grid gap-2.5 p-4">
