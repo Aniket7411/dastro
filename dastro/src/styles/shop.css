@@ -1,0 +1,848 @@
+/**
+ * Astro Shop — scoped under .shop-page to beat style.min.css resets.
+ */
+
+.site-shell .shop-page {
+  width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fdf6ee !important;
+  color: #2a0f02 !important;
+  overflow-x: clip !important;
+  font-family: 'Be Vietnam Pro', 'Be Vietnam', sans-serif !important;
+}
+
+.site-shell .shop-page .sh-wrap {
+  width: 100% !important;
+  max-width: var(--container-public) !important;
+  margin-inline: auto !important;
+  padding-inline: var(--page-pad-x) !important;
+}
+
+/* Hero */
+.site-shell .shop-page .sh-hero {
+  margin: 0 !important;
+  padding: clamp(3rem, 7vw, 5rem) 0 clamp(2.5rem, 5vw, 3.5rem) !important;
+  background:
+    linear-gradient(rgba(42, 15, 2, 0.82), rgba(42, 15, 2, 0.82)),
+    url('https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=1200') center/cover !important;
+  text-align: center !important;
+  position: relative !important;
+}
+
+.site-shell .shop-page .sh-hero--category {
+  padding: clamp(2.5rem, 6vw, 4rem) 0 !important;
+}
+
+.site-shell .shop-page .sh-kicker {
+  display: inline-block !important;
+  margin: 0 0 0.75rem !important;
+  padding: 0.25rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #c8832a !important;
+}
+
+.site-shell .shop-page .sh-title {
+  margin: 0 0 0.65rem !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(2rem, 5vw, 3rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-title-accent {
+  color: #c8832a !important;
+}
+
+.site-shell .shop-page .sh-lead {
+  margin: 0 auto !important;
+  padding: 0 !important;
+  max-width: 36rem !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Trust row */
+.site-shell .shop-page .sh-trust-wrap {
+  margin: -2.5rem 0 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+@media (min-width: 768px) {
+  .site-shell .shop-page .sh-trust-wrap {
+    margin-top: -3rem !important;
+  }
+}
+
+.site-shell .shop-page .sh-trust-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 1rem 1.25rem !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(200, 131, 42, 0.12) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 28px rgba(42, 15, 2, 0.08) !important;
+}
+
+@media (min-width: 640px) {
+  .site-shell .shop-page .sh-trust-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .site-shell .shop-page .sh-trust-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+.site-shell .shop-page .sh-trust-col {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin: 0 !important;
+  padding: 0.65rem 0.85rem !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+@media (min-width: 992px) {
+  .site-shell .shop-page .sh-trust-col {
+    border-bottom: none !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+  }
+  .site-shell .shop-page .sh-trust-col:last-child {
+    border-right: none !important;
+  }
+}
+
+.site-shell .shop-page .sh-trust-col:last-child {
+  border-bottom: none !important;
+}
+
+.site-shell .shop-page .sh-trust-col i {
+  font-size: 1.25rem !important;
+  color: #8b4a1e !important;
+}
+
+.site-shell .shop-page .sh-trust-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  color: #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-trust-sub {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.75rem !important;
+  color: #7b6254 !important;
+}
+
+/* Main sections */
+.site-shell .shop-page .sh-main {
+  margin: 0 !important;
+  padding: clamp(2rem, 4vw, 2.5rem) 0 clamp(3rem, 6vw, 4rem) !important;
+}
+
+.site-shell .shop-page .sh-section-head {
+  margin: 0 0 1.25rem !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.site-shell .shop-page .sh-section-head--left {
+  text-align: left !important;
+}
+
+.site-shell .shop-page .sh-section-title {
+  margin: 0 0 0.35rem !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  font-weight: 700 !important;
+  color: #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-section-sub {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.9375rem !important;
+  color: #5c3d26 !important;
+}
+
+.site-shell .shop-page .sh-line {
+  width: 3.5rem !important;
+  height: 3px !important;
+  margin: 0.75rem auto 0 !important;
+  padding: 0 !important;
+  background: #c8832a !important;
+  border: none !important;
+}
+
+.site-shell .shop-page .sh-spacer {
+  margin: 0 !important;
+  padding: 2rem 0 0 !important;
+}
+
+/* Category grid */
+.site-shell .shop-page .sh-cat-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 1.25rem !important;
+  margin: 0 0 2rem !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .site-shell .shop-page .sh-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-shell .shop-page .sh-cat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+.site-shell .shop-page .sh-cat-card {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: clamp(16rem, 28vw, 20rem) !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: transform 0.3s ease !important;
+  background: transparent !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.site-shell .shop-page .sh-cat-card:hover {
+  transform: translateY(-5px) !important;
+}
+
+.site-shell .shop-page .sh-cat-media {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .shop-page .sh-cat-media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.5s ease !important;
+}
+
+.site-shell .shop-page .sh-cat-card:hover .sh-cat-media img {
+  transform: scale(1.08) !important;
+}
+
+.site-shell .shop-page .sh-cat-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: 0.85 !important;
+}
+
+.site-shell .shop-page .sh-cat-content {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 1.25rem !important;
+  z-index: 2 !important;
+}
+
+.site-shell .shop-page .sh-cat-count {
+  display: inline-block !important;
+  margin: 0 0 0.65rem !important;
+  padding: 0.35rem 0.85rem !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+}
+
+.site-shell .shop-page .sh-cat-name {
+  margin: 0 0 0.25rem !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-cat-desc {
+  margin: 0 0 0.65rem !important;
+  padding: 0 !important;
+  font-size: 0.875rem !important;
+  opacity: 0.9 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-cat-link {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+}
+
+/* Filters */
+.site-shell .shop-page .sh-filters {
+  margin: 0 0 1.5rem !important;
+  padding: 1rem 1.15rem !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(139, 74, 30, 0.12) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 6px 18px rgba(42, 15, 2, 0.05) !important;
+}
+
+.site-shell .shop-page .sh-filters-top {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  margin: 0 0 1rem !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .site-shell .shop-page .sh-filters-top {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+}
+
+.site-shell .shop-page .sh-search-wrap {
+  position: relative !important;
+  flex: 1 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .site-shell .shop-page .sh-search-wrap {
+    max-width: 28rem !important;
+  }
+}
+
+.site-shell .shop-page .sh-search-icon {
+  position: absolute !important;
+  left: 0.85rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #8b4a1e !important;
+  font-size: 0.9rem !important;
+  pointer-events: none !important;
+}
+
+.site-shell .shop-page .sh-search-input {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0.65rem 2.25rem 0.65rem 2.35rem !important;
+  border: 1px solid rgba(139, 74, 30, 0.18) !important;
+  border-radius: 0.5rem !important;
+  background: #fffbf5 !important;
+  color: #2a0f02 !important;
+  font-size: 0.9375rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+.site-shell .shop-page .sh-search-input:focus {
+  border-color: #c8832a !important;
+  box-shadow: 0 0 0 3px rgba(200, 131, 42, 0.12) !important;
+}
+
+.site-shell .shop-page .sh-search-clear {
+  position: absolute !important;
+  right: 0.5rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding: 0.25rem 0.45rem !important;
+  border: none !important;
+  background: transparent !important;
+  color: #7b6254 !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-filters-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.site-shell .shop-page .sh-result-count {
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: #5c3d26 !important;
+}
+
+.site-shell .shop-page .sh-reset-btn {
+  margin: 0 !important;
+  padding: 0.35rem 0.65rem !important;
+  border: 1px solid rgba(139, 74, 30, 0.2) !important;
+  border-radius: 0.375rem !important;
+  background: transparent !important;
+  color: #8b4a1e !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-filters-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0.75rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .site-shell .shop-page .sh-filters-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .site-shell .shop-page .sh-filters-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    align-items: end !important;
+  }
+}
+
+.site-shell .shop-page .sh-filter-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .shop-page .sh-filter-label {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #8b4a1e !important;
+}
+
+.site-shell .shop-page .sh-select {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0.55rem 0.65rem !important;
+  border: 1px solid rgba(139, 74, 30, 0.18) !important;
+  border-radius: 0.5rem !important;
+  background: #ffffff !important;
+  color: #2a0f02 !important;
+  font-size: 0.875rem !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-check-field {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0.55rem 0 !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #2a0f02 !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-check-field input {
+  width: 1rem !important;
+  height: 1rem !important;
+  margin: 0 !important;
+}
+
+.site-shell .shop-page .sh-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  margin: 0 0 1rem !important;
+  padding: 0 !important;
+}
+
+.site-shell .shop-page .sh-chip {
+  margin: 0 !important;
+  padding: 0.4rem 0.85rem !important;
+  border: 1px solid rgba(139, 74, 30, 0.18) !important;
+  border-radius: 9999px !important;
+  background: #ffffff !important;
+  color: #5c3d26 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.site-shell .shop-page .sh-chip--active {
+  background: #2a0f02 !important;
+  border-color: #2a0f02 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-breadcrumb {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  margin: 0 0 1rem !important;
+  padding: 0 !important;
+  font-size: 0.8125rem !important;
+}
+
+.site-shell .shop-page .sh-breadcrumb a {
+  color: #8b4a1e !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+
+.site-shell .shop-page .sh-breadcrumb-sep {
+  color: #7b6254 !important;
+  margin: 0 0.15rem !important;
+}
+
+/* Product grid */
+.site-shell .shop-page .sh-prod-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 1.25rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 540px) {
+  .site-shell .shop-page .sh-prod-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .site-shell .shop-page .sh-prod-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .site-shell .shop-page .sh-prod-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+.site-shell .shop-page .sh-prod-card {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(200, 131, 42, 0.1) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  transition: box-shadow 0.25s ease, transform 0.25s ease !important;
+}
+
+.site-shell .shop-page .sh-prod-card:hover {
+  box-shadow: 0 16px 32px rgba(139, 74, 30, 0.1) !important;
+  transform: translateY(-3px) !important;
+}
+
+.site-shell .shop-page .sh-prod-media {
+  position: relative !important;
+  height: 13.5rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.site-shell .shop-page .sh-prod-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.site-shell .shop-page .sh-prod-badge {
+  position: absolute !important;
+  top: 0.75rem !important;
+  left: 0.75rem !important;
+  margin: 0 !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 9999px !important;
+  background: #2a0f02 !important;
+  color: #ffffff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+.site-shell .shop-page .sh-prod-oos {
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
+  margin: 0 !important;
+  padding: 0.3rem 0.6rem !important;
+  border-radius: 0.375rem !important;
+  background: rgba(42, 15, 2, 0.75) !important;
+  color: #fff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+}
+
+.site-shell .shop-page .sh-prod-actions {
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: -3rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  transition: right 0.25s ease !important;
+}
+
+.site-shell .shop-page .sh-prod-card:hover .sh-prod-actions {
+  right: 0.75rem !important;
+}
+
+.site-shell .shop-page .sh-icon-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #2a0f02 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-icon-btn:hover:not(:disabled) {
+  background: #8b4a1e !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-icon-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.site-shell .shop-page .sh-prod-body {
+  margin: 0 !important;
+  padding: 1rem !important;
+}
+
+.site-shell .shop-page .sh-prod-stars {
+  margin: 0 0 0.5rem !important;
+  padding: 0 !important;
+  font-size: 0.8rem !important;
+}
+
+.site-shell .shop-page .sh-star--on {
+  color: #f59e0b !important;
+}
+
+.site-shell .shop-page .sh-star--off {
+  color: #e5e7eb !important;
+}
+
+.site-shell .shop-page .sh-prod-name {
+  margin: 0 0 0.75rem !important;
+  padding: 0 !important;
+  min-height: 2.75rem !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-prod-foot {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.65rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .shop-page .sh-prod-price {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: #8b4a1e !important;
+}
+
+.site-shell .shop-page .sh-prod-btn {
+  margin: 0 !important;
+  padding: 0.45rem 0.75rem !important;
+  border: 1.5px solid #2a0f02 !important;
+  border-radius: 0.5rem !important;
+  background: transparent !important;
+  color: #2a0f02 !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.site-shell .shop-page .sh-prod-btn:hover:not(:disabled) {
+  background: #2a0f02 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-prod-btn:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+.site-shell .shop-page .sh-empty {
+  margin: 0 !important;
+  padding: 2.5rem 1rem !important;
+  text-align: center !important;
+  background: #ffffff !important;
+  border: 1px dashed rgba(139, 74, 30, 0.2) !important;
+  border-radius: 1rem !important;
+  color: #5c3d26 !important;
+}
+
+/* Support banner */
+.site-shell .shop-page .sh-banner {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 1.25rem !important;
+  align-items: center !important;
+  margin: 2.5rem 0 0 !important;
+  padding: 1.5rem 1.75rem !important;
+  background: linear-gradient(135deg, #2a0f02, #5c2d12) !important;
+  border-radius: 1rem !important;
+}
+
+@media (min-width: 992px) {
+  .site-shell .shop-page .sh-banner {
+    grid-template-columns: 1fr auto !important;
+  }
+}
+
+.site-shell .shop-page .sh-banner-title {
+  margin: 0 0 0.5rem !important;
+  padding: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.375rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-banner-text {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.site-shell .shop-page .sh-banner-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 9999px !important;
+  background: #c8832a !important;
+  color: #ffffff !important;
+  font-size: 0.9375rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.site-shell .shop-page .sh-banner-btn:hover {
+  background: #ffffff !important;
+  color: #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-note {
+  margin: 2rem 0 0 !important;
+  padding: 1rem 1.25rem !important;
+  text-align: center !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(139, 74, 30, 0.12) !important;
+  border-radius: 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: #5c3d26 !important;
+}
+
+.site-shell .shop-page .sh-note b {
+  color: #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-cat-actions {
+  display: flex !important;
+  gap: 0.5rem !important;
+  margin: 0.75rem 0 0 !important;
+  padding: 0 !important;
+}
+
+.site-shell .shop-page .sh-cat-btn {
+  flex: 1 !important;
+  margin: 0 !important;
+  padding: 0.65rem 0.75rem !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.site-shell .shop-page .sh-cat-btn--outline {
+  background: #f8f9fa !important;
+  color: #2a0f02 !important;
+  border: 1px solid #2a0f02 !important;
+}
+
+.site-shell .shop-page .sh-cat-btn--solid {
+  background: #2a0f02 !important;
+  color: #ffffff !important;
+}
+
+.site-shell .shop-page .sh-stock {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: #16a34a !important;
+}
+
+.site-shell .shop-page .sh-stock--out {
+  color: #dc2626 !important;
+}

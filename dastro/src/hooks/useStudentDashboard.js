@@ -1,0 +1,348 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from '@/utils/toast';
+import API_BASE from '../utils/api';
+import { getContactValidationError, getPasswordValidationError, normalizeIndianMobile } from '../utils/validation';
+
+export function normalizeCourse(entry) {
+  if (!entry) return null;
+
+  if (entry.course) {
+    return {
+      id: entry.course._id || entry.course.courseId || entry._id || entry.course.id,
+      title: entry.course.title || entry.course.courseTitle || 'Untitled Course',
+      thumbnail: entry.course.thumbnailUrl || entry.course.thumbnail || entry.course.image || '/images/vedic_thumbnail.png',
+      description: entry.course.description || entry.course.shortDescription || entry.courseTitle || 'Your enrolled course',
+      purchaseDate: entry.purchaseDate || entry.course.purchaseDate || entry.purchase_date,
+      validTill: entry.validTill || entry.course.validTill || entry.course.valid_until || entry.validUntil,
+      courseType: entry.course.courseType || entry.courseType || 'Recorded',
+      progress: entry.course.progress ?? entry.progress ?? 0,
+      isLifetime: entry.isLifetime || entry.course.isLifetime || false,
+    };
+  }
+
+  return {
+    id: entry.courseId || entry._id || entry.id,
+    title: entry.courseTitle || entry.title || 'Untitled Course',
+    thumbnail: entry.thumbnail || entry.courseThumbnail || '/images/vedic_thumbnail.png',
+    description: entry.description || entry.summary || 'Your enrolled course',
+    purchaseDate: entry.purchaseDate,
+    validTill: entry.validTill || entry.valid_until || entry.validity,
+    courseType: entry.courseType || 'Recorded',
+    progress: entry.progress ?? 0,
+    isLifetime: entry.isLifetime || false,
+  };
+}
+
+export function formatDashboardDate(value) {
+  if (!value) return 'N/A';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
+}
+
+export function computeDaysRemaining(validTill, isLifetime = false) {
+  if (isLifetime) return 'Lifetime Access';
+  if (!validTill) return 'N/A';
+  const end = new Date(validTill);
+  // Treat far-future dates (year >= 2099) as lifetime access
+  if (end.getFullYear() >= 2099) return 'Lifetime Access';
+  const diff = Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  return diff >= 0 ? `${diff} day${diff === 1 ? '' : 's'}` : 'Expired';
+}
+
+export default function useStudentDashboard() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('studentToken');
+
+  const [profile, setProfile] = useState(null);
+  const [profileForm, setProfileForm] = useState({ name: '', email: '', mobile: '' });
+  const [profileEditMode, setProfileEditMode] = useState(false);
+  const [passwordEditMode, setPasswordEditMode] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [courses, setCourses] = useState([]);
+  const [courseValidity, setCourseValidity] = useState({});
+  const [banners, setBanners] = useState([]);
+  const [merchandise, setMerchandise] = useState([]);
+  const [newCourses, setNewCourses] = useState([]);
+  const [offers, setOffers] = useState([]);
+  const [materials, setMaterials] = useState([]);
+  const [selectedCourseForMaterials, setSelectedCourseForMaterials] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingMaterials, setLoadingMaterials] = useState(false);
+
+  const studentName = profile?.name || localStorage.getItem('studentName') || 'Student';
+  const enrolledCourses = useMemo(() => courses.map(normalizeCourse).filter(Boolean), [courses]);
+
+  const fetchSection = async (path) => {
+    const response = await fetch(`${API_BASE}${path}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Failed to load');
+    if (data.success === false) throw new Error(data.message || 'Failed to load');
+    return data;
+  };
+
+  const loadCourseValidity = async (courseId) => {
+    try {
+      const response = await fetch(`${API_BASE}/api/student/course/${courseId}/validity`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) return;
+      const validity = data.validity || data.data || data;
+      setCourseValidity((prev) => ({ ...prev, [courseId]: validity }));
+    } catch {
+      // Validity is optional.
+    }
+  };
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    let cancelled = false;
+    let secondaryTimer;
+
+    const loadDashboardData = async () => {
+      try {
+        // Critical path only — secondary panels load after first paint
+        const [profileData, courseData] = await Promise.all([
+          fetchSection('/api/student/profile'),
+          fetchSection('/api/student/courses'),
+        ]);
+        if (cancelled) return;
+
+        const profilePayload = profileData.profile || profileData.student || profileData.user || profileData;
+        const loadedCourses = courseData.enrollments || courseData.courses || courseData.data || [];
+
+        setProfile(profilePayload);
+        setProfileForm({
+          name: profilePayload.name || '',
+          email: profilePayload.email || '',
+          mobile: profilePayload.mobile || '',
+        });
+        setCourses(loadedCourses);
+        setLoading(false);
+
+        const courseIds = loadedCourses.map((course) => normalizeCourse(course)?.id).filter(Boolean);
+        // Validity in parallel after courses are visible (non-blocking)
+        Promise.all(courseIds.map((courseId) => loadCourseValidity(courseId))).catch(() => {});
+
+        secondaryTimer = window.setTimeout(async () => {
+          if (cancelled) return;
+          try {
+            const [bannerData, merchData, launchesData, offersData] = await Promise.all([
+              fetchSection('/api/student/banners').catch(() => ({})),
+              fetchSection('/api/student/merchandise').catch(() => ({})),
+              fetchSection('/api/student/new-courses').catch(() => ({})),
+              fetchSection('/api/student/offers').catch(() => ({})),
+            ]);
+            if (cancelled) return;
+            setBanners(bannerData.banners || bannerData.data || []);
+            setMerchandise(merchData.products || merchData.merchandise || merchData.data || []);
+            setNewCourses(launchesData.courses || launchesData.newCourses || launchesData.data || []);
+            setOffers(offersData.offers || offersData.data || []);
+          } catch {
+            // Secondary content is optional
+          }
+        }, 600);
+      } catch (error) {
+        if (cancelled) return;
+        const errorMessage = error.message || 'Unable to load student dashboard';
+        toast.error(errorMessage);
+        if (errorMessage.toLowerCase().includes('session') || errorMessage.toLowerCase().includes('token')) {
+          localStorage.removeItem('studentToken');
+          localStorage.removeItem('studentName');
+          navigate('/login');
+        }
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(secondaryTimer);
+    };
+  }, [navigate, token]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE}/api/student/logout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch {
+      // Clear local session regardless.
+    }
+    localStorage.removeItem('studentToken');
+    localStorage.removeItem('studentName');
+    navigate('/login');
+  };
+
+  const handleProfileChange = (field) => (event) => {
+    setProfileForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const handlePasswordChange = (field) => (event) => {
+    setPasswordForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const resetPasswordForm = () => {
+    setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  };
+
+  const savePassword = async (event) => {
+    event.preventDefault();
+    const validationError = getPasswordValidationError(
+      passwordForm.newPassword,
+      passwordForm.confirmPassword,
+    );
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (!passwordForm.currentPassword) {
+      toast.error('Please enter your current password.');
+      return;
+    }
+
+    setSavingPassword(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/student/change-password`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) {
+        throw new Error(data.message || 'Unable to update password');
+      }
+
+      resetPasswordForm();
+      setPasswordEditMode(false);
+      toast.success('Password updated successfully');
+    } catch (error) {
+      toast.error(error.message || 'Password update failed');
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
+  const saveProfile = async (event) => {
+    event.preventDefault();
+    const validationError = getContactValidationError(profileForm);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    setSavingProfile(true);
+    const sanitizedProfile = {
+      ...profileForm,
+      name: profileForm.name.trim(),
+      email: profileForm.email.trim(),
+      mobile: normalizeIndianMobile(profileForm.mobile),
+    };
+
+    try {
+      const response = await fetch(`${API_BASE}/api/student/profile`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sanitizedProfile),
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) throw new Error(data.message || 'Unable to update profile');
+      const updatedProfile = data.profile || data.student || data.user || data;
+      setProfile(updatedProfile);
+      setProfileForm({
+        name: updatedProfile.name || '',
+        email: updatedProfile.email || '',
+        mobile: updatedProfile.mobile || '',
+      });
+      setProfileEditMode(false);
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      toast.error(error.message || 'Profile update failed');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const loadMaterials = async (courseId) => {
+    if (!courseId) return;
+    setLoadingMaterials(true);
+    setSelectedCourseForMaterials(courseId);
+
+    try {
+      const response = await fetch(`${API_BASE}/api/student/course/${courseId}/materials`, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) throw new Error(data.message || 'Failed to load course materials');
+      setMaterials(data.materials || data.data || []);
+    } catch (error) {
+      toast.error(error.message || 'Unable to fetch materials');
+      setMaterials([]);
+    } finally {
+      setLoadingMaterials(false);
+    }
+  };
+
+  return {
+    profile,
+    profileForm,
+    profileEditMode,
+    setProfileEditMode,
+    passwordEditMode,
+    setPasswordEditMode,
+    passwordForm,
+    savingProfile,
+    savingPassword,
+    enrolledCourses,
+    courseValidity,
+    banners,
+    merchandise,
+    newCourses,
+    offers,
+    materials,
+    selectedCourseForMaterials,
+    loading,
+    loadingMaterials,
+    studentName,
+    handleLogout,
+    handleProfileChange,
+    handlePasswordChange,
+    saveProfile,
+    savePassword,
+    resetPasswordForm,
+    loadMaterials,
+  };
+}

@@ -1,0 +1,371 @@
+/* ================================================================
+   Shared Tool Styles — matches existing site theme
+   Force overrides against Bootstrap/style.min.css
+================================================================ */
+
+/* ── Page ── */
+.t-page {
+  padding: 60px 0;
+  min-height: 80vh;
+  color: var(--text-content);
+}
+
+/* ── Back button ── */
+.t-back {
+  background: transparent !important;
+  border: 1px solid var(--accent-color) !important;
+  color: var(--primary-color) !important;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px !important;
+  border-radius: 6px !important;
+  transition: opacity 0.2s, transform 0.2s;
+  text-decoration: none !important;
+}
+
+.t-back:hover {
+  opacity: 0.8;
+  transform: translateX(-3px);
+}
+
+/* ── Section headings ── */
+.t-heading {
+  font-size: clamp(32px, 5vw, 42px) !important;
+  font-family: var(--font-serif) !important;
+  font-weight: 700 !important;
+  color: var(--text-heading) !important;
+  margin-bottom: 8px !important;
+}
+
+@keyframes tGradMove {
+  0% {
+    background-position: 0%
+  }
+
+  100% {
+    background-position: 200%
+  }
+}
+
+.t-sub {
+  color: var(--text-muted) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+/* ── Glass cards ── */
+.t-card {
+  background: var(--card-color) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 20px !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s !important;
+}
+
+.t-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--premium-shadow) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* ── Form labels ── */
+.t-label {
+  display: block !important;
+  font-size: 14px !important;
+  color: #999 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  margin-bottom: 6px !important;
+  font-weight: 500 !important;
+}
+
+/* ── Form inputs — force dark style ── */
+.t-input {
+  width: 100% !important;
+  display: block !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-main) !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: all 0.2s !important;
+}
+
+.t-input:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15) !important;
+  background: #FFFFFF !important;
+  color: var(--text-main) !important;
+}
+
+.t-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+
+.t-input option {
+  background: #111;
+  color: #fff;
+}
+
+/* ── CTA button — override Bootstrap completely ── */
+.t-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: var(--primary-color) !important;
+  border: none !important;
+  color: #fff !important;
+  padding: 12px 28px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2) !important;
+}
+
+.t-btn:hover:not(:disabled) {
+  opacity: 0.88 !important;
+  transform: translateY(-2px) !important;
+  color: #fff !important;
+}
+
+.t-btn:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+.t-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Outline button ── */
+.t-outline-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ccc !important;
+  padding: 7px 16px !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  transition: border-color 0.2s, color 0.2s !important;
+}
+
+.t-outline-btn:hover {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+/* ── Error ── */
+.t-error {
+  color: #f87171 !important;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* ── Results animation ── */
+.t-results {
+  animation: tFadeUp 0.5s ease both;
+}
+
+@keyframes tFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Info row ── */
+.t-info-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  transition: background 0.2s !important;
+}
+
+.t-info-row:hover {
+  background: rgba(255, 106, 0, 0.07) !important;
+}
+
+.t-info-icon {
+  font-size: 18px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.t-info-label {
+  font-size: 12px !important;
+  color: #777 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+
+.t-info-value {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+}
+
+/* ── Number cards ── */
+.t-num-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 106, 0, 0.2) !important;
+  border-radius: 12px !important;
+  padding: 20px 12px !important;
+  text-align: center !important;
+  transition: transform 0.3s !important;
+}
+
+.t-num-card:hover {
+  transform: translateY(-4px) !important;
+}
+
+.t-num-big {
+  font-size: clamp(36px, 6vw, 52px) !important;
+  font-weight: 800 !important;
+  color: var(--primary-color) !important;
+  line-height: 1 !important;
+  margin-bottom: 4px !important;
+}
+
+.t-num-label {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+}
+
+.t-num-sub {
+  font-size: 13px !important;
+  color: #666 !important;
+  margin-top: 2px !important;
+}
+
+/* ── Section title ── */
+.t-section-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--primary-color) !important;
+  border-left: 3px solid var(--primary-color) !important;
+  padding-left: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+/* ── Sign cards (Horoscope) ── */
+.t-sign-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 14px 8px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: transform 0.25s, border-color 0.25s, background 0.25s !important;
+}
+
+.t-sign-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: #ff6a00 !important;
+  background: rgba(255, 106, 0, 0.08) !important;
+}
+
+.t-sign-sym {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.t-sign-name {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--text-main) !important;
+}
+
+.t-sign-dates {
+  font-size: 12px !important;
+  color: #666 !important;
+  margin-top: 2px !important;
+}
+
+/* ── Mantra card ── */
+.t-mantra-card {
+  background: rgba(255, 106, 0, 0.06) !important;
+  border: 1px solid rgba(255, 106, 0, 0.2) !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  text-align: center !important;
+}
+
+.t-mantra-text {
+  font-size: clamp(18px, 3vw, 26px) !important;
+  font-weight: 800 !important;
+  color: var(--primary-color) !important;
+  letter-spacing: 2px !important;
+  margin: 8px 0 !important;
+}
+
+/* ── Place autocomplete ── */
+.place-suggestions-dropdown {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #111827 !important;
+  border: 1px solid rgba(255, 106, 0, 0.3) !important;
+  border-radius: 8px !important;
+  list-style: none !important;
+  margin: 4px 0 0 !important;
+  padding: 4px 0 !important;
+  z-index: 9999 !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+.suggestion-item {
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  color: #ddd !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+  transition: background 0.15s !important;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none !important;
+}
+
+.suggestion-item:hover {
+  background: rgba(255, 106, 0, 0.12) !important;
+}
+
+.suggestion-primary {
+  font-weight: 600 !important;
+}
+
+.suggestion-secondary {
+  color: #777 !important;
+  font-size: 0.8em !important;
+}

@@ -1,0 +1,347 @@
+@import "tailwindcss";
+@import "./styles/tw-page.css";
+
+@theme {
+  /* Manuscript & Brass — ds-astrology-design-system.html */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-price: 'IBM Plex Sans', system-ui, sans-serif;
+
+  --color-site-bg: #fbf5ea;
+  --color-site-surface: #f4e9d6;
+  --color-site-sand: #ebddc4;
+  --color-site-border: #e0cfb0;
+  --color-site-text: #241c14;
+  --color-site-muted: #574636;
+  --color-site-soft: #6b5848;
+  --color-site-primary: #33251a;
+  --color-site-accent: #a25e2a;
+  --color-site-accent-dark: #8a4a1c;
+  --color-site-gold: #c49a4a;
+  --color-site-cream: #fbf5ea;
+
+  --spacing-site-header: calc(2.25rem + 4rem);
+}
+
+@media (min-width: 40rem) {
+  @theme {
+    --spacing-site-header: calc(2rem + 4.25rem);
+  }
+}
+
+@utility top-site-header-sticky {
+  top: var(--spacing-site-header);
+}
+
+@utility pt-site-header {
+  padding-top: var(--spacing-site-header);
+}
+
+@utility -mt-site-header {
+  margin-top: calc(-1 * var(--spacing-site-header));
+}
+
+/* Pure-CSS infinite marquees — run entirely on the compositor thread
+   (transform-only @keyframes), unlike a JS-driven framer-motion loop which
+   re-runs on every animation frame and competes with scroll for main-thread
+   time. Used by logo/news strips that scroll forever in the background. */
+@keyframes marquee-left {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0%); }
+}
+
+@utility animate-marquee-left {
+  animation: marquee-left 20s linear infinite;
+}
+
+@utility animate-marquee-right {
+  animation: marquee-right 25s linear infinite;
+}
+
+/* Live course badge — light flow / shimmer across the pill */
+@keyframes course-live-shine {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(220%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes course-live-dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+@layer components {
+  .course-live-badge__shine {
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255, 255, 255, 0.12) 45%,
+      rgba(255, 40, 40, 0.75) 50%,
+      rgba(255, 255, 255, 0.35) 55%,
+      transparent 62%,
+      transparent 100%
+    );
+    animation: course-live-shine 2.4s ease-in-out infinite;
+  }
+
+  .course-live-badge__dot {
+    animation: course-live-dot-pulse 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course-live-badge__shine,
+    .course-live-badge__dot {
+      animation: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: var(--spacing-site-header);
+  }
+
+  body {
+    @apply m-0 bg-site-bg font-body text-lg font-normal leading-relaxed text-site-text antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-site-text;
+    text-wrap: balance;
+  }
+
+  /* Legacy link defaults — in @layer base so Tailwind text-* utilities win on migrated pages */
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: var(--primary-color);
+  }
+
+  .tw-page a,
+  .tw-page a:hover,
+  .tw-page a:visited {
+    color: inherit;
+  }
+}
+
+@layer utilities {
+  .font-price {
+    font-family: var(--font-price);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+    letter-spacing: -0.02em;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-marquee {
+    animation: marquee 38s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/*
+ * ─── Unlayered site-wide overrides ───────────────────────────────────────────
+ * Loaded via the Vite bundle AFTER Bootstrap's <link> in index.html.
+ * In the CSS cascade, same-origin unlayered rules that appear LATER win
+ * for equal specificity — no !important needed.
+ *
+ * These intentionally DO NOT use @layer so they sit ABOVE all @layer rules
+ * (Tailwind base / components / utilities).  Bootstrap pages rely on Bootstrap
+ * class names (.container, .btn-primary, .form-control …) — Tailwind pages use
+ * utility names — so there is no class-name collision in practice.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Container — generous side padding matching the site design ──
+   Padding matches the Contact page pattern (px-4 → px-6 → px-12).
+   Bootstrap's max-width breakpoints are still provided by Bootstrap's
+   own CSS (loaded earlier) so the layout constraint is unchanged.     */
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container,
+  .container-fluid,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container,
+  .container-fluid,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+}
+
+/* ── Cards ── */
+.card,
+.glass-panel,
+.sidebar-widget {
+  background: var(--card-color);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--premium-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* ── Buttons — cover every pseudo-class so Bootstrap's a:hover (0,1,1
+   specificity) can never bleed blue text onto anchor-based buttons ── */
+.btn-primary,   .btn-primary:link,   .btn-primary:visited,
+.btn-primary:hover,   .btn-primary:focus,   .btn-primary:active,
+.btn-dark,      .btn-dark:link,      .btn-dark:visited,
+.btn-dark:hover,      .btn-dark:focus,      .btn-dark:active,
+.btn-submit,    .btn-submit:link,    .btn-submit:visited,
+.btn-submit:hover,    .btn-submit:active,
+.mystic-btn-primary,  .mystic-btn-primary:link,  .mystic-btn-primary:visited,
+.mystic-btn-primary:hover,  .mystic-btn-primary:active,
+.cta-reg-btn,   .cta-reg-btn:link,   .cta-reg-btn:visited,
+.cta-reg-btn:hover,   .cta-reg-btn:active,
+.btn-consult-header,  .btn-consult-header:link,  .btn-consult-header:visited,
+.btn-consult-header:hover,  .btn-consult-header:active,
+.btn-mobile-cta.primary-cta, .btn-mobile-cta.primary-cta:link,
+.btn-mobile-cta.primary-cta:visited, .btn-mobile-cta.primary-cta:hover,
+.btn-mobile-cta.primary-cta:active {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-primary,
+.btn-dark,
+.btn-submit,
+.mystic-btn-primary,
+.cta-reg-btn,
+.btn-consult-header,
+.btn-mobile-cta.primary-cta {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-dark:hover,
+.btn-submit:hover,
+.mystic-btn-primary:hover,
+.cta-reg-btn:hover,
+.btn-consult-header:hover {
+  background-color: #723c26;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 74, 47, 0.3);
+}
+
+/* ── Form controls ── */
+.form-control,
+.form-select {
+  background-color: #ffffff;
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15);
+}
+
+/* Toast notifications above modals (admin modals use z-index ~10050) */
+.Toastify__toast-container {
+  z-index: 20050 !important;
+}
+
+/* Fix visibility of native date, time, and datetime-local pickers on mobile (iOS/Safari/Android) */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  min-height: 2.25rem; /* Ensure clickable height */
+}

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(tasklist //FI \"IMAGENAME eq node.exe\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5000/api/consultations/services)",
+      "Bash(npx eslint *)",
+      "Bash(cat src/routes/authRoutes.js)",
+      "Bash(grep -rn \"video/token\\\\|videoToken\\\\|signed\" src/routes src/controllers)",
+      "Bash(node --check src/controllers/astrologerController.js)",
+      "Bash(node --check src/routes/adminRoutes.js)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npm run build)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}
