@@ -72,10 +72,9 @@ function ToolCard({ tool, onActivate }) {
       {/* Left Side: Image/Icon */}
       <div className="flex shrink-0 items-center justify-center">
         {tool.image ? (
-          <div className="relative h-36 w-36 sm:h-40 sm:w-40">
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#fff3e0] to-[#fde0c5] transition-all duration-700 group-hover:-translate-y-2 opacity-80 blur-md"></div>
-            <div className="relative h-full w-full overflow-hidden rounded-xl border-[3px] border-white shadow-[0_8px_20px_rgba(139,74,30,0.15)] transition-all duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_12px_25px_rgba(139,74,30,0.25)] z-10">
-              <img src={tool.image} alt={tool.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div className="relative h-36 w-36 sm:h-40 sm:w-40 flex shrink-0 items-center justify-center">
+            <div className="relative h-full w-full transition-all duration-700 group-hover:-translate-y-2 z-10">
+              <img src={tool.image} alt={tool.name} className="h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-110" />
             </div>
           </div>
         ) : (
