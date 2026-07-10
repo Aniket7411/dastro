@@ -1031,7 +1031,7 @@ function Home() {
               <div className="col-12 col-lg-4 order-2 service-center-col text-center d-flex align-items-center justify-content-center my-4 py-2 my-lg-0 py-lg-0" data-aos="zoom-in">
                 <div className="service-center-img position-relative w-100">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
-                  <img alt="meditation" src="/removebg.png" className="img-fluid center-overlay" />
+                  <img alt="meditation" src="/removebg.png" className="img-fluid center-overlay" loading="lazy" decoding="async" />
                 </div>
               </div>
 
@@ -2848,16 +2848,16 @@ function Home() {
         .service-center-img .center-overlay {
           position: absolute;
           left: 50%;
-          top: 43%;
+          top: 42%;
           transform: translate(-50%, -50%);
-          width: 50%;
-          max-width: 210px;
+          width: 56%;
+          max-width: 250px;
           z-index: 2;
           margin: 0;
           pointer-events: none;
-          filter: drop-shadow(0 10px 28px rgba(42, 15, 2, 0.12));
-          -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 100%);
-          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 100%);
+          filter: drop-shadow(0 10px 28px rgba(42, 15, 2, 0.15));
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
         }
 
         @media (min-width: 992px) {
@@ -2873,9 +2873,9 @@ function Home() {
           }
 
           .service-center-img .center-overlay {
-            width: 45%;
-            max-width: 225px;
-            top: 41%;
+            width: 52%;
+            max-width: 280px;
+            top: 40%;
           }
 
           .service-card {
@@ -2929,9 +2929,9 @@ function Home() {
           }
 
           .service-center-img .center-overlay {
-            width: 46%;
-            max-width: 122px;
-            top: 44%;
+            width: 54%;
+            max-width: 155px;
+            top: 43%;
           }
 
           .service-card {
