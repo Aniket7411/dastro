@@ -101,9 +101,9 @@ function ToolCard({ tool, onActivate }) {
           {tool.desc}
         </p>
 
-        <span className="inline-flex items-center gap-1.5 w-max rounded-lg border border-[rgba(139,74,30,0.18)] px-3.5 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide text-[#7a3a12] transition-all duration-300 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white">
+        <span className="inline-flex items-center gap-1.5 w-max rounded-lg border-[1.5px] border-[#9c5a1e]/40 bg-[#9c5a1e]/5 px-4 py-1.5 text-[0.7rem] font-extrabold uppercase tracking-wide text-[#8a4a16] transition-all duration-300 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white group-hover:shadow-md">
           Access Tool
-          <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
         </span>
       </div>
     </div>
