@@ -67,38 +67,52 @@ function ToolCard({ tool, onActivate }) {
   const { Icon } = tool;
 
   const inner = (
-    <div className="group relative flex h-full flex-col rounded-xl border border-[rgba(139,74,30,0.11)] bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(139,74,30,0.3)] hover:shadow-[0_10px_28px_rgba(139,74,30,0.11)] sm:p-5">
-      {tool.badge && (
-        <span className="absolute right-3 top-3 rounded-full bg-[#fff3e0] px-2 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-[0.1em] text-[#9c5a1e]">
-          {tool.badge}
+    <div className="group relative flex h-full flex-row items-center rounded-2xl border border-[rgba(139,74,30,0.11)] bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[rgba(139,74,30,0.3)] hover:shadow-[0_12px_30px_rgba(139,74,30,0.12)] sm:p-5 gap-4 sm:gap-5 overflow-hidden">
+      
+      {/* Left Side: Image/Icon */}
+      <div className="flex shrink-0 items-center justify-center">
+        {tool.image ? (
+          <div className="relative h-36 w-36 sm:h-40 sm:w-40">
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#fff3e0] to-[#fde0c5] transition-all duration-700 group-hover:-translate-y-2 opacity-80 blur-md"></div>
+            <div className="relative h-full w-full overflow-hidden rounded-xl border-[3px] border-white shadow-[0_8px_20px_rgba(139,74,30,0.15)] transition-all duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_12px_25px_rgba(139,74,30,0.25)] z-10">
+              <img src={tool.image} alt={tool.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            </div>
+          </div>
+        ) : (
+          <div className="relative h-36 w-36 sm:h-40 sm:w-40">
+            <div className="absolute inset-0 rounded-xl bg-[#fff8ef] transition-all duration-700 group-hover:-translate-y-2 opacity-80 blur-md"></div>
+            <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border-[3px] border-white bg-[#fff8ef] text-[#9c5a1e] shadow-[0_8px_20px_rgba(139,74,30,0.15)] transition-all duration-700 group-hover:-translate-y-2 group-hover:bg-[#9c5a1e] group-hover:text-white group-hover:shadow-[0_12px_25px_rgba(139,74,30,0.25)] z-10">
+              <Icon className="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] transition-transform duration-700 group-hover:scale-110" strokeWidth={2} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Right Side: Content */}
+      <div className="flex flex-1 flex-col justify-center">
+        {tool.badge && (
+          <span className="mb-2 w-max rounded-full bg-[#fff3e0] px-2.5 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-[0.1em] text-[#9c5a1e] shadow-sm">
+            {tool.badge}
+          </span>
+        )}
+        <h3 className="mb-1.5 text-[1rem] sm:text-[1.125rem] font-extrabold leading-tight text-[#3d1a06]">
+          {tool.name}
+        </h3>
+        <p className="mb-4 text-xs sm:text-[0.8125rem] leading-relaxed text-[#7a5c4f]">
+          {tool.desc}
+        </p>
+
+        <span className="inline-flex items-center gap-1.5 w-max rounded-lg border border-[rgba(139,74,30,0.18)] px-3.5 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide text-[#7a3a12] transition-all duration-300 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white">
+          Access Tool
+          <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
         </span>
-      )}
-
-      {tool.image ? (
-        <div className="mb-3 h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-[rgba(139,74,30,0.12)] bg-white shadow-sm transition-all duration-200">
-          <img src={tool.image} alt={tool.name} className="h-full w-full object-cover" />
-        </div>
-      ) : (
-        <div className="mb-3 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[rgba(139,74,30,0.1)] bg-[#fff8ef] text-[#9c5a1e] transition-colors duration-200 group-hover:bg-[#9c5a1e] group-hover:text-white">
-          <Icon className="h-5 w-5" strokeWidth={2} />
-        </div>
-      )}
-
-      <h3 className="mb-1.5 text-[0.9375rem] font-extrabold leading-snug text-[#3d1a06]">
-        {tool.name}
-      </h3>
-      <p className="mb-4 flex-1 text-xs leading-relaxed text-[#7a5c4f]">{tool.desc}</p>
-
-      <span className="mt-auto inline-flex items-center gap-1 self-start rounded-lg border border-[rgba(139,74,30,0.18)] px-3 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide text-[#7a3a12] transition-all duration-200 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white">
-        Access Tool
-        <ArrowRight className="h-2.5 w-2.5" strokeWidth={2.5} />
-      </span>
+      </div>
     </div>
   );
 
   if (tool.link) {
     return (
-      <Link to={tool.link} className="!no-underline" aria-label={tool.name}>
+      <Link to={tool.link} className="!no-underline block h-full" aria-label={tool.name}>
         {inner}
       </Link>
     );
@@ -108,7 +122,7 @@ function ToolCard({ tool, onActivate }) {
     <button
       type="button"
       onClick={() => onActivate(tool.id)}
-      className="h-full w-full text-left"
+      className="block h-full w-full text-left"
       aria-label={tool.name}
     >
       {inner}
@@ -160,7 +174,7 @@ function FreeTools() {
 
       {/* Tools grid */}
       <div className="mx-auto max-w-[90rem] px-4 py-5 sm:px-6 sm:py-6 lg:px-12 lg:py-7">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
           {tools.map((tool, idx) => (
             <div
               key={tool.id}
