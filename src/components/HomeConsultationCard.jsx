@@ -15,7 +15,6 @@ export default function HomeConsultationCard({ item, onBook }) {
     mrp: item.mrp,
   });
   const hasPrice = Number(item.priceValue) > 0;
-  const subtitle = item.short && item.short !== item.title ? item.short : null;
 
   return (
     <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
@@ -54,13 +53,7 @@ export default function HomeConsultationCard({ item, onBook }) {
           {item.title}
         </Link>
 
-        {subtitle ? (
-          <p className="mt-0.5 line-clamp-1 font-body text-[11px] leading-snug text-site-muted sm:mt-1 sm:text-[13px]">
-            {subtitle}
-          </p>
-        ) : null}
-
-        <div className="mt-2 border-t border-site-border/60 pt-2 sm:mt-2.5 sm:pt-2.5">
+        <div className="mt-auto border-t border-site-border/60 pt-2 sm:pt-2.5">
           {hasPrice ? (
             <div className="leading-none">
               <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
