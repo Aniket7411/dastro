@@ -119,7 +119,7 @@ export const SITE_COURSE_CARD_BADGE_META =
   'left-2.5 top-2.5 bg-white/92 text-site-primary';
 
 export const SITE_COURSE_CARD_BADGE_RECORDED =
-  'right-1.5 top-1.5 bg-site-accent-dark text-white sm:right-2 sm:top-2';
+  'inline-flex w-fit items-center gap-0.5 !rounded-full bg-[#0a0a0a]/95 text-white shadow-[0_1px_4px_rgba(0,0,0,0.3)]';
 
 /** Duration strip — full-width bar flush to bottom of image (design §03) */
 export const SITE_COURSE_CARD_DURATION =

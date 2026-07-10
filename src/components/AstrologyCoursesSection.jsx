@@ -103,7 +103,7 @@ function CourseCard({ course }) {
         ) : null}
 
         {!isLive ? (
-          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED}`}>
+          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} right-1.5 top-1.5 sm:right-2 sm:top-2`}>
             Recorded
           </span>
         ) : course.level ? (

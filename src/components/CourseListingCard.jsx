@@ -72,9 +72,9 @@ export default function CourseListingCard({ course }) {
           <CourseLiveBadge />
         ) : (
           <span
-            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} left-1.5 top-1.5 right-auto sm:left-2 sm:top-2`}
+            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} left-1.5 top-1.5 z-[2] sm:left-2 sm:top-2`}
           >
-            <Video size={9} aria-hidden className="mr-0.5 inline shrink-0 sm:size-2.5" />
+            <Video size={9} aria-hidden className="shrink-0 text-white sm:size-2.5" />
             <span className="hidden min-[400px]:inline">Rec</span>
             <span className="min-[400px]:hidden">R</span>
           </span>
@@ -82,7 +82,7 @@ export default function CourseListingCard({ course }) {
 
         {course.tier ? (
           <span
-            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 max-w-[4.5rem] truncate sm:right-2 sm:max-w-[5rem]`}
+            className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 z-[2] max-w-[calc(100%-3.25rem)] whitespace-nowrap sm:right-2 sm:max-w-[calc(100%-4rem)]`}
           >
             {course.tier}
           </span>

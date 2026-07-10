@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import toast from '@/utils/toast';
 import {
@@ -126,7 +126,13 @@ export default function CounsellorLogin() {
     <div className={`${SHELL} tw-page flex min-h-screen items-center justify-center`}>
       <div className={`${WRAP} w-full max-w-md !py-8 sm:!py-10`}>
         <div className="mb-6 text-center sm:mb-8">
-          <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="mx-auto mb-4 h-12 w-12 rounded-xl object-contain" />
+          <Link
+            to="/"
+            className="mx-auto mb-4 block w-fit transition-opacity hover:opacity-90"
+            aria-label={`${SITE_LOGO_ALT} home`}
+          >
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-12 w-12 rounded-xl object-contain" />
+          </Link>
           <h1 className="font-body text-xl font-extrabold text-site-primary sm:text-2xl">{title}</h1>
           <p className="mt-2 font-body text-sm text-site-muted">{subtitle}</p>
         </div>
