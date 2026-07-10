@@ -1,0 +1,20 @@
+Live Mentored Certifications — Final Price List									
+Live > Recorded · every card shows classes + hours + duration + certificate · Offer = default price									
+
+
+| Category   | Service                                       | Description                                                                                      | Duration / Size                    | MRP ₹   | Offer Price ₹ | Save vs MRP | Max Extra Disc | Floor ₹ | Notes                                    |
+| ---------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------- | ------- | ------------- | ----------- | -------------- | ------- | ---------------------------------------- |
+| Foundation | Basic Vedic Numerology                        | Life path, personality, luck & future through numbers — live cohort                              | 12 classes · ~18 hrs · certificate | ₹8,499  | ₹5,999        | 29%         | 20%            | ₹4,799  | Live > recorded (₹1,999).                |
+| Foundation | Vedic Astrology Foundation                    | Start Jyotish from scratch — charts, planets, houses, basics                                     | 10–12 wks · ~24 hrs · certificate  | ₹9,999  | ₹6,999        | 30%         | 20%            | ₹5,599  |                                          |
+| Foundation | Basic Vedic Astrology                         | Fundamentals of Vedic astrology for absolute beginners                                           | 14 classes · ~22 hrs · certificate | ₹9,999  | ₹6,999        | 30%         | 20%            | ₹5,599  |                                          |
+| Specialist | Face Reading                                  | Read personality, nature, luck & career from the face                                            | 16 classes · ~24 hrs · certificate | ₹12,999 | ₹8,999        | 31%         | 20%            | ₹7,199  | Niche — low competition.                 |
+| Specialist | Graphology                                    | Handwriting analysis revealing personality & behaviour                                           | 16 classes · ~24 hrs · certificate | ₹12,999 | ₹8,999        | 31%         | 20%            | ₹7,199  | Rare skill — premium.                    |
+| Specialist | Tarot (Basic→Professional)                    | Beginner to professional-consultation-level tarot reading                                        | 16 classes · ~26 hrs · certificate | ₹13,999 | ₹9,999        | 29%         | 20%            | ₹7,999  | "Professional" framing lifts price.      |
+| Specialist | Kundali Reading Masterclass                   | Advance chart reading — yogas, D-charts, Ashtakavarga                                            | 8 wks · ~28 hrs · certificate      | ₹13,999 | ₹9,999        | 29%         | 20%            | ₹7,999  |                                          |
+| Advanced   | KP System of Astrology                        | Krishnamurti Paddhati — precise predictive system                                                | 10 wks · ~35 hrs · certificate     | ₹17,999 | ₹12,999       | 28%         | 20%            | ₹10,399 | Advanced/technical — diploma band.       |
+| Advanced   | Advanced Predictive Astrology                 | Master-level Jaimini, Prashna, Muhurta & advanced prediction                                     | 16 wks · ~45 hrs · certificate     | ₹23,999 | ₹16,999       | 29%         | 20%            | ₹13,599 | Your current best anchor.                |
+| FLAGSHIP   | Professional Certification in Vedic Astrology | End-to-end program: theory + live case-study internship + panel-ready certificate. Capped seats. | 5–6 months · ~90 hrs · certificate | ₹54,999 | ₹39,999       | 27%         | 20%            | ₹31,999 | THE premium anchor. Cap ~20 seats/batch. |
+
+
+Best live discount is early-bird / cohort-fill: 'first 15 seats 20% off' beats an always-on discount — it creates urgency and fills batches.									
+Do NOT gift live seats freely — gift recorded courses instead (see Bundles). Live seats carry real mentor cost.									

@@ -1,0 +1,679 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  CalendarCheck,
+  ChevronDown,
+  GraduationCap,
+  Hash,
+  Heart,
+  LogOut,
+  Menu,
+  MessageCircle,
+  PlayCircle,
+  Radio,
+  Shield,
+  Sparkles,
+  User,
+  Wrench,
+  X,
+} from 'lucide-react';
+import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME } from '../utils/brandAssets';
+import { SITE_BTN_NAV, SITE_NAV_LINK, SITE_NAV_LINK_ACTIVE, SITE_NAV_LINK_MOBILE } from '../utils/siteTokens';
+import FreeWebinarInterestModal from './webinar/FreeWebinarInterestModal';
+
+const REPORT_ITEMS = [
+  '2026 Financial Horoscope Based on Your Birth Chart',
+  '2026 Career Horoscope Based on Your Birth Chart',
+  '2026 Marriage Horoscope Based on Your Birth Chart',
+  '2026 Wealth Horoscope Based on Your Birth Chart',
+  '2026 Love Horoscope Based on Your Birth Chart',
+];
+
+const mobileNavItemClass = SITE_NAV_LINK_MOBILE;
+
+const NAV_LINK_BASE = SITE_NAV_LINK;
+
+const NAV_LINK_ACTIVE = SITE_NAV_LINK_ACTIVE;
+
+const NAV_LINK_IDLE = '';
+
+const NAV_ACTION_BTN = SITE_BTN_NAV;
+
+const COURSE_LINKS = [
+  { label: 'Live Courses', to: '/live-courses', Icon: Radio },
+  { label: 'Recorded Courses', to: '/recorded-courses', Icon: PlayCircle },
+];
+
+const FREE_TOOL_LINKS = [
+  { label: 'All Free Tools', to: '/free-tools', Icon: Wrench },
+  { label: 'Numerology', to: '/numerology', Icon: Hash },
+  { label: 'Tarot Reading', to: '/tarot', Icon: Sparkles },
+  { label: 'Love Calculator', to: '/love', Icon: Heart },
+];
+
+function CoursesDropdown({ coursesActive }) {
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <li
+      className="relative flex list-none items-center"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className={`${NAV_LINK_BASE} ${
+          coursesActive ? NAV_LINK_ACTIVE : open ? '!text-site-accent-dark' : NAV_LINK_IDLE
+        }`}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Courses
+        <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div
+        className={`absolute left-1/2 top-full z-50 w-48 -translate-x-1/2 pt-2 transition-opacity ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <ul className="overflow-hidden rounded-xl border border-site-border bg-site-surface py-1 shadow-lg">
+          {COURSE_LINKS.map(({ label, to, Icon }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-site-sand hover:!text-site-accent-dark"
+              >
+                <Icon className="h-4 w-4 shrink-0 opacity-60" />
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
+function FreeToolsDropdown({ toolsActive }) {
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <li
+      className="relative flex list-none items-center"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className={`${NAV_LINK_BASE} ${
+          toolsActive ? NAV_LINK_ACTIVE : open ? '!text-site-accent-dark' : NAV_LINK_IDLE
+        }`}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Free Tools
+        <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div
+        className={`absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 pt-2 transition-opacity ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <ul className="overflow-hidden rounded-xl border border-site-border bg-site-surface py-1 shadow-lg">
+          {FREE_TOOL_LINKS.map(({ label, to, Icon }) => (
+            <li key={`${label}-${to}`}>
+              <Link
+                to={to}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium !text-site-text !no-underline decoration-transparent transition-colors visited:!text-site-text hover:!no-underline hover:bg-site-sand hover:!text-site-accent-dark"
+              >
+                <Icon className="h-4 w-4 shrink-0 opacity-60" />
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
+function NavLink({ to, match, children, onClick, className = '' }) {
+  const location = useLocation();
+  const isActive = match === '/'
+    ? location.pathname === '/'
+    : location.pathname.startsWith(match);
+
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={`${NAV_LINK_BASE} ${isActive ? NAV_LINK_ACTIVE : NAV_LINK_IDLE} ${className}`}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export default function SiteNavbar({
+  authState,
+  isLoginPage,
+  onBookConsultation,
+  onStudentLogout,
+  onAdminLogout,
+}) {
+  const location = useLocation();
+  const headerRef = useRef(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  const [freeWebinarOpen, setFreeWebinarOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const coursesActive = COURSE_LINKS.some((link) => location.pathname.startsWith(link.to));
+  const toolsActive = ['/free-tools', '/numerology', '/tarot', '/love'].some((p) => location.pathname.startsWith(p));
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setMobileCoursesOpen(false);
+    setMobileToolsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  useLayoutEffect(() => {
+    const el = headerRef.current;
+    if (!el) return undefined;
+
+    const syncHeaderOffset = () => {
+      document.documentElement.style.setProperty('--spacing-site-header', `${el.offsetHeight}px`);
+    };
+
+    syncHeaderOffset();
+
+    // ResizeObserver handles all resize cases — no need for window resize listener too
+    const observer = new ResizeObserver(syncHeaderOffset);
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const closeMobile = () => setMobileOpen(false);
+
+  const guestDesktopLinks = (
+    <>
+      <CoursesDropdown coursesActive={coursesActive} />
+      <FreeToolsDropdown toolsActive={toolsActive} />
+      <li className="flex list-none items-center">
+        <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/astrologer" match="/astrologer" className="gap-1.5">
+          <MessageCircle className="h-3.5 w-3.5 opacity-80" />
+          Astro Chat
+        </NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/webinar" match="/webinar" className="gap-1.5">
+          Live Webinar
+        </NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/about" match="/about">About</NavLink>
+      </li>
+    </>
+  );
+
+  const studentDesktopLinks = (
+    <>
+      <li className="flex list-none items-center">
+        <NavLink to="/" match="/">Home</NavLink>
+      </li>
+      {/* <li className="flex list-none items-center">
+        <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
+      </li> */}
+      <CoursesDropdown coursesActive={coursesActive} />
+      <FreeToolsDropdown toolsActive={toolsActive} />
+      <li className="flex list-none items-center">
+        <NavLink to="/book-consultation" match="/book-consultation">Consultations</NavLink>
+      </li>
+      <li className="flex list-none items-center">
+        <NavLink to="/astrologer" match="/astrologer" className="gap-1.5">
+          <MessageCircle className="h-3.5 w-3.5 opacity-80" />
+          Astro Chat
+        </NavLink>
+      </li>
+    </>
+  );
+
+  const accountActions = (
+    <>
+      {authState.isAdmin && (
+        <Link
+          to="/admin"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
+        >
+          <Shield className="h-3.5 w-3.5" />
+          Admin
+        </Link>
+      )}
+      {authState.isStudent ? (
+        <div className="flex items-center gap-1.5">
+          <Link
+            to="/dashboard"
+            className="inline-flex max-w-[9rem] items-center justify-center gap-1.5 overflow-hidden rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
+          >
+            <GraduationCap className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{authState.studentName}</span>
+          </Link>
+          <button
+            type="button"
+            onClick={onStudentLogout}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-site-border bg-site-surface text-site-accent-dark transition hover:border-site-accent-dark/40 hover:bg-site-sand"
+            aria-label="Logout"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        </div>
+      ) : !isLoginPage ? (
+        <Link
+          to="/login"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-xs font-semibold !text-site-accent-dark !no-underline transition hover:!no-underline hover:border-site-accent-dark/40 hover:bg-site-sand"
+        >
+          <User className="h-3.5 w-3.5" />
+          Student Login
+        </Link>
+      ) : null}
+      <button
+        type="button"
+        onClick={onBookConsultation}
+        className={`${NAV_ACTION_BTN} !no-underline`}
+      >
+        <CalendarCheck className="h-3.5 w-3.5" />
+        Book Consultation
+      </button>
+    </>
+  );
+
+  const mobilePrimaryLinks = authState.isStudent
+    ? [
+        { label: 'Home', to: '/', match: '/' },
+        { label: 'My Courses', to: '/dashboard', match: '/dashboard' },
+        { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'Astro Chat', to: '/astrologer', match: '/astrologer', icon: MessageCircle },
+      ]
+    : [
+        { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'Astro Chat', to: '/astrologer', match: '/astrologer', icon: MessageCircle },
+        { label: 'About', to: '/about', match: '/about' },
+      ];
+
+  return (
+    <div
+      ref={headerRef}
+      className="fixed top-0 left-0 right-0 z-[1020] w-full border-b border-site-border bg-site-bg shadow-[0_1px_0_0_rgba(51,37,26,0.06)] [&_a]:!no-underline [&_a:hover]:!no-underline [&_a:visited]:!no-underline"
+    >
+      <style>{`
+        @keyframes logo-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes logo-spin-reverse {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+        .animate-spin-slow {
+          animation: logo-spin 35s linear infinite;
+        }
+        .animate-spin-reverse-slow {
+          animation: logo-spin-reverse 45s linear infinite;
+        }
+        .premium-logo-wrapper:hover .logo-glow {
+          opacity: 1 !important;
+        }
+      `}</style>
+      {/* Report ticker — fixed height so main padding always matches */}
+      <div className="flex h-9 shrink-0 items-center overflow-hidden border-b border-site-accent-dark/15 bg-site-bg sm:h-8">
+        <div className="flex h-full shrink-0 items-center bg-site-accent-dark px-3 text-[0.625rem] font-bold uppercase tracking-wider text-white sm:px-4 sm:text-xs">
+          Popular Reports
+        </div>
+        <Link
+          to="/free-tools"
+          className="relative flex h-full min-w-0 flex-1 cursor-pointer items-center overflow-hidden transition hover:bg-site-accent/5"
+          aria-label="View all free astrology tools"
+        >
+          <div className="flex w-max animate-marquee items-center gap-6 pl-3 pr-6 sm:gap-10">
+            {[...REPORT_ITEMS, ...REPORT_ITEMS].map((text, index) => (
+              <span
+                key={`${text}-${index}`}
+                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs font-medium text-site-muted sm:text-sm"
+              >
+                <span className="rounded-full bg-site-accent px-2 py-0.5 text-[0.625rem] font-extrabold uppercase text-white">
+                  New
+                </span>
+                {text}
+              </span>
+            ))}
+          </div>
+        </Link>
+      </div>
+
+      {/* Main navbar */}
+      <header
+        className={`border-b border-site-border bg-site-bg transition-shadow ${
+          scrolled ? 'shadow-[0_4px_20px_rgba(51,37,26,0.10)]' : 'shadow-[0_2px_8px_rgba(51,37,26,0.06)]'
+        }`}
+      >
+        <div className="mx-auto flex h-[4.5rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[5rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
+          {/* Logo */}
+          <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline z-20" aria-label={`${SITE_NAME} home`}>
+            <img
+              src={SITE_LOGO}
+              alt={SITE_LOGO_ALT}
+              className="h-14 w-14 object-contain sm:h-16 sm:w-16 lg:h-[4.5rem] lg:w-[4.5rem]"
+              fetchPriority="high"
+            />
+          </Link>
+
+          {/* Desktop navigation — centered */}
+          <nav className="hidden items-center justify-center xl:flex" aria-label="Main navigation">
+            <ul className="flex flex-row flex-nowrap items-center gap-0.5 lg:gap-1">
+              {authState.isStudent ? studentDesktopLinks : guestDesktopLinks}
+            </ul>
+          </nav>
+
+          {/* Right column: desktop actions + mobile menu */}
+          <div className="flex items-center justify-end gap-2.5 justify-self-end">
+            <div className="hidden items-center gap-2.5 xl:flex">{accountActions}</div>
+
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-site-border bg-site-surface text-site-primary shadow-sm transition hover:border-site-accent-dark hover:bg-site-sand xl:hidden"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={mobileOpen}
+            >
+              <Menu className="h-5 w-5 shrink-0" strokeWidth={2.5} aria-hidden />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile backdrop */}
+      <button
+        type="button"
+        aria-label="Close menu"
+        className={`fixed inset-0 z-[1054] bg-site-primary/45 transition-opacity xl:hidden ${
+          mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={closeMobile}
+      />
+
+      {/* Mobile drawer */}
+      <aside
+        className={`fixed top-0 right-0 z-[1055] flex h-full w-full max-w-sm flex-col bg-site-bg shadow-2xl transition-transform duration-300 ease-out xl:hidden ${
+          mobileOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        aria-hidden={!mobileOpen}
+      >
+        <div className="flex items-center justify-between border-b border-site-accent-dark/15 px-4 py-3">
+          <Link to="/" onClick={closeMobile} className="flex items-center gap-2 no-underline">
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-12 w-12 object-contain" />
+            <span className="font-heading text-sm font-bold text-site-accent-dark">{SITE_NAME}</span>
+          </Link>
+          <button
+            type="button"
+            onClick={closeMobile}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-site-accent-dark transition hover:bg-site-accent/10"
+            aria-label="Close menu"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto" aria-label="Mobile navigation">
+          <ul className="m-0 list-none p-0">
+            {mobilePrimaryLinks.map((item) => {
+              const isActive = item.match === '/' ? location.pathname === '/' : location.pathname.startsWith(item.match);
+              return (
+                <li key={item.to} className="border-b border-site-accent-dark/10">
+                  <Link 
+                    to={item.to} 
+                    onClick={closeMobile} 
+                    className={`${mobileNavItemClass} ${isActive ? '!text-site-accent-dark' : ''}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+
+            <li className="border-b border-site-accent-dark/10">
+              <button
+                type="button"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
+                onClick={() => setMobileCoursesOpen((open) => !open)}
+                aria-expanded={mobileCoursesOpen}
+              >
+                Courses
+                <ChevronDown className={`h-4 w-4 text-site-accent-dark transition-transform ${mobileCoursesOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileCoursesOpen && (
+                <ul className="m-0 list-none space-y-1 border-t border-site-accent-dark/10 bg-[#fffaf4] px-3 py-2">
+                  {COURSE_LINKS.map(({ label, to, Icon }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        onClick={() => {
+                          setMobileCoursesOpen(false);
+                          closeMobile();
+                        }}
+                        className="flex items-center gap-2 rounded-lg border border-site-accent-dark/10 bg-white px-3 py-2.5 text-sm font-medium !text-site-muted !no-underline transition visited:!text-site-muted hover:!no-underline hover:bg-[#fff3e6] hover:!text-site-accent-dark"
+                      >
+                        <Icon className="h-4 w-4 opacity-60" />
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+
+            <li className="border-b border-site-accent-dark/10">
+              <Link
+                to="/astrologer"
+                onClick={closeMobile}
+                className={mobileNavItemClass}
+              >
+                Astrologers
+              </Link>
+            </li>
+
+            <li className="border-b border-site-accent-dark/10">
+              <button
+                type="button"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
+                onClick={() => setMobileToolsOpen((open) => !open)}
+                aria-expanded={mobileToolsOpen}
+              >
+                Free Tools
+                <ChevronDown className={`h-4 w-4 text-site-accent-dark transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileToolsOpen && (
+                <ul className="m-0 list-none space-y-1 border-t border-site-accent-dark/10 bg-[#fffaf4] px-3 py-2">
+                  {[
+                    { label: 'All Free Tools', to: '/free-tools' },
+                    { label: 'Numerology', to: '/numerology' },
+                    { label: 'Tarot Reading', to: '/tarot' },
+                    { label: 'Love Calculator', to: '/love' },
+                  ].map((item) => (
+                    <li key={item.to}>
+                      <Link
+                        to={item.to}
+                        onClick={closeMobile}
+                        className="block rounded-lg border border-site-accent-dark/10 bg-white px-3 py-2.5 text-sm font-medium !text-site-muted !no-underline transition visited:!text-site-muted hover:!no-underline hover:bg-[#fff3e6] hover:!text-site-accent-dark"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+
+            {/* Webinar — mobile only */}
+            <li className="border-b border-site-accent-dark/10">
+              <Link
+                to="/webinar"
+                onClick={closeMobile}
+                className="flex items-center gap-2.5 px-4 py-3.5 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text no-underline transition hover:text-site-accent-dark"
+              >
+                <Radio className="h-3.5 w-3.5 shrink-0 text-site-accent" />
+                Live Webinar
+                {/* <span className="ml-auto rounded-full bg-site-primary px-2 py-0.5 text-[0.55rem] font-extrabold normal-case tracking-wide text-white">
+                  ₹99
+                </span> */}
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobile();
+                  setFreeWebinarOpen(true);
+                }}
+                className="block w-full border-0 border-t border-site-accent-dark/8 bg-[#fffaf4] px-4 py-3 text-left font-body text-xs leading-snug text-site-muted transition hover:bg-[#fff3e6]"
+              >
+                Interested in a{' '}
+                <span className="font-bold text-site-accent-dark">free webinar</span>?{' '}
+                <span className="font-semibold text-site-accent underline-offset-2 hover:underline">Click here</span>
+              </button>
+            </li>
+
+            {!authState.isStudent && (
+              <>
+                <li className="border-b border-site-accent-dark/10">
+                  <Link
+                    to="/blog"
+                    onClick={closeMobile}
+                    className={mobileNavItemClass}
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li className="border-b border-site-accent-dark/10">
+                  <Link
+                    to="/careers"
+                    onClick={closeMobile}
+                    className={`gap-2 ${mobileNavItemClass}`}
+                  >
+                    Careers
+                    <span className="rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-bold normal-case tracking-normal text-white">
+                      We&apos;re hiring
+                    </span>
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+
+          <div className="grid gap-2.5 p-4">
+            {authState.isAdmin && (
+              <Link
+                to="/admin"
+                onClick={closeMobile}
+                className="flex items-center justify-center gap-2 rounded-xl border border-site-accent-dark/15 bg-[#fff8ef] px-4 py-3 text-xs font-bold uppercase tracking-wide !text-site-text !no-underline hover:!no-underline"
+              >
+                <Shield className="h-4 w-4" />
+                Admin Dashboard
+              </Link>
+            )}
+            {authState.isStudent ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={closeMobile}
+                  className="flex items-center justify-center gap-2 rounded-xl border-2 border-site-accent-dark px-4 py-3 text-xs font-bold uppercase tracking-wide !text-site-accent-dark !no-underline hover:!no-underline"
+                >
+                  <GraduationCap className="h-4 w-4" />
+                  Student Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeMobile();
+                    onStudentLogout();
+                  }}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-site-accent-dark/15 bg-[#fff8ef] px-4 py-3 text-xs font-bold uppercase tracking-wide !text-site-text !no-underline"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </>
+            ) : !isLoginPage ? (
+              <Link
+                to="/login"
+                onClick={closeMobile}
+                className="flex items-center justify-center gap-2 rounded-xl border-2 border-site-accent-dark px-4 py-3 text-xs font-bold uppercase tracking-wide !text-site-accent-dark !no-underline hover:!no-underline"
+              >
+                <User className="h-4 w-4" />
+                Student Login
+              </Link>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                closeMobile();
+                onBookConsultation();
+              }}
+              className={`${SITE_BTN_NAV} flex w-full items-center justify-center gap-2 !no-underline`}
+            >
+              <CalendarCheck className="h-4 w-4" />
+              Book Consultation
+            </button>
+            {authState.isAdmin && (
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobile();
+                  onAdminLogout();
+                }}
+                className="flex items-center justify-center gap-2 rounded-xl border border-site-accent-dark/15 bg-[#fff8ef] px-4 py-3 text-xs font-bold uppercase tracking-wide text-site-text"
+              >
+                <LogOut className="h-4 w-4" />
+                Admin Logout
+              </button>
+            )}
+          </div>
+        </nav>
+      </aside>
+
+      <FreeWebinarInterestModal
+        open={freeWebinarOpen}
+        onClose={() => setFreeWebinarOpen(false)}
+        source="navbar"
+      />
+    </div>
+  );
+}

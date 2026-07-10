@@ -1,0 +1,131 @@
+import { useState } from 'react';
+import { Search, ChevronDown, ChevronUp } from 'lucide-react';
+import CategoryChip from './CategoryChip';
+import { FILTER_BAR, PAGE_WRAP, SELECT } from '../consultation/tokens';
+
+const SCROLL_HIDE = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
+
+export const COURSE_SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest first' },
+  { value: 'oldest', label: 'Oldest first' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+];
+
+export default function CourseFilterBar({
+  loading,
+  resultCount,
+  resultLabel,
+  searchTerm,
+  onSearchChange,
+  searchPlaceholder,
+  categoryFilters,
+  selectedCategory,
+  onSelectCategory,
+  sortValue,
+  onSortChange,
+  sortOptions = COURSE_SORT_OPTIONS,
+}) {
+  const [catOpen, setCatOpen] = useState(false);
+  const hasActiveCategory = selectedCategory && selectedCategory !== 'All';
+
+  return (
+    <section aria-label="Search and filters" className={FILTER_BAR}>
+      <div className={PAGE_WRAP}>
+        <div className="rounded-2xl border border-site-accent-dark/10 bg-white px-2.5 py-2 shadow-sm sm:px-4 sm:py-3">
+
+          {/* ── Top row: Search gets its own full-width line on mobile; Results + Sort + Category share the line below.
+                On sm+ everything collapses back onto a single row: Results (left) ... Search Sort Category (right). ── */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 sm:flex-nowrap sm:gap-x-3">
+
+            {/* Search */}
+            <div className="relative order-1 w-full sm:order-2 sm:ml-auto sm:w-44 sm:flex-none md:w-52 lg:w-60">
+              <Search
+                size={15}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:left-3.5"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder={searchPlaceholder}
+                className="h-9 w-full !rounded-full border border-site-accent-dark/15 bg-site-bg pl-9 pr-3 font-body text-xs font-medium leading-none text-site-primary antialiased outline-none transition placeholder:text-xs placeholder:font-normal placeholder:text-site-soft focus:border-site-accent focus:ring-2 focus:ring-site-accent/15 sm:pl-10 sm:text-sm sm:placeholder:text-sm"
+              />
+            </div>
+
+            {/* Results count */}
+            <p className="order-2 shrink-0 whitespace-nowrap font-body text-xs font-medium leading-none text-site-muted antialiased sm:order-1 sm:text-sm">
+              {loading ? 'Loading…' : (
+                <>
+                  <span className="md:hidden">
+                    Results{' '}
+                    <strong className="font-bold tabular-nums text-site-primary">{resultCount}</strong>
+                  </span>
+                  <span className="hidden md:inline">
+                    <strong className="font-bold tabular-nums text-site-primary">{resultCount}</strong>
+                    {' '}{resultLabel}
+                  </span>
+                </>
+              )}
+            </p>
+
+            {/* Sort + category toggle, grouped */}
+            <div className="order-3 ml-auto flex shrink-0 items-center gap-2 sm:ml-0">
+              {onSortChange ? (
+                <div className="relative shrink-0">
+                  <select
+                    value={sortValue}
+                    onChange={(e) => onSortChange(e.target.value)}
+                    className={SELECT}
+                    aria-label="Sort courses"
+                  >
+                    {sortOptions.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={10} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-site-accent-dark/50 sm:right-2.5 sm:size-[11px]" aria-hidden />
+                </div>
+              ) : null}
+
+              {/* Category toggle — mobile only */}
+              {categoryFilters.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setCatOpen(v => !v)}
+                  className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 font-body text-xs font-bold leading-none transition sm:hidden ${
+                    hasActiveCategory
+                      ? 'border-site-accent-dark bg-site-accent-dark text-white'
+                      : 'border-site-accent-dark/15 bg-site-bg text-site-accent-dark'
+                  }`}
+                >
+                  {catOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+                  Category
+                  {hasActiveCategory && (
+                    <span className="ml-0.5 rounded bg-white/25 px-1 py-0.5 text-[0.5rem] font-bold leading-none">1</span>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* ── Category chips — always on sm+, toggle on mobile ── */}
+          {categoryFilters.length > 1 && (
+            <div className={`${catOpen ? 'flex' : 'hidden'} sm:flex mt-2 w-full flex-wrap items-center gap-1 sm:min-w-0 sm:flex-nowrap sm:justify-end sm:gap-2 sm:overflow-x-auto ${SCROLL_HIDE}`}>
+              {categoryFilters.map(({ label, count }) => (
+                <CategoryChip
+                  key={label}
+                  label={label}
+                  count={count}
+                  active={selectedCategory === label}
+                  onClick={() => onSelectCategory(label)}
+                />
+              ))}
+            </div>
+          )}
+
+        </div>
+      </div>
+    </section>
+  );
+}
