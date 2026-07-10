@@ -53,7 +53,7 @@ export default function CourseListingCard({ course }) {
           <img
             src={course.image}
             alt=""
-            className="block h-full w-full object-cover transition duration-300 group-hover:scale-[1.05]"
+            className="block h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.05]"
             loading="lazy"
             onError={() => setImgError(true)}
           />

@@ -98,7 +98,7 @@ function CourseCard({ course }) {
         <img
           src={course.image}
           alt=""
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
+          className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.04]"
           loading="lazy"
         />
 

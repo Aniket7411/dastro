@@ -13,12 +13,14 @@ const tools = [
     desc: 'Generate your Vedic birth chart with detailed planetary positions.',
     Icon: Star,
     badge: 'Popular',
+    image: '/images/kundali_birth_chart.jpg',
   },
   {
     id: 'horoscope',
     name: 'Daily Horoscope',
     desc: 'Read your personalised daily cosmic predictions by sun sign.',
     Icon: Sun,
+    image: '/images/daily_horoscope.jpg',
   },
   {
     id: 'love',
@@ -27,6 +29,7 @@ const tools = [
     Icon: Heart,
     badge: 'Trending',
     link: '/love',
+    image: '/images/love_compatibility.jpg',
   },
   {
     id: 'numerology',
@@ -34,6 +37,7 @@ const tools = [
     desc: 'Discover your radical, destiny, and name numbers.',
     Icon: Hash,
     link: '/numerology',
+    image: '/images/numerology.jpg',
   },
   {
     id: 'tarot',
@@ -41,18 +45,21 @@ const tools = [
     desc: 'Draw a Major Arcana card for ancient wisdom and guidance.',
     Icon: Sparkles,
     link: '/tarot',
+    image: '/images/tarot.jpg',
   },
   {
     id: 'moon',
     name: 'Moon Sign Calculator',
     desc: 'Find your Vedic moon sign and emotional blueprint.',
     Icon: Moon,
+    image: '/images/moon_sign.jpg',
   },
   {
     id: 'zodiac',
     name: 'Sun Sign Calculator',
     desc: 'Know your zodiac sun sign from your exact date of birth.',
     Icon: Compass,
+    image: '/images/sun_sign.jpg',
   },
 ];
 
@@ -67,9 +74,15 @@ function ToolCard({ tool, onActivate }) {
         </span>
       )}
 
-      <div className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[rgba(139,74,30,0.1)] bg-[#fff8ef] text-[#9c5a1e] transition-colors duration-200 group-hover:bg-[#9c5a1e] group-hover:text-white">
-        <Icon className="h-4 w-4" strokeWidth={2} />
-      </div>
+      {tool.image ? (
+        <div className="mb-3 h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-[rgba(139,74,30,0.12)] bg-white shadow-sm transition-all duration-200">
+          <img src={tool.image} alt={tool.name} className="h-full w-full object-cover" />
+        </div>
+      ) : (
+        <div className="mb-3 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[rgba(139,74,30,0.1)] bg-[#fff8ef] text-[#9c5a1e] transition-colors duration-200 group-hover:bg-[#9c5a1e] group-hover:text-white">
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </div>
+      )}
 
       <h3 className="mb-1.5 text-[0.9375rem] font-extrabold leading-snug text-[#3d1a06]">
         {tool.name}

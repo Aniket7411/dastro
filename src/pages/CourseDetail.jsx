@@ -622,7 +622,7 @@ function CourseDetail() {
                 {course.image ? (
                   <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm lg:hidden">
                     <div className="relative aspect-video w-full overflow-hidden bg-site-sand">
-                      <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                      <img src={course.image} alt={course.title} className="block h-full w-full object-cover object-top" />
                       {isLiveCourse ? (
                         <CourseLiveBadge />
                       ) : (
@@ -829,7 +829,7 @@ function CourseDetail() {
             <aside className="hidden lg:sticky lg:top-[8.75rem] lg:block lg:self-start">
               <div className="overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
                 <div className="relative aspect-video overflow-hidden bg-site-sand">
-                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
+                  <img src={course.image} alt={course.title} className="block h-full w-full object-cover object-top" />
                   {isLiveCourse ? (
                     <CourseLiveBadge />
                   ) : (
