@@ -68,7 +68,7 @@ function ToolCard({ tool, onActivate }) {
 
   const inner = (
     <div className="group relative flex h-full flex-row items-center rounded-2xl border border-[rgba(139,74,30,0.11)] bg-white p-4 shadow-[0_2px_12px_rgba(42,15,2,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[rgba(139,74,30,0.3)] hover:shadow-[0_12px_30px_rgba(139,74,30,0.12)] sm:p-5 gap-4 sm:gap-5 overflow-hidden">
-      
+
       {/* Left Side: Image/Icon */}
       <div className="flex shrink-0 items-center justify-center">
         {tool.image ? (
@@ -101,10 +101,16 @@ function ToolCard({ tool, onActivate }) {
           {tool.desc}
         </p>
 
-        <span className="inline-flex items-center gap-1.5 w-max rounded-lg border-[1.5px] border-[#9c5a1e]/40 bg-[#9c5a1e]/5 px-4 py-1.5 text-[0.7rem] font-extrabold uppercase tracking-wide text-[#8a4a16] transition-all duration-300 group-hover:border-[#9c5a1e] group-hover:bg-[#9c5a1e] group-hover:text-white group-hover:shadow-md">
-          Access Tool
-          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
-        </span>
+        <div className="relative mt-auto w-max group/btn cursor-pointer">
+          {/* Magical glowing aura */}
+          <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-[#9c5a1e] via-[#e8b368] to-[#9c5a1e] opacity-50 blur-[2px] transition-all duration-500 group-hover/btn:-inset-1 group-hover/btn:opacity-100 group-hover/btn:blur-md"></div>
+          
+          {/* Button Face */}
+          <span className="relative flex w-full items-center justify-center gap-1.5 rounded-xl bg-white px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wide text-[#9c5a1e] shadow-[inset_0_0_0_1px_rgba(156,90,30,0.2)] transition-all duration-300 group-hover/btn:bg-[#fffdfa] group-hover/btn:text-[#7a4211]">
+            Access Tool
+            <ArrowRight className="h-4 w-4 text-[#d99648] transition-transform duration-300 group-hover/btn:translate-x-1.5 group-hover/btn:text-[#9c5a1e]" strokeWidth={3} />
+          </span>
+        </div>
       </div>
     </div>
   );
