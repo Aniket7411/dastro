@@ -2856,6 +2856,8 @@ function Home() {
           margin: 0;
           pointer-events: none;
           filter: drop-shadow(0 10px 28px rgba(42, 15, 2, 0.12));
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 100%);
         }
 
         @media (min-width: 992px) {
