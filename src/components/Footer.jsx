@@ -409,8 +409,8 @@ function Footer() {
           <div className="md:col-span-3 lg:col-span-1">
             <Link to="/" className="mb-5 inline-flex items-center no-underline">
               <img
-                className="block h-[clamp(4.5rem,7vw,6rem)] max-w-[min(16rem,72vw)] object-contain"
-                src={`${SITE_LOGO}?v=3`}
+                className="block h-[clamp(5rem,8vw,6.5rem)] w-[clamp(5rem,8vw,6.5rem)] object-contain"
+                src={SITE_LOGO}
                 alt={SITE_LOGO_ALT}
               />
             </Link>
@@ -461,7 +461,7 @@ function Footer() {
       {/* Mobile */}
       <div className="flex flex-col gap-6 px-5 py-8 md:hidden">
         <Link to="/" className="inline-flex items-center no-underline">
-          <img className="block h-[4.5rem] max-w-[12rem] object-contain" src={`${SITE_LOGO}?v=3`} alt={SITE_LOGO_ALT} />
+          <img className="block h-[5rem] w-[5rem] object-contain" src={SITE_LOGO} alt={SITE_LOGO_ALT} />
         </Link>
 
         <p className={`m-0 ${TW_BODY_SM}`}>

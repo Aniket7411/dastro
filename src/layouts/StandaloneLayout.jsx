@@ -138,8 +138,8 @@ function StandaloneLayout() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link to="/" className={LOGO_WRAP}>
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-[#8b4a1e]/20 sm:h-10 sm:w-10">
-              <img src={`${SITE_LOGO}?v=3`} alt={SITE_LOGO_ALT} className="h-full w-full object-contain p-0.5" />
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-[#8b4a1e]/20 sm:h-11 sm:w-11">
+              <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-full w-full object-contain p-0.5" />
             </span>
             <span className="min-w-0">
               <span className="block truncate text-[10px] font-black uppercase tracking-[0.24em] text-[#c8832a]">

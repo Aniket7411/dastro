@@ -131,7 +131,7 @@ export default function CounsellorLogin() {
             className="mx-auto mb-4 block w-fit transition-opacity hover:opacity-90"
             aria-label={`${SITE_LOGO_ALT} home`}
           >
-            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-12 w-12 rounded-xl object-contain" />
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-14 w-14 rounded-xl object-contain" />
           </Link>
           <h1 className="font-body text-xl font-extrabold text-site-primary sm:text-2xl">{title}</h1>
           <p className="mt-2 font-body text-sm text-site-muted">{subtitle}</p>

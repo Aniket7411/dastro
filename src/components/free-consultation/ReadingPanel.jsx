@@ -66,6 +66,14 @@ export default function ReadingPanel({ reading, usedFallback, lead }) {
   if (!reading) return null;
 
   const rashiHi = reading.rashiHi || getRashiHi(reading.sunSign);
+  const gender = lead?.gender || '';
+  const natureTitle = gender === 'Female' ? 'Her nature' : gender === 'Male' ? 'His nature' : 'Your nature';
+  const phaseTitle = gender === 'Female' ? 'Her current phase' : gender === 'Male' ? 'His current phase' : 'Your current phase';
+  const chartTitle = gender === 'Female'
+    ? 'What her chart will reveal'
+    : gender === 'Male'
+      ? 'What his chart will reveal'
+      : 'What your chart will reveal';
 
   const nature = pickText(reading, 'natureEn', 'natureHi', 'nature', lang);
   const phase = pickText(reading, 'currentPhaseEn', 'currentPhaseHi', 'currentPhase', lang);
@@ -122,14 +130,11 @@ export default function ReadingPanel({ reading, usedFallback, lead }) {
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className={`${DESK_INNER} flex flex-wrap items-center gap-2 px-3 py-2`}>
+          <span className="font-body text-[10px] font-bold uppercase tracking-wide text-[#444]">Lucky colour</span>
           <span className="font-body text-xs font-bold text-[#000]">
-            Lucky <span className="text-[#000]">{reading.luckyNumber}</span>
-          </span>
-          <span className="text-[#ccc]">|</span>
-          <span className="font-body text-xs text-[#000]">
-            {reading.luckyColour}
+            {reading.luckyColour || '—'}
             {reading.luckyColourHi ? (
-              <span className="ml-1.5 font-['IBM_Plex_Sans_Devanagari',sans-serif] text-[#444]">
+              <span className="ml-1.5 font-['IBM_Plex_Sans_Devanagari',sans-serif] font-semibold text-[#444]">
                 ({reading.luckyColourHi})
               </span>
             ) : null}
@@ -156,10 +161,10 @@ export default function ReadingPanel({ reading, usedFallback, lead }) {
       </div>
 
       <div className="grid gap-2 sm:gap-2.5">
-        <BilingualBlock titleEn="Your nature" titleHi="आपका स्वभाव" en={natureEn} hi={natureHi} lang={lang} />
-        <BilingualBlock titleEn="Your current phase" titleHi="आपका वर्तमान चरण" en={phaseEn} hi={phaseHi} lang={lang} />
+        <BilingualBlock titleEn={natureTitle} titleHi="आपका स्वभाव" en={natureEn} hi={natureHi} lang={lang} />
+        <BilingualBlock titleEn={phaseTitle} titleHi="आपका वर्तमान चरण" en={phaseEn} hi={phaseHi} lang={lang} />
         <BilingualBlock
-          titleEn="What your full chart will reveal"
+          titleEn={chartTitle}
           titleHi="पूरी कुंडली क्या बताएगी"
           en={revealEn}
           hi={revealHi}

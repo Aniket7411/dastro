@@ -1,5 +1,5 @@
-/** Public site logo — served from /public/dsnewlogo.png */
-export const SITE_LOGO = '/dsnewlogo.png'; // Transparent variation
+/** Primary site logo — served from /public/updatedlogo.svg */
+export const SITE_LOGO = '/updatedlogo.svg';
 export const SITE_LOGO_WHITE = '/logo-white.png';
 export const SITE_LOGO_BLACK = '/logo-black.png';
 export const SITE_LOGO_TRANSPARENT = '/logo-transparent.png';

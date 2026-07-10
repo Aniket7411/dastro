@@ -139,10 +139,10 @@ export function buildReadingReportHtml(
     : '';
 
   const luckyLine = lang === 'hi'
-    ? `भाग्यशाली अंक: ${reading.luckyNumber || '—'}  |  रंग: ${blocks.hi?.luckyColour || reading.luckyColourHi || '—'}`
+    ? `रंग: ${blocks.hi?.luckyColour || reading.luckyColourHi || reading.luckyColour || '—'}`
     : lang === 'en'
-      ? `Lucky Number: ${reading.luckyNumber || '—'}  |  Colour: ${blocks.en?.luckyColour || '—'}`
-      : `Lucky Number: ${reading.luckyNumber || '—'} (${reading.luckyColour || '—'})  |  रंग: ${reading.luckyColourHi || '—'}`;
+      ? `Lucky Colour: ${blocks.en?.luckyColour || reading.luckyColour || '—'}`
+      : `Lucky Colour: ${reading.luckyColour || '—'}  |  रंग: ${reading.luckyColourHi || '—'}`;
 
   let bodySections = '';
 
@@ -237,6 +237,8 @@ export function buildReadingReportHtml(
         <table style="border-collapse:collapse;width:100%;">
           ${metaRow('Mobile', lead.mobile || '—', compact)}
           ${metaRow('Date of birth', lead.dob || '', compact)}
+          ${metaRow('Time of birth', lead.tobUnknown ? 'Unknown' : (lead.tob || '—'), compact)}
+          ${metaRow('Place of birth', lead.pob || '', compact)}
           ${metaRow('Age', formatLeadAge(lead), compact)}
           ${metaRow('Gender', lead.gender || '', compact)}
           ${metaRow('Reason for call', lead.reasonForCalling || '', compact)}

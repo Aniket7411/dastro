@@ -260,9 +260,9 @@ function AdminDashboard() {
             aria-label="Go to website home"
           >
             <img
-              src={`${SITE_LOGO}?v=3`}
+              src={SITE_LOGO}
               alt={SITE_LOGO_ALT}
-              className="h-8 w-auto max-w-[120px] shrink-0 rounded-md object-contain sm:h-9"
+              className="h-9 w-9 shrink-0 rounded-md object-contain sm:h-10 sm:w-10"
             />
             <div className="sb-logo-text">
               <span className="sb-logo-badge">Admin Console</span>

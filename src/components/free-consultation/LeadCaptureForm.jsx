@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Loader2, Phone, RotateCcw } from 'lucide-react';
+import toast from '@/utils/toast';
 import { getAgeFromDob } from '../../utils/ageFromDob';
+import { getFreeConsultationLeadValidationError } from '../../utils/validation';
 import FormField from './FormField';
 import {
   BTN_PRIMARY,
@@ -21,7 +23,6 @@ const INITIAL = {
   gender: 'Male',
   dob: '',
   tob: '',
-  tobUnknown: false,
   pob: '',
   maritalStatus: 'Single',
   reasonForCalling: '',
@@ -45,6 +46,16 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
 
   const ageInfo = useMemo(() => getAgeFromDob(form.dob), [form.dob]);
 
+  const validationError = useMemo(
+    () => getFreeConsultationLeadValidationError({
+      ...form,
+      ageValid: ageInfo.valid,
+    }),
+    [form, ageInfo.valid],
+  );
+
+  const canSubmit = !validationError && form.consent && !submitting;
+
   const set = (field) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setForm((prev) => {
@@ -61,7 +72,14 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.consent || !ageInfo.valid) return;
+    if (!form.consent) {
+      toast.error('Caller consent is required before generating a reading.');
+      return;
+    }
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
 
     onSubmit({
       ...form,
@@ -70,7 +88,8 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
       age: ageInfo.years,
       ageMonths: ageInfo.years === 0 ? ageInfo.months : undefined,
       ageDisplay: ageInfo.display,
-      tob: form.tobUnknown ? '' : form.tob,
+      tob: form.tob,
+      tobUnknown: false,
     });
   };
 
@@ -101,6 +120,9 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2.5 lg:grid-cols-3 lg:gap-3">
+        <p className={`font-body text-[10px] font-bold uppercase tracking-wide sm:col-span-2 lg:col-span-3 ${DESK_MUTED}`}>
+          Birth details for reading
+        </p>
         <FormField
           compact
           label="Full name"
@@ -109,6 +131,57 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
           required
           className="sm:col-span-2 lg:col-span-3"
         />
+        <FormField
+          compact
+          label="Date of birth"
+          type="date"
+          value={form.dob}
+          onChange={set('dob')}
+          required
+          min={minDob}
+          max={maxDob}
+        />
+        <FormField
+          compact
+          label="Gender"
+          as="select"
+          value={form.gender}
+          onChange={set('gender')}
+          options={GENDERS}
+        />
+        <FormField
+          compact
+          label="Time of birth"
+          type="time"
+          value={form.tob}
+          onChange={set('tob')}
+          required
+        />
+        <FormField
+          compact
+          label="Place of birth"
+          value={form.pob}
+          onChange={set('pob')}
+          required
+          placeholder="City, e.g. Lucknow"
+          className="sm:col-span-2 lg:col-span-2"
+        />
+        <div>
+          <FormField
+            compact
+            label="Age"
+            as="display"
+            value={ageInfo.valid ? ageInfo.display : ''}
+            placeholder={form.dob ? 'Invalid DOB' : 'From DOB'}
+          />
+          <p className={`mt-0.5 font-body text-[10px] ${DESK_MUTED}`}>
+            Auto from DOB · babies show in months
+          </p>
+        </div>
+
+        <p className={`mt-1 font-body text-[10px] font-bold uppercase tracking-wide sm:col-span-2 lg:col-span-3 ${DESK_MUTED}`}>
+          Contact &amp; lead details
+        </p>
         <FormField
           compact
           label="Mobile number"
@@ -126,6 +199,7 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
             value={form.sameWhatsappAsMobile ? form.mobile : form.whatsapp}
             onChange={set('whatsapp')}
             required
+            readOnly={form.sameWhatsappAsMobile}
             inputMode="numeric"
             maxLength={10}
             placeholder="10-digit"
@@ -142,80 +216,19 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
         </div>
         <FormField
           compact
-          label="Date of birth"
-          type="date"
-          value={form.dob}
-          onChange={set('dob')}
-          required
-          min={minDob}
-          max={maxDob}
-        />
-        <div>
-          <FormField
-            compact
-            label="Age"
-            as="display"
-            value={ageInfo.valid ? ageInfo.display : ''}
-            placeholder={form.dob ? 'Invalid DOB' : 'From DOB'}
-          />
-          <p className={`mt-0.5 font-body text-[10px] ${DESK_MUTED}`}>
-            Auto from DOB · babies show in months
-          </p>
-        </div>
-        <FormField
-          compact
-          label="Gender"
-          as="select"
-          value={form.gender}
-          onChange={set('gender')}
-          required
-          options={GENDERS}
-        />
-        <FormField
-          compact
           label="Marital status"
           as="select"
           value={form.maritalStatus}
           onChange={set('maritalStatus')}
-          required
           options={MARITAL}
-        />
-        <div>
-          <FormField
-            compact
-            label="Time of birth"
-            type="time"
-            value={form.tob}
-            onChange={set('tob')}
-            className={form.tobUnknown ? 'opacity-50' : ''}
-          />
-          <label className={`mt-0.5 flex cursor-pointer items-center gap-1.5 font-body text-[10px] sm:text-[11px] ${DESK_MUTED}`}>
-            <input
-              type="checkbox"
-              checked={form.tobUnknown}
-              onChange={set('tobUnknown')}
-              className="h-3.5 w-3.5 rounded border-[#000] text-[#000]"
-            />
-            Birth time unknown
-          </label>
-        </div>
-        <FormField
-          compact
-          label="Place of birth"
-          value={form.pob}
-          onChange={set('pob')}
-          required
-          placeholder="City, state"
-          className="sm:col-span-2 lg:col-span-1"
         />
         <FormField
           compact
           label="Reason for calling"
           value={form.reasonForCalling}
           onChange={set('reasonForCalling')}
-          required
           placeholder="Career, marriage, money…"
-          className="sm:col-span-2 lg:col-span-3"
+          className="sm:col-span-2 lg:col-span-2"
         />
       </div>
 
@@ -244,7 +257,7 @@ export default function LeadCaptureForm({ onSubmit, submitting }) {
       <div className="flex justify-end pt-0.5">
         <button
           type="submit"
-          disabled={submitting || !form.consent || dobInvalid}
+          disabled={!canSubmit}
           className={`${BTN_PRIMARY} !min-h-9 !w-full !text-xs sm:!w-auto sm:!text-sm`}
         >
           {submitting ? (

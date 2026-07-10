@@ -25,6 +25,29 @@ export const getPasswordValidationError = (password, confirmPassword) => {
 
 export const isValidName = (value = '') => String(value).trim().length >= 2;
 
+export const isValidPlaceOfBirth = (value = '') => String(value).trim().length >= 2;
+
+export function getFreeConsultationLeadValidationError({
+  name,
+  dob,
+  tob,
+  pob,
+  mobile,
+  whatsapp,
+  sameWhatsappAsMobile,
+  ageValid = true,
+} = {}) {
+  if (!isValidName(name)) return 'Please enter the caller\'s full name.';
+  if (!String(dob || '').trim()) return 'Please enter date of birth.';
+  if (!ageValid) return 'Please enter a valid date of birth.';
+  if (!String(tob || '').trim()) return 'Please enter time of birth.';
+  if (!isValidPlaceOfBirth(pob)) return 'Please enter place of birth.';
+  if (!isValidIndianMobile(mobile)) return 'Please enter a valid 10-digit mobile number.';
+  const whatsappValue = sameWhatsappAsMobile ? mobile : whatsapp;
+  if (!isValidIndianMobile(whatsappValue)) return 'Please enter a valid 10-digit WhatsApp number.';
+  return '';
+}
+
 export const getContactValidationError = ({ name, email, phone, mobile } = {}) => {
   if (name !== undefined && !isValidName(name)) return 'Please enter your full name.';
   if (email !== undefined && !isValidEmail(email)) return 'Please enter a valid email address.';

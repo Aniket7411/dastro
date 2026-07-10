@@ -20,7 +20,7 @@ export default function CounsellorShell({
       <header className="shrink-0 border-b border-[#000] bg-[#fff]">
         <div className={`${DESK_WRAP} flex items-center justify-between gap-2 !py-2 sm:!py-2.5`}>
           <Link to="/counsellor/desk" className="flex min-w-0 items-center gap-2 no-underline">
-            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-8 w-8 rounded-md object-contain sm:h-9 sm:w-9" />
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-9 w-9 rounded-md object-contain sm:h-10 sm:w-10" />
             <div className="min-w-0 leading-tight">
               <p className="truncate font-body text-[9px] font-bold uppercase tracking-[0.12em] text-[#444] sm:text-[10px]">
                 Free consultation desk

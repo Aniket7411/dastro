@@ -9,11 +9,11 @@ export default function LoginBrandMark({ badge, className = '' }) {
       style={{ textDecoration: 'none' }}
       aria-label={`${SITE_LOGO_ALT} home`}
     >
-      <span className="flex h-9 w-[7.25rem] shrink-0 items-center justify-start sm:h-10 sm:w-[8rem]">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center sm:h-11 sm:w-11">
         <img
-          src={`${SITE_LOGO}?v=3`}
+          src={SITE_LOGO}
           alt={SITE_LOGO_ALT}
-          className="!block !h-full !w-full !max-h-full !max-w-full object-contain object-left"
+          className="!block !h-full !w-full !max-h-full !max-w-full object-contain"
         />
       </span>
       {badge ? (
