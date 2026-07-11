@@ -8,7 +8,7 @@ import CourseEmptyState from '../components/courses/CourseEmptyState';
 import { useCourses, useCourseCategories } from '../hooks/useCourses';
 import { PAGE_WRAP, COURSE_GRID, COURSE_GRID_ITEM } from '../components/consultation/tokens';
 import { SECTION_PY } from '../utils/siteTokens';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 
 const PAGE_META = {
   live: {

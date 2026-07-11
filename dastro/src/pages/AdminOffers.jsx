@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, Edit3, ImagePlus, Loader2 } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { uploadImage } from '../utils/uploadMedia';
 import {
   OFFER_TYPES,

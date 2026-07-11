@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import AdminContentManager from '../components/AdminContentManager';
 

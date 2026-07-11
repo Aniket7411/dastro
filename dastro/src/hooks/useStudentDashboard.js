@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import { getContactValidationError, getPasswordValidationError, normalizeIndianMobile } from '../utils/validation';
 

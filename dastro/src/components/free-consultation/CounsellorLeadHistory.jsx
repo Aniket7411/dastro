@@ -8,7 +8,7 @@ import {
   RefreshCw,
   Search,
 } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import { formatLeadAge } from '../../utils/ageFromDob';
 import ReadingPanel from './ReadingPanel';
 import { counsellorListLeads } from '../../utils/freeConsultationApi';

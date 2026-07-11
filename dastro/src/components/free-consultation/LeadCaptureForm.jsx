@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Loader2, Phone, RotateCcw } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import { getAgeFromDob } from '../../utils/ageFromDob';
 import { getFreeConsultationLeadValidationError } from '../../utils/validation';
 import FormField from './FormField';

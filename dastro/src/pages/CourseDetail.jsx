@@ -13,7 +13,7 @@ import CourseListingCard from '../components/CourseListingCard';
 import CourseCardDurationBar from '../components/courses/CourseCardDurationBar';
 import CourseLiveBadge from '../components/courses/CourseLiveBadge';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import { fetchCourseBySlugOrId, mapCourseFromApi } from '../hooks/useCourses';
 import PageLoader, { OverlayLoader } from '../components/PageLoader';

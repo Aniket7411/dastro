@@ -13,7 +13,7 @@ import {
   Check,
 } from 'lucide-react';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 

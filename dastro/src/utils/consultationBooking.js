@@ -1,5 +1,5 @@
 import API_BASE from './api';
-import toast from '@/utils/toast';
+import toast from './toast';
 import { loadRazorpayScript, reportPaymentFailure, buildPaymentSuccessPath } from './paymentUtils';
 import { SITE_LOGO } from './brandAssets';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';

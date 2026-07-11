@@ -1,5 +1,5 @@
 import API_BASE from './api';
-import toast from '@/utils/toast';
+import toast from './toast';
 import { SITE_LOGO } from './brandAssets';
 
 export const loadRazorpayScript = () => {

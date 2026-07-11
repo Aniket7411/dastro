@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import {
   Briefcase, Users, Download, FileText, MapPin,
   Trash2, Edit3, Plus, CheckCircle, Clock,

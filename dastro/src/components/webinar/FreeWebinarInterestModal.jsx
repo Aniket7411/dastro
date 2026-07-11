@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Gift, X } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import API_BASE from '@/utils/api';
 import { getContactValidationError, normalizeIndianMobile } from '@/utils/validation';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 
 function slugifyPreview(name = '') {
   return String(name)

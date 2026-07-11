@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, X, Calendar, User, ArrowRight } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import {
   SITE_CONTAINER,
