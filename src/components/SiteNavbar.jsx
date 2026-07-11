@@ -383,13 +383,13 @@ export default function SiteNavbar({
           scrolled ? 'shadow-[0_4px_20px_rgba(51,37,26,0.10)]' : 'shadow-[0_2px_8px_rgba(51,37,26,0.06)]'
         }`}
       >
-        <div className="mx-auto flex h-[4rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[4.25rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
+        <div className="mx-auto flex h-[4.5rem] w-full max-w-[90rem] items-center justify-between gap-3 px-4 sm:h-[5rem] sm:px-6 lg:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:items-center xl:justify-normal">
           {/* Logo */}
           <Link to="/" className="flex shrink-0 items-center justify-self-start no-underline z-20" aria-label={`${SITE_NAME} home`}>
             <img
               src={SITE_LOGO}
               alt={SITE_LOGO_ALT}
-              className="h-12 w-12 object-contain sm:h-[3.25rem] sm:w-[3.25rem] lg:h-14 lg:w-14"
+              className="h-14 w-14 object-contain sm:h-16 sm:w-16 lg:h-[4.5rem] lg:w-[4.5rem]"
               fetchPriority="high"
             />
           </Link>
@@ -437,7 +437,7 @@ export default function SiteNavbar({
       >
         <div className="flex items-center justify-between border-b border-site-accent-dark/15 px-4 py-3">
           <Link to="/" onClick={closeMobile} className="flex items-center gap-2 no-underline">
-            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-11 w-11 object-contain" />
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} className="h-12 w-12 object-contain" />
             <span className="font-heading text-sm font-bold text-site-accent-dark">{SITE_NAME}</span>
           </Link>
           <button

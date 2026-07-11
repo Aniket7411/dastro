@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { History, LogOut, Phone, UserRound } from 'lucide-react';
+import { History, Home, LogOut, Phone, UserRound } from 'lucide-react';
 import { SITE_LOGO, SITE_LOGO_ALT } from '../../utils/brandAssets';
 import { BTN_OUTLINE, DESK_SHELL, DESK_WRAP } from './tokens';
 
@@ -31,6 +31,13 @@ export default function CounsellorShell({
             </div>
           </Link>
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <Link
+              to="/"
+              className={`${BTN_OUTLINE} !min-h-8 !px-3 !py-1.5 !text-xs no-underline`}
+            >
+              <Home size={13} />
+              <span className="hidden sm:inline">Home</span>
+            </Link>
             {counsellorName ? (
               <span className="hidden max-w-[120px] items-center gap-1 truncate font-body text-[11px] font-semibold text-[#444] sm:inline-flex lg:max-w-[180px]">
                 <UserRound size={12} className="shrink-0" aria-hidden />
