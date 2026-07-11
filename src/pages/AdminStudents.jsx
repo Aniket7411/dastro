@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 
 function todayISODate() {

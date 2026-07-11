@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import {
   counsellorForgotPassword,
   counsellorLogin,

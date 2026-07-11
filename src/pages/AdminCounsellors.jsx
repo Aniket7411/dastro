@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Copy, Eye, EyeOff, Loader2, Mail, Pencil, Plus, RefreshCw, Trash2, UserX } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import {
   adminCreateCounsellor,

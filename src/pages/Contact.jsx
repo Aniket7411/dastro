@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import { useSettings } from '../context/SettingsContext';
 import SEO from '../components/SEO';
@@ -38,13 +38,13 @@ const contactChannels = [
     href: (value) => `mailto:${value}`,
     hint: 'We reply within 24 hours',
   },
-  {
-    icon: 'fa-map-marker-alt',
-    title: 'Visit Us',
-    valueKey: 'address',
-    href: null,
-    hint: 'In-person consultations by appointment',
-  },
+  // {
+  //   icon: 'fa-map-marker-alt',
+  //   title: 'Visit Us',
+  //   valueKey: 'address',
+  //   href: null,
+  //   hint: 'In-person consultations by appointment',
+  // },
 ];
 
 const supportHighlights = [
@@ -57,7 +57,7 @@ const grievanceDetails = [
   { label: 'Name', value: 'Ananya Singh' },
   { label: 'Email', value: 'help@dsastroinstitute.com', href: 'mailto:help@dsastroinstitute.com' },
   { label: 'Phone', value: CONTACT_PHONE_DISPLAY, href: `tel:${CONTACT_PHONE_DISPLAY.replace(/[\s-]/g, '')}` },
-  { label: 'Address', value: 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010' },
+  // { label: 'Address', value: 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010' },
   { label: 'Response time', value: 'Within 7 working days' },
 ];
 

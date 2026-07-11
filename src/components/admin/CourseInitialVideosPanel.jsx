@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { CheckCircle2, Film, Lock, PlayCircle, Trash2, Upload } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import { uploadVideo } from '../../utils/uploadMedia';
 import {
   btnSecondarySm,

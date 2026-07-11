@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import CourseEnrollModal from '../components/CourseEnrollModal';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 

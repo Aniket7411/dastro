@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Eye, FileSpreadsheet, RefreshCw, X } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { formatLeadAge } from '../utils/ageFromDob';
 import ReadingPanel from '../components/free-consultation/ReadingPanel';
 import ReadingReportActions from '../components/free-consultation/ReadingReportActions';

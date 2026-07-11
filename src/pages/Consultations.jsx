@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Ban, CalendarCheck, FlaskConical, Lock, Scale, SearchX, Sparkles } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import ConsultationModal from '../components/ConsultationModal';
 import { OverlayLoader } from '../components/PageLoader';
 import BookConsultationCTA from '../components/BookConsultationCTA';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { invalidateCoursesCache } from '../hooks/useCourses';
 import AdminCourseCategories from './AdminCourseCategories';
 import CourseInitialVideosPanel from '../components/admin/CourseInitialVideosPanel';

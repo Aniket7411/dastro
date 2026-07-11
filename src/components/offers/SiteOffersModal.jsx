@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Copy, Gift, MessageCircle, Tag, Sparkles } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import { BTN } from '../consultation/tokens';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import {

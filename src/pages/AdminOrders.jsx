@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { Receipt } from 'lucide-react';
 import API_BASE from '../utils/api';
 import { formatAdminCurrency, formatAdminDate } from '../utils/adminTableUtils';
