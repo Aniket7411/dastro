@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
+import { useNavigate } from 'react-router-dom';
 
 const ICONS = {
   planet: '🪐', stones: '💎', days: '📅', color: '🎨',
@@ -15,7 +16,8 @@ const Field = ({ label, children }) => (
 
 const inputCls = 'w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]';
 
-function NumerologyTool({ onBack }) {
+function NumerologyTool({ onBack, image = '/images/numerology.jpg' }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', dob: '' });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -47,26 +49,33 @@ function NumerologyTool({ onBack }) {
     <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row">
 
       {/* Left hero panel */}
-      <div className="shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 py-8 text-white sm:px-8 sm:py-10 lg:flex lg:w-[38%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
-        <div className="mx-auto w-full max-w-xs lg:max-w-none">
-          {onBack && (
-            <button
-              onClick={onBack}
-              className="mb-5 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20"
-            >
-              ← Back to Tools
-            </button>
-          )}
-          {!result ? (
-            <>
-              <div className="mb-3 text-2xl">🔢</div>
-              <h1 className="mb-3 font-serif text-2xl font-black leading-tight sm:text-3xl lg:text-[1.875rem]">
-                Numerology Calculator
-              </h1>
-              <p className="text-sm leading-relaxed text-white/85 sm:text-[0.9375rem]">
-                Unlock the vibrational power of your numbers. Discover your Radical, Destiny, and Name numbers based on Chaldean &amp; Vedic systems.
-              </p>
-            </>
+      <div className="relative shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 pt-16 pb-8 text-white sm:px-8 sm:pt-20 sm:pb-10 lg:flex lg:w-[48%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
+        <button
+          onClick={onBack || (() => navigate('/free-tools'))}
+          className="absolute left-4 top-4 sm:left-6 sm:top-6 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20 z-10"
+        >
+          ← Back to Tools
+        </button>
+        <div className="mx-auto w-full max-w-2xl">
+          
+          <div className="flex flex-col items-center gap-6 text-center">
+            {image && (
+              <div className="shrink-0">
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-[18%] shadow-2xl">
+                  <img src={image} alt="Tool Image" className="w-full h-full object-cover scale-105" />
+                </div>
+              </div>
+            )}
+            <div className="flex flex-col items-center">
+              {!result ? (
+                <>
+                  <h1 className="mb-3 font-serif text-3xl font-black leading-tight sm:text-4xl lg:text-[2.2rem] text-white">
+                    Numerology Calculator
+                  </h1>
+                  <p className="mb-4 text-sm leading-relaxed text-white/85 sm:text-[1rem] text-white">
+                    Unlock the vibrational power of your numbers. Discover your Radical, Destiny, and Name numbers based on Chaldean &amp; Vedic systems.
+                  </p>
+                </>
           ) : (
             <>
               <div className="mb-3 text-4xl">🔢</div>
@@ -80,7 +89,9 @@ function NumerologyTool({ onBack }) {
                 ↺ Calculate New
               </button>
             </>
-          )}
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -93,32 +104,34 @@ function NumerologyTool({ onBack }) {
                 Your Details
               </h2>
               <form onSubmit={calculate} className="flex flex-col gap-5">
-                <Field label="Full Name">
+                <div>
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Full Name</label>
                   <input
-                    className={inputCls}
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]"
                     type="text"
                     placeholder="e.g. Aniket Sharma"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
                   />
-                </Field>
-                <Field label="Date of Birth">
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Date of Birth</label>
                   <input
-                    className={inputCls}
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors focus:border-[#c6843f]"
                     type="date"
                     value={formData.dob}
                     onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
                     required
                   />
-                </Field>
+                </div>
                 {error && <p className="text-center text-xs text-red-600">{error}</p>}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="mt-1 w-full rounded-xl bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-2 w-full rounded-lg bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-3.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(198,132,63,0.2)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(198,132,63,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
                 >
-                  {loading ? 'Calculating…' : 'Calculate My Numbers'}
+                  {loading ? 'Calculating...' : 'Calculate My Numbers'}
                 </button>
               </form>
             </div>

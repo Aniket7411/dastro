@@ -142,17 +142,19 @@ function FreeTools() {
     window.scrollTo(0, 0);
   }, [activeTool]);
 
+  const activeToolData = tools.find(t => t.id === activeTool);
+
   if (activeTool === 'kundali') {
-    return <KundaliTool onBack={() => setActiveTool(null)} />;
+    return <KundaliTool onBack={() => setActiveTool(null)} image={activeToolData?.image} />;
   }
   if (activeTool === 'horoscope') {
-    return <HoroscopeTool onBack={() => setActiveTool(null)} />;
+    return <HoroscopeTool onBack={() => setActiveTool(null)} image={activeToolData?.image} />;
   }
   if (activeTool === 'moon') {
-    return <MoonTool onBack={() => setActiveTool(null)} />;
+    return <MoonTool onBack={() => setActiveTool(null)} image={activeToolData?.image} />;
   }
   if (activeTool === 'zodiac') {
-    return <ZodiacFinder onBack={() => setActiveTool(null)} />;
+    return <ZodiacFinder onBack={() => setActiveTool(null)} image={activeToolData?.image} />;
   }
 
   return (

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import API_BASE from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 function Tarot() {
+  const navigate = useNavigate();
   const [stage, setStage] = useState('input');
   const [question, setQuestion] = useState('');
   const [cardResult, setCardResult] = useState(null);
@@ -54,48 +56,59 @@ function Tarot() {
   const cards = Array.from({ length: totalCards }, (_, i) => i);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-white">
-      {/* Subtle background */}
-      <div
-        className="pointer-events-none fixed inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse at 20% 30%, rgba(198,132,63,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(101,37,12,0.03) 0%, transparent 50%)',
-        }}
-      />
-
-      <div className="relative mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
-        {/* Header */}
-        <div className="mb-6 text-center sm:mb-8">
-          <h1 className="mb-2 font-serif text-2xl font-black text-[#65250c] sm:text-3xl">The Mystic Tarot</h1>
-          <div className="mx-auto mb-3 h-0.5 w-12 rounded-full bg-gradient-to-r from-[#c6843f] to-[#9c5a1e]" />
-          <p className="mx-auto max-w-md text-xs leading-relaxed text-[#9c847b] sm:text-sm">
-            Unveil the hidden truths of your journey. Let the ancient wisdom of the Tarot illuminate your path today.
-          </p>
-        </div>
-
-        {error && (
-          <div className="mx-auto mb-6 max-w-sm rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
-            {error}
+    <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row animated fadeIn">
+      {/* Left hero panel */}
+      <div className="relative shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 pt-16 pb-8 text-white sm:px-8 sm:pt-20 sm:pb-10 lg:flex lg:w-[48%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
+        <button
+          onClick={() => navigate('/free-tools')}
+          className="absolute left-4 top-4 sm:left-6 sm:top-6 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20 z-10"
+        >
+          ← Back to Tools
+        </button>
+        <div className="mx-auto w-full max-w-2xl">
+          
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div className="shrink-0">
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-[18%] shadow-2xl">
+                <img src="/images/tarot.jpg" alt="Tarot Image" className="w-full h-full object-cover scale-105" />
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <h1 className="mb-3 font-serif text-3xl font-black leading-tight sm:text-4xl lg:text-[2.2rem] text-white">
+                The Mystic Tarot
+              </h1>
+              <p className="mb-4 text-sm leading-relaxed text-white/85 sm:text-[1rem] text-white">
+                Unveil the hidden truths of your journey. Let the ancient wisdom of the Tarot illuminate your path today. Focus your mind, ask your question, and let the cards reveal your destiny.
+              </p>
+            </div>
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Right content panel */}
+      <div className="flex flex-1 items-start justify-center bg-white px-4 pt-8 pb-32 sm:px-6 sm:pt-10 sm:pb-32 lg:items-center lg:px-10 lg:pt-14 lg:pb-28">
+        <div className="w-full max-w-lg">
+          {error && (
+            <div className="mx-auto mb-6 max-w-sm rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
+              {error}
+            </div>
+          )}
 
         {/* Stage: Input */}
         {stage === 'input' && (
           <div className="mx-auto max-w-sm">
-            <div className="rounded-xl border border-[#f3e5d8] bg-[#fffdfa] p-5 shadow-[0_8px_24px_rgba(198,132,63,0.08)] sm:p-6">
-              <div className="mb-3 text-center text-3xl">✨</div>
-              <h3 className="mb-4 text-center font-serif text-base font-extrabold text-[#65250c]">
+            <div className="rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-[0_8px_28px_rgba(198,132,63,0.09)] sm:p-8">
+              <h2 className="mb-6 text-center font-serif text-lg font-extrabold text-[#65250c]">
                 What seeks your heart?
-              </h3>
-              <form onSubmit={startRitual} className="flex flex-col gap-4">
+              </h2>
+              <form onSubmit={startRitual} className="flex flex-col gap-5">
                 <div>
-                  <label className="mb-1 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">
                     Focus your intention
                   </label>
                   <input
                     type="text"
-                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-1.5 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]"
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]"
                     placeholder="Enter your question here…"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
@@ -104,7 +117,7 @@ function Tarot() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-2 text-xs font-bold uppercase tracking-widest text-white shadow transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="mt-2 w-full rounded-lg bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-3.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(198,132,63,0.2)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(198,132,63,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
                 >
                   Focus &amp; Shuffle Deck
                 </button>
@@ -210,6 +223,7 @@ function Tarot() {
             </div>
           </div>
         )}
+        </div>
       </div>
 
       <style>{`
