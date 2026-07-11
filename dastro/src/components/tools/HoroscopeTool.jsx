@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
+import { useNavigate } from 'react-router-dom';
 
 const svgFigures = {
   Aries: (
@@ -256,7 +257,8 @@ const signs = [
   { name: 'Pisces',      sym: '♓', dates: 'Feb 19 – Mar 20' },
 ];
 
-function HoroscopeTool({ onBack }) {
+function HoroscopeTool({ onBack, image }) {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -277,311 +279,126 @@ function HoroscopeTool({ onBack }) {
   };
 
   return (
-    <div className="horoscope-tool-container animated fadeIn">
-      <div className="container-fluid p-0">
-        <div className="row g-0 min-vh-100">
-
-          {/* LEFT HERO PANEL */}
-          {!selected ? (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-4 bg-bronze-hero text-white">
-              <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
-                {onBack && (
-                  <button className="btn-back-tool mb-3" onClick={onBack}>
-                    <i className="fas fa-chevron-left me-2"></i> Back to Tools
-                  </button>
-                )}
-                <h1 className="fw-bold mb-2 hero-title">Daily Horoscope</h1>
-                <p className="hero-desc mb-3">
-                  Reveal what the stars have in store for you. Choose your sign below to receive your personalized
-                  cosmic guidance and planetary insights for today.
-                </p>
-                <div className="decor-icons">☀️ 🌙 ✨ 🌟</div>
-              </div>
-            </div>
-          ) : (
-            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-4 bg-bronze-hero text-white text-center">
-              <div className="mx-auto" style={{ maxWidth: '480px' }}>
-                <div className="selected-sign-icon mb-3">
-                  <div className="selected-svg-wrap">{svgFigures[selected.name]}</div>
-                </div>
-                <h1 className="fw-bold mb-2 hero-title">{selected.name}</h1>
-                <p className="hero-desc mb-3">Guided by the celestial alignment of {prediction?.date || 'Today'}.</p>
-                <button className="btn-change-sign" onClick={() => { setSelected(null); setPrediction(null); }}>
-                  <i className="fas fa-sync-alt me-2"></i> Choose Another Sign
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* RIGHT CONTENT PANEL */}
-          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-4 bg-white-content">
+    <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row animated fadeIn">
+      {/* Left hero panel */}
+      <div className="relative shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 pt-16 pb-8 text-white sm:px-8 sm:pt-20 sm:pb-10 lg:flex lg:w-[48%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
+        <button
+          onClick={onBack || (() => navigate('/free-tools'))}
+          className="absolute left-4 top-4 sm:left-6 sm:top-6 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20 z-10"
+        >
+          ← Back to Tools
+        </button>
+        <div className="mx-auto w-full max-w-2xl">
+          
+          <div className="flex flex-col items-center gap-6 text-center">
             {!selected ? (
-              <div className="zodiac-selection-grid w-100" style={{ maxWidth: '720px' }}>
-                <div className="zodiac-grid">
-                  {signs.map((sign) => (
-                    <div key={sign.name} className="zodiac-card-premium" onClick={() => fetchHoroscope(sign)}>
-                      <div className="zodiac-card-icon">
-                        {svgFigures[sign.name]}
-                      </div>
-                      <div className="zodiac-card-name">{sign.name}</div>
-                      <div className="zodiac-card-dates">{sign.dates}</div>
-                    </div>
-                  ))}
+              <>
+                {image && (
+                <div className="shrink-0">
+                  <div className="relative w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-[18%] shadow-2xl">
+                    <img src={image} alt="Tool Image" className="w-full h-full object-cover scale-105" />
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="horoscope-report w-100" style={{ maxWidth: '680px' }}>
-                {loading || !prediction ? (
-                  <div className="text-center p-5">
-                    <div className="spinner-border text-bronze mb-4" role="status" style={{ width: '3rem', height: '3rem' }}></div>
-                    <h4 className="text-muted font-heading">Consulting the Cosmic Alignment...</h4>
-                  </div>
-                ) : (
-                  <div className="prediction-box animated fadeInUp">
-                    <div className="prediction-header mb-3 border-bottom pb-3">
-                      <span className="badge-cosmic">Cosmic Guidance</span>
-                      <h2 className="prediction-h1 mt-2">Daily Predictions</h2>
-                      <div className="prediction-date-label">{prediction.date || 'Today'}</div>
-                    </div>
-
-                    <div className="prediction-body">
-                      <div className="prediction-section mb-3">
-                        <h3 className="section-title mb-2"><i className="fas fa-star me-2"></i> General Outlook</h3>
-                        <p className="prediction-text">{prediction.prediction}</p>
-                      </div>
-
-                      <div className="row g-3">
-                        <div className="col-md-6">
-                          <div className="prediction-section card-insight p-3">
-                            <h3 className="section-title-sm mb-1">Personal Growth</h3>
-                            <p className="prediction-text-sm">Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions.</p>
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="prediction-section card-insight p-3">
-                            <h3 className="section-title-sm mb-1">Social Energy</h3>
-                            <p className="prediction-text-sm">A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="prediction-footer mt-3 pt-3 border-top">
-                      <div className="row g-2 text-center">
-                        <div className="col-6">
-                          <div className="lucky-stat">
-                            <span className="stat-label">Lucky Number</span>
-                            <span className="stat-value">9</span>
-                          </div>
-                        </div>
-                        <div className="col-6">
-                          <div className="lucky-stat">
-                            <span className="stat-label">Lucky Color</span>
-                            <span className="stat-value">Golden Brown</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 )}
+                <div>
+                  <h1 className="mb-3 font-serif text-3xl font-black leading-tight sm:text-4xl lg:text-[2.2rem] text-white">
+                    Daily Horoscope
+                  </h1>
+                  <p className="mb-4 text-sm leading-relaxed text-white/85 sm:text-[1rem] text-white">
+                    Reveal what the stars have in store for you. Choose your sign below to receive your personalized
+                    cosmic guidance and planetary insights for today.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="w-full text-center">
+                <div className="mb-4 flex justify-center">
+                  <div className="text-white/90 [&>svg]:h-24 [&>svg]:w-24">
+                    {svgFigures[selected.name]}
+                  </div>
+                </div>
+                <h1 className="mb-2 font-serif text-4xl font-black leading-tight sm:text-5xl">{selected.name}</h1>
+                <p className="mb-6 text-sm text-white/80">Guided by the celestial alignment of {prediction?.date || 'Today'}.</p>
+                <button
+                  onClick={() => { setSelected(null); setPrediction(null); }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
+                >
+                  ↺ Choose Another Sign
+                </button>
               </div>
             )}
           </div>
-
         </div>
       </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+      {/* Right content panel */}
+      <div className="flex flex-1 items-start justify-center bg-white px-4 pt-8 pb-32 sm:px-6 sm:pt-10 sm:pb-32 lg:items-center lg:px-10 lg:pt-14 lg:pb-28">
+        <div className="w-full max-w-2xl">
+          {!selected ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {signs.map((sign) => (
+                <div
+                  key={sign.name}
+                  onClick={() => fetchHoroscope(sign)}
+                  className="group cursor-pointer rounded-2xl border border-[#f3e5d8] bg-white p-4 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-[#c6843f] hover:shadow-[0_12px_24px_rgba(198,132,63,0.1)]"
+                >
+                  <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffefd6] [&>svg]:h-10 [&>svg]:w-10">
+                    {svgFigures[sign.name]}
+                  </div>
+                  <div className="mb-0.5 text-sm font-extrabold text-[#65250c] sm:text-base">{sign.name}</div>
+                  <div className="text-[0.6875rem] font-medium text-[#9c847b]">{sign.dates}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mx-auto max-w-xl">
+              {loading || !prediction ? (
+                <div className="py-12 text-center text-[#65250c]">
+                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-[#c6843f] border-r-transparent"></div>
+                  <h4 className="font-serif font-bold">Consulting the Cosmic Alignment...</h4>
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-[0_8px_28px_rgba(198,132,63,0.09)] sm:p-8">
+                  <div className="mb-5 border-b border-[#f3e5d8] pb-5 text-center">
+                    <span className="mb-2 inline-block rounded-full bg-[#ffefd6] px-3 py-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#9c5a1e]">
+                      Cosmic Guidance
+                    </span>
+                    <h2 className="mb-1 font-serif text-2xl font-black text-[#65250c] sm:text-3xl">Daily Predictions</h2>
+                    <div className="text-sm font-semibold text-[#c6843f]">{prediction.date || 'Today'}</div>
+                  </div>
 
-        .horoscope-tool-container {
-          font-family: 'Be Vietnam Pro', sans-serif;
-          overflow-x: hidden;
-        }
+                  <div className="mb-6">
+                    <h3 className="mb-3 font-serif text-lg font-bold text-[#65250c]">General Outlook</h3>
+                    <p className="text-sm leading-relaxed text-[#65250c]/85">{prediction.prediction}</p>
+                  </div>
 
-        .bg-bronze-hero {
-          background: linear-gradient(to right, #c6843f, #9c5a1e);
-          position: relative;
-        }
+                  <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="rounded-xl border border-[#f1e4d8] bg-[#faf7f4] p-4">
+                      <h3 className="mb-2 font-serif text-base font-bold text-[#65250c]">Personal Growth</h3>
+                      <p className="text-xs leading-relaxed text-[#65250c]/70">Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions.</p>
+                    </div>
+                    <div className="rounded-xl border border-[#f1e4d8] bg-[#faf7f4] p-4">
+                      <h3 className="mb-2 font-serif text-base font-bold text-[#65250c]">Social Energy</h3>
+                      <p className="text-xs leading-relaxed text-[#65250c]/70">A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative.</p>
+                    </div>
+                  </div>
 
-        .bg-white-content {
-          background-color: #ffffff;
-          padding-bottom: 8.5rem !important;
-        }
-
-        .hero-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(2rem, 4vw, 3rem);
-          font-weight: 900;
-          line-height: 1.15;
-          margin-bottom: 12px;
-        }
-
-        .hero-desc {
-          font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-          line-height: 1.6;
-          opacity: 0.95;
-          font-weight: 500;
-        }
-
-        .btn-back-tool {
-          background: rgba(255,255,255,0.15);
-          border: 1px solid rgba(255,255,255,0.3);
-          color: #fff;
-          padding: 8px 24px;
-          border-radius: 4px;
-          font-size: 16px;
-          transition: 0.3s;
-          font-weight: 500;
-        }
-        .btn-back-tool:hover { background: rgba(255,255,255,0.25); }
-
-        .btn-change-sign {
-          background: #ffffff;
-          border: none;
-          color: #9c5a1e;
-          padding: 12px 30px;
-          border-radius: 4px;
-          font-size: 16px;
-          font-weight: 700;
-          transition: 0.3s;
-        }
-        .btn-change-sign:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-        /* Selected sign SVG on left panel — white tinted */
-        .selected-sign-icon {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .selected-svg-wrap svg {
-          width: 100px;
-          height: 100px;
-          filter: brightness(0) invert(1);
-          opacity: 0.92;
-        }
-
-        /* Zodiac Cards */
-        .zodiac-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 14px;
-        }
-        @media (min-width: 768px) {
-          .zodiac-grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-          }
-        }
-        .zodiac-card-premium {
-          background: #ffffff;
-          padding: 22px 10px 16px;
-          border-radius: 20px;
-          text-align: center;
-          cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-          border: 1px solid #f3e5d8;
-        }
-        .zodiac-card-premium:hover {
-          transform: translateY(-10px);
-          border-color: #c6843f;
-          box-shadow: 0 20px 40px rgba(198,132,63,0.1);
-        }
-        .zodiac-card-icon {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background: #ffefd6;
-          margin: 0 auto 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .zodiac-card-icon svg {
-          width: 46px;
-          height: 46px;
-        }
-        .zodiac-card-name {
-          font-weight: 800;
-          color: #65250c;
-          font-size: 18px;
-          margin-bottom: 2px;
-        }
-        .zodiac-card-dates {
-          font-size: 13px;
-          color: #9c847b;
-          font-weight: 500;
-        }
-
-        /* Prediction Styles */
-        .prediction-h1 {
-          font-family: 'Playfair Display', serif;
-          font-size: 28px;
-          color: #65250c;
-          margin: 0;
-        }
-        .badge-cosmic {
-          background: #ffefd6;
-          color: #9c5a1e;
-          padding: 5px 14px;
-          border-radius: 50px;
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-        .prediction-date-label {
-          color: #9c5a1e;
-          font-weight: 600;
-          font-size: 14px;
-          margin-top: 6px;
-        }
-        .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 19px;
-          color: #65250c;
-          font-weight: 700;
-        }
-        .section-title-sm {
-          font-family: 'Playfair Display', serif;
-          font-size: 16px;
-          color: #65250c;
-          font-weight: 700;
-        }
-        .prediction-text {
-          font-size: 15px;
-          line-height: 1.6;
-          color: rgba(101, 37, 12, 0.85);
-          text-align: justify;
-        }
-        .prediction-text-sm {
-          font-size: 13.5px;
-          line-height: 1.55;
-          color: rgba(101, 37, 12, 0.7);
-        }
-        .card-insight {
-          background: #faf7f4;
-          border-radius: 12px;
-          border: 1px solid #f1e4d8;
-        }
-        .lucky-stat {
-          padding: 12px;
-          background: #ffefd6;
-          border-radius: 8px;
-        }
-        .stat-label { display: block; font-size: 11.5px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
-        .stat-value { font-weight: 800; color: #65250c; font-size: 17px; }
-
-        .text-bronze { color: #c6843f; }
-        .font-heading { font-family: 'Playfair Display', serif; }
-
-        @media (max-width: 991px) {
-          .hero-title { font-size: 28px; }
-          .prediction-h1 { font-size: 26px; }
-          .zodiac-card-icon { width: 60px; height: 60px; }
-          .zodiac-card-icon svg { width: 36px; height: 36px; }
-        }
-      `}</style>
+                  <div className="grid grid-cols-2 gap-4 border-t border-[#f3e5d8] pt-5 text-center">
+                    <div className="rounded-xl bg-[#ffefd6] p-3">
+                      <div className="mb-1 text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Lucky Number</div>
+                      <div className="text-lg font-black text-[#65250c]">9</div>
+                    </div>
+                    <div className="rounded-xl bg-[#ffefd6] p-3">
+                      <div className="mb-1 text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Lucky Color</div>
+                      <div className="text-lg font-black text-[#65250c]">Golden Brown</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

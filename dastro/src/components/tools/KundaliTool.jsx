@@ -3,8 +3,10 @@ import KundaliChart from './KundaliChart';
 import { DateTime } from 'luxon';
 import toast from '@/utils/toast';
 import API_BASE from '../../utils/api.js';
+import { useNavigate } from 'react-router-dom';
 
-function KundaliTool({ onBack }) {
+function KundaliTool({ onBack, image }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '', dob: '', tob: '', lat: '', lon: '', place: '', gender: 'Male'
   });
@@ -265,140 +267,110 @@ function KundaliTool({ onBack }) {
   }
 
   return (
-    <div className="kundali-tool-container animated fadeIn">
-      <div className="container-fluid p-0">
-        <div className="row g-0 min-vh-100">
+    <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row animated fadeIn">
+      {/* Left hero panel */}
+      <div className="relative shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 pt-16 pb-8 text-white sm:px-8 sm:pt-20 sm:pb-10 lg:flex lg:w-[48%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
+        <button
+          onClick={onBack || (() => navigate('/free-tools'))}
+          className="absolute left-4 top-4 sm:left-6 sm:top-6 inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20 z-10"
+        >
+          ← Back to Tools
+        </button>
+        <div className="mx-auto w-full max-w-2xl">
           
-          {/* LEFT PANEL */}
-          <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
-            <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
-              {onBack && (
-                <button className="btn-back-tool mb-4" onClick={onBack}>
-                  <i className="fas fa-chevron-left me-2"></i> Back to Tools
-                </button>
-              )}
-              <h1 className="display-4 fw-bold mb-3 hero-title">Free Kundli Online</h1>
-              <p className="hero-desc mb-5">
+          <div className="flex flex-col items-center gap-6 text-center">
+            {image && (
+              <div className="shrink-0">
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-[18%] shadow-2xl">
+                  <img src={image} alt="Tool Image" className="w-full h-full object-cover scale-105" />
+                </div>
+              </div>
+            )}
+            <div>
+              <h1 className="mb-3 font-serif text-3xl font-black leading-tight sm:text-4xl lg:text-[2.2rem] text-white">
+                Free Kundli Online
+              </h1>
+              <p className="mb-4 text-sm leading-relaxed text-white/85 sm:text-[1rem] text-white">
                 Generate your detailed Vedic birth chart. Our high-precision algorithm reveals your personality, destiny, and planetary strengths based on ancient wisdom.
               </p>
-              <div className="decor-icons text-center" style={{ fontSize: '2.5rem' }}>🕉️ ✨ 🌙 🌟</div>
             </div>
           </div>
-
-          {/* RIGHT PANEL */}
-          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white-content">
-            <div className="w-100" style={{ maxWidth: '550px' }}>
-              <div className="premium-form-card p-4 p-md-5">
-                <h3 className="form-heading text-center mb-5">Birth Details</h3>
-                <form onSubmit={calculate}>
-                  <div className="mb-4">
-                    <label className="custom-lbl">Full Name</label>
-                    <input className="custom-inp" type="text" placeholder="Enter your name"
-                      value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                  </div>
-                  <div className="row g-3 mb-4">
-                    <div className="col-md-6">
-                      <label className="custom-lbl">Gender</label>
-                      <select className="custom-inp" value={formData.gender} onChange={e => setFormData({ ...formData, gender: e.target.value })} required>
-                        <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
-                      </select>
-                    </div>
-                    <div className="col-md-6">
-                      <label className="custom-lbl">Date of Birth</label>
-                      <input className="custom-inp" type="date" value={formData.dob} onChange={e => setFormData({ ...formData, dob: e.target.value })} required />
-                    </div>
-                  </div>
-                  <div className="row g-3 mb-4">
-                    <div className="col-md-6">
-                      <label className="custom-lbl">Time of Birth</label>
-                      <input className="custom-inp" type="time" value={formData.tob} onChange={e => setFormData({ ...formData, tob: e.target.value })} required />
-                    </div>
-                    <div className="col-md-6">
-                      <label className="custom-lbl">Birth Place</label>
-                      <input className="custom-inp" type="text" placeholder="Search city..." value={query} onChange={e => handleLocationSearch(e.target.value)} required />
-                      {suggestions.length > 0 && (
-                        <div className="search-suggestions-box">
-                          {suggestions.map((loc, i) => (
-                            <div key={i} className="suggestion-item" onClick={() => selectLocation(loc)}>{loc.display_name}</div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <button className="btn-calculate-premium w-100 mt-4" type="submit" disabled={loading}>
-                    {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Creating Chart…</> : 'Generate My Kundli'}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
-
-        .kundali-tool-container { font-family: 'Be Vietnam Pro', sans-serif; overflow-x: hidden; }
-        .bg-bronze-hero { background: linear-gradient(to right, #c6843f, #9c5a1e); }
-        .bg-white-content { background-color: #ffffff; padding-bottom: 8.5rem !important; }
-        .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
-        .hero-desc { font-size: clamp(1.1rem, 1.8vw, 1.4rem); line-height: 1.7; opacity: 0.95; font-weight: 500; }
-
-        .btn-back-tool {
-          background: rgba(255,255,255,0.15);
-          border: 1px solid rgba(255,255,255,0.3);
-          color: #fff;
-          padding: 8px 24px;
-          border-radius: 4px;
-          font-size: 16px;
-          transition: 0.3s;
-          font-weight: 500;
-        }
-
-        .premium-form-card { background: #ffffff; border-radius: 24px; border: 1px solid #f3e5d8; box-shadow: 0 20px 40px rgba(198,132,63,0.1); }
-        .form-heading { font-family: 'Playfair Display', serif; color: #65250c; font-weight: 800; }
-
-        .custom-lbl { 
-          display: block; 
-          font-size: 15px; 
-          color: #65250c; 
-          margin-bottom: 8px; 
-          font-weight: 700; 
-          text-align: left;
-        }
-        .custom-inp { 
-          width: 100%; 
-          border: none; 
-          border-bottom: 2px solid #f3e5d8; 
-          background: transparent; 
-          padding: 10px 0; 
-          font-size: 18px; 
-          color: #65250c; 
-          outline: none; 
-          transition: 0.3s;
-          font-weight: 600;
-        }
-        .custom-inp:focus { border-color: #c6843f; }
-
-        .btn-calculate-premium {
-          background: linear-gradient(to right, #c6843f, #9c5a1e);
-          border: none;
-          color: #fff;
-          padding: 16px;
-          border-radius: 10px;
-          font-weight: 800;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          box-shadow: 0 10px 25px rgba(198,132,63,0.2);
-          transition: 0.3s;
-        }
-        .btn-calculate-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(198,132,63,0.3); }
-
-        .search-suggestions-box { position: absolute; background: white; border: 1px solid #f3e5d8; border-radius: 8px; z-index: 10; width: 100%; margin-top: 5px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-height: 200px; overflow-y: auto; }
-        .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #faf7f4; font-size: 16px; color: #65250c; }
-        .suggestion-item:hover { background: #ffefd6; }
-      `}</style>
+      {/* Right content panel */}
+      <div className="flex flex-1 items-start justify-center bg-white px-4 pt-8 pb-32 sm:px-6 sm:pt-10 sm:pb-32 lg:items-center lg:px-10 lg:pt-14 lg:pb-28">
+        <div className="w-full max-w-sm">
+          <div className="rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-[0_8px_28px_rgba(198,132,63,0.09)] sm:p-8">
+            <h2 className="mb-6 text-center font-serif text-lg font-extrabold text-[#65250c]">
+              Birth Details
+            </h2>
+            <form onSubmit={calculate} className="flex flex-col gap-5">
+              <div>
+                <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Full Name</label>
+                <input
+                  className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]"
+                  type="text" placeholder="Enter your name"
+                  value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Gender</label>
+                  <select
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors focus:border-[#c6843f]"
+                    value={formData.gender} onChange={e => setFormData({ ...formData, gender: e.target.value })} required
+                  >
+                    <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Date of Birth</label>
+                  <input
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors focus:border-[#c6843f]"
+                    type="date" value={formData.dob} onChange={e => setFormData({ ...formData, dob: e.target.value })} required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Time of Birth</label>
+                  <input
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors focus:border-[#c6843f]"
+                    type="time" value={formData.tob} onChange={e => setFormData({ ...formData, tob: e.target.value })} required
+                  />
+                </div>
+                <div className="relative">
+                  <label className="mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Birth Place</label>
+                  <input
+                    className="w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]"
+                    type="text" placeholder="Search city..." value={query} onChange={e => handleLocationSearch(e.target.value)} required
+                  />
+                  {suggestions.length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto rounded-lg border border-[#f3e5d8] bg-white shadow-xl z-50">
+                      {suggestions.map((loc, i) => (
+                        <div
+                          key={i}
+                          className="cursor-pointer border-b border-[#f3e5d8]/50 px-3 py-2 text-sm text-[#65250c] hover:bg-[#ffefd6]/50 last:border-b-0"
+                          onClick={() => selectLocation(loc)}
+                        >
+                          {loc.display_name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <button
+                className="mt-2 w-full rounded-lg bg-gradient-to-r from-[#c6843f] to-[#9c5a1e] py-3.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(198,132,63,0.2)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(198,132,63,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
+                type="submit" disabled={loading}
+              >
+                {loading ? 'Creating Chart...' : 'Generate My Kundli'}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
