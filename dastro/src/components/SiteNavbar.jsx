@@ -393,7 +393,7 @@ export default function SiteNavbar({
             <img
               src={SITE_LOGO}
               alt={SITE_LOGO_ALT}
-              className="h-[4rem] w-[4rem] object-contain sm:h-[4.75rem] sm:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem]"
+              className="h-[4rem] w-[4rem] object-contain sm:h-[4.75rem] sm:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem] translate-y-1"
               fetchPriority="high"
             />
           </Link>
