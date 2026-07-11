@@ -13,14 +13,14 @@ const tools = [
     desc: 'Generate your Vedic birth chart with detailed planetary positions.',
     Icon: Star,
     badge: 'Popular',
-    image: '/images/kundali_birth_chart.jpg',
+    image: '/images/kundali_birth_chart.webp',
   },
   {
     id: 'horoscope',
     name: 'Daily Horoscope',
     desc: 'Read your personalised daily cosmic predictions by sun sign.',
     Icon: Sun,
-    image: '/images/daily_horoscope.jpg',
+    image: '/images/daily_horoscope.webp',
   },
   {
     id: 'love',
@@ -29,7 +29,7 @@ const tools = [
     Icon: Heart,
     badge: 'Trending',
     link: '/love',
-    image: '/images/love_compatibility.jpg',
+    image: '/images/love_compatibility.webp',
   },
   {
     id: 'numerology',
@@ -37,7 +37,7 @@ const tools = [
     desc: 'Discover your radical, destiny, and name numbers.',
     Icon: Hash,
     link: '/numerology',
-    image: '/images/numerology.jpg',
+    image: '/images/numerology.webp',
   },
   {
     id: 'tarot',
@@ -45,21 +45,21 @@ const tools = [
     desc: 'Draw a Major Arcana card for ancient wisdom and guidance.',
     Icon: Sparkles,
     link: '/tarot',
-    image: '/images/tarot.jpg',
+    image: '/images/tarot.webp',
   },
   {
     id: 'moon',
     name: 'Moon Sign Calculator',
     desc: 'Find your Vedic moon sign and emotional blueprint.',
     Icon: Moon,
-    image: '/images/moon_sign.jpg',
+    image: '/images/moon_sign.webp',
   },
   {
     id: 'zodiac',
     name: 'Sun Sign Calculator',
     desc: 'Know your zodiac sun sign from your exact date of birth.',
     Icon: Compass,
-    image: '/images/sun_sign.jpg',
+    image: '/images/sun_sign.webp',
   },
 ];
 
