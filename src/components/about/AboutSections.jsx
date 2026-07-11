@@ -25,7 +25,7 @@ import {
   TW_LEAD,
   TW_STACK,
   TW_STACK_SM,
-  SECTION_PY,
+  SECTION_PY_SM,
   SITE_BAND,
   SITE_BAND_BODY,
   SITE_BAND_TITLE,
@@ -35,7 +35,7 @@ import {
   SITE_CARD,
 } from '../../utils/siteTokens';
 
-const SECTION = SECTION_PY;
+const SECTION = SECTION_PY_SM;
 const SECTION_ALT = 'border-t border-site-border bg-site-surface';
 const SECTION_MAX = 'mx-auto max-w-3xl';
 
@@ -199,7 +199,7 @@ function SectionIntro({ kicker, title, titleHighlight, subtitle, align = 'left',
 
 function AboutHeroImage({ className = '' }) {
   return (
-    <figure className={`relative mx-auto w-full max-w-[20rem] sm:max-w-sm lg:max-w-[22rem] xl:max-w-md ${className}`}>
+    <figure className={`relative mx-auto w-full max-w-[23rem] sm:max-w-md lg:max-w-[26rem] xl:max-w-lg ${className}`}>
       <span
         className="pointer-events-none absolute -inset-3 rounded-[1.25rem] bg-site-accent/12 blur-2xl"
         aria-hidden
@@ -208,7 +208,7 @@ function AboutHeroImage({ className = '' }) {
         <img
           src="/images/damini.webp"
           alt="Damini Shukla — DS Astro Institute"
-          className="mx-auto block h-auto max-h-[22rem] w-full object-contain object-center sm:max-h-[24rem] lg:max-h-[26rem]"
+          className="mx-auto block h-auto max-h-[25rem] w-full object-contain object-center sm:max-h-[28rem] lg:max-h-[31rem]"
           loading="eager"
         />
       </div>
@@ -280,40 +280,67 @@ export function AboutHero() {
   );
 }
 
+function AboutTeamImage({ className = '' }) {
+  return (
+    <figure className={`relative mx-auto w-full max-w-md lg:max-w-none ${className}`}>
+      <span
+        className="pointer-events-none absolute -inset-3 rounded-[1.25rem] bg-site-accent/12 blur-2xl"
+        aria-hidden
+      />
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_12px_28px_rgba(51,37,26,0.10)] sm:aspect-video">
+        <img
+          src="/images/teamimage.webp"
+          alt="Damini Shukla with the DS Astro Institute team"
+          className="h-full w-full object-cover object-top"
+          loading="lazy"
+        />
+      </div>
+      <figcaption className="mt-3 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-center shadow-sm sm:px-3.5 sm:py-2.5">
+        <p className="m-0 font-heading text-sm font-bold text-site-text">Damini Shukla &amp; the DS Astro Institute team</p>
+        <p className="m-0 mt-0.5 font-body text-[12px] text-site-muted">Guidance rooted in experience, delivered by a dedicated team</p>
+      </figcaption>
+    </figure>
+  );
+}
+
 export function AboutDamini() {
   return (
-    <section className={`${SECTION_ALT} ${SECTION}`}>
-      <div className={`${PAGE_WRAP} max-w-3xl`}>
-        <div className={`${TW_STACK} gap-5`}>
-          <SectionIntro
-            kicker="The woman behind the practice"
-            title="Damini"
-            titleHighlight="Shukla"
-          />
+    <section className={`${SECTION_ALT} py-6 sm:py-8`}>
+      <div className={PAGE_WRAP}>
+        <div className="grid items-center gap-7 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 xl:gap-14">
+          <AboutTeamImage />
 
-          <div className={`${TW_STACK} gap-4`}>
-            <p className={TW_BODY}>
-              Damini&apos;s connection with astrology began not as a profession, but as a fascination. Even as a
-              child, she was drawn to the language of the planets — the sense that everything in the universe is
-              quietly connected. That early curiosity grew into a lifelong calling.
-            </p>
-            <p className={`${TW_BODY} text-site-muted`}>
-              Over the years, she trained under several respected gurus and traditions, refining her craft until
-              she became one of the sought-after names in the field. She has served as a senior astrologer and
-              mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
-              Vidya — guiding both clients and aspiring astrologers alike.
-            </p>
-            <p className={`${TW_BODY} text-site-muted`}>
-              Her work has also reached the screen: Damini featured as an astrology consultant on the television
-              show <em className="not-italic font-semibold text-site-text">Wheel of Fortune</em> alongside Akshay
-              Kumar, and today she is a trusted celebrity astrologer to public figures who value discretion and
-              depth in equal measure.
-            </p>
-            <p className={TW_BODY}>
-              But ask her what she&apos;s proudest of, and the answer isn&apos;t the fame — it&apos;s the thousands
-              of lives she&apos;s helped steady, and the students she&apos;s guided onto their own path as
-              astrologers.
-            </p>
+          <div className={`${TW_STACK} gap-3`}>
+            <SectionIntro
+              kicker="The woman behind the practice"
+              title="Damini"
+              titleHighlight="Shukla"
+            />
+
+            <div className={`${TW_STACK} gap-2.5`}>
+              <p className={TW_BODY}>
+                Damini&apos;s connection with astrology began not as a profession, but as a fascination. Even as a
+                child, she was drawn to the language of the planets — the sense that everything in the universe is
+                quietly connected. That early curiosity grew into a lifelong calling.
+              </p>
+              <p className={`${TW_BODY} text-site-muted`}>
+                Over the years, she trained under several respected gurus and traditions, refining her craft until
+                she became one of the sought-after names in the field. She has served as a senior astrologer and
+                mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
+                Vidya — guiding both clients and aspiring astrologers alike.
+              </p>
+              <p className={`${TW_BODY} text-site-muted`}>
+                Her work has also reached the screen: Damini featured as an astrology consultant on the television
+                show <em className="not-italic font-semibold text-site-text">Wheel of Fortune</em> alongside Akshay
+                Kumar, and today she is a trusted celebrity astrologer to public figures who value discretion and
+                depth in equal measure.
+              </p>
+              <p className={TW_BODY}>
+                But ask her what she&apos;s proudest of, and the answer isn&apos;t the fame — it&apos;s the thousands
+                of lives she&apos;s helped steady, and the students she&apos;s guided onto their own path as
+                astrologers.
+              </p>
+            </div>
           </div>
         </div>
       </div>
