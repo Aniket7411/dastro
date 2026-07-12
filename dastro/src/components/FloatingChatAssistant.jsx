@@ -3,42 +3,11 @@ import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
 import { WHATSAPP_NUMBER } from '../utils/contactInfo';
-import { matchQuestion } from '../data/chatQA';
+import { chatQA, matchQuestion } from '../data/chatQA';
 
 const fallbackWhatsappNumber = WHATSAPP_NUMBER;
 
-const suggestedQuestions = [
-  {
-    label: 'Courses',
-    question: 'Which astrology course should I choose?',
-    keywords: ['course', 'class', 'learn', 'certification', 'vedic', 'advanced'],
-    answer: 'You can start with the beginner or Vedic astrology course if you are new. For deeper prediction skills, explore Advanced Astrology, Predictive Astrology, or Certification Courses.'
-  },
-  {
-    label: 'Consultation',
-    question: 'How can I book a consultation?',
-    keywords: ['consultation', 'booking', 'book', 'appointment', 'astrologer'],
-    answer: 'Go to Consultations, choose the service that matches your concern, and submit the booking form. The team will guide you through the next step.'
-  },
-  {
-    label: 'Shop',
-    question: 'How do I choose a gemstone or remedy?',
-    keywords: ['gemstone', 'remedy', 'shop', 'rudraksha', 'yantra', 'bracelet', 'puja'],
-    answer: 'For gemstones or remedies, it is best to choose after birth chart analysis. You can browse the Astro Shop, or contact support for a recommendation.'
-  },
-  {
-    label: 'Student Login',
-    question: 'Where can I watch my course videos?',
-    keywords: ['login', 'student', 'video', 'dashboard', 'watch', 'access'],
-    answer: 'Use Student Login, then open your dashboard. Your enrolled courses and protected class videos will be available there.'
-  },
-  {
-    label: 'Payment',
-    question: 'What should I do if payment fails?',
-    keywords: ['payment', 'failed', 'refund', 'checkout', 'transaction'],
-    answer: 'If payment fails, retry from the payment page or contact support with your name, phone number, and transaction details.'
-  }
-];
+const initialSuggestions = chatQA.filter(qa => ['Courses', 'Consultation', 'Shop', 'Technical', 'Payment'].includes(qa.label)).slice(0, 5);
 
 function normalizeWhatsappNumber(value) {
   return String(value || fallbackWhatsappNumber).replace(/[^\d]/g, '') || fallbackWhatsappNumber;
@@ -100,7 +69,7 @@ function FloatingChatAssistant() {
       botResponseText = answerFromQA;
     } else {
       const lowerQuery = query.toLowerCase();
-      const matched = suggestedQuestions.find((item) => item.keywords.some((keyword) => lowerQuery.includes(keyword)));
+      const matched = chatQA.find((item) => item.keywords.some((keyword) => lowerQuery.includes(keyword)));
       if (matched) {
         botResponseText = matched.answer;
       }
@@ -129,7 +98,7 @@ function FloatingChatAssistant() {
 
   const lowerQuestion = question.trim().toLowerCase();
   const liveMatches = isTyping
-    ? suggestedQuestions.filter((item) => item.keywords.some((keyword) => keyword.includes(lowerQuestion) || lowerQuestion.includes(keyword)))
+    ? chatQA.filter((item) => item.keywords.some((keyword) => keyword.includes(lowerQuestion) || lowerQuestion.includes(keyword))).slice(0, 10)
     : [];
 
   const wrapperPositionCls = hasMobileStickyBar ? 'bottom-24 lg:bottom-5' : 'bottom-[0.9rem] sm:bottom-5';
@@ -218,10 +187,10 @@ function FloatingChatAssistant() {
                 {/* Suggestions / Live Matches */}
                 {!isTyping && messages.length === 1 && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-2 flex flex-wrap gap-2">
-                    {suggestedQuestions.map((item) => (
+                    {initialSuggestions.map((item, idx) => (
                       <button
                         type="button"
-                        key={item.label}
+                        key={`init-${idx}-${item.label}`}
                         onClick={() => answerQuestion(item.question)}
                         className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-1.5 text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
                       >
@@ -233,10 +202,10 @@ function FloatingChatAssistant() {
 
                 {isTyping && liveMatches.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {liveMatches.map((item) => (
+                    {liveMatches.map((item, idx) => (
                       <button
                         type="button"
-                        key={item.label}
+                        key={`live-${idx}-${item.label}`}
                         onClick={() => answerQuestion(item.question)}
                         className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-1.5 text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
                       >
