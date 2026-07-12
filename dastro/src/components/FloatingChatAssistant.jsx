@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
 import { WHATSAPP_NUMBER } from '../utils/contactInfo';
 import { matchQuestion } from '../data/chatQA';
-
 
 const fallbackWhatsappNumber = WHATSAPP_NUMBER;
 
@@ -49,13 +49,25 @@ function FloatingChatAssistant() {
   const { settings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState('');
-  const [lastQuestion, setLastQuestion] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [answer, setAnswer] = useState('Hi, I can help with courses, consultations, shop remedies, student login, and payments.');
+  
+  const [messages, setMessages] = useState([
+    { id: 1, text: 'Namaste, and welcome to DS Astro Institute! I can help with courses, consultations, kundli readings and more. What would you like to know?', sender: 'bot' }
+  ]);
+  
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   const shouldHide = pathname.startsWith('/admin') || pathname.startsWith('/student/course');
-  // Course detail pages show a fixed price/CTA bar at the bottom on
-  // mobile/tablet — lift this FAB clear of it so they don't overlap.
   const hasMobileStickyBar = pathname.startsWith('/courses/');
   const whatsappNumber = useMemo(() => normalizeWhatsappNumber(settings?.whatsappNumber), [settings?.whatsappNumber]);
 
@@ -70,30 +82,35 @@ function FloatingChatAssistant() {
     const query = text.trim();
     if (!query) return;
 
-    // First try the 70 Q&A bank
+    // Add user message
+    const userMsg = { id: Date.now(), text: query, sender: 'user' };
+    
+    // Determine bot response
+    let botResponseText = '';
     const answerFromQA = matchQuestion(query);
     if (answerFromQA) {
-      setAnswer(answerFromQA);
-      setLastQuestion(query);
-      setQuestion('');
-      return;
+      botResponseText = answerFromQA;
+    } else {
+      const lowerQuery = query.toLowerCase();
+      const matched = suggestedQuestions.find((item) => item.keywords.some((keyword) => lowerQuery.includes(keyword)));
+      if (matched) {
+        botResponseText = matched.answer;
+      }
     }
-
-    // Then try existing suggested questions just in case
-    const lowerQuery = query.toLowerCase();
-    const matched = suggestedQuestions.find((item) => item.keywords.some((keyword) => lowerQuery.includes(keyword)));
-
-    if (matched) {
-      setAnswer(matched.answer);
-      setLastQuestion(query);
-      setQuestion('');
-      return;
+    
+    if (botResponseText) {
+      setMessages((prev) => [...prev, userMsg, { id: Date.now() + 1, text: botResponseText, sender: 'bot' }]);
+    } else {
+      setMessages((prev) => [...prev, userMsg, { 
+        id: Date.now() + 1, 
+        text: 'I am not fully sure about this. Please continue on WhatsApp and our team will help you directly.', 
+        sender: 'bot',
+        isFallback: true 
+      }]);
+      setTimeout(() => openWhatsApp(query), 1500);
     }
-
-    setAnswer('I am not fully sure about this. Please continue on WhatsApp and our team will help you directly.');
-    setLastQuestion(query);
+    
     setQuestion('');
-    openWhatsApp(query);
   };
 
   const handleSubmit = (event) => {
@@ -111,124 +128,153 @@ function FloatingChatAssistant() {
 
   return (
     <div className={`fixed z-[1040] right-[0.9rem] sm:right-5 ${wrapperPositionCls}`}>
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-label="Website help chat"
-          className="absolute bottom-16 right-0 w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-site-accent-dark/[0.14] bg-white shadow-[0_22px_55px_rgba(42,15,2,0.18)] sm:bottom-[4.2rem]"
-        >
-          <div className="flex items-center justify-between gap-3 bg-gradient-to-br from-site-primary to-site-accent-dark p-4 text-white">
-            <div>
-              <span className="block text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-white/80">
-                Website Help
-              </span>
-              <strong className="mt-[0.2rem] block text-base font-bold leading-tight">
-                How can we guide you?
-              </strong>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close chat"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white"
-            >
-              <i className="fas fa-times"></i>
-            </button>
-          </div>
-
-          {!isTyping && (
-            <div className="p-4">
-              {lastQuestion && (
-                <div className="mb-3 rounded-lg bg-gray-50 p-2 text-sm text-gray-700 border border-gray-100">
-                  <span className="font-bold text-site-primary">You:</span> {lastQuestion}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            role="dialog"
+            aria-label="Website help chat"
+            className="absolute bottom-16 right-0 flex h-[28rem] w-[min(23rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-site-accent-dark/[0.14] bg-white shadow-[0_22px_55px_rgba(42,15,2,0.18)] sm:bottom-[4.2rem]"
+          >
+            {/* Header */}
+            <div className="flex shrink-0 items-center justify-between gap-3 bg-gradient-to-br from-site-primary to-site-accent-dark p-4 text-white shadow-md z-10">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                  <i className="fas fa-robot text-lg"></i>
                 </div>
-              )}
-              <p className="mb-[0.85rem] text-[0.92rem] leading-[1.55] text-site-muted">{answer}</p>
-              <div className="flex flex-wrap gap-[0.45rem]">
-                {suggestedQuestions.map((item) => (
-                  <button
-                    type="button"
-                    key={item.label}
-                    onClick={() => {
-                      setQuestion(item.question);
-                      setIsTyping(false);
-                      answerQuestion(item.question);
-                    }}
-                    className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-[0.62rem] py-[0.42rem] text-[0.78rem] font-extrabold text-site-primary"
+                <div>
+                  <span className="block text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-white/80">
+                    Website Help
+                  </span>
+                  <strong className="mt-[0.1rem] block text-[0.95rem] font-bold leading-tight">
+                    How can we guide you?
+                  </strong>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close chat"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 overflow-y-auto bg-[#f8f9fa] p-4 custom-scrollbar">
+              <div className="flex flex-col gap-4">
+                {messages.map((msg) => (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={msg.id}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    {item.label}
-                  </button>
+                    <div
+                      className={`relative max-w-[85%] rounded-2xl px-4 py-[0.65rem] text-[0.9rem] leading-relaxed shadow-sm ${
+                        msg.sender === 'user'
+                          ? 'rounded-tr-sm bg-site-primary text-white'
+                          : 'rounded-tl-sm bg-white text-site-muted border border-gray-100'
+                      }`}
+                    >
+                      {msg.text}
+                      {msg.isFallback && (
+                        <button
+                          onClick={() => openWhatsApp(messages[messages.length - 2]?.text)}
+                          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-3 py-2 text-xs font-bold text-white transition hover:bg-[#20bd5a]"
+                        >
+                          <i className="fab fa-whatsapp text-sm"></i>
+                          Chat on WhatsApp
+                        </button>
+                      )}
+                    </div>
+                  </motion.div>
                 ))}
+                
+                {/* Suggestions / Live Matches */}
+                {!isTyping && messages.length === 1 && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-2 flex flex-wrap gap-2">
+                    {suggestedQuestions.map((item) => (
+                      <button
+                        type="button"
+                        key={item.label}
+                        onClick={() => answerQuestion(item.question)}
+                        className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-1.5 text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+
+                {isTyping && liveMatches.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {liveMatches.map((item) => (
+                      <button
+                        type="button"
+                        key={item.label}
+                        onClick={() => answerQuestion(item.question)}
+                        className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-1.5 text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
               </div>
             </div>
-          )}
 
-          {isTyping && liveMatches.length > 0 && (
-            <div className="p-4">
-              <div className="flex flex-wrap gap-[0.45rem]">
-                {liveMatches.map((item) => (
-                  <button
-                    type="button"
-                    key={item.label}
-                    onClick={() => {
-                      setQuestion(item.question);
-                      setIsTyping(false);
-                      answerQuestion(item.question);
-                    }}
-                    className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-[0.62rem] py-[0.42rem] text-[0.78rem] font-extrabold text-site-primary"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <form
-            className="grid grid-cols-[1fr_auto] gap-2 border-t border-site-accent-dark/[0.14] p-[0.85rem]"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              value={question}
-              onChange={(event) => {
-                const value = event.target.value;
-                setQuestion(value);
-                setIsTyping(value.trim().length > 0);
-              }}
-              placeholder="Ask about courses, payment, shop..."
-              className="min-w-0 rounded-full border border-site-accent-dark/[0.14] px-[0.82rem] py-[0.62rem] text-[0.88rem] text-site-text outline-none focus:border-site-accent focus:ring-[3px] focus:ring-site-accent/[0.12]"
-            />
-            <button
-              type="submit"
-              aria-label="Ask question"
-              className="flex h-[2.45rem] w-[2.45rem] items-center justify-center rounded-full border-0 bg-site-primary text-white"
+            {/* Input Area */}
+            <form
+              className="flex shrink-0 items-center gap-2 border-t border-gray-200 bg-white p-3"
+              onSubmit={handleSubmit}
             >
-              <i className="fas fa-paper-plane"></i>
-            </button>
-          </form>
+              <input
+                type="text"
+                value={question}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setQuestion(value);
+                  setIsTyping(value.trim().length > 0);
+                }}
+                placeholder="Type your message..."
+                className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-site-text outline-none transition focus:border-site-primary focus:bg-white focus:ring-[3px] focus:ring-site-primary/10"
+              />
+              <button
+                type="submit"
+                disabled={!question.trim()}
+                aria-label="Ask question"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-0 bg-site-primary text-white transition hover:bg-site-primary/90 disabled:opacity-50"
+              >
+                <i className="fas fa-paper-plane text-sm"></i>
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <button
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             type="button"
-            onClick={() => openWhatsApp(question)}
-            className="flex w-full items-center justify-center gap-2 border-0 border-t border-[rgba(15,118,64,0.14)] bg-[#e9fff2] p-[0.85rem] text-sm font-extrabold text-[#0f7640]"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open help chat"
+            className="flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-full border border-white/[0.18] bg-site-primary text-white shadow-[0_16px_35px_rgba(42,15,2,0.28)]"
           >
-            <i className="fab fa-whatsapp"></i>
-            Continue on WhatsApp
-          </button>
-        </div>
-      )}
-
-      {!isOpen && (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open help chat"
-          className="flex h-[3.4rem] w-[3.4rem] items-center justify-center rounded-full border border-white/[0.18] bg-site-primary text-white shadow-[0_16px_35px_rgba(42,15,2,0.28)] transition hover:-translate-y-0.5 hover:bg-[#6b3514]"
-        >
-          <i className="fas fa-comments"></i>
-        </button>
-      )}
+            <i className="fas fa-comment-dots text-xl"></i>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
