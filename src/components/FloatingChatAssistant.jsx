@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import { WHATSAPP_NUMBER } from '../utils/contactInfo';
+import { matchQuestion } from '../data/chatQA';
+
 
 const fallbackWhatsappNumber = WHATSAPP_NUMBER;
 
@@ -67,6 +69,14 @@ function FloatingChatAssistant() {
     const query = text.trim();
     if (!query) return;
 
+    // First try the 70 Q&A bank
+    const answerFromQA = matchQuestion(query);
+    if (answerFromQA) {
+      setAnswer(answerFromQA);
+      return;
+    }
+
+    // Then try existing suggested questions just in case
     const lowerQuery = query.toLowerCase();
     const matched = suggestedQuestions.find((item) => item.keywords.some((keyword) => lowerQuery.includes(keyword)));
 

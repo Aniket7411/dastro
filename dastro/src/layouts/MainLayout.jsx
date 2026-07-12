@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import { PageLoader } from '../components/PageLoader';
 import { DeferredSiteOffersModal } from '../components/DeferredSiteWidgets';
 import { SKIP_LAYOUT_TW_PAGE_PATHS, TW_PAGE_ROOT } from '../utils/siteTokens';
-import FloatingChatWidget from '../components/chat/FloatingChatWidget';
+
 
 function MainLayout() {
   const { pathname } = useLocation();
@@ -27,7 +27,6 @@ function MainLayout() {
       </main>
       <Footer />
       <DeferredSiteOffersModal />
-      <FloatingChatWidget />
     </div>
   );
 }
