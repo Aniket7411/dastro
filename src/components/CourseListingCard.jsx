@@ -101,12 +101,10 @@ export default function CourseListingCard({ course }) {
 
         {course.shortDesc ? <p className={SITE_COURSE_CARD_DESC}>{course.shortDesc}</p> : null}
 
-        {(course.instructor || (!isLive && course.modulesCount > 0) || (isLive && course.schedule)) && (
+        {/* modules count is already shown once in the duration strip above the image — not repeated here */}
+        {(course.instructor || (isLive && course.schedule)) && (
           <div className="mb-2 hidden flex-wrap gap-1 sm:flex">
             {course.instructor ? <MetaChip icon={User}>{course.instructor}</MetaChip> : null}
-            {!isLive && course.modulesCount > 0 ? (
-              <MetaChip icon={BookOpen}>{course.modulesCount} modules</MetaChip>
-            ) : null}
             {isLive && course.schedule ? <MetaChip icon={Clock}>{course.schedule}</MetaChip> : null}
           </div>
         )}

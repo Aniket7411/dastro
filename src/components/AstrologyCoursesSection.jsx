@@ -296,15 +296,19 @@ export default function AstrologyCoursesSection() {
 
   useEffect(() => {
     let cancelled = false;
+    // Fetch a buffer beyond the display limit — home page only shows priced courses,
+    // so we need extra candidates to still fill up to HOME_COURSE_LIMIT after filtering.
+    const fetchLimit = HOME_COURSE_LIMIT * 3;
 
     Promise.all([
-      fetchCourses({ courseType: 'Live', limit: HOME_COURSE_LIMIT }),
-      fetchCourses({ courseType: 'Recorded', limit: HOME_COURSE_LIMIT }),
+      fetchCourses({ courseType: 'Live', limit: fetchLimit }),
+      fetchCourses({ courseType: 'Recorded', limit: fetchLimit }),
     ])
       .then(([live, recorded]) => {
         if (cancelled) return;
-        setLiveCourses(live);
-        setRecordedCourses(recorded);
+        const hasPrice = (course) => Number(course.price) > 0;
+        setLiveCourses(live.filter(hasPrice).slice(0, HOME_COURSE_LIMIT));
+        setRecordedCourses(recorded.filter(hasPrice).slice(0, HOME_COURSE_LIMIT));
       })
       .catch(() => {
         if (cancelled) return;
