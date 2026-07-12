@@ -303,7 +303,7 @@ function PrivacyPolicy() {
               For any questions, concerns, or requests relating to this Privacy Policy, please contact us at:
             </p>
             <div className="contact-details">
-              <p><strong>Company Name:</strong> <strong>DS ASTROLOGY LLP</strong></p>
+              <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
               {/* <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
               <p><strong>Email:</strong> <a href="mailto:info@dsastroinstitute.com" className="text-site-accent hover:underline">info@dsastroinstitute.com</a></p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>

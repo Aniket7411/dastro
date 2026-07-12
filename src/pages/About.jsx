@@ -28,6 +28,22 @@ const faqSchema = {
   })),
 };
 
+// sameAs (social/press links) intentionally omitted until confirmed — see SEO_Copy_Facts_To_Confirm.docx
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Damini Shukla',
+  jobTitle: 'Astrologer',
+  description:
+    'Celebrity Vedic astrologer, tarot reader, and founder of DS Astro Institute with 10+ years of experience.',
+  image: 'https://dsastroinstitute.com/images/damini.webp',
+  url: 'https://dsastroinstitute.com/about',
+  worksFor: {
+    '@type': 'EducationalOrganization',
+    name: 'DS Astro Institute',
+  },
+};
+
 function About() {
   useEffect(() => {
     if (window.AOS) window.AOS.refresh();
@@ -38,6 +54,7 @@ function About() {
       <SEO title={ABOUT_SEO.title} description={ABOUT_SEO.description} url="/about" />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
       <AboutHero />
