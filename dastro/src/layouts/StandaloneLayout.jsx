@@ -4,6 +4,7 @@ import { PageLoader } from '../components/PageLoader';
 import { motion } from 'framer-motion';
 import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 import { TW_PAGE_ROOT } from '../utils/siteTokens';
+import FloatingChatWidget from '../components/chat/FloatingChatWidget';
 
 const SHELL_LINK =
   '!no-underline decoration-transparent visited:!no-underline hover:!no-underline focus:!no-underline';
@@ -229,6 +230,8 @@ function StandaloneLayout() {
           <p className="mb-0 text-xs font-bold text-[#d8b894]">&copy; 2026 Cosmic Light Astrology</p>
         </div>
       </motion.footer>
+
+      <FloatingChatWidget />
     </div>
   );
 }
