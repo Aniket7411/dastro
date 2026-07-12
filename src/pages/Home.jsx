@@ -1031,7 +1031,7 @@ function Home() {
               <div className="col-12 col-lg-4 order-2 service-center-col text-center d-flex align-items-center justify-content-center my-4 py-2 my-lg-0 py-lg-0" data-aos="zoom-in">
                 <div className="service-center-img position-relative w-100">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
-                  <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
+                  <img alt="meditation" src="/removebg.png" className="img-fluid center-overlay" />
                 </div>
               </div>
 
@@ -2848,10 +2848,10 @@ function Home() {
         .service-center-img .center-overlay {
           position: absolute;
           left: 50%;
-          top: 50%;
+          top: 43%;
           transform: translate(-50%, -50%);
-          width: 62%;
-          max-width: 260px;
+          width: 50%;
+          max-width: 210px;
           z-index: 2;
           margin: 0;
           pointer-events: none;
@@ -2871,9 +2871,9 @@ function Home() {
           }
 
           .service-center-img .center-overlay {
-            width: 58%;
-            max-width: 300px;
-            top: 48%;
+            width: 45%;
+            max-width: 225px;
+            top: 41%;
           }
 
           .service-card {
@@ -2927,8 +2927,9 @@ function Home() {
           }
 
           .service-center-img .center-overlay {
-            width: 52%;
-            max-width: 140px;
+            width: 46%;
+            max-width: 122px;
+            top: 44%;
           }
 
           .service-card {

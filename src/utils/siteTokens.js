@@ -125,6 +125,10 @@ export const SITE_COURSE_CARD_BADGE_RECORDED =
 export const SITE_COURSE_CARD_DURATION =
   'pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex items-center justify-center gap-1 bg-black/55 px-1.5 py-1 font-body text-[9.5px] font-medium leading-tight text-white sm:gap-1.5 sm:py-1.5 sm:text-[10px]';
 
+/** Duration strip as its own block BELOW the image, not overlaid on top of it */
+export const SITE_COURSE_CARD_DURATION_STRIP =
+  'flex w-full items-center justify-center gap-1 bg-site-primary px-2 py-1.5 font-body text-[10px] font-medium leading-tight text-white sm:gap-1.5 sm:py-2 sm:text-[11px]';
+
 /** §03 Hero panel — parchment block on cream pages */
 export const SITE_HERO_PANEL =
   'rounded-2xl border border-site-border bg-site-surface p-8 sm:p-10';

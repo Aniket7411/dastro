@@ -83,7 +83,7 @@ function CourseCard({ course }) {
     <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
       <Link
         to={detailPath}
-        className={`${CARD_LINK} relative block h-[148px] overflow-hidden min-[480px]:h-[158px] sm:h-[162px]`}
+        className={`${CARD_LINK} relative block aspect-video overflow-hidden bg-site-sand`}
         tabIndex={-1}
         aria-hidden
       >
@@ -113,9 +113,9 @@ function CourseCard({ course }) {
             {course.level}
           </span>
         ) : null}
-
-        <CourseCardDurationBar course={course} />
       </Link>
+
+      <CourseCardDurationBar course={course} variant="strip" />
 
       <div className={SITE_COURSE_CARD_BODY}>
         {course.category ? <p className={SITE_COURSE_CARD_KICKER}>{course.category}</p> : null}

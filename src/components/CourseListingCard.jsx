@@ -45,7 +45,7 @@ export default function CourseListingCard({ course }) {
     <article className={`${SITE_COURSE_CARD} h-full w-full min-w-0`}>
       <Link
         to={detailPath}
-        className={`${CARD_LINK} relative block h-[148px] overflow-hidden min-[480px]:h-[158px] sm:h-[162px]`}
+        className={`${CARD_LINK} relative block aspect-video overflow-hidden bg-site-sand`}
         tabIndex={-1}
         aria-hidden
       >
@@ -80,16 +80,17 @@ export default function CourseListingCard({ course }) {
           </span>
         )}
 
-        {course.tier ? (
+        {/* course.tier badge (e.g. "Lead Magnet") is an internal classification, not for public display — commented out per client request */}
+        {/* {course.tier ? (
           <span
             className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 z-[2] max-w-[calc(100%-3.25rem)] whitespace-nowrap sm:right-2 sm:max-w-[calc(100%-4rem)]`}
           >
             {course.tier}
           </span>
-        ) : null}
-
-        <CourseCardDurationBar course={course} />
+        ) : null} */}
       </Link>
+
+      <CourseCardDurationBar course={course} variant="strip" />
 
       <div className={SITE_COURSE_CARD_BODY}>
         {course.category ? <p className={SITE_COURSE_CARD_KICKER}>{course.category}</p> : null}
