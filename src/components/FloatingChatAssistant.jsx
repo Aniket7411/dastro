@@ -7,7 +7,16 @@ import { chatQA, matchQuestion } from '../data/chatQA';
 
 const fallbackWhatsappNumber = WHATSAPP_NUMBER;
 
-const initialSuggestions = chatQA.filter(qa => ['Courses', 'Consultation', 'Shop', 'Technical', 'Payment'].includes(qa.label)).slice(0, 5);
+const targetCategories = ['Courses', 'Consultation', 'Shop', 'Technical', 'Payment'];
+const initialSuggestions = [];
+const seenLabels = new Set();
+for (const qa of chatQA) {
+  if (targetCategories.includes(qa.label) && !seenLabels.has(qa.label)) {
+    initialSuggestions.push(qa);
+    seenLabels.add(qa.label);
+    if (initialSuggestions.length === 5) break;
+  }
+}
 
 function normalizeWhatsappNumber(value) {
   return String(value || fallbackWhatsappNumber).replace(/[^\d]/g, '') || fallbackWhatsappNumber;
@@ -201,15 +210,15 @@ function FloatingChatAssistant() {
                 )}
 
                 {isTyping && liveMatches.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-col gap-2">
                     {liveMatches.map((item, idx) => (
                       <button
                         type="button"
                         key={`live-${idx}-${item.label}`}
                         onClick={() => answerQuestion(item.question)}
-                        className="rounded-full border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-1.5 text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
+                        className="rounded-xl border border-site-accent-dark/[0.14] bg-[#fff7ee] px-3 py-2 text-left text-xs font-bold text-site-primary transition hover:bg-site-primary hover:text-white"
                       >
-                        {item.label}
+                        {item.question}
                       </button>
                     ))}
                   </div>
