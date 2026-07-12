@@ -222,6 +222,19 @@ function FloatingChatAssistant() {
                     ))}
                   </div>
                 )}
+
+                {isTyping && liveMatches.length === 0 && (
+                  <div className="mt-2 flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openWhatsApp(question)}
+                      className="rounded-xl border border-[#25D366] bg-[#25D366]/10 px-3 py-2 text-left text-xs font-bold text-[#25D366] transition hover:bg-[#25D366] hover:text-white flex items-center justify-between"
+                    >
+                      <span>Question not found. Chat on WhatsApp</span>
+                      <i className="fab fa-whatsapp text-sm"></i>
+                    </button>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
             </div>
