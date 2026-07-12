@@ -55,6 +55,14 @@ function FloatingChatAssistant() {
     { id: 1, text: 'Namaste, and welcome to DS Astro Institute! I can help with courses, consultations, kundli readings and more. What would you like to know?', sender: 'bot' }
   ]);
   
+  const clearChat = () => {
+    setMessages([
+      { id: Date.now(), text: 'Namaste, and welcome to DS Astro Institute! I can help with courses, consultations, kundli readings and more. What would you like to know?', sender: 'bot' }
+    ]);
+    setIsTyping(false);
+    setQuestion('');
+  };
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -154,14 +162,26 @@ function FloatingChatAssistant() {
                   </strong>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close chat"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20"
-              >
-                <i className="fas fa-times"></i>
-              </button>
+              <div className="flex items-center gap-2">
+                {messages.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={clearChat}
+                    title="Clear Chat"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20 hover:text-red-200"
+                  >
+                    <i className="fas fa-trash-alt text-[0.85rem]"></i>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close chat"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
             </div>
 
             {/* Chat Area */}
