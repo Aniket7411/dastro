@@ -250,8 +250,11 @@ export default function SiteNavbar({
   const studentDesktopLinks = (
     <>
       <li className="flex list-none items-center">
-        <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
+        <NavLink to="/" match="/">Home</NavLink>
       </li>
+      {/* <li className="flex list-none items-center">
+        <NavLink to="/dashboard" match="/dashboard">My Courses</NavLink>
+      </li> */}
       <CoursesDropdown coursesActive={coursesActive} />
       <FreeToolsDropdown toolsActive={toolsActive} />
       <li className="flex list-none items-center">
@@ -317,6 +320,7 @@ export default function SiteNavbar({
 
   const mobilePrimaryLinks = authState.isStudent
     ? [
+        { label: 'Home', to: '/', match: '/' },
         { label: 'My Courses', to: '/dashboard', match: '/dashboard' },
         { label: 'Consultations', to: '/book-consultation', match: '/book-consultation' },
         { label: 'Astro Chat', to: '/astrologer', match: '/astrologer', icon: MessageCircle },
@@ -452,19 +456,25 @@ export default function SiteNavbar({
 
         <nav className="flex-1 overflow-y-auto" aria-label="Mobile navigation">
           <ul className="m-0 list-none p-0">
-            {mobilePrimaryLinks.map((item) => (
-              <li key={item.to} className="border-b border-site-accent-dark/10">
-                <NavLink to={item.to} match={item.match} onClick={closeMobile} className="flex items-center gap-2 px-4 py-3.5">
-                  {item.icon && <item.icon className="h-3.5 w-3.5 shrink-0 opacity-60" />}
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
+            {mobilePrimaryLinks.map((item) => {
+              const isActive = item.match === '/' ? location.pathname === '/' : location.pathname.startsWith(item.match);
+              return (
+                <li key={item.to} className="border-b border-site-accent-dark/10">
+                  <Link 
+                    to={item.to} 
+                    onClick={closeMobile} 
+                    className={`${mobileNavItemClass} ${isActive ? '!text-site-accent-dark' : ''}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
 
             <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
-                className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold !uppercase tracking-[0.08em] text-site-text"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
                 onClick={() => setMobileCoursesOpen((open) => !open)}
                 aria-expanded={mobileCoursesOpen}
               >
@@ -505,7 +515,7 @@ export default function SiteNavbar({
             <li className="border-b border-site-accent-dark/10">
               <button
                 type="button"
-                className="flex w-full items-center justify-between px-4 py-3.5 text-left text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-site-text"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left !text-[0.6875rem] font-bold !uppercase tracking-[0.08em] !text-site-text"
                 onClick={() => setMobileToolsOpen((open) => !open)}
                 aria-expanded={mobileToolsOpen}
               >
@@ -576,7 +586,7 @@ export default function SiteNavbar({
                   <Link
                     to="/careers"
                     onClick={closeMobile}
-                    className={`flex items-center gap-2 ${mobileNavItemClass.replace('block ', '')}`}
+                    className={`gap-2 ${mobileNavItemClass}`}
                   >
                     Careers
                     <span className="rounded bg-red-600 px-1.5 py-0.5 text-[0.625rem] font-bold normal-case tracking-normal text-white">

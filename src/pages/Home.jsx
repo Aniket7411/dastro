@@ -1031,7 +1031,7 @@ function Home() {
               <div className="col-12 col-lg-4 order-2 service-center-col text-center d-flex align-items-center justify-content-center my-4 py-2 my-lg-0 py-lg-0" data-aos="zoom-in">
                 <div className="service-center-img position-relative w-100">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
-                  <img alt="meditation" src="/removebg.png" className="img-fluid center-overlay" />
+                  <img alt="meditation" src="/images/consultation_center_new.png" className="img-fluid center-overlay" />
                 </div>
               </div>
 

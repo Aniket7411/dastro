@@ -417,7 +417,7 @@ function StudentLogin() {
               </strong>
             </div>
             <img
-              src="/images/student_login_visual.png"
+              src="/images/student_login_visual_new.jpg"
               alt=""
               className="block h-full min-h-[22rem] w-full object-cover"
             />
