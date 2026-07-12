@@ -115,7 +115,7 @@ function FloatingChatAssistant() {
         sender: 'bot',
         isFallback: true 
       }]);
-      setTimeout(() => openWhatsApp(query), 1500);
+      openWhatsApp(query);
     }
     
     setQuestion('');
