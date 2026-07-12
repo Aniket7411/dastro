@@ -905,7 +905,8 @@ export const matchQuestion = (query) => {
   const normalizedQuery = query.toLowerCase().trim();
   for (const qa of chatQA) {
     for (const keyword of qa.keywords) {
-      if (normalizedQuery.includes(keyword.toLowerCase().trim())) {
+      const kw = keyword.toLowerCase().trim();
+      if (normalizedQuery.includes(kw) || kw.includes(normalizedQuery)) {
         return qa.answer;
       }
     }
