@@ -49,6 +49,7 @@ function FloatingChatAssistant() {
   const { settings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState('');
+  const [lastQuestion, setLastQuestion] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [answer, setAnswer] = useState('Hi, I can help with courses, consultations, shop remedies, student login, and payments.');
 
@@ -73,6 +74,8 @@ function FloatingChatAssistant() {
     const answerFromQA = matchQuestion(query);
     if (answerFromQA) {
       setAnswer(answerFromQA);
+      setLastQuestion(query);
+      setQuestion('');
       return;
     }
 
@@ -82,10 +85,14 @@ function FloatingChatAssistant() {
 
     if (matched) {
       setAnswer(matched.answer);
+      setLastQuestion(query);
+      setQuestion('');
       return;
     }
 
     setAnswer('I am not fully sure about this. Please continue on WhatsApp and our team will help you directly.');
+    setLastQuestion(query);
+    setQuestion('');
     openWhatsApp(query);
   };
 
@@ -131,6 +138,11 @@ function FloatingChatAssistant() {
 
           {!isTyping && (
             <div className="p-4">
+              {lastQuestion && (
+                <div className="mb-3 rounded-lg bg-gray-50 p-2 text-sm text-gray-700 border border-gray-100">
+                  <span className="font-bold text-site-primary">You:</span> {lastQuestion}
+                </div>
+              )}
               <p className="mb-[0.85rem] text-[0.92rem] leading-[1.55] text-site-muted">{answer}</p>
               <div className="flex flex-wrap gap-[0.45rem]">
                 {suggestedQuestions.map((item) => (
