@@ -89,11 +89,10 @@ function FloatingChatAssistant() {
     } else {
       setMessages((prev) => [...prev, userMsg, { 
         id: Date.now() + 1, 
-        text: 'I am not fully sure about this. Please continue on WhatsApp and our team will help you directly.', 
+        text: 'Question not found. Our team can help you with this directly. Please chat with us on WhatsApp.', 
         sender: 'bot',
         isFallback: true 
       }]);
-      openWhatsApp(query);
     }
     
     setQuestion('');
