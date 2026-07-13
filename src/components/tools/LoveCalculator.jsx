@@ -84,6 +84,7 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
   const [lang, setLang] = useState('en');
   const [translations, setTranslations] = useState(null);
   const reportRef = useRef(null);
+  const pdfReportRef = useRef(null);
 
   const isValid = () =>
     partnerA.lat && partnerA.lon && partnerB.lat && partnerB.lon &&
@@ -119,15 +120,20 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
   const scoreColor = score > 80 ? '#c6843f' : score > 60 ? '#9c5a1e' : '#65250c';
 
   const downloadReport = async () => {
-    if (!reportRef.current) return;
+    if (!pdfReportRef.current) return;
     setDownloading(true);
     try {
-      const canvas = await html2canvas(reportRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      const canvas = await html2canvas(pdfReportRef.current, { 
+        scale: 2, 
+        backgroundColor: '#ffffff',
+        useCORS: true
+      });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
       pdf.save(`${result.partnerA?.name || 'Partner1'}-${result.partnerB?.name || 'Partner2'}-compatibility.pdf`);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Could not download report. Please try again.');
     } finally {
       setDownloading(false);
@@ -281,6 +287,100 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
               >
                 ↺ Try Someone Else
               </button>
+            </div>
+
+            {/* Hidden printable report layout */}
+            <div 
+              ref={pdfReportRef} 
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+                top: '0',
+                width: '794px',
+                minHeight: '1123px',
+                padding: '60px 80px',
+                backgroundColor: '#ffffff',
+                boxSizing: 'border-box'
+              }}
+              className="font-sans text-[#4a372d]"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between border-b-2 border-[#c6843f] pb-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-full bg-[#65250c] flex items-center justify-center text-white font-serif text-xl font-black">DS</div>
+                  <div>
+                    <h1 className="font-serif text-xl font-bold tracking-wide text-[#65250c] uppercase">DS Astrology Institute</h1>
+                    <p className="text-[10px] uppercase tracking-widest text-[#9c5a1e] font-semibold">Vedic Synastry &amp; Cosmic Alignment</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-bold text-[#65250c]">LOVE COMPATIBILITY REPORT</p>
+                  <p className="text-[10px] text-gray-500">{new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                </div>
+              </div>
+
+              {/* Title Section */}
+              <div className="text-center my-8">
+                <span className="inline-block rounded-full bg-[#fff3e0] px-4 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#9c5a1e] mb-2">
+                  Celestial Match
+                </span>
+                <h2 className="font-serif text-3xl font-black text-[#65250c]">
+                  {result.partnerA?.name} &amp; {result.partnerB?.name}
+                </h2>
+                <p className="text-sm font-semibold text-[#9c5a1e] mt-1">
+                  {result.partnerA?.sign} Moon &amp; {result.partnerB?.sign} Moon
+                </p>
+              </div>
+
+              {/* Score Box */}
+              <div className="my-8 rounded-2xl border-2 border-[#f3e5d8] bg-[#fffaf4] p-8 text-center">
+                <p className="text-xs font-bold uppercase tracking-widest text-[#9c5a1e]/80 mb-2">Destiny Compatibility Score</p>
+                <div className="font-serif text-7xl font-black leading-none my-4" style={{ color: scoreColor }}>
+                  {score}%
+                </div>
+                <div className="mx-auto h-2.5 w-full max-w-[320px] overflow-hidden rounded-full bg-[#f3e5d8] my-4">
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${score}%`, background: scoreColor }}
+                  />
+                </div>
+                <p className="text-sm font-bold text-[#65250c] mt-3">
+                  {score >= 80 ? 'A deeply blessed, highly harmonious cosmic connection!' : score >= 60 ? 'A balanced relationship with strong potential for mutual growth.' : 'Requires understanding, patience, and conscious communication.'}
+                </p>
+              </div>
+
+              {/* Interpretation */}
+              {result.analysis && (
+                <div className="my-8 rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-sm">
+                  <h3 className="mb-3 font-serif text-base font-bold text-[#65250c] border-b border-[#f3e5d8] pb-2">✦ Cosmic Synastry Analysis</h3>
+                  <p className="text-sm italic leading-relaxed text-[#4a372d]">
+                    "{lang === 'hi' && translations ? translations[0] : result.analysis}"
+                  </p>
+                </div>
+              )}
+
+              {/* Pillars / Traits */}
+              {result.traits?.length > 0 && (
+                <div className="my-8">
+                  <h3 className="mb-4 font-serif text-base font-bold text-[#65250c] border-b border-[#f3e5d8] pb-2">✦ Key Compatibility Metrics</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    {result.traits.map((t, i) => (
+                      <div key={i} className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
+                        <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-[#9c5a1e]">{t.label}</div>
+                        <div className="text-sm font-extrabold text-[#65250c]">
+                          {lang === 'hi' && translations ? translations[i + 1] : t.value}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Footer */}
+              <div className="border-t border-[#f3e5d8] pt-6 mt-12 text-center text-[10px] text-gray-500">
+                <p className="mb-1">This is an automated Vedic compatibility analysis based on planetary synastry calculations.</p>
+                <p className="font-semibold text-[#9c5a1e]">DS Astrology Institute © {new Date().getFullYear()} • www.dsastrology.com</p>
+              </div>
             </div>
           </div>
         )}
