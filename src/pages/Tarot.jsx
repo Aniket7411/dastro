@@ -92,7 +92,7 @@ function Tarot() {
 
       {/* Right content panel */}
       <div className="flex flex-1 items-start justify-center bg-white px-4 pt-8 pb-32 sm:px-6 sm:pt-10 sm:pb-32 lg:items-center lg:px-10 lg:pt-14 lg:pb-28">
-        <div className="w-full max-w-lg">
+        <div className={`w-full transition-all duration-300 ${stage === 'result' ? 'max-w-3xl' : 'max-w-lg'}`}>
           {error && (
             <div className="mx-auto mb-6 max-w-sm rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
               {error}
