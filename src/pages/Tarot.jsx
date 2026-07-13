@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API_BASE from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from '../components/tools/TranslateButton';
 
 function Tarot() {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ function Tarot() {
   const [error, setError] = useState('');
   const [selectedIdx, setSelectedIdx] = useState(null);
   const [flipped, setFlipped] = useState(false);
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const startRitual = (e) => {
     e.preventDefault();
@@ -50,6 +53,8 @@ function Tarot() {
     setSelectedIdx(null);
     setFlipped(false);
     setQuestion('');
+    setLang('en');
+    setTranslations(null);
   };
 
   const totalCards = 22;
@@ -186,7 +191,7 @@ function Tarot() {
                       <div className="text-4xl">{cardResult.symbol}</div>
                       <h4 className="font-serif text-base font-extrabold text-[#65250c]">{cardResult.name}</h4>
                       <span className={`rounded-full px-3 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-widest ${cardResult.orientation === 'Upright' ? 'bg-[#ffefd6] text-[#c6843f]' : 'bg-[#faf7f4] text-[#9c847b]'}`}>
-                        {cardResult.orientation}
+                        {lang === 'hi' && translations ? translations[3] : cardResult.orientation}
                       </span>
                     </div>
                   </div>
@@ -208,18 +213,32 @@ function Tarot() {
 
               <div className="mb-3">
                 <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#65250c]">Core Energy</span>
-                <p className="text-xs leading-relaxed text-[#4a4a6a] sm:text-sm">{cardResult.meaning}</p>
+                <p className="text-xs leading-relaxed text-[#4a4a6a] sm:text-sm">
+                  {lang === 'hi' && translations ? translations[0] : cardResult.meaning}
+                </p>
               </div>
 
               <div className="mb-3">
                 <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#65250c]">Your Reading</span>
-                <p className="text-xs leading-relaxed text-[#4a372d] sm:text-sm">{cardResult.interpretation}</p>
+                <p className="text-xs leading-relaxed text-[#4a372d] sm:text-sm">
+                  {lang === 'hi' && translations ? translations[1] : cardResult.interpretation}
+                </p>
               </div>
 
               <div className="rounded-lg border-l-4 border-[#c6843f] bg-[#faf7f4] p-3">
                 <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#c6843f]">Divine Guidance</span>
-                <p className="text-xs font-semibold italic leading-relaxed text-[#65250c] sm:text-sm">{cardResult.wisdom}</p>
+                <p className="text-xs font-semibold italic leading-relaxed text-[#65250c] sm:text-sm">
+                  {lang === 'hi' && translations ? translations[2] : cardResult.wisdom}
+                </p>
               </div>
+
+              <TranslateButton
+                texts={[cardResult.meaning, cardResult.interpretation, cardResult.wisdom, cardResult.orientation]}
+                lang={lang}
+                setLang={setLang}
+                translations={translations}
+                onTranslate={(t) => setTranslations(t)}
+              />
             </div>
           </div>
         )}

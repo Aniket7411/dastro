@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 const emptyPartner = () => ({ name: '', dob: '', tob: '12:00', place: '', lat: '', lon: '' });
 
@@ -80,6 +81,8 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [downloading, setDownloading] = useState(false);
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
   const reportRef = useRef(null);
 
   const isValid = () =>
@@ -91,6 +94,8 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
     if (!isValid()) { setError('Please select both birth places from the dropdown.'); return; }
     setLoading(true);
     setError('');
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/love-compatibility`, {
         method: 'POST',
@@ -168,7 +173,7 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
                   </h1>
                   <p className="mb-5 text-sm text-white/80">{result.partnerA?.sign} Moon ♥ {result.partnerB?.sign} Moon</p>
                   <button
-                    onClick={() => setResult(null)}
+                    onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}
                     className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
                   >
                     ↺ Try Another
@@ -230,7 +235,9 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
             {result.analysis && (
               <div className="mb-4 rounded-2xl border border-[#f3e5d8] bg-white p-4 shadow-[0_4px_16px_rgba(198,132,63,0.06)] sm:p-5">
                 <h3 className="mb-2.5 font-serif text-sm font-bold text-[#65250c]">✦ Cosmic Interpretation</h3>
-                <p className="text-sm italic leading-relaxed text-[#4a372d]">"{result.analysis}"</p>
+                <p className="text-sm italic leading-relaxed text-[#4a372d]">
+                  "{lang === 'hi' && translations ? translations[0] : result.analysis}"
+                </p>
               </div>
             )}
 
@@ -240,12 +247,25 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
                 {result.traits.map((t, i) => (
                   <div key={i} className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-3 text-center">
                     <div className="mb-0.5 text-[0.5625rem] font-bold uppercase tracking-wider text-[#9c5a1e]">{t.label}</div>
-                    <div className="text-xs font-bold text-[#65250c]">{t.value}</div>
+                    <div className="text-xs font-bold text-[#65250c]">
+                      {lang === 'hi' && translations ? translations[i + 1] : t.value}
+                    </div>
                   </div>
                 ))}
               </div>
             )}
             </div>
+
+            <TranslateButton
+              texts={[
+                result.analysis || '',
+                ...(result.traits ? result.traits.map((t) => t.value) : [])
+              ]}
+              lang={lang}
+              setLang={setLang}
+              translations={translations}
+              onTranslate={(t) => setTranslations(t)}
+            />
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
               <button
@@ -256,7 +276,7 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
                 {downloading ? 'Preparing…' : '⬇ Download Report'}
               </button>
               <button
-                onClick={() => setResult(null)}
+                onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}
                 className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] px-6 py-2 text-xs font-bold uppercase tracking-wide text-[#9c5a1e] transition hover:bg-[#f3e5d8]"
               >
                 ↺ Try Someone Else

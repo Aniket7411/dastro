@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 const inputCls = 'w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors placeholder:text-[#c6843f]/40 focus:border-[#c6843f]';
 const labelCls = 'mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]';
@@ -11,11 +12,15 @@ function MoonTool({ onBack, image }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const calculate = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/moon`, {
         method: 'POST',
@@ -67,10 +72,12 @@ function MoonTool({ onBack, image }) {
             <>
               <div className="mb-3 text-4xl">🌙</div>
               <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/70">Moon Phase</p>
-              <h1 className="mb-2 font-serif text-3xl font-black leading-tight">{result.phase?.name}</h1>
+              <h1 className="mb-2 font-serif text-3xl font-black leading-tight">
+                {lang === 'hi' && translations ? translations[0] : result.phase?.name}
+              </h1>
               <p className="mb-5 text-sm text-white/80">{result.moonSign} Moon · {result.moonDegree}°</p>
               <button
-                onClick={() => setResult(null)}
+                onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
               >
                 ↺ Calculate Another
@@ -157,7 +164,9 @@ function MoonTool({ onBack, image }) {
                   {result.phase.keywords.map((kw, i) => (
                     <div key={i} className="flex items-center gap-2 rounded-lg bg-[#fffaf4] px-3 py-2">
                       <span className="text-xs text-[#c6843f]">✦</span>
-                      <span className="text-xs font-medium text-[#65250c]">{kw}</span>
+                      <span className="text-xs font-medium text-[#65250c]">
+                        {lang === 'hi' && translations ? translations[i + 1] : kw}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -168,7 +177,9 @@ function MoonTool({ onBack, image }) {
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
                 <div className="mb-1 text-[0.6rem] font-bold uppercase tracking-wider text-[#9c5a1e]">Moon Sign</div>
-                <div className="text-sm font-extrabold text-[#65250c]">{result.moonSign}</div>
+                <div className="text-sm font-extrabold text-[#65250c]">
+                  {result.moonSign}
+                </div>
                 <div className="mt-0.5 text-[0.6875rem] text-[#9c847b]">{result.moonDegree}°</div>
               </div>
               <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
@@ -178,6 +189,17 @@ function MoonTool({ onBack, image }) {
                 </div>
               </div>
             </div>
+
+            <TranslateButton
+              texts={[
+                result.phase?.name || '',
+                ...(result.phase?.keywords || [])
+              ]}
+              lang={lang}
+              setLang={setLang}
+              translations={translations}
+              onTranslate={(t) => setTranslations(t)}
+            />
           </div>
         )}
       </div>

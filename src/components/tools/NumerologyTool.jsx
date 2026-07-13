@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 const ICONS = {
   planet: '🪐', stones: '💎', days: '📅', color: '🎨',
@@ -22,11 +23,15 @@ function NumerologyTool({ onBack, image = '/images/numerology.jpg' }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const calculate = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/numerology`, {
         method: 'POST',
@@ -76,19 +81,23 @@ function NumerologyTool({ onBack, image = '/images/numerology.jpg' }) {
                     Unlock the vibrational power of your numbers. Discover your Radical, Destiny, and Name numbers based on Chaldean &amp; Vedic systems.
                   </p>
                 </>
-          ) : (
-            <>
-              <div className="mb-3 text-4xl">🔢</div>
-              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/70">Your Radical Number</p>
-              <h1 className="mb-2 font-serif text-5xl font-black leading-none">{result.radical}</h1>
-              {fav.planet && <p className="mb-5 text-sm text-white/80">Ruled by {fav.planet}</p>}
-              <button
-                onClick={() => setResult(null)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
-              >
-                ↺ Calculate New
-              </button>
-            </>
+              ) : (
+                <>
+                  <div className="mb-3 text-4xl">🔢</div>
+                  <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/70">Your Radical Number</p>
+                  <h1 className="mb-2 font-serif text-5xl font-black leading-none">{result.radical}</h1>
+                  {fav.planet && (
+                    <p className="mb-5 text-sm text-white/80">
+                      Ruled by {lang === 'hi' && translations ? translations[0] : fav.planet}
+                    </p>
+                  )}
+                  <button
+                    onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
+                  >
+                    ↺ Calculate New
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -159,12 +168,12 @@ function NumerologyTool({ onBack, image = '/images/numerology.jpg' }) {
                 <h3 className="mb-4 font-serif text-base font-bold text-[#65250c]">✦ Auspicious Details</h3>
                 <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                   {[
-                    ['Planet', ICONS.planet, fav.planet],
-                    ['Stone', ICONS.stones, fav.stones],
-                    ['Lucky Days', ICONS.days, fav.days],
-                    ['Colors', ICONS.color, fav.color],
+                    ['Planet', ICONS.planet, lang === 'hi' && translations ? translations[0] : fav.planet],
+                    ['Stone', ICONS.stones, lang === 'hi' && translations ? translations[1] : fav.stones],
+                    ['Lucky Days', ICONS.days, lang === 'hi' && translations ? translations[2] : fav.days],
+                    ['Colors', ICONS.color, lang === 'hi' && translations ? translations[3] : fav.color],
                     ['Dates', ICONS.dates, fav.dates],
-                    ['Letters', ICONS.alphabets, fav.alphabets],
+                    ['Letters', ICONS.alphabets, lang === 'hi' && translations ? translations[4] : fav.alphabets],
                   ].map(([label, icon, value]) => (
                     <div key={label} className="flex items-center gap-2 rounded-xl border border-[#f3e5d8] bg-[#fffaf4] p-2.5">
                       <span className="text-base">{icon}</span>
@@ -180,14 +189,32 @@ function NumerologyTool({ onBack, image = '/images/numerology.jpg' }) {
                   <div className="mt-4 rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
                     <div className="mb-1 text-lg">🕉️</div>
                     <div className="mb-1 text-[0.625rem] font-bold uppercase tracking-widest text-[#9c5a1e]">Sacred Mantra</div>
-                    <div className="text-base font-extrabold tracking-wide text-[#65250c]">{fav.mantra}</div>
+                    <div className="text-base font-extrabold tracking-wide text-[#65250c]">
+                      {lang === 'hi' && translations ? translations[5] : fav.mantra}
+                    </div>
                     <div className="mt-1.5 text-[0.6875rem] text-[#9c5a1e]">
-                      Chant 108 times every {fav.fast} morning
+                      Chant 108 times every {lang === 'hi' && translations ? translations[6] : fav.fast} morning
                     </div>
                   </div>
                 )}
               </div>
             )}
+
+            <TranslateButton
+              texts={[
+                fav.planet || '',
+                fav.stones || '',
+                fav.days || '',
+                fav.color || '',
+                fav.alphabets || '',
+                fav.mantra || '',
+                fav.fast || ''
+              ]}
+              lang={lang}
+              setLang={setLang}
+              translations={translations}
+              onTranslate={(t) => setTranslations(t)}
+            />
           </div>
         )}
       </div>

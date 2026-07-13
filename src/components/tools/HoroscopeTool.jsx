@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 const svgFigures = {
   Aries: (
@@ -262,11 +263,15 @@ function HoroscopeTool({ onBack, image }) {
   const [selected, setSelected] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const fetchHoroscope = async (sign) => {
     setLoading(true);
     setSelected(sign);
     setPrediction(null);
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/horoscope/${sign.name}`);
       const data = await res.json();
@@ -320,7 +325,7 @@ function HoroscopeTool({ onBack, image }) {
                 <h1 className="mb-2 font-serif text-4xl font-black leading-tight sm:text-5xl">{selected.name}</h1>
                 <p className="mb-6 text-sm text-white/80">Guided by the celestial alignment of {prediction?.date || 'Today'}.</p>
                 <button
-                  onClick={() => { setSelected(null); setPrediction(null); }}
+                  onClick={() => { setSelected(null); setPrediction(null); setLang('en'); setTranslations(null); }}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
                 >
                   ↺ Choose Another Sign
@@ -369,17 +374,23 @@ function HoroscopeTool({ onBack, image }) {
 
                   <div className="mb-6">
                     <h3 className="mb-3 font-serif text-lg font-bold text-[#65250c]">General Outlook</h3>
-                    <p className="text-sm leading-relaxed text-[#65250c]/85">{prediction.prediction}</p>
+                    <p className="text-sm leading-relaxed text-[#65250c]/85">
+                      {lang === 'hi' && translations ? translations[0] : prediction.prediction}
+                    </p>
                   </div>
 
                   <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="rounded-xl border border-[#f1e4d8] bg-[#faf7f4] p-4">
                       <h3 className="mb-2 font-serif text-base font-bold text-[#65250c]">Personal Growth</h3>
-                      <p className="text-xs leading-relaxed text-[#65250c]/70">Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions.</p>
+                      <p className="text-xs leading-relaxed text-[#65250c]/70">
+                        {lang === 'hi' && translations ? translations[1] : "Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions."}
+                      </p>
                     </div>
                     <div className="rounded-xl border border-[#f1e4d8] bg-[#faf7f4] p-4">
                       <h3 className="mb-2 font-serif text-base font-bold text-[#65250c]">Social Energy</h3>
-                      <p className="text-xs leading-relaxed text-[#65250c]/70">A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative.</p>
+                      <p className="text-xs leading-relaxed text-[#65250c]/70">
+                        {lang === 'hi' && translations ? translations[2] : "A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative."}
+                      </p>
                     </div>
                   </div>
 
@@ -393,6 +404,18 @@ function HoroscopeTool({ onBack, image }) {
                       <div className="text-lg font-black text-[#65250c]">Golden Brown</div>
                     </div>
                   </div>
+
+                  <TranslateButton
+                    texts={[
+                      prediction.prediction,
+                      "Expect clarity in your decisions today. The stars favor internal reflection and setting new intentions.",
+                      "A conversation with a peer might lead to an unexpected breakthrough. Stay open and communicative."
+                    ]}
+                    lang={lang}
+                    setLang={setLang}
+                    translations={translations}
+                    onTranslate={(t) => setTranslations(t)}
+                  />
                 </div>
               )}
             </div>

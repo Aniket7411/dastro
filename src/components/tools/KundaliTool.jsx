@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import toast from '../../utils/toast';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 function KundaliTool({ onBack, image }) {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ function KundaliTool({ onBack, image }) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [searching, setSearching] = useState(false);
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const handleLocationSearch = async (val) => {
     setQuery(val);
@@ -39,6 +42,8 @@ function KundaliTool({ onBack, image }) {
     e.preventDefault();
     if (!formData.lat || !formData.lon) { toast.error("Please select a valid birth place."); return; }
     setLoading(true);
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/kundali`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -78,7 +83,7 @@ function KundaliTool({ onBack, image }) {
               </button>
             )}
             <h2 className="results-header-title mb-0">{result.name}'s Vedic Chart</h2>
-            <button className="btn-calculate-premium py-2 px-4" style={{ fontSize: '14px' }} onClick={() => setResult(null)}>New Calculation</button>
+            <button className="btn-calculate-premium py-2 px-4" style={{ fontSize: '14px' }} onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}>New Calculation</button>
           </div>
 
           <div className="results-nav-tabs mb-5">
@@ -173,8 +178,18 @@ function KundaliTool({ onBack, image }) {
                 </div>
                 <div className="personality-analysis p-4" style={{ background: '#faf7f4', borderRadius: '15px' }}>
                   <h5 className="fw-bold mb-3" style={{ color: '#9c5a1e' }}>Personality Blueprint:</h5>
-                  <p style={{ lineHeight: '1.8', color: '#4a372d' }}>{interpretations[result.ascendant]?.text}</p>
+                  <p style={{ lineHeight: '1.8', color: '#4a372d' }}>
+                    {lang === 'hi' && translations ? translations[0] : interpretations[result.ascendant]?.text}
+                  </p>
                 </div>
+
+                <TranslateButton
+                  texts={[interpretations[result.ascendant]?.text || '']}
+                  lang={lang}
+                  setLang={setLang}
+                  translations={translations}
+                  onTranslate={(t) => setTranslations(t)}
+                />
               </div>
             )}
           </div>

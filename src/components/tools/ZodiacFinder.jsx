@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 import { useNavigate } from 'react-router-dom';
+import TranslateButton from './TranslateButton';
 
 const inputCls = 'w-full border-0 border-b-2 border-[#f3e5d8] bg-transparent py-2 text-sm font-semibold text-[#65250c] outline-none transition-colors focus:border-[#c6843f]';
 const labelCls = 'mb-1.5 block text-[0.6875rem] font-bold uppercase tracking-widest text-[#9c5a1e]';
@@ -11,12 +12,16 @@ function ZodiacFinder({ onBack, image }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lang, setLang] = useState('en');
+  const [translations, setTranslations] = useState(null);
 
   const findSign = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setResult(null);
+    setLang('en');
+    setTranslations(null);
     try {
       const res = await fetch(`${API_BASE}/api/tools/zodiac`, {
         method: 'POST',
@@ -72,7 +77,7 @@ function ZodiacFinder({ onBack, image }) {
               <h1 className="mb-2 font-serif text-3xl font-black leading-tight">{result.sign}</h1>
               <p className="mb-5 text-sm text-white/80">{result.dates}</p>
               <button
-                onClick={() => setResult(null)}
+                onClick={() => { setResult(null); setLang('en'); setTranslations(null); }}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
               >
                 ↺ Find Another Sign
@@ -125,7 +130,9 @@ function ZodiacFinder({ onBack, image }) {
                 The {result.sign} Personality
               </h2>
               {result.description && (
-                <p className="mt-2 text-sm italic leading-relaxed text-[#4a372d]">"{result.description}"</p>
+                <p className="mt-2 text-sm italic leading-relaxed text-[#4a372d]">
+                  "{lang === 'hi' && translations ? translations[0] : result.description}"
+                </p>
               )}
             </div>
 
@@ -138,7 +145,9 @@ function ZodiacFinder({ onBack, image }) {
                     {result.traits.map((t, i) => (
                       <div key={i} className="flex items-center gap-2 rounded-lg bg-[#fffaf4] px-3 py-1.5">
                         <span className="text-xs text-[#c6843f]">◈</span>
-                        <span className="text-xs font-medium text-[#65250c]">{t}</span>
+                        <span className="text-xs font-medium text-[#65250c]">
+                          {lang === 'hi' && translations ? translations[i + 1] : t}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -150,13 +159,17 @@ function ZodiacFinder({ onBack, image }) {
                 {result.ruler && (
                   <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-3 text-center">
                     <div className="mb-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[#9c5a1e]">Ruling Planet</div>
-                    <div className="text-sm font-extrabold text-[#65250c]">{result.ruler}</div>
+                    <div className="text-sm font-extrabold text-[#65250c]">
+                      {lang === 'hi' && translations ? translations[result.traits.length + 1] : result.ruler}
+                    </div>
                   </div>
                 )}
                 {result.color && (
                   <div className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-3 text-center">
                     <div className="mb-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[#9c5a1e]">Lucky Color</div>
-                    <div className="text-sm font-extrabold text-[#65250c]">{result.color}</div>
+                    <div className="text-sm font-extrabold text-[#65250c]">
+                      {lang === 'hi' && translations ? translations[result.traits.length + 2] : result.color}
+                    </div>
                   </div>
                 )}
                 {result.lucky?.length > 0 && (
@@ -167,6 +180,19 @@ function ZodiacFinder({ onBack, image }) {
                 )}
               </div>
             </div>
+
+            <TranslateButton
+              texts={[
+                result.description,
+                ...result.traits,
+                result.ruler,
+                result.color
+              ]}
+              lang={lang}
+              setLang={setLang}
+              translations={translations}
+              onTranslate={(t) => setTranslations(t)}
+            />
           </div>
         )}
       </div>
