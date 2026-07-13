@@ -44,11 +44,11 @@ function TranslateButton({ texts, lang, setLang, translations, onTranslate }) {
   };
 
   return (
-    <div className="mt-4 flex justify-center">
+    <div className="mt-4 w-full">
       <button
         onClick={handleToggle}
         disabled={loading}
-        className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold uppercase tracking-wider shadow-sm transition-all duration-300 ${
+        className={`w-full flex items-center justify-center gap-2 rounded-xl border py-3 text-xs font-extrabold uppercase tracking-widest shadow-sm transition-all duration-300 ${
           lang === 'hi'
             ? 'border-[#c6843f] bg-[#ffefd6] text-[#65250c] hover:bg-[#f3e5d8]'
             : 'border-[#f3e5d8] bg-white text-[#9c5a1e] hover:border-[#c6843f] hover:shadow-md'
@@ -56,7 +56,7 @@ function TranslateButton({ texts, lang, setLang, translations, onTranslate }) {
       >
         {loading ? (
           <>
-            <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#9c5a1e] border-r-transparent"></div>
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#9c5a1e] border-r-transparent"></div>
             Translating...
           </>
         ) : (
