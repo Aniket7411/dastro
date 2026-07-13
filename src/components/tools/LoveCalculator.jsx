@@ -288,98 +288,106 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
                 ↺ Try Someone Else
               </button>
             </div>
-
             {/* Hidden printable report layout */}
             <div 
-              ref={pdfReportRef} 
               style={{
-                position: 'absolute',
-                left: '-9999px',
-                top: '0',
+                position: 'fixed',
+                top: 0,
+                left: 0,
                 width: '794px',
-                minHeight: '1123px',
-                padding: '60px 80px',
-                backgroundColor: '#ffffff',
-                boxSizing: 'border-box'
+                zIndex: -9999,
+                pointerEvents: 'none',
+                overflow: 'hidden'
               }}
-              className="font-sans text-[#4a372d]"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between border-b-2 border-[#c6843f] pb-4 mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-[#65250c] flex items-center justify-center text-white font-serif text-xl font-black">DS</div>
-                  <div>
-                    <h1 className="font-serif text-xl font-bold tracking-wide text-[#65250c] uppercase">DS Astrology Institute</h1>
-                    <p className="text-[10px] uppercase tracking-widest text-[#9c5a1e] font-semibold">Vedic Synastry &amp; Cosmic Alignment</p>
+              <div 
+                ref={pdfReportRef} 
+                style={{
+                  width: '794px',
+                  minHeight: '1123px',
+                  padding: '60px 80px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box',
+                  fontFamily: 'sans-serif',
+                  color: '#4a372d'
+                }}
+              >
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #c6843f', paddingBottom: '16px', marginBottom: '32px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ height: '48px', width: '48px', borderRadius: '9999px', backgroundColor: '#65250c', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontFamily: 'serif', fontSize: '20px', fontWeight: '900' }}>DS</div>
+                    <div>
+                      <h1 style={{ fontFamily: 'serif', fontSize: '20px', fontWeight: 'bold', letterSpacing: '0.05em', color: '#65250c', textTransform: 'uppercase', margin: 0 }}>DS Astrology Institute</h1>
+                      <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', fontWeight: '600', margin: 0 }}>Vedic Synastry &amp; Cosmic Alignment</p>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#65250c', margin: 0 }}>LOVE COMPATIBILITY REPORT</p>
+                    <p style={{ fontSize: '10px', color: '#666666', margin: 0 }}>{new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs font-bold text-[#65250c]">LOVE COMPATIBILITY REPORT</p>
-                  <p className="text-[10px] text-gray-500">{new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                </div>
-              </div>
 
-              {/* Title Section */}
-              <div className="text-center my-8">
-                <span className="inline-block rounded-full bg-[#fff3e0] px-4 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#9c5a1e] mb-2">
-                  Celestial Match
-                </span>
-                <h2 className="font-serif text-3xl font-black text-[#65250c]">
-                  {result.partnerA?.name} &amp; {result.partnerB?.name}
-                </h2>
-                <p className="text-sm font-semibold text-[#9c5a1e] mt-1">
-                  {result.partnerA?.sign} Moon &amp; {result.partnerB?.sign} Moon
-                </p>
-              </div>
-
-              {/* Score Box */}
-              <div className="my-8 rounded-2xl border-2 border-[#f3e5d8] bg-[#fffaf4] p-8 text-center">
-                <p className="text-xs font-bold uppercase tracking-widest text-[#9c5a1e]/80 mb-2">Destiny Compatibility Score</p>
-                <div className="font-serif text-7xl font-black leading-none my-4" style={{ color: scoreColor }}>
-                  {score}%
-                </div>
-                <div className="mx-auto h-2.5 w-full max-w-[320px] overflow-hidden rounded-full bg-[#f3e5d8] my-4">
-                  <div
-                    className="h-full rounded-full"
-                    style={{ width: `${score}%`, background: scoreColor }}
-                  />
-                </div>
-                <p className="text-sm font-bold text-[#65250c] mt-3">
-                  {score >= 80 ? 'A deeply blessed, highly harmonious cosmic connection!' : score >= 60 ? 'A balanced relationship with strong potential for mutual growth.' : 'Requires understanding, patience, and conscious communication.'}
-                </p>
-              </div>
-
-              {/* Interpretation */}
-              {result.analysis && (
-                <div className="my-8 rounded-2xl border border-[#f3e5d8] bg-white p-6 shadow-sm">
-                  <h3 className="mb-3 font-serif text-base font-bold text-[#65250c] border-b border-[#f3e5d8] pb-2">✦ Cosmic Synastry Analysis</h3>
-                  <p className="text-sm italic leading-relaxed text-[#4a372d]">
-                    "{lang === 'hi' && translations ? translations[0] : result.analysis}"
+                {/* Title Section */}
+                <div style={{ textAlign: 'center', margin: '32px 0' }}>
+                  <span style={{ display: 'inline-block', borderRadius: '9999px', backgroundColor: '#fff3e0', padding: '4px 16px', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', marginBottom: '8px' }}>
+                    Celestial Match
+                  </span>
+                  <h2 style={{ fontFamily: 'serif', fontSize: '30px', fontWeight: '900', color: '#65250c', margin: 0 }}>
+                    {result.partnerA?.name} &amp; {result.partnerB?.name}
+                  </h2>
+                  <p style={{ fontSize: '14px', fontWeight: '600', color: '#9c5a1e', marginTop: '4px', marginBottom: 0 }}>
+                    {result.partnerA?.sign} Moon &amp; {result.partnerB?.sign} Moon
                   </p>
                 </div>
-              )}
 
-              {/* Pillars / Traits */}
-              {result.traits?.length > 0 && (
-                <div className="my-8">
-                  <h3 className="mb-4 font-serif text-base font-bold text-[#65250c] border-b border-[#f3e5d8] pb-2">✦ Key Compatibility Metrics</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    {result.traits.map((t, i) => (
-                      <div key={i} className="rounded-xl border border-[#f3e5d8] bg-[#fff8ef] p-4 text-center">
-                        <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-[#9c5a1e]">{t.label}</div>
-                        <div className="text-sm font-extrabold text-[#65250c]">
-                          {lang === 'hi' && translations ? translations[i + 1] : t.value}
-                        </div>
-                      </div>
-                    ))}
+                {/* Score Box */}
+                <div style={{ margin: '32px 0', borderRadius: '16px', border: '2px solid #f3e5d8', backgroundColor: '#fffaf4', padding: '32px', textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', marginBottom: '8px', marginTop: 0 }}>Destiny Compatibility Score</p>
+                  <div style={{ fontFamily: 'serif', fontSize: '72px', fontWeight: '900', lineHeight: 1, margin: '16px 0', color: scoreColor }}>
+                    {score}%
                   </div>
+                  <div style={{ marginLeft: 'auto', marginRight: 'auto', height: '10px', width: '100%', maxWidth: '320px', overflow: 'hidden', borderRadius: '9999px', backgroundColor: '#f3e5d8', margin: '16px auto' }}>
+                    <div
+                      style={{ height: '100%', borderRadius: '9999px', width: `${score}%`, backgroundColor: scoreColor }}
+                    />
+                  </div>
+                  <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#65250c', marginTop: '12px', marginBottom: 0 }}>
+                    {score >= 80 ? 'A deeply blessed, highly harmonious cosmic connection!' : score >= 60 ? 'A balanced relationship with strong potential for mutual growth.' : 'Requires understanding, patience, and conscious communication.'}
+                  </p>
                 </div>
-              )}
 
-              {/* Footer */}
-              <div className="border-t border-[#f3e5d8] pt-6 mt-12 text-center text-[10px] text-gray-500">
-                <p className="mb-1">This is an automated Vedic compatibility analysis based on planetary synastry calculations.</p>
-                <p className="font-semibold text-[#9c5a1e]">DS Astrology Institute © {new Date().getFullYear()} • www.dsastrology.com</p>
+                {/* Interpretation */}
+                {result.analysis && (
+                  <div style={{ margin: '32px 0', borderRadius: '16px', border: '1px solid #f3e5d8', backgroundColor: '#ffffff', padding: '24px' }}>
+                    <h3 style={{ marginBottom: '12px', fontFamily: 'serif', fontSize: '16px', fontWeight: 'bold', color: '#65250c', borderBottom: '1px solid #f3e5d8', paddingBottom: '8px', marginTop: 0 }}>✦ Cosmic Synastry Analysis</h3>
+                    <p style={{ fontSize: '14px', fontStyle: 'italic', lineHeight: 1.6, color: '#4a372d', margin: 0 }}>
+                      "{lang === 'hi' && translations ? translations[0] : result.analysis}"
+                    </p>
+                  </div>
+                )}
+
+                {/* Pillars / Traits */}
+                {result.traits?.length > 0 && (
+                  <div style={{ margin: '32px 0' }}>
+                    <h3 style={{ marginBottom: '12px', fontFamily: 'serif', fontSize: '16px', fontWeight: 'bold', color: '#65250c', borderBottom: '1px solid #f3e5d8', paddingBottom: '8px', marginTop: 0 }}>✦ Key Compatibility Metrics</h3>
+                    <div style={{ display: 'flex', gap: '16px', justifyContent: 'space-between' }}>
+                      {result.traits.map((t, i) => (
+                        <div key={i} style={{ flex: 1, borderRadius: '12px', border: '1px solid #f3e5d8', backgroundColor: '#fff8ef', padding: '16px', textAlign: 'center' }}>
+                          <div style={{ marginBottom: '4px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#9c5a1e' }}>{t.label}</div>
+                          <div style={{ fontSize: '14px', fontWeight: '800', color: '#65250c' }}>
+                            {lang === 'hi' && translations ? translations[i + 1] : t.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Footer */}
+                <div style={{ borderTop: '1px solid #f3e5d8', paddingTop: '24px', marginTop: '48px', textAlign: 'center', fontSize: '10px', color: '#666666' }}>
+                  <p style={{ margin: '0 0 4px 0' }}>This is an automated Vedic compatibility analysis based on planetary synastry calculations.</p>
+                  <p style={{ fontWeight: '600', color: '#9c5a1e', margin: 0 }}>DS Astrology Institute © {new Date().getFullYear()} • www.dsastrology.com</p>
+                </div>
               </div>
             </div>
           </div>
