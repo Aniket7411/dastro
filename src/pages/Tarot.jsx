@@ -188,9 +188,9 @@ function Tarot() {
                   </div>
                   <div className="tarot-card-back-side">
                     <div className="flex flex-col items-center justify-center gap-2 p-4 text-center">
-                      <div className="text-4xl">{cardResult.symbol}</div>
-                      <h4 className="font-serif text-base font-extrabold text-[#65250c]">{cardResult.name}</h4>
-                      <span className={`rounded-full px-3 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-widest ${cardResult.orientation === 'Upright' ? 'bg-[#ffefd6] text-[#c6843f]' : 'bg-[#faf7f4] text-[#9c847b]'}`}>
+                      <div className="text-6xl font-serif mb-1">{cardResult.symbol}</div>
+                      <h4 className="font-serif text-xl sm:text-2xl font-black text-[#65250c] mb-1.5">{cardResult.name}</h4>
+                      <span className={`rounded-full px-3.5 py-1 text-xs font-extrabold uppercase tracking-widest ${cardResult.orientation === 'Upright' ? 'bg-[#ffefd6] text-[#c6843f]' : 'bg-[#faf7f4] text-[#9c847b]'}`}>
                         {lang === 'hi' && translations ? translations[3] : cardResult.orientation}
                       </span>
                     </div>
@@ -207,27 +207,27 @@ function Tarot() {
 
             {/* Reading */}
             <div className="w-full min-w-0 flex-1 rounded-xl border border-[#f3e5d8] bg-white p-4 shadow-[0_2px_12px_rgba(198,132,63,0.06)] sm:p-5">
-              <h2 className="mb-3 border-b border-[#faf7f4] pb-2.5 font-serif text-base font-extrabold text-[#65250c] sm:text-lg">
+              <h2 className="mb-4 border-b border-[#faf7f4] pb-2.5 font-serif text-lg sm:text-2xl font-extrabold text-[#65250c]">
                 Oracle's Revelation
               </h2>
 
-              <div className="mb-3">
-                <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#65250c]">Core Energy</span>
-                <p className="text-xs leading-relaxed text-[#4a4a6a] sm:text-sm">
+              <div className="mb-4">
+                <span className="mb-1 block text-xs sm:text-[0.8rem] font-bold uppercase tracking-widest text-[#65250c]">Core Energy</span>
+                <p className="text-sm leading-relaxed text-[#4a4a6a] sm:text-[1rem]">
                   {lang === 'hi' && translations ? translations[0] : cardResult.meaning}
                 </p>
               </div>
 
-              <div className="mb-3">
-                <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#65250c]">Your Reading</span>
-                <p className="text-xs leading-relaxed text-[#4a372d] sm:text-sm">
+              <div className="mb-4">
+                <span className="mb-1 block text-xs sm:text-[0.8rem] font-bold uppercase tracking-widest text-[#65250c]">Your Reading</span>
+                <p className="text-sm leading-relaxed text-[#4a372d] sm:text-[1rem]">
                   {lang === 'hi' && translations ? translations[1] : cardResult.interpretation}
                 </p>
               </div>
 
-              <div className="rounded-lg border-l-4 border-[#c6843f] bg-[#faf7f4] p-3">
-                <span className="mb-1 block text-[0.6rem] font-bold uppercase tracking-widest text-[#c6843f]">Divine Guidance</span>
-                <p className="text-xs font-semibold italic leading-relaxed text-[#65250c] sm:text-sm">
+              <div className="rounded-lg border-l-4 border-[#c6843f] bg-[#faf7f4] p-3 mb-4">
+                <span className="mb-1 block text-xs sm:text-[0.8rem] font-bold uppercase tracking-widest text-[#c6843f]">Divine Guidance</span>
+                <p className="text-sm font-semibold italic leading-relaxed text-[#65250c] sm:text-[1rem]">
                   {lang === 'hi' && translations ? translations[2] : cardResult.wisdom}
                 </p>
               </div>
