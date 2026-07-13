@@ -332,26 +332,26 @@ function LoveCalculator({ onBack, image = '/images/love_compatibility.jpg' }) {
                   <span style={{ display: 'inline-block', borderRadius: '9999px', backgroundColor: '#fff3e0', padding: '4px 16px', fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', marginBottom: '8px' }}>
                     Celestial Match
                   </span>
-                  <h2 style={{ fontFamily: 'serif', fontSize: '30px', fontWeight: '900', color: '#65250c', margin: 0 }}>
+                  <h2 style={{ fontFamily: 'serif', fontSize: '30px', fontWeight: '900', color: '#65250c', margin: '8px 0', lineHeight: '1.3' }}>
                     {result.partnerA?.name} &amp; {result.partnerB?.name}
                   </h2>
-                  <p style={{ fontSize: '14px', fontWeight: '600', color: '#9c5a1e', marginTop: '4px', marginBottom: 0 }}>
+                  <p style={{ fontSize: '14px', fontWeight: '600', color: '#9c5a1e', margin: '4px 0 0 0', lineHeight: '1.4' }}>
                     {result.partnerA?.sign} Moon &amp; {result.partnerB?.sign} Moon
                   </p>
                 </div>
 
                 {/* Score Box */}
                 <div style={{ margin: '32px 0', borderRadius: '16px', border: '2px solid #f3e5d8', backgroundColor: '#fffaf4', padding: '32px', textAlign: 'center' }}>
-                  <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', marginBottom: '8px', marginTop: 0 }}>Destiny Compatibility Score</p>
-                  <div style={{ fontFamily: 'serif', fontSize: '72px', fontWeight: '900', lineHeight: 1, margin: '16px 0', color: scoreColor }}>
+                  <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9c5a1e', marginBottom: '12px', marginTop: 0, lineHeight: '1.3' }}>Destiny Compatibility Score</p>
+                  <div style={{ fontFamily: 'serif', fontSize: '72px', fontWeight: '900', lineHeight: '1.3', margin: '24px 0 16px 0', color: scoreColor }}>
                     {score}%
                   </div>
-                  <div style={{ marginLeft: 'auto', marginRight: 'auto', height: '10px', width: '100%', maxWidth: '320px', overflow: 'hidden', borderRadius: '9999px', backgroundColor: '#f3e5d8', margin: '16px auto' }}>
+                  <div style={{ marginLeft: 'auto', marginRight: 'auto', height: '10px', width: '100%', maxWidth: '320px', overflow: 'hidden', borderRadius: '9999px', backgroundColor: '#f3e5d8', margin: '24px auto 16px auto' }}>
                     <div
                       style={{ height: '100%', borderRadius: '9999px', width: `${score}%`, backgroundColor: scoreColor }}
                     />
                   </div>
-                  <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#65250c', marginTop: '12px', marginBottom: 0 }}>
+                  <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#65250c', marginTop: '16px', marginBottom: 0, lineHeight: '1.4' }}>
                     {score >= 80 ? 'A deeply blessed, highly harmonious cosmic connection!' : score >= 60 ? 'A balanced relationship with strong potential for mutual growth.' : 'Requires understanding, patience, and conscious communication.'}
                   </p>
                 </div>
