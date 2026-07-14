@@ -279,7 +279,7 @@ function PrivacyPolicy() {
               <p><strong>Designation:</strong> Grievance Officer</p>
               <p><strong>Email:</strong> help@dsastroinstitute.com</p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
-              <p><strong>Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
+              {/* <p><strong>Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
               <p><strong>Response Time:</strong> Within 7 working days of receipt of complaint</p>
             </div>
             <p>
@@ -304,7 +304,7 @@ function PrivacyPolicy() {
             </p>
             <div className="contact-details">
               <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
-              <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
+              {/* <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
               <p><strong>Website:</strong> https://dsastroinstitute.com/</p>

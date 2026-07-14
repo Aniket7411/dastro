@@ -17,7 +17,6 @@ import {
   SITE_BTN_OUTLINE,
 } from '../utils/siteTokens';
 import {
-  CONTACT_LINK,
   ContactChannelCard,
   ContactForm,
   ContactHero,
@@ -38,13 +37,13 @@ const contactChannels = [
     href: (value) => `mailto:${value}`,
     hint: 'We reply within 24 hours',
   },
-  {
-    icon: 'fa-map-marker-alt',
-    title: 'Visit Us',
-    valueKey: 'address',
-    href: null,
-    hint: 'In-person consultations by appointment',
-  },
+  // {
+  //   icon: 'fa-map-marker-alt',
+  //   title: 'Visit Us',
+  //   valueKey: 'address',
+  //   href: null,
+  //   hint: 'In-person consultations by appointment',
+  // },
 ];
 
 const supportHighlights = [
@@ -53,13 +52,13 @@ const supportHighlights = [
   { icon: 'fa-headset', text: 'Dedicated support for students and clients' },
 ];
 
-const grievanceDetails = [
-  { label: 'Name', value: 'Ananya Singh' },
-  { label: 'Email', value: 'help@dsastroinstitute.com', href: 'mailto:help@dsastroinstitute.com' },
-  { label: 'Phone', value: CONTACT_PHONE_DISPLAY, href: `tel:${CONTACT_PHONE_DISPLAY.replace(/[\s-]/g, '')}` },
-  { label: 'Address', value: 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010' },
-  { label: 'Response time', value: 'Within 7 working days' },
-];
+// const grievanceDetails = [
+//   { label: 'Name', value: 'Ananya Singh' },
+//   { label: 'Email', value: 'help@dsastroinstitute.com', href: 'mailto:help@dsastroinstitute.com' },
+//   { label: 'Phone', value: CONTACT_PHONE_DISPLAY, href: `tel:${CONTACT_PHONE_DISPLAY.replace(/[\s-]/g, '')}` },
+//   { label: 'Address', value: 'D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010' },
+//   { label: 'Response time', value: 'Within 7 working days' },
+// ];
 
 function Contact() {
   const { settings } = useSettings();
@@ -163,7 +162,7 @@ function Contact() {
                 ))}
               </ul>
 
-              <div className="rounded-xl border border-site-accent-dark/14 bg-white p-4 shadow-sm">
+              {/* <div className="rounded-xl border border-site-accent-dark/14 bg-white p-4 shadow-sm">
                 <div className="mb-3 flex items-center gap-2.5">
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fff7ed] text-sm text-site-accent">
                     <i className="fas fa-user-shield" aria-hidden="true" />
@@ -188,7 +187,7 @@ function Contact() {
                     </div>
                   ))}
                 </dl>
-              </div>
+              </div> */}
 
               <Link to="/book-consultation" className={`${SITE_BTN_OUTLINE} w-fit`}>
                 Prefer a consultation?

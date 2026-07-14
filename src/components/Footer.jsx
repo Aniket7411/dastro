@@ -385,14 +385,14 @@ function Footer() {
         <i className="fas fa-envelope text-site-accent-dark" />
         <span>info@dsastroinstitute.com</span>
       </li>
-      <li className="mt-1 flex items-start gap-2.5 text-[15px] text-site-muted">
+      {/* <li className="mt-1 flex items-start gap-2.5 text-[15px] text-site-muted">
         <i className="fas fa-map-marker-alt mt-1 text-site-accent-dark" />
         <span>
           D321, Vibhuti Khand
           <br />
           Lucknow, UP-226010
         </span>
-      </li>
+      </li> */}
     </>
   );
 
@@ -508,14 +508,14 @@ function Footer() {
               <i className="fas fa-envelope mt-0.5 text-site-accent-dark" />
               <span className="break-all">info@dsastroinstitute.com</span>
             </li>
-            <li className="flex items-start gap-2 text-sm text-site-muted">
+            {/* <li className="flex items-start gap-2 text-sm text-site-muted">
               <i className="fas fa-map-marker-alt mt-0.5 text-site-accent-dark" />
               <span>
                 D321, Vibhuti Khand
                 <br />
                 Lucknow, UP-226010
               </span>
-            </li>
+            </li> */}
           </ul>
         </div>
 

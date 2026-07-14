@@ -40,9 +40,9 @@ const SECTION_ALT = 'border-t border-site-border bg-site-surface';
 const SECTION_MAX = 'mx-auto max-w-3xl';
 
 export const ABOUT_SEO = {
-  title: 'About Damini Shukla — Celebrity Astrologer',
+  title: 'About Damini Shukla | Celebrity Astrologer & Founder – DS Astro Institute',
   description:
-    'Meet Damini Shukla — celebrity astrologer with 10+ years’ experience and 4,000+ clients. Vedic astrology, tarot, numerology, face reading & Vastu consultations and courses.',
+    'Meet Damini Shukla — celebrity Vedic astrologer with 10+ years of experience, 4,000+ consultations & 15,000+ students trained. Learn about DS Astro Institute.',
 };
 
 export const ABOUT_FAQ = [
@@ -66,6 +66,30 @@ export const ABOUT_FAQ = [
     q: 'Which astrology systems does Damini Shukla practise?',
     a: 'Vedic astrology, tarot, numerology, face reading, and Vastu Shastra.',
   },
+  {
+    q: 'How can I book an astrology consultation with Damini Shukla?',
+    a: 'Click "Book Consultation" anywhere on the site, choose your consultation type and time slot, and complete the payment. You\'ll receive confirmation with your call/video details on WhatsApp and email.',
+  },
+  {
+    q: 'What details do I need to share for a kundli reading?',
+    a: 'Your date of birth, exact time of birth, and place of birth. If your birth time is unknown, our astrologers can still guide you using alternative techniques like prashna and tarot.',
+  },
+  {
+    q: 'How much does an astrology consultation cost?',
+    a: 'Consultation fees vary by type and duration. Visit our Consultations page for current pricing, or chat with our team for guidance on which consultation suits your question best.',
+  },
+  {
+    q: 'Are the astrology courses certified?',
+    a: 'Yes. Every student receives a certificate from DS Astro Institute on successful completion, along with the practical chart-reading skills to begin their own practice.',
+  },
+  {
+    q: 'Can beginners with no background join the astrology courses?',
+    a: 'Absolutely. Our foundation batches assume zero prior knowledge and build up step by step — many of our 15,000+ students started as complete beginners.',
+  },
+  {
+    q: 'Does DS Astro Institute provide remedies and gemstone recommendations?',
+    a: 'Yes. Every consultation includes practical, personalised remedies. Certified gemstones, yantras, and spiritual essentials are available through our Astrology Shop.',
+  },
 ];
 
 const STATS = [
@@ -78,27 +102,27 @@ const STATS = [
 const SCIENCES = [
   {
     title: 'Vedic Astrology',
-    text: 'Birth-chart analysis, dashas & transits, and clear life direction.',
+    text: 'In-depth kundli analysis — birth chart, dashas, transits & clear life direction.',
     Icon: Star,
   },
   {
-    title: 'Tarot',
-    text: 'Focused readings for clarity when decisions feel uncertain.',
+    title: 'Tarot Reading',
+    text: 'Focused tarot card readings for clarity when decisions feel uncertain.',
     Icon: Layers,
   },
   {
     title: 'Numerology',
-    text: 'Name and number patterns that shape destiny and choice.',
+    text: 'Name and number analysis that reveals patterns shaping destiny and choice.',
     Icon: Hash,
   },
   {
     title: 'Face Reading',
-    text: 'Character and tendencies revealed through the face.',
+    text: 'Character, strengths, and tendencies revealed through Samudrik Shastra.',
     Icon: UserRound,
   },
   {
     title: 'Vastu Shastra',
-    text: 'Home and workspace aligned for peace and prosperity.',
+    text: 'Vastu consultation for home and workspace — aligned for peace and prosperity.',
     Icon: Home,
   },
 ];
@@ -106,35 +130,35 @@ const SCIENCES = [
 const OFFERINGS = [
   {
     title: 'Personal consultations',
-    text: 'Career · Love & marriage · Business · Health · Finances · Muhurat',
+    text: 'One-on-one astrology consultation for career, love & marriage, business, health, finances, and muhurat.',
     to: '/consultations',
     cta: 'Book consultation',
     Icon: CalendarCheck,
   },
   {
     title: 'Live courses',
-    text: 'Learn with Damini — foundations through advanced mastery.',
+    text: 'Learn Vedic astrology live with Damini — from foundations to advanced professional mastery, with certification.',
     to: '/live-courses',
     cta: 'View live courses',
     Icon: GraduationCap,
   },
   {
     title: 'Recorded courses',
-    text: 'Self-paced study, anytime, anywhere.',
+    text: 'Self-paced online astrology courses — study anytime, anywhere, with lifetime access.',
     to: '/recorded-courses',
     cta: 'Browse recorded',
     Icon: PlayCircle,
   },
   {
     title: 'Webinars & masterclasses',
-    text: 'Focused sessions on the topics that matter most.',
+    text: 'Focused live sessions on the topics that matter most — remedies, predictions & practice.',
     to: '/webinar',
     cta: 'Join a webinar',
     Icon: BookOpen,
   },
   {
     title: 'Astrology shop',
-    text: 'Remedies, gemstones, yantras, and spiritual essentials.',
+    text: 'Energised remedies, certified gemstones, yantras, and spiritual essentials — curated by Damini.',
     to: '/shop',
     cta: 'Visit shop',
     Icon: Store,
@@ -207,7 +231,7 @@ function AboutHeroImage({ className = '' }) {
       <div className="relative overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_12px_28px_rgba(51,37,26,0.10)]">
         <img
           src="/images/damini.webp"
-          alt="Damini Shukla — DS Astro Institute"
+          alt="Damini Shukla - Celebrity Astrologer and Founder of DS Astro Institute"
           className="mx-auto block h-auto max-h-[25rem] w-full object-contain object-center sm:max-h-[28rem] lg:max-h-[31rem]"
           loading="eager"
         />
@@ -236,7 +260,8 @@ export function AboutHero() {
                 About <span className="text-site-accent">DS Astro Institute</span>
               </h1>
               <p className={`mt-4 ${TW_LEAD}`}>
-                Guidance rooted in the cosmos — and a decade of devotion.
+                India&apos;s trusted institute for Vedic astrology consultations and certified astrology courses —
+                guided by celebrity astrologer Damini Shukla.
               </p>
             </div>
 
@@ -248,14 +273,22 @@ export function AboutHero() {
               <p className={TW_BODY}>
                 DS Astro Institute was born from a simple belief: that the wisdom of the stars, when read with
                 honesty and heart, can bring clarity to life&apos;s most uncertain moments. At the centre of it
-                stands <strong className="font-semibold text-site-text">Damini Shukla</strong> — a celebrated
-                astrologer, teacher, and guide who has spent more than ten years helping people find direction,
-                purpose, and peace.
+                stands <strong className="font-semibold text-site-text">Damini Shukla</strong> — a celebrated Vedic
+                astrologer, teacher, and mentor who has spent more than a decade helping people across India and
+                abroad find direction, purpose, and peace.
               </p>
               <p className={`${TW_BODY} text-site-muted`}>
                 For thousands across India and around the world, DS Astro Institute has become a trusted space
                 — not for fear or superstition, but for genuine understanding, practical remedies, and the quiet
-                confidence that comes from knowing what the stars have to say.
+                confidence that comes from knowing what the stars have to say. From online kundli{' '}
+                <Link to="/consultations" className="font-semibold text-site-accent-dark no-underline hover:underline">
+                  consultations
+                </Link>{' '}
+                to certified astrology{' '}
+                <Link to="/live-courses" className="font-semibold text-site-accent-dark no-underline hover:underline">
+                  courses
+                </Link>
+                , everything we do is built on accuracy, honesty, and practical remedies — never fear.
               </p>
             </div>
 
@@ -290,13 +323,13 @@ function AboutTeamImage({ className = '' }) {
       <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-site-border bg-site-sand shadow-[0_12px_28px_rgba(51,37,26,0.10)] sm:aspect-video">
         <img
           src="/images/teamimage.webp"
-          alt="Damini Shukla with the DS Astro Institute team"
+          alt="Damini Shukla with the DS Astro Institute team of astrologers"
           className="h-full w-full object-cover object-top"
           loading="lazy"
         />
       </div>
       <figcaption className="mt-3 rounded-xl border border-site-border bg-site-surface px-3 py-2 text-center shadow-sm sm:px-3.5 sm:py-2.5">
-        <p className="m-0 font-heading text-sm font-bold text-site-text">Damini Shukla &amp; the DS Astro Institute team</p>
+        <p className="m-0 font-heading text-sm font-bold text-site-text">Damini Shukla with fellow astrologers &amp; the DS Astro Institute mentor team</p>
         <p className="m-0 mt-0.5 font-body text-[12px] text-site-muted">Guidance rooted in experience, delivered by a dedicated team</p>
       </figcaption>
     </figure>
@@ -325,9 +358,9 @@ export function AboutDamini() {
               </p>
               <p className={`${TW_BODY} text-site-muted`}>
                 Over the years, she trained under several respected gurus and traditions, refining her craft until
-                she became one of the sought-after names in the field. She has served as a senior astrologer and
-                mentor on India&apos;s leading platforms — including Astrotalk, Astroyogi, and the Academy of Vedic
-                Vidya — guiding both clients and aspiring astrologers alike.
+                she became one of the sought-after names in Vedic astrology. She has served as a senior astrologer
+                and mentor on India&apos;s leading astrology platforms — including Astrotalk, Astroyogi, and the
+                Academy of Vedic Vidya — guiding more than 4,000 clients and 15,000+ aspiring astrologers.
               </p>
               <p className={`${TW_BODY} text-site-muted`}>
                 Her work has also reached the screen: Damini featured as an astrology consultant on the television
@@ -354,10 +387,10 @@ export function AboutSciences() {
       <div className={PAGE_WRAP}>
         <SectionIntro
           align="center"
-          kicker="A rare command of the sacred sciences"
-          title="Breadth that shapes"
-          titleHighlight="every reading"
-          subtitle="Where many specialise in a single art, Damini reads across several — so every question is seen from every angle."
+          kicker="Our specialities"
+          title="Vedic Astrology, Tarot, Numerology,"
+          titleHighlight="Face Reading & Vastu"
+          subtitle="Where many specialise in a single art, Damini reads across five sacred sciences — so every question is answered from every angle."
         >
           <p className={`${TW_BODY_SM} font-semibold text-site-accent-dark`}>
             Consultations in Hindi and English.
@@ -427,8 +460,8 @@ export function AboutOfferings() {
       <div className={PAGE_WRAP}>
         <SectionIntro
           kicker="What we offer"
-          title="A path for"
-          titleHighlight="every seeker"
+          title="Our Services —"
+          titleHighlight="Consultations, Courses, Webinars & More"
           subtitle="Whether you’re looking for an answer today or a lifelong skill, there’s a path here for you."
         />
 
@@ -475,13 +508,13 @@ export function AboutAudience() {
           </div>
           <SectionIntro
             kicker="Who we guide"
-            title="Across India"
-            titleHighlight="and beyond"
+            title="Trusted Across India"
+            titleHighlight="& by Indians Worldwide"
           />
           <p className={`${TW_BODY} mt-4 text-site-muted`}>
-            DS Astro Institute serves a growing community across India and among Indians settled abroad. Whether
-            you&apos;re navigating a crossroads at home or seeking familiar wisdom from across the seas, distance
-            is never a barrier — genuine guidance travels with you.
+            From Lucknow to London, DS Astro Institute serves a growing community of seekers across India and NRIs
+            around the world. All consultations and courses are conducted online — by call or video, in Hindi and
+            English — so genuine guidance is never limited by distance or time zone.
           </p>
         </div>
       </div>
@@ -498,7 +531,7 @@ export function AboutTrust() {
             kicker="Why people trust DS Astro Institute"
             title="Clarity,"
             titleHighlight="not fear"
-            subtitle="The stars have always been speaking. DS Astro Institute simply helps you listen."
+            subtitle="The stars have always been speaking. DS Astro Institute simply helps you listen — with honest analysis, practical remedies, and zero fear-mongering."
           />
 
           <ul className="m-0 flex list-none flex-col divide-y divide-site-border overflow-hidden rounded-[14px] border border-site-border bg-site-surface p-0 shadow-[0_2px_5px_rgba(51,37,26,0.08)]">
@@ -535,6 +568,7 @@ export function AboutFaq() {
           {ABOUT_FAQ.map((item) => (
             <details
               key={item.q}
+              name="about-faq"
               className="group rounded-[14px] border border-site-border bg-site-bg open:bg-site-surface open:shadow-[0_6px_15px_rgba(51,37,26,0.10)]"
             >
               <summary className="cursor-pointer list-none px-4 py-4 font-heading text-[15px] font-semibold text-site-text marker:content-none sm:px-5 sm:text-base [&::-webkit-details-marker]:hidden">

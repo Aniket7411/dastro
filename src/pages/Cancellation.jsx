@@ -279,7 +279,7 @@ function Cancellation() {
             <h2 className="contact-title">10. Contact Us</h2>
             <div className="contact-details">
               <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
-              <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
+              {/* <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
               <p><strong>Email:</strong> info@dsastroinstitute.com</p>
               <p><strong>Support Email:</strong> help@dsastroinstitute.com</p>
               <p><strong>Phone / WhatsApp:</strong> {CONTACT_PHONE_DISPLAY}</p>
