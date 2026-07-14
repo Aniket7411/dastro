@@ -6,7 +6,7 @@ import {
   User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter, X, RefreshCw,
 } from 'lucide-react';
 import axios from 'axios';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import { uploadResume } from '../utils/uploadMedia';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';

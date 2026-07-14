@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
@@ -402,7 +402,6 @@ const AstrologyCourses = ({ onEnroll }) => {
   );
 };
 */
-console.log("ahahh")
 
 const BANNER_SLIDES = [
   {
@@ -610,6 +609,7 @@ function Home() {
       setIsSubmitting(false);
     }
   };
+
 
 
   const [currentSlide, setCurrentSlide] = useState(0);

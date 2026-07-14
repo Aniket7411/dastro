@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import ShopFilters, { ShopCategoryChips } from '../components/ShopFilters';
 import ShopProductCard from '../components/ShopProductCard';

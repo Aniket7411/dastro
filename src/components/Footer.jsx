@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import axios from 'axios';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import { CONTACT_PHONE_DISPLAY, WHATSAPP_NUMBER } from '../utils/contactInfo';
 import { SITE_LOGO, SITE_LOGO_ALT, SITE_NAME_LLP } from '../utils/brandAssets';

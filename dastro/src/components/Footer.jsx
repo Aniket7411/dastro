@@ -416,7 +416,7 @@ function Footer() {
             </Link>
             <p className={`mb-4 max-w-xs ${TW_BODY_SM}`}>
               India&apos;s trusted platform for live astrology courses, personalised consultations
-              &amp; astrology products.
+              &amp; astrology product.
             </p>
             <div className="mt-2.5 max-w-xs">
               <p className={`${TW_H3} mb-2.5 text-base`}>Subscribe to our Newsletter</p>
@@ -466,7 +466,7 @@ function Footer() {
 
         <p className={`m-0 ${TW_BODY_SM}`}>
           India&apos;s trusted platform for live astrology courses, personalised consultations
-          &amp; astrology products.
+          &amp; astrology product.
         </p>
 
         <div className="w-full">

@@ -12,7 +12,7 @@ import {
   Shield,
   Sparkles,
 } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';

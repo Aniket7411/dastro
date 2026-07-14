@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Headphones, Info } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import CounsellorShell from '../../components/free-consultation/CounsellorShell';
 import CounsellorLeadHistory from '../../components/free-consultation/CounsellorLeadHistory';
 import LeadCaptureForm from '../../components/free-consultation/LeadCaptureForm';

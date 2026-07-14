@@ -2,7 +2,7 @@ import { useEffect, useState, Suspense, lazy } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SiteNavbar from './SiteNavbar';
 import API_BASE from '../utils/api';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';

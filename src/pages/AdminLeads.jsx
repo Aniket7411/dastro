@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
-import toast from '@/utils/toast';
+import toast from '../utils/toast';
 import * as XLSX from 'xlsx';
 import API_BASE from '../utils/api';
 import {

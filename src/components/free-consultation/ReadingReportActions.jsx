@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Download, FileText, Loader2, Printer } from 'lucide-react';
-import toast from '@/utils/toast';
+import toast from '../../utils/toast';
 import { downloadReadingReport, openReadingReportPrint } from '../../utils/readingReport';
 
 const LANG_BTNS = [

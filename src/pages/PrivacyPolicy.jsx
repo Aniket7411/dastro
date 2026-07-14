@@ -277,7 +277,7 @@ function PrivacyPolicy() {
             <div className="contact-box">
               <p><strong>Name:</strong> Ananya Singh</p>
               <p><strong>Designation:</strong> Grievance Officer</p>
-              <p><strong>Email:</strong> help@dsastroinstitute.com</p>
+              <p><strong>Email:</strong> <a href="mailto:help@dsastroinstitute.com" className="text-site-accent hover:underline">help@dsastroinstitute.com</a></p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
               {/* <p><strong>Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
               <p><strong>Response Time:</strong> Within 7 working days of receipt of complaint</p>
@@ -305,7 +305,7 @@ function PrivacyPolicy() {
             <div className="contact-details">
               <p><strong>Company Name:</strong> DS ASTROLOGY LLP</p>
               {/* <p><strong>Registered Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p> */}
-              <p><strong>Email:</strong> info@dsastroinstitute.com</p>
+              <p><strong>Email:</strong> <a href="mailto:info@dsastroinstitute.com" className="text-site-accent hover:underline">info@dsastroinstitute.com</a></p>
               <p><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</p>
               <p><strong>Website:</strong> https://dsastroinstitute.com/</p>
             </div>
