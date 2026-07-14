@@ -98,7 +98,8 @@ export const SITE_NAV_LINK_MOBILE =
 export const SITE_COURSE_CARD =
   'group flex h-full flex-col overflow-hidden rounded-2xl border border-site-border bg-site-surface shadow-[0_2px_5px_rgba(51,37,26,0.08)] transition duration-150 hover:-translate-y-px hover:shadow-[0_6px_15px_rgba(51,37,26,0.12)]';
 
-export const SITE_COURSE_CARD_BODY = 'flex flex-1 flex-col p-3 min-[480px]:p-3.5 sm:p-[18px]';
+export const SITE_COURSE_CARD_BODY =
+  'flex flex-1 flex-col px-3 py-2.5 min-[480px]:px-3.5 min-[480px]:py-3 sm:px-[18px] sm:py-4';
 
 export const SITE_COURSE_CARD_FOOTER =
   'mt-auto flex flex-col gap-2 border-t border-site-border/60 pt-2.5 min-[480px]:flex-row min-[480px]:items-end min-[480px]:justify-between min-[480px]:gap-2 min-[480px]:pt-3 sm:pt-4';
@@ -127,7 +128,7 @@ export const SITE_COURSE_CARD_DURATION =
 
 /** Duration strip as its own block BELOW the image, not overlaid on top of it */
 export const SITE_COURSE_CARD_DURATION_STRIP =
-  'flex w-full items-center justify-center gap-1 bg-site-primary px-2 py-1.5 font-body text-[10px] font-medium leading-tight text-white sm:gap-1.5 sm:py-2 sm:text-[11px]';
+  'flex w-full items-center justify-center gap-1 bg-site-primary px-2 py-1.5 font-body text-[8.5px] font-medium leading-tight text-white sm:gap-1.5 sm:py-2 sm:text-[9.5px]';
 
 /** §03 Hero panel — parchment block on cream pages */
 export const SITE_HERO_PANEL =

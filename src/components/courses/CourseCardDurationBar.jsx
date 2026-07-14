@@ -5,7 +5,7 @@ function stripModuleSegments(text) {
   return String(text || '')
     .split('·')
     .map((segment) => segment.trim())
-    .filter((segment) => segment && !/^\d+\s*modules?$/i.test(segment))
+    .filter((segment) => segment && !/^\d+\s*(modules?|classes?|(weekly\s+)?sessions?)$/i.test(segment))
     .join(' · ');
 }
 
@@ -35,7 +35,7 @@ export default function CourseCardDurationBar({ course, variant = 'overlay' }) {
   return (
     <span className={className}>
       <Clock size={10} className="shrink-0 opacity-90 sm:size-2.5" aria-hidden />
-      <span className="whitespace-nowrap">{label}</span>
+      <span className="min-w-0 truncate">{label}</span>
     </span>
   );
 }

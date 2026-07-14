@@ -104,17 +104,13 @@ function CourseCard({ course }) {
 
         {isLive ? (
           <CourseLiveBadge />
-        ) : course.level ? (
-          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META}`}>
-            {getShortLevel(course.level)}
-          </span>
-        ) : null}
-
-        {!isLive ? (
-          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} right-1.5 top-1.5 sm:right-2 sm:top-2`}>
+        ) : (
+          <span className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_RECORDED} left-1.5 top-1.5 sm:left-2 sm:top-2`}>
             Recorded
           </span>
-        ) : course.level ? (
+        )}
+
+        {course.level ? (
           <span
             className={`${SITE_COURSE_CARD_BADGE} ${SITE_COURSE_CARD_BADGE_META} left-auto right-1.5 top-1.5 sm:right-2 sm:top-2`}
           >
@@ -161,7 +157,7 @@ function CourseCard({ course }) {
           </div>
 
           <Link to={detailPath} className={`${SITE_BTN_CARD} !text-white visited:!text-white`}>
-            {isLive ? 'Enquire' : 'Explore'}
+            {isLive ? 'View Details' : 'Explore'}
             <ArrowRight size={11} strokeWidth={2.5} className="shrink-0 min-[480px]:size-3" aria-hidden />
           </Link>
         </div>
