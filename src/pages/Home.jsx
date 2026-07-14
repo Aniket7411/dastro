@@ -402,6 +402,7 @@ const AstrologyCourses = ({ onEnroll }) => {
   );
 };
 */
+console.log("ahahh")
 
 const BANNER_SLIDES = [
   {
@@ -609,7 +610,6 @@ function Home() {
       setIsSubmitting(false);
     }
   };
-
 
 
   const [currentSlide, setCurrentSlide] = useState(0);
