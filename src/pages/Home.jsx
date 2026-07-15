@@ -408,7 +408,7 @@ const BANNER_SLIDES = [
   {
     title1: 'Learn Vedic Astrology Online from',
     title2: "India's Trusted Experts",
-    desc: 'Live certified astrology courses and personalized kundli consultations by Astrologer Damini Shukla — 20+ years of experience, 15,000+ students trained across India.',
+    desc: 'Live certified astrology courses and personalized kundli consultations by Astrologer Damini Shukla — 10+ years of experience, 10,000+ students trained across India.',
     primaryCta: { label: 'View Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
     secondaryCta: { label: 'Book Consultation', path: '/consultations' },
     themeRust: false,
@@ -715,7 +715,7 @@ function Home() {
       <SEO
         title="Learn Vedic Astrology Online | Courses & Consultations – DS Astro Institute"
         titleIsFull
-        description="Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 15,000+ students trained. Join today."
+        description="Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 10,000+ students trained. Join today."
         url="/"
       />
       {/* Banner Section */}
@@ -798,7 +798,7 @@ function Home() {
                       <div className="stars">
                         <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
                       </div>
-                      <span>Rated by 15,000+ students & clients across India</span>
+                      <span>Rated by 10,000+ students & clients across India</span>
                     </div>
                   </div>
                 </div>
@@ -947,7 +947,7 @@ function Home() {
                   kicker="About DS Astro Institute"
                   title="India's Trusted Institute for Vedic Astrology"
                   titleHighlight="Learning & Consultation"
-                  subtitle="DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 20+ years of Vedic astrology expertise to students and seekers across India. Whether you want to learn astrology professionally or seek guidance on career, marriage, health, or finance — our accurate birth chart analysis, live courses, and personalized remedies give you clarity and confidence at every step."
+                  subtitle="DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 10+ years of Vedic astrology expertise to students and seekers across 20+ countries. Whether you want to learn astrology professionally or seek guidance on career, marriage, health, or finance — our accurate birth chart analysis, live courses, and personalized remedies give you clarity and confidence at every step."
                 />
                 {/* Desktop button — below text */}
                 <div className="hidden lg:flex mt-5">
@@ -973,7 +973,7 @@ function Home() {
                     <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
-                    <h4>20+</h4>
+                    <h4>10+</h4>
                     <span>Years Experience</span>
                   </div>
                 </div>

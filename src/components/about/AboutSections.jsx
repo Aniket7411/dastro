@@ -42,13 +42,13 @@ const SECTION_MAX = 'mx-auto max-w-3xl';
 export const ABOUT_SEO = {
   title: 'About Damini Shukla | Celebrity Astrologer & Founder – DS Astro Institute',
   description:
-    'Meet Damini Shukla — celebrity Vedic astrologer with 10+ years of experience, 4,000+ consultations & 15,000+ students trained. Learn about DS Astro Institute.',
+    'Meet Damini Shukla — celebrity Vedic astrologer with 10+ years of experience, 5,000+ consultations & 10,000+ students trained across 20+ countries. Learn about DS Astro Institute.',
 };
 
 export const ABOUT_FAQ = [
   {
     q: 'Who is Damini Shukla?',
-    a: 'Damini Shukla is a celebrity astrologer and teacher with over 10 years of experience, having consulted more than 4,000 clients and taught over 15,000 students across live and recorded programmes. She specialises in Vedic astrology, tarot, numerology, face reading, and Vastu Shastra.',
+    a: 'Damini Shukla is a celebrity astrologer and teacher with over 10 years of experience, having consulted more than 5,000 clients across 20+ countries and taught over 10,000 students across live and recorded programmes. She specialises in Vedic astrology, tarot, numerology, face reading, and Vastu Shastra.',
   },
   {
     q: 'What services does DS Astro Institute offer?',
@@ -84,7 +84,7 @@ export const ABOUT_FAQ = [
   },
   {
     q: 'Can beginners with no background join the astrology courses?',
-    a: 'Absolutely. Our foundation batches assume zero prior knowledge and build up step by step — many of our 15,000+ students started as complete beginners.',
+    a: 'Absolutely. Our foundation batches assume zero prior knowledge and build up step by step — many of our 10,000+ students started as complete beginners.',
   },
   {
     q: 'Does DS Astro Institute provide remedies and gemstone recommendations?',
@@ -93,10 +93,10 @@ export const ABOUT_FAQ = [
 ];
 
 const STATS = [
-  { value: '10+', label: 'Years of practice' },
-  { value: '4,000+', label: 'Clients consulted' },
-  { value: '5,000+', label: 'Students taught live' },
-  { value: '10,000+', label: 'Online learners' },
+  { value: '10+', label: 'Years Experience' },
+  { value: '5,000+', label: 'Total Consultations' },
+  { value: '10,000+', label: 'Students Trained' },
+  { value: '20+', label: 'Countries Served' },
 ];
 
 const SCIENCES = [
@@ -360,7 +360,7 @@ export function AboutDamini() {
                 Over the years, she trained under several respected gurus and traditions, refining her craft until
                 she became one of the sought-after names in Vedic astrology. She has served as a senior astrologer
                 and mentor on India&apos;s leading astrology platforms — including Astrotalk, Astroyogi, and the
-                Academy of Vedic Vidya — guiding more than 4,000 clients and 15,000+ aspiring astrologers.
+                Academy of Vedic Vidya — guiding more than 5,000 clients across 20+ countries and 10,000+ aspiring astrologers.
               </p>
               <p className={`${TW_BODY} text-site-muted`}>
                 Her work has also reached the screen: Damini featured as an astrology consultant on the television

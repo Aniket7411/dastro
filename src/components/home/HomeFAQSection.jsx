@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'How accurate are the predictions?',
-    a: 'Our analysis is based on classical Vedic astrology principles with precise astronomical calculations of your birth chart, backed by 20+ years of consultation experience.',
+    a: 'Our analysis is based on classical Vedic astrology principles with precise astronomical calculations of your birth chart, backed by 10+ years of consultation experience.',
   },
 ];
 

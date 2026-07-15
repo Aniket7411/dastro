@@ -40,7 +40,7 @@ export default function HomeFinalCTA() {
             <span className="text-site-accent">Astrology?</span>
           </h2>
           <p className={`${SITE_BAND_BODY} mt-3 sm:mt-4`}>
-          Join 15,000+ learners and seekers across India — explore certified astrology courses or book a personalized consultation today.
+          Join 10,000+ learners and seekers across India — explore certified astrology courses or book a personalized consultation today.
           </p>
 
           <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:mt-8 sm:flex-row sm:items-center sm:justify-center">

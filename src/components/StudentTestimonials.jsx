@@ -155,7 +155,7 @@ export default function StudentTestimonials() {
         <HomeSectionHeader
           id="student-testimonials-heading"
           kicker="Student & Client Stories"
-          title="Why 15,000+ Students & Clients"
+          title="Why 10,000+ Students & Clients"
           titleHighlight="Trust DS Astro Institute"
           subtitle="Trusted by thousands of satisfied students across India."
           showAccent

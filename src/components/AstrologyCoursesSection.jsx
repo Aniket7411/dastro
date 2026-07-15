@@ -39,7 +39,7 @@ const COURSES_HERO_IMG = '/images/courses_hero_new.jpg';
 const COURSES_HERO_ACCENT = '/images/vedic_thumbnail_new.jpg';
 
 const FEATURES = [
-  { icon: Users, title: 'Learn from Experts', sub: '20+ years of real consultation experience' },
+  { icon: Users, title: 'Learn from Experts', sub: '10+ years of real consultation experience' },
   { icon: Video, title: 'Live & Recorded Classes', sub: 'Learn at your pace, from anywhere' },
   { icon: Award, title: 'Certified Courses', sub: 'Certification that builds your credibility' },
   { icon: Headphones, title: 'Lifetime Mentor Support', sub: 'Guidance even after your course ends' },
@@ -216,7 +216,7 @@ function CoursesSectionIntro() {
         </div>
         <div className="absolute -right-1 top-3 rounded-xl border border-site-border bg-site-surface/95 px-3 py-2 shadow-md backdrop-blur-sm sm:right-0 sm:top-4 sm:px-4 sm:py-2.5">
           <p className="m-0 font-heading text-base font-bold leading-none text-site-text sm:text-lg">
-            15,000+
+            10,000+
           </p>
           <p className="m-0 mt-1 text-[11px] font-medium text-site-muted sm:text-xs">students trained</p>
         </div>
