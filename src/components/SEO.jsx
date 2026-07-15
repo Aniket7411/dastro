@@ -2,13 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { SITE_NAME } from '../utils/brandAssets';
 
-const SEO = ({ title, description, url, image }) => {
+const SEO = ({ title, description, url, image, titleIsFull = false }) => {
   const defaultTitle = `${SITE_NAME} | Learn Astrology & Book Consultations`;
   const defaultDescription = `Live astrology courses, personalised kundali consultations & astrology merchandise. Join ${SITE_NAME} today.`;
   const defaultImage = "/images/banner.jpg";
   const defaultUrl = "https://dsastroinstitute.com";
 
-  const seoTitle = title ? `${title} | ${SITE_NAME}` : defaultTitle;
+  const seoTitle = title ? (titleIsFull ? title : `${title} | ${SITE_NAME}`) : defaultTitle;
   const seoDescription = description || defaultDescription;
   const seoImage = image || defaultImage;
   const seoUrl = url ? `${defaultUrl}${url}` : defaultUrl;

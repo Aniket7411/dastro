@@ -8,7 +8,7 @@ import {
 
 const LINK = '!no-underline decoration-transparent visited:!no-underline hover:!no-underline';
 
-export default function HomeBannerCTAs({ primaryCta, onDark = false }) {
+export default function HomeBannerCTAs({ primaryCta, secondaryCta, onDark = false }) {
   const primaryClass = onDark
     ? `${LINK} ${SITE_BTN_TONAL_ON_DARK}`
     : `${LINK} ${SITE_BTN_PRIMARY}`;
@@ -23,8 +23,8 @@ export default function HomeBannerCTAs({ primaryCta, onDark = false }) {
         {primaryCta?.label || 'View courses'}
       </Link>
 
-      <Link to="/consultations" className={secondaryClass}>
-        Book Consultation
+      <Link to={secondaryCta?.path || '/consultations'} className={secondaryClass}>
+        {secondaryCta?.label || 'Book Consultation'}
       </Link>
     </div>
   );

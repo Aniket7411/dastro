@@ -27,6 +27,7 @@ const REPORT_ITEMS = [
   '2026 Marriage Horoscope Based on Your Birth Chart',
   '2026 Wealth Horoscope Based on Your Birth Chart',
   '2026 Love Horoscope Based on Your Birth Chart',
+  'Free Kundli & Birth Chart Analysis — Try Our Free Tools',
 ];
 
 const mobileNavItemClass = SITE_NAV_LINK_MOBILE;

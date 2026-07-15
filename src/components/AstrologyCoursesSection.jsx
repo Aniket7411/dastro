@@ -39,10 +39,10 @@ const COURSES_HERO_IMG = '/images/courses_hero_new.jpg';
 const COURSES_HERO_ACCENT = '/images/vedic_thumbnail_new.jpg';
 
 const FEATURES = [
-  { icon: Users, title: 'Learn from Experts', sub: '20+ years of experience' },
-  { icon: Video, title: 'Live & Recorded', sub: 'Flexible learning paths' },
-  { icon: Award, title: 'Certification', sub: 'Boost your credibility' },
-  { icon: Headphones, title: 'Lifetime Support', sub: "We're here for you" },
+  { icon: Users, title: 'Learn from Experts', sub: '20+ years of real consultation experience' },
+  { icon: Video, title: 'Live & Recorded Classes', sub: 'Learn at your pace, from anywhere' },
+  { icon: Award, title: 'Certified Courses', sub: 'Certification that builds your credibility' },
+  { icon: Headphones, title: 'Lifetime Mentor Support', sub: 'Guidance even after your course ends' },
 ];
 
 const CARD_LINK =
@@ -175,22 +175,22 @@ function CoursesSectionIntro() {
       <header className="text-left">
         <p className={`${TW_KICKER} mb-2`}>Featured Programs</p>
         <h2 id="astro-courses-heading" className={`${TW_H2} leading-[1.08]`}>
-          Astrology <span className="text-site-accent">Courses</span>
+          Online Astrology Courses — <span className="text-site-accent">Live & Recorded</span>
         </h2>
         <div
           className="mt-3 h-1 w-14 rounded-full bg-gradient-to-r from-site-accent via-site-accent-dark to-site-accent"
           aria-hidden
         />
         <p className={`${TW_BODY} mt-4 max-w-xl text-site-muted`}>
-          Ancient wisdom, modern teaching — live batches and self-paced programs for every level.
+          Learn Vedic astrology, numerology, and predictive techniques through instructor-led live batches or self-paced recorded programs. Every course includes practical chart-reading practice, doubt-clearing sessions, and a certificate on completion.
         </p>
         <div className="mt-4 flex flex-wrap gap-2.5">
           <Link to="/live-courses" className={`${SITE_BTN_TONAL_COMPACT} !no-underline`}>
             <Radio size={14} aria-hidden />
-            Live batches
+            Live Batches
           </Link>
           <Link to="/recorded-courses" className={`${SITE_BTN_COPPER_COMPACT} !no-underline`}>
-            Recorded programs
+            Recorded Programs
             <ChevronRight size={14} aria-hidden />
           </Link>
         </div>
@@ -347,7 +347,7 @@ export default function AstrologyCoursesSection() {
           icon={Radio}
           title="Live"
           titleHighlight="Courses"
-          subtitle="Instructor-led batches with mentor support — enquire for schedule and fees."
+          subtitle="Instructor-led batches with lifetime mentor support. Limited seats per batch. Enquire now for the upcoming schedule."
           courses={liveCourses}
           loading={loading}
           emptyText="New live batches are coming soon. Check back or enquire with our team."

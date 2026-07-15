@@ -316,6 +316,21 @@ function Footer() {
         </Link>
       </li>
       <li>
+        <Link to="/free-tools" className={FOOTER_LINK}>
+          Free Kundli
+        </Link>
+      </li>
+      <li>
+        <Link to="/astro-chat" className={FOOTER_LINK}>
+          Astro Chat
+        </Link>
+      </li>
+      <li>
+        <Link to="/webinar" className={FOOTER_LINK}>
+          Live Webinar
+        </Link>
+      </li>
+      <li>
         <Link to={authState.isStudent ? '/dashboard' : '/login'} className={FOOTER_LINK}>
           {authState.isStudent ? 'Student Dashboard' : 'Student Login'}
         </Link>
@@ -415,8 +430,9 @@ function Footer() {
               />
             </Link>
             <p className={`mb-4 max-w-xs ${TW_BODY_SM}`}>
-              India&apos;s trusted platform for live astrology courses, personalised consultations
-              &amp; astrology products.
+              DS Astro Institute — India&apos;s trusted platform for Vedic astrology courses, kundli
+              consultations, and free astrology tools. Learn astrology online or book a personal
+              reading with Astrologer Damini Shukla.
             </p>
             <div className="mt-2.5 max-w-xs">
               <p className={`${TW_H3} mb-2.5 text-base`}>Subscribe to our Newsletter</p>
@@ -465,8 +481,9 @@ function Footer() {
         </Link>
 
         <p className={`m-0 ${TW_BODY_SM}`}>
-          India&apos;s trusted platform for live astrology courses, personalised consultations
-          &amp; astrology products.
+          DS Astro Institute — India&apos;s trusted platform for Vedic astrology courses, kundli
+          consultations, and free astrology tools. Learn astrology online or book a personal
+          reading with Astrologer Damini Shukla.
         </p>
 
         <div className="w-full">

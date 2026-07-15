@@ -133,9 +133,11 @@ function App() {
                 <Route index element={<Home />} />
                 <Route path="book-consultation" element={<Consultations />} />
                 <Route path="book-consultation/:serviceId" element={<KeyedConsultationDetail />} />
+                <Route path="book-astrology-consultation" element={<Consultations />} />
                 <Route path="consultations" element={<Consultations />} />
                 <Route path="consultations/:serviceId" element={<KeyedConsultationDetail />} />
                 <Route path="about" element={<About />} />
+                <Route path="about-damini-shukla" element={<About />} />
                 <Route path="blog" element={<Blog />} />
                 <Route path="blog/:slug" element={<KeyedBlogDetail />} />
                 <Route path="contact" element={<Contact />} />
@@ -149,10 +151,12 @@ function App() {
                 <Route path="predictive-astrology" element={<Navigate to="/recorded-courses" replace />} />
                 <Route path="certification-courses" element={<Navigate to="/courses" replace />} />
                 <Route path="courses" element={<Courses />} />
+                <Route path="astrology-courses-online" element={<Courses />} />
                 <Route path="live-courses" element={<Courses mode="live" />} />
                 <Route path="recorded-courses" element={<Courses mode="recorded" />} />
                 <Route path="courses/:courseId" element={<KeyedCourseDetail />} />
                 <Route path="free-tools" element={<FreeTools />} />
+                <Route path="free-kundli-tools" element={<FreeTools />} />
                 <Route path="numerology" element={<Numerology />} />
                 <Route path="tarot" element={<Tarot />} />
                 <Route path="love" element={<Love />} />

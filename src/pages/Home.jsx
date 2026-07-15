@@ -8,6 +8,7 @@ import { getContactValidationError, normalizeIndianMobile } from '../utils/valid
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
 import HomeBannerCTAs from '../components/HomeBannerCTAs';
 import HomeSectionHeader from '../components/home/HomeSectionHeader';
+import HomeFAQSection from '../components/home/HomeFAQSection';
 import HomeFinalCTA from '../components/home/HomeFinalCTA';
 import LazyOnView from '../components/LazyOnView';
 import { runWhenIdle } from '../utils/loadScript';
@@ -405,26 +406,29 @@ const AstrologyCourses = ({ onEnroll }) => {
 
 const BANNER_SLIDES = [
   {
-    title1: 'Illuminate Your Path With',
-    title2: 'Expert Vedic Astrology',
-    desc: 'Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.',
-    primaryCta: { label: 'Explore Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
+    title1: 'Learn Vedic Astrology Online from',
+    title2: "India's Trusted Experts",
+    desc: 'Live certified astrology courses and personalized kundli consultations by Astrologer Damini Shukla — 20+ years of experience, 15,000+ students trained across India.',
+    primaryCta: { label: 'View Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
+    secondaryCta: { label: 'Book Consultation', path: '/consultations' },
     themeRust: false,
     overlayGlass: true,
   },
   {
-    title1: 'Ancient Wisdom for',
-    title2: 'A Modern Lifestyle',
-    desc: 'Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.',
-    primaryCta: { label: 'View Live Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
+    title1: 'Get Clarity on',
+    title2: 'Career, Marriage & Finance',
+    desc: 'Book a one-on-one astrology consultation and get precise answers from your birth chart — career timing, marriage muhurat, business decisions, and remedies that work.',
+    primaryCta: { label: 'Book Consultation', path: '/consultations', icon: 'fas fa-graduation-cap' },
+    secondaryCta: { label: 'View Consultation Plans', path: '/consultations' },
     bgImage: '/banner1.jpg',
     overlayGlass: true,
   },
   {
-    title1: 'Align Your Life With',
-    title2: 'The Stars & Planets',
-    desc: 'Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.',
+    title1: 'Become a',
+    title2: 'Professional Astrologer',
+    desc: 'From beginner to advanced — structured Vedic astrology courses with live classes, mentor support, and certification. Start your journey as a certified astrologer.',
     primaryCta: { label: 'Start Learning', path: '/courses', icon: 'fas fa-arrow-right' },
+    secondaryCta: { label: 'Talk to a Counsellor', path: '/consultations' },
     bgImage: '/banner2.webp',
     overlayGlass: true,
     glassOverall: true,
@@ -433,25 +437,25 @@ const BANNER_SLIDES = [
 
 const SERVICE_CARDS = [
   {
-    alt: 'horoscope', src: '/images/3013143.png',
+    alt: 'Personal horoscope and kundli reading', src: '/images/3013143.png',
     title: 'Personal Horoscope',
-    desc: 'Uncover the cosmic blueprint written in the stars the moment you were born.',
-    features: ['Birth chart & planetary analysis', 'Monthly & yearly forecasts', 'Daily transit alerts'],
+    desc: 'Uncover the cosmic blueprint written in your birth chart the moment you were born.',
+    features: ['Kundli & planetary analysis', 'Monthly & yearly predictions', 'Daily transit alerts'],
   },
   {
-    alt: 'marriage', src: '/images/8596897.png',
-    title: 'Relationships',
+    alt: 'Marriage and relationship astrology', src: '/images/8596897.png',
+    title: 'Relationships & Marriage',
     desc: 'Decode compatibility patterns and karmic bonds to build lasting, meaningful connections.',
-    features: ['Compatibility & synastry charts', 'Marriage timing & muhurat', 'Relationship remedies'],
+    features: ['Kundli matching & compatibility charts', 'Marriage timing & muhurat', 'Relationship remedies'],
   },
   {
-    alt: 'career', src: '/images/867780.png',
+    alt: 'Career and business astrology', src: '/images/867780.png',
     title: 'Career & Business',
     desc: 'Align your professional path with planetary strengths for focused, confident growth.',
-    features: ['Career direction & timing', 'Finance & business predictions', 'Auspicious launch dates'],
+    features: ['Career direction & job change timing', 'Finance & business predictions', 'Auspicious launch dates (muhurat)'],
   },
   {
-    alt: 'muhurat', src: '/images/9289285.png',
+    alt: 'Muhurat and auspicious timing', src: '/images/9289285.png',
     title: 'Muhurat Timing',
     desc: 'Start every important venture under the most auspicious planetary alignment.',
     features: ['Weddings & naming ceremonies', 'Property & business launches', 'Travel & medical timing'],
@@ -708,7 +712,12 @@ function Home() {
 
   return (
     <>
-      <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
+      <SEO
+        title="Learn Vedic Astrology Online | Courses & Consultations – DS Astro Institute"
+        titleIsFull
+        description="Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 15,000+ students trained. Join today."
+        url="/"
+      />
       {/* Banner Section */}
       <section
         className={`banner-section banner-hero-full w-100 banner-has-bg banner-glass-overlay ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}${slideAnimating ? (slideDirection === 1 ? ' banner-bg-slide-next' : ' banner-bg-slide-prev') : ''}`}
@@ -767,13 +776,14 @@ function Home() {
                   <p className="banner-desc mb-2">{activeSlide.desc}</p>
 
                   <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
-                    <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
-                    <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
-                    <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
+                    <li><i className="fas fa-check-circle"></i> Certified Live & Recorded Courses</li>
+                    <li><i className="fas fa-check-circle"></i> Accurate Birth Chart Analysis</li>
+                    <li><i className="fas fa-check-circle"></i> Personalized Remedies & Guidance</li>
                   </ul>
 
                   <HomeBannerCTAs
                     primaryCta={activeSlide.primaryCta}
+                    secondaryCta={activeSlide.secondaryCta}
                     onDark={true}
                   />
 
@@ -788,7 +798,7 @@ function Home() {
                       <div className="stars">
                         <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
                       </div>
-                      <span>Trusted by seekers globally</span>
+                      <span>Rated by 15,000+ students & clients across India</span>
                     </div>
                   </div>
                 </div>
@@ -934,10 +944,10 @@ function Home() {
                 <HomeSectionHeader
                   align="left"
                   className="max-w-none"
-                  kicker="About DS Astrology"
-                  title="Unlock a Brilliant Future with"
-                  titleHighlight="Astrology"
-                  subtitle="Discover your true potential with expert astrology guidance — clarity, confidence, and success through accurate, personalized insights."
+                  kicker="About DS Astro Institute"
+                  title="India's Trusted Institute for Vedic Astrology"
+                  titleHighlight="Learning & Consultation"
+                  subtitle="DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 20+ years of Vedic astrology expertise to students and seekers across India. Whether you want to learn astrology professionally or seek guidance on career, marriage, health, or finance — our accurate birth chart analysis, live courses, and personalized remedies give you clarity and confidence at every step."
                 />
                 {/* Desktop button — below text */}
                 <div className="hidden lg:flex mt-5">
@@ -963,7 +973,7 @@ function Home() {
                     <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
-                    <h4>16+</h4>
+                    <h4>20+</h4>
                     <span>Years Experience</span>
                   </div>
                 </div>
@@ -995,10 +1005,9 @@ function Home() {
           <div className="container">
             <HomeSectionHeader
               kicker="Our Expertise"
-              title="Guiding You"
-              titleHighlight="Through Life"
-              subtitle="Our astrologers are dedicated to providing clarity and direction for every chapter of your journey."
-              subtitleClassName="lg:whitespace-nowrap"
+              title="Astrology Guidance for"
+              titleHighlight="Every Area of Your Life"
+              subtitle="Our astrologers provide accurate, personalized guidance for every chapter of your journey — from birth chart analysis to auspicious muhurat timing."
               showAccent
             />
 
@@ -1073,10 +1082,9 @@ function Home() {
             <HomeSectionHeader
               id="consultation-home-heading"
               kicker="Professional Guidance"
-              title="Expert"
-              titleHighlight="Consultations"
-              subtitle="Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey."
-              subtitleClassName="lg:whitespace-nowrap"
+              title="Book an Online Astrology"
+              titleHighlight="Consultation"
+              subtitle="Get one-on-one guidance from experienced Vedic astrologers — by call or video, in Hindi or English. Share your birth details and receive precise analysis with practical remedies you can actually follow."
               showAccent
             />
 
@@ -1098,6 +1106,10 @@ function Home() {
             <ConsultationTestimonials />
           </Suspense>
         </LazyOnView> */}
+
+        <LazyOnView minHeight="260px">
+          <HomeFAQSection />
+        </LazyOnView>
 
         <LazyOnView minHeight="220px">
           <HomeFinalCTA />

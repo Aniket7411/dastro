@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { MapPin, Star } from 'lucide-react';
 import { PAGE_WRAP } from './consultation/tokens';
 import HomeSectionHeader from './home/HomeSectionHeader';
@@ -56,6 +57,24 @@ const STUDENTS = [
 
 const MARQUEE_ITEMS = [...STUDENTS, ...STUDENTS];
 
+const REVIEW_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  name: 'DS Astro Institute',
+  url: 'https://dsastroinstitute.com/',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5',
+    reviewCount: String(STUDENTS.length),
+  },
+  review: STUDENTS.map((s) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: s.name },
+    reviewRating: { '@type': 'Rating', ratingValue: String(s.rating), bestRating: '5' },
+    reviewBody: s.text,
+  })),
+};
+
 const CARD_W = 'w-[17.5rem] sm:w-[18.5rem]';
 const CARD_MIN_H = 'min-h-[17.5rem] sm:min-h-[18rem]';
 
@@ -88,7 +107,7 @@ function TestimonialCard({ item, index }) {
       <div className="mt-3 border-t border-site-accent-dark/8 pt-3">
         <Stars rating={item.rating} />
         <div className="mt-2.5 flex items-center gap-2.5">
-          <img
+          {/* <img
             src={item.img}
             alt=""
             className="h-9 w-9 shrink-0 rounded-full border border-site-accent/30 object-cover"
@@ -98,7 +117,7 @@ function TestimonialCard({ item, index }) {
               e.currentTarget.onerror = null;
               e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=8B4A1E&color=fff`;
             }}
-          />
+          /> */}
           <div className="min-w-0">
             <p className="m-0 truncate text-sm font-bold text-site-primary">{item.name}</p>
             <p className="m-0 mt-0.5 flex items-center gap-1 text-[0.6875rem] text-site-soft">
@@ -129,13 +148,16 @@ export default function StudentTestimonials() {
       className="border-t border-site-accent-dark/8 bg-white py-[clamp(2.5rem,5vw,3.5rem)]"
       aria-labelledby="student-testimonials-heading"
     >
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(REVIEW_SCHEMA)}</script>
+      </Helmet>
       <div className={PAGE_WRAP}>
         <HomeSectionHeader
           id="student-testimonials-heading"
-          kicker="Real Stories"
-          title="What Our"
-          titleHighlight="Students Say"
-          subtitle="Trusted by thousands of satisfied students across the globe."
+          kicker="Student & Client Stories"
+          title="Why 15,000+ Students & Clients"
+          titleHighlight="Trust DS Astro Institute"
+          subtitle="Trusted by thousands of satisfied students across India."
           showAccent
         />
 
