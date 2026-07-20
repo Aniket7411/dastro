@@ -29,8 +29,9 @@ function Terms() {
   return (
     <LegalPolicyLayout
       seo={{
-        title: 'Terms and Conditions',
-        description: 'Read the terms and conditions for using the DS Astrology website and services.',
+        title: 'Terms & Conditions | DS Astro Institute',
+        titleIsFull: true,
+        description: 'Terms and Conditions for DS Astro Institute.',
         url: '/terms-and-conditions'
       }}
       banner={PAGE_BANNERS.terms}

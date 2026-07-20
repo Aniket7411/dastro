@@ -19,8 +19,9 @@ function Cancellation() {
   return (
     <LegalPolicyLayout
       seo={{
-        title: 'Refund & Cancellation Policy',
-        description: 'Read our refund and cancellation policy for courses, consultations, and merchandise at DS Astrology.',
+        title: 'Refund Policy | DS Astro Institute',
+        titleIsFull: true,
+        description: 'Refund Policy for DS Astro Institute.',
         url: '/refund-policy'
       }}
       banner={PAGE_BANNERS.refund}

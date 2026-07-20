@@ -5,6 +5,7 @@ import KundaliTool from '../components/tools/KundaliTool';
 import HoroscopeTool from '../components/tools/HoroscopeTool';
 import MoonTool from '../components/tools/MoonTool';
 import ZodiacFinder from '../components/tools/ZodiacFinder';
+import SEO from '../components/SEO';
 
 const tools = [
   {
@@ -159,6 +160,12 @@ function FreeTools() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-[#fffdf9]">
+      <SEO
+        title="Free Kundli & Astrology Tools Online | DS Astro Institute"
+        titleIsFull
+        description="Generate your free kundli online with DS Astro Institute. Instant birth chart, dosha check, numerology & more Vedic astrology tools - 100% free."
+        url="/free-tools"
+      />
 
       {/* Hero — compact */}
       <div className="relative overflow-hidden border-b border-[rgba(139,74,30,0.09)] bg-gradient-to-b from-[#fff8ef] to-[#fffdf9] py-3 sm:py-4 lg:py-5">

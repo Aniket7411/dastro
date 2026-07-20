@@ -51,7 +51,7 @@ function About() {
 
   return (
     <>
-      <SEO title={ABOUT_SEO.title} description={ABOUT_SEO.description} url="/about" />
+      <SEO title={ABOUT_SEO.title} titleIsFull description={ABOUT_SEO.description} url="/about" />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>

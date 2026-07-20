@@ -28,8 +28,9 @@ function PrivacyPolicy() {
   return (
     <LegalPolicyLayout
       seo={{
-        title: 'Privacy Policy',
-        description: 'Read our privacy policy to understand how we collect, use, and protect your personal information at DS Astrology.',
+        title: 'Privacy Policy | DS Astro Institute',
+        titleIsFull: true,
+        description: 'Privacy Policy for DS Astro Institute.',
         url: '/privacy-policy'
       }}
       banner={PAGE_BANNERS.privacy}

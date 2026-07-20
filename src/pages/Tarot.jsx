@@ -2,6 +2,7 @@ import { useState } from 'react';
 import API_BASE from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import TranslateButton from '../components/tools/TranslateButton';
+import SEO from '../components/SEO';
 
 function Tarot() {
   const navigate = useNavigate();
@@ -62,6 +63,12 @@ function Tarot() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden lg:flex-row animated fadeIn">
+      <SEO
+        title="Online Tarot Reading & Courses | DS Astro Institute"
+        titleIsFull
+        description="Get accurate online tarot readings and learn tarot from certified experts at DS Astro Institute. Love, career & life guidance - book your session now."
+        url="/tarot"
+      />
       {/* Left hero panel */}
       <div className="relative shrink-0 bg-gradient-to-br from-[#c6843f] to-[#65250c] px-6 pt-16 pb-8 text-white sm:px-8 sm:pt-20 sm:pb-10 lg:flex lg:w-[48%] lg:flex-col lg:justify-center lg:px-10 lg:py-14 xl:px-14">
         <button

@@ -40,7 +40,7 @@ const SECTION_ALT = 'border-t border-site-border bg-site-surface';
 const SECTION_MAX = 'mx-auto max-w-3xl';
 
 export const ABOUT_SEO = {
-  title: 'About Damini Shukla | Celebrity Astrologer & Founder – DS Astro Institute',
+  title: 'About Damini Shukla | Celebrity Astrologer - DS Astro',
   description:
     'Meet Damini Shukla — celebrity Vedic astrologer with 10+ years of experience, 5,000+ consultations & 10,000+ students trained across 20+ countries. Learn about DS Astro Institute.',
 };

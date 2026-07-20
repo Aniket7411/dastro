@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Play, Check, CheckCircle2, Shield, EyeOff, Loader2 } from 'lucide-react';
 import API_BASE from '../utils/api';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
+import SEO from '../components/SEO';
 
 const DEFAULT_AVATAR = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=8b4a1e&color=fff&size=128&bold=true`;
 
@@ -241,6 +242,12 @@ export default function LiveAstrologers() {
 
   return (
     <div className="bg-site-bg min-h-screen">
+      <SEO
+        title="Chat with Live Astrologers Online | DS Astro Institute"
+        titleIsFull
+        description="Talk to expert live astrologers now. Instant answers on love, career, marriage & more from DS Astro Institute's verified astrologers. Start your chat."
+        url="/live"
+      />
       {/* Hero */}
       <div className="bg-gradient-to-br from-site-primary via-[#2e1208] to-[#1a0a01] text-white py-10 px-6 sm:px-8 lg:px-12 border-b border-site-accent-dark/10 shadow-sm">
         <div className="text-center">

@@ -713,9 +713,9 @@ function Home() {
   return (
     <>
       <SEO
-        title="Learn Vedic Astrology Online | Courses & Consultations – DS Astro Institute"
+        title="Learn Vedic Astrology Online | DS Astro Institute"
         titleIsFull
-        description="Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 10,000+ students trained. Join today."
+        description="Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 10,000+ students."
         url="/"
       />
       {/* Banner Section */}
