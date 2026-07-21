@@ -26,6 +26,7 @@ const buildPublicSettings = (settings) => {
     facebookUrl: settings.facebookUrl || '',
     instagramUrl: settings.instagramUrl || '',
     youtubeUrl: settings.youtubeUrl || '',
+    youtubeUnfilteredUrl: settings.youtubeUnfilteredUrl || '',
     twitterUrl: settings.twitterUrl || '',
     whatsappNumber: settings.whatsappNumber || '',
     razorpayKeyId: paymentEnabled ? razorpayKeyId : '',
@@ -76,7 +77,7 @@ export const updateSettings = async (req, res) => {
     const fieldsToUpdate = [
       'siteName', 'siteTitle', 'siteDescription', 'contactEmail',
       'contactPhone', 'address', 'facebookUrl', 'instagramUrl',
-      'youtubeUrl', 'twitterUrl', 'whatsappNumber', 'razorpayKeyId',
+      'youtubeUrl', 'youtubeUnfilteredUrl', 'twitterUrl', 'whatsappNumber', 'razorpayKeyId',
       'shopifyStoreUrl', 'googleAnalyticsId', 'maintenanceMode',
       'announcementText',
     ];

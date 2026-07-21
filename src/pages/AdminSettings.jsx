@@ -19,6 +19,7 @@ function AdminSettings() {
     facebookUrl: '',
     instagramUrl: '',
     youtubeUrl: '',
+    youtubeUnfilteredUrl: '',
     twitterUrl: '',
     whatsappNumber: '',
     razorpayKeyId: '',
@@ -247,6 +248,14 @@ function AdminSettings() {
                       <input 
                         name="youtubeUrl" 
                         value={settings.youtubeUrl} 
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label><i className="fab fa-youtube text-danger"></i> YouTube Unfiltered</label>
+                      <input 
+                        name="youtubeUnfilteredUrl" 
+                        value={settings.youtubeUnfilteredUrl} 
                         onChange={handleChange}
                       />
                     </div>
