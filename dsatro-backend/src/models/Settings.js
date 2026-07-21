@@ -10,7 +10,7 @@ const SettingsSchema = new mongoose.Schema({
   
   // Social Media
   facebookUrl: { type: String, default: '' },
-  instagramUrl: { type: String, default: '' },
+  instagramUrl: { type: String, default: 'https://www.instagram.com/dsastrounfiltered/' },
   youtubeUrl: { type: String, default: '' },
   twitterUrl: { type: String, default: '' },
   whatsappNumber: { type: String, default: '' },

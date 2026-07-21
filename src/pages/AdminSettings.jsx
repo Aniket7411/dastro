@@ -239,7 +239,7 @@ function AdminSettings() {
                         name="instagramUrl" 
                         value={settings.instagramUrl} 
                         onChange={handleChange}
-                        placeholder="https://instagram.com/dsastroinstitute"
+                        placeholder="https://www.instagram.com/dsastrounfiltered/"
                       />
                     </div>
                     <div className="form-group">

@@ -261,7 +261,7 @@ function Footer() {
         </svg>
       ),
       color: '#E1306C',
-      link: settings?.instagramUrl || '#',
+      link: settings?.instagramUrl || 'https://www.instagram.com/dsastrounfiltered/',
     },
     {
       name: 'X',
