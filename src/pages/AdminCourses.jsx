@@ -324,7 +324,7 @@ function AdminCourses() {
   );
 
   const syncCourseVideoCount = (courseId, videos) => {
-    const count = countEnrolledVideos(videos);
+    const count = videos?.length ?? 0;
     setCourses((currentCourses) => currentCourses.map((course) => (
       course._id === courseId ? { ...course, videoCount: count, videosCount: count } : course
     )));
