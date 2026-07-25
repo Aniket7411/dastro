@@ -80,7 +80,7 @@ function PatternsSection({ onJoinNow }) {
             </p>
             <button
                 onClick={onJoinNow}
-                className="m-0 inline-flex min-h-[3rem] cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body !text-sm !font-bold !text-white shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:min-h-[3.5rem] sm:px-10 sm:!text-base"
+                className="mt-4 sm:mt-6 inline-flex min-h-[3rem] cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body !text-sm !font-bold !text-white shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:min-h-[3.5rem] sm:px-10 sm:!text-base"
             >
                 Join Masterclass — ₹499
             </button>
