@@ -36,11 +36,11 @@ function MentorSection({ onJoinNow }) {
             data-aos="fade-left"
             className="-mx-4 w-[calc(100%+2rem)] max-w-none sm:mx-auto sm:w-full sm:max-w-[20rem] text-center lg:sticky lg:top-8 lg:mx-0 lg:max-w-none"
           >
-            <div className="overflow-hidden rounded-none sm:rounded-2xl shadow-xl flex items-center justify-center bg-[#2A1647] sm:bg-transparent h-[320px] sm:h-auto">
+            <div className="overflow-hidden rounded-none sm:rounded-2xl shadow-xl flex items-center justify-center bg-[#2A1647] sm:bg-transparent sm:h-auto">
               <img
                 src="/images/masterclass-mentor.webp"
                 alt="Damini Ma'am Portrait"
-                className="w-full h-full sm:h-auto object-cover object-top sm:object-contain"
+                className="w-full h-auto object-contain"
                 fetchpriority="high"
                 loading="eager"
               />
