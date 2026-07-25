@@ -20,30 +20,35 @@ const textReviews = [
     text: 'Maine apne office colleague ka face read kiya — sab kuch match hua! Can’t believe this works so accurately.',
     author: 'Neha Verma',
     role: 'HR Professional',
+    avatar: '/images/avatars/neha.png'
   },
   {
     id: 2,
     text: 'Damini Shukla’s teaching is so simple. No complicated terms, just pure observation. I could instantly read my family members.',
     author: 'Rohit Sharma',
     role: 'Business Owner',
+    avatar: '/images/avatars/rohit.png'
   },
   {
     id: 3,
     text: 'This masterclass completely changed how I interact with people. I can now understand if someone is genuine or faking it within seconds.',
     author: 'Priya Desai',
     role: 'Sales Executive',
+    avatar: '/images/avatars/priya.png'
   },
   {
     id: 4,
     text: 'The 160+ snapshot technique is mind-blowing. I never knew a person’s face could reveal so much about their personality.',
     author: 'Karan Singh',
     role: 'Student',
+    avatar: '/images/avatars/karan.png'
   },
   {
     id: 5,
     text: 'I was always interested in psychology, but this ancient science of Samudrika Shastra took my understanding to another level. Highly recommended!',
     author: 'Ananya Gupta',
     role: 'Psychology Enthusiast',
+    avatar: '/images/avatars/ananya.png'
   }
 ];
 
@@ -121,24 +126,27 @@ const TextReviewCarousel = () => {
               {textReviews.map((review) => (
                 <motion.div
                   key={review.id}
-                  className="relative flex min-w-[280px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#EE6662] hover:shadow-md sm:min-w-[340px] sm:p-7"
                   whileHover={{ scale: 1.01 }}
+                  className="flex w-[18rem] sm:w-[22rem] lg:w-[24rem] shrink-0 snap-start flex-col justify-between rounded-xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute right-6 top-2 font-serif text-6xl leading-none text-[#EE6662] opacity-[0.07] sm:text-7xl">
-                    &ldquo;
+                  <div className="relative">
+                    <i className="fas fa-quote-right absolute -right-2 -top-2 text-4xl text-slate-100 opacity-50" />
+                    <p className={`${TYPE.body} relative z-10 font-medium text-slate-600`}>
+                      "{review.text}"
+                    </p>
                   </div>
-                  <p className={`${TYPE.body} relative z-[1] mb-6`}>{review.text}</p>
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#3B2261] font-body text-base font-extrabold text-white shadow-sm sm:h-12 sm:w-12">
-                      {review.author[0]}
+
+                  <div className="mt-6 flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-slate-100 bg-slate-50 shadow-sm">
+                      <img src={review.avatar} alt={review.author} className="h-full w-full object-cover" loading="lazy" />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="!m-0 font-body !text-sm !font-bold !text-[#3B2261] sm:!text-base">
+                    <div>
+                      <h4 className="font-heading text-base font-bold text-[#3B2261]">
                         {review.author}
-                      </span>
-                      <span className="!m-0 font-body !text-xs !font-semibold !text-[#EE6662] sm:!text-sm">
+                      </h4>
+                      <p className="font-body text-sm font-medium text-[#EE6662]">
                         {review.role}
-                      </span>
+                      </p>
                     </div>
                   </div>
                 </motion.div>
