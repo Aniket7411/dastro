@@ -48,18 +48,18 @@ function MentorSection({ onJoinNow }) {
           </div>
 
           <div data-aos="fade-right" className="flex flex-col w-full">
-            <h2 className={`${TYPE.h2OnDark} mb-20 w-full text-center sm:mb-28 lg:-mt-4`}>
+            <h2 className={`${TYPE.h2OnDark} mb-8 w-full text-center lg:text-left sm:mb-10 lg:-mt-2`}>
               Meet Your Mentor — <span className={WB_HIGHLIGHT}>Damini Shukla</span>
             </h2>
 
-            <ul className="m-0 mb-8 flex flex-col gap-4 p-0 sm:mb-10 sm:gap-5">
+            <ul className="m-0 mb-8 flex flex-col gap-4 p-0 sm:mb-10 sm:gap-5 w-full">
               {HIGHLIGHTS.map((item) => (
-                <li key={item} className="flex items-start gap-3">
+                <li key={item} className="flex items-start gap-3 w-full text-left">
                   <i
                     className="fas fa-check-circle shrink-0 mt-1 text-[1.05rem] text-[#EE6662]"
                     aria-hidden="true"
                   />
-                  <span className={`${TYPE.bodyOnDark} font-medium`}>{item}</span>
+                  <span className={`${TYPE.bodyOnDark} font-medium text-left`}>{item}</span>
                 </li>
               ))}
             </ul>
