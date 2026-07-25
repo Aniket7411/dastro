@@ -34,9 +34,9 @@ function MentorSection({ onJoinNow }) {
         <div className="grid items-start gap-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-14">
           <div
             data-aos="fade-left"
-            className="mx-auto w-full max-w-[20rem] text-center lg:sticky lg:top-8 lg:mx-0 lg:max-w-none"
+            className="-mx-4 w-[calc(100%+2rem)] max-w-none sm:mx-auto sm:w-full sm:max-w-[20rem] text-center lg:sticky lg:top-8 lg:mx-0 lg:max-w-none"
           >
-            <div className="overflow-hidden rounded-2xl shadow-xl flex items-center justify-center">
+            <div className="overflow-hidden rounded-none sm:rounded-2xl shadow-xl flex items-center justify-center bg-[#2A1647] sm:bg-transparent">
               <img
                 src="/images/masterclass-mentor.webp"
                 alt="Damini Ma'am Portrait"
