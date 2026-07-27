@@ -22,18 +22,20 @@ function getNextSundayMidnightIST() {
 }
 
 export function SimpleDigitalTimer() {
-  const [time, setTime] = useState({ h: '00', m: '00', s: '00' });
+  const [time, setTime] = useState({ d: 0, h: '00', m: '00', s: '00' });
 
   useEffect(() => {
     const tick = () => {
       const target = getNextSundayMidnightIST();
       const diff = Math.max(0, target - Date.now());
-      
-      const hours = Math.floor(diff / 3600000);
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor(diff / 3600000) % 24;
       const minutes = Math.floor(diff / 60000) % 60;
       const seconds = Math.floor(diff / 1000) % 60;
-      
+
       setTime({
+        d: days,
         h: String(hours).padStart(2, '0'),
         m: String(minutes).padStart(2, '0'),
         s: String(seconds).padStart(2, '0')
@@ -48,7 +50,7 @@ export function SimpleDigitalTimer() {
     <div className="flex items-center gap-2">
       <span className="text-[10px] uppercase tracking-[0.10em] text-white/60">ENDS IN</span>
       <span className="font-body text-[17px] font-bold text-white tabular-nums tracking-wider">
-        {time.h}:{time.m}:{time.s}
+        {time.d > 0 && `${time.d}d `}{time.h}:{time.m}:{time.s}
       </span>
     </div>
   );

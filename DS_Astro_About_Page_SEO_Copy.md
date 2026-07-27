@@ -1,20 +1,24 @@
 # DS ASTRO INSTITUTE — ABOUT PAGE SEO COPY (v1)
 **For the dev/IT team.** Same format as the homepage doc: CURRENT text → NEW replacement text, with heading tag guidance.
 
-**⚠ CRITICAL FIX FIRST:** This page says "10 years" / "more than ten years" while the homepage says 16+/20+. Pick ONE true number and use it on every page. This document uses **10+ years** (change via find-and-replace if different).
+**✅ CONFIRMED STATS — use these exact numbers everywhere, no other version:**
+- Years of experience: **10+**
+- Total consultations: **5,000+**
+- Students trained: **10,000+**
+- Countries served: **20+**
 
 ---
 
 ## 0. META TAGS (page <head>)
 
-**Meta Title (max 60 chars):**
+**Meta Title (max 60 chars, 53 used):**
 ```
-About Damini Shukla | Celebrity Astrologer & Founder – DS Astro Institute
+About Damini Shukla | Celebrity Astrologer – DS Astro
 ```
 
-**Meta Description (max 155 chars):**
+**Meta Description (max 155 chars, 144 used):**
 ```
-Meet Damini Shukla — celebrity Vedic astrologer with 10+ years of experience, 4,000+ consultations & 15,000+ students trained. Learn about DS Astro Institute.
+Meet Damini Shukla, celebrity Vedic astrologer with 10+ years experience, 5,000+ consultations & 10,000+ students trained at DS Astro Institute.
 ```
 
 ---
@@ -52,7 +56,7 @@ Mostly excellent — storytelling is strong. Three SEO-driven edits:
 
 **Paragraph 2 — REPLACE WITH:**
 ```
-Over the years, she trained under several respected gurus and traditions, refining her craft until she became one of the sought-after names in Vedic astrology. She has served as a senior astrologer and mentor on India's leading astrology platforms — including Astrotalk, Astroyogi, and the Academy of Vedic Vidya — guiding more than 4,000 clients and 15,000+ aspiring astrologers.
+Over the years, she trained under several respected gurus and traditions, refining her craft until she became one of the sought-after names in Vedic astrology. She has served as a senior astrologer and mentor on India's leading astrology platforms — including Astrotalk, Astroyogi, and the Academy of Vedic Vidya — guiding more than 5,000 clients and 10,000+ aspiring astrologers.
 ```
 (Pulls the strong numbers UP from the FAQ into the visible bio — right now your best proof points are buried in a collapsed FAQ.)
 
@@ -185,9 +189,8 @@ From Lucknow to London, DS Astro Institute serves a growing community of seekers
 
 **UI upgrade (see design notes in chat):** turn this into a stats band instead of a lone paragraph card:
 ```
-10+ Years of Practice   |   4,000+ Consultations   |   15,000+ Students Trained   |   20+ Countries Served
+10+ Years of Practice   |   5,000+ Consultations   |   10,000+ Students Trained   |   20+ Countries Served
 ```
-(Confirm the countries number or drop that stat.)
 
 ---
 
@@ -220,7 +223,7 @@ Q: Are the astrology courses certified?
 A: Yes. Every student receives a certificate from DS Astro Institute on successful completion, along with the practical chart-reading skills to begin their own practice.
 
 Q: Can beginners with no background join the astrology courses?
-A: Absolutely. Our foundation batches assume zero prior knowledge and build up step by step — many of our 15,000+ students started as complete beginners.
+A: Absolutely. Our foundation batches assume zero prior knowledge and build up step by step — many of our 10,000+ students started as complete beginners.
 
 Q: Does DS Astro Institute provide remedies and gemstone recommendations?
 A: Yes. Every consultation includes practical, personalised remedies. Certified gemstones, yantras, and spiritual essentials are available through our Astrology Shop.
@@ -236,6 +239,6 @@ A: Yes. Every consultation includes practical, personalised remedies. Certified 
 3. FAQ open-state contrast fix (see design notes)
 4. FAQPage JSON-LD schema for all 11 FAQs
 5. Person schema (JSON-LD) for Damini Shukla — name, jobTitle "Astrologer", sameAs links to her Instagram/YouTube/press mentions. This directly builds her Google identity.
-6. Unify the experience number sitewide (10+ / 16+ / 20+ → pick one)
+6. Confirmed stats sitewide: 10+ years experience, 5,000+ consultations, 10,000+ students trained, 20+ countries served — do not use any other numbers
 7. Descriptive alt text on every image
 8. Internal links: bio mentions of "courses" and "consultations" should link to those pages

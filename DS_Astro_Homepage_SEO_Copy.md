@@ -1,20 +1,24 @@
 # DS ASTRO INSTITUTE — HOMEPAGE SEO COPY (v1)
 **For the dev/IT team.** Each section below shows the CURRENT text on the live page and the NEW text that replaces it. HTML tag guidance (H1/H2/H3) is included — please follow it, it matters for Google ranking.
 
-**⚠ CONFIRM BEFORE PUBLISHING:** Years of experience (16+ or 20+?) and student count (10k or 15,000+?) — use ONE number consistently across the whole site. This document assumes **20+ years** and **15,000+ students**. Find-and-replace if different.
+**✅ CONFIRMED STATS — use these exact numbers everywhere, no other version:**
+- Years of experience: **10+**
+- Total consultations: **5,000+**
+- Students trained: **10,000+**
+- Countries served: **20+**
 
 ---
 
 ## 0. META TAGS (page <head> — not visible on page, critical for SEO)
 
-**Meta Title (max 60 characters):**
+**Meta Title (max 60 characters, 49 used):**
 ```
-Learn Vedic Astrology Online | Courses & Consultations – DS Astro Institute
+Learn Vedic Astrology Online | DS Astro Institute
 ```
 
-**Meta Description (max 155 characters):**
+**Meta Description (max 155 characters, 139 used):**
 ```
-Learn Vedic astrology online with live certified courses by Damini Shukla. Book kundli reading & personal consultations. 15,000+ students trained. Join today.
+Learn Vedic astrology online with live certified courses by Damini Shukla. Book a kundli reading or consultation. 10,000+ students trained.
 ```
 
 **Suggested URL structure for inner pages (for later):**
@@ -51,7 +55,7 @@ NEW  Free Kundli & Birth Chart Analysis — Try Our Free Tools
 
 **Sub-text:**
 ```
-Live certified astrology courses and personalized kundli consultations by Astrologer Damini Shukla — 20+ years of experience, 15,000+ students trained across India.
+Live certified astrology courses and personalized kundli consultations by Astrologer Damini Shukla — 10+ years of experience, 10,000+ students trained across India.
 ```
 
 **Bullet points (keep 3):**
@@ -93,7 +97,7 @@ From beginner to advanced — structured Vedic astrology courses with live class
 
 **Trust line under buttons (all slides):**
 ```
-★★★★★ Rated by 15,000+ students & clients across India
+★★★★★ Rated by 10,000+ students & clients across India
 ```
 (Replace "Trusted by seekers globally" — "across India" is stronger for your actual audience and local SEO.)
 
@@ -111,10 +115,10 @@ From beginner to advanced — structured Vedic astrology courses with live class
 
 **Body:**
 ```
-DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 20+ years of Vedic astrology expertise to students and seekers across India. Whether you want to learn astrology professionally or seek guidance on career, marriage, health, or finance — our accurate birth chart analysis, live courses, and personalized remedies give you clarity and confidence at every step.
+DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 10+ years of Vedic astrology expertise to students and seekers across India. Whether you want to learn astrology professionally or seek guidance on career, marriage, health, or finance — our accurate birth chart analysis, live courses, and personalized remedies give you clarity and confidence at every step.
 ```
 
-**Badge:** `20+ YEARS EXPERIENCE` (or 16+ — confirm and match everywhere)
+**Badge:** `10+ YEARS EXPERIENCE`
 
 **Button:** `More About Us`
 
@@ -135,7 +139,7 @@ DS Astro Institute, founded by renowned astrologer Damini Shukla, brings 20+ yea
 Learn Vedic astrology, numerology, and predictive techniques through instructor-led live batches or self-paced recorded programs. Every course includes practical chart-reading practice, doubt-clearing sessions, and a certificate on completion.
 ```
 
-**Badge on image:** `15,000+ students trained`
+**Badge on image:** `10,000+ students trained`
 
 **Buttons:** `Live Batches` | `Recorded Programs →`
 
@@ -157,7 +161,7 @@ Live Courses — Instructor-led batches with lifetime mentor support. Limited se
 
 | Icon | Title | Sub-text |
 |---|---|---|
-| 👥 | Learn from Experts | 20+ years of real consultation experience |
+| 👥 | Learn from Experts | 10+ years of real consultation experience |
 | 🎥 | Live & Recorded Classes | Learn at your pace, from anywhere |
 | 🎓 | Certified Courses | Certification that builds your credibility |
 | 🤝 | Lifetime Mentor Support | Guidance even after your course ends |
@@ -236,7 +240,7 @@ Get one-on-one guidance from experienced Vedic astrologers — by call or video,
 
 **Eyebrow:** `STUDENT & CLIENT STORIES`
 
-**H2:** `Why 15,000+ Students & Clients Trust DS Astro Institute`
+**H2:** `Why 10,000+ Students & Clients Trust DS Astro Institute`
 
 Ask your team to collect 4–6 real testimonials (name + city + course/consultation taken). Format:
 ```
@@ -265,7 +269,7 @@ Q: Are the courses in Hindi or English?
 A: Our courses and consultations are available in both Hindi and English, so you can learn and consult in the language you're most comfortable with.
 
 Q: How accurate are the predictions?
-A: Our analysis is based on classical Vedic astrology principles with precise astronomical calculations of your birth chart, backed by 20+ years of consultation experience.
+A: Our analysis is based on classical Vedic astrology principles with precise astronomical calculations of your birth chart, backed by 10+ years of consultation experience.
 ```
 Dev note: add FAQ schema markup (JSON-LD) — this can get you expandable FAQ results directly in Google.
 
@@ -283,7 +287,7 @@ Dev note: add FAQ schema markup (JSON-LD) — this can get you expandable FAQ re
 
 **Sub-text:**
 ```
-Join 15,000+ learners and seekers across India — explore certified astrology courses or book a personalized consultation today.
+Join 10,000+ learners and seekers across India — explore certified astrology courses or book a personalized consultation today.
 ```
 
 **Buttons:** `Explore Courses →` | `Book Consultation`
@@ -314,6 +318,6 @@ learn astrology online, vedic astrology course online, astrology course with cer
 3. Add FAQ schema + Review schema (JSON-LD)
 4. All images need descriptive alt text, e.g. `alt="Astrologer Damini Shukla - DS Astro Institute founder"` — never leave alt empty
 5. Ticker items must be clickable links
-6. One consistent experience number and one consistent student count sitewide
+6. Confirmed stats sitewide: 10+ years experience, 5,000+ consultations, 10,000+ students trained, 20+ countries served — do not use any other numbers
 7. Compress hero images (WebP format) — page speed is a ranking factor
 8. Create Google Business Profile for the Lucknow address
