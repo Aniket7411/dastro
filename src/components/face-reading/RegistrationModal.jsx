@@ -35,23 +35,27 @@ function RegistrationModal({
 
           <div className="overflow-y-auto">
             {/* HERO BAND */}
-            <div className="relative h-[140px] w-full sm:h-[170px] bg-[#3B2261] overflow-hidden">
+            <div className="relative w-full bg-[#3B2261] overflow-hidden rounded-t-2xl sm:h-[170px]">
               <div className="absolute inset-0 bg-gradient-to-r from-[#2a1845] via-[#2a1845]/60 to-transparent" />
-              <img
-                src="/images/damini.webp"
-                alt="Damini Shukla"
-                className="absolute right-0 top-0 h-full w-[60%] object-cover object-right-top sm:w-[50%]"
-                width="400"
-                height="170"
-              />
-              <div className="absolute left-0 top-0 flex h-full w-2/3 flex-col justify-center p-5 z-[2] sm:p-6">
-                <span className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#EE6662] sm:text-xs">
-                  Launch Offer
-                </span>
-                <h4 className={`${TYPE.h2} !text-white !leading-tight`}>
-                  2-Day Face Reading <br className="hidden sm:block"/>
-                  <span className={WB_HIGHLIGHT}>Masterclass</span>
-                </h4>
+              <div className="relative z-[2] flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div className="w-full overflow-hidden sm:w-[40%]">
+                  <img
+                    src="/images/damini.webp"
+                    alt="Damini Shukla"
+                    className="h-[180px] w-full object-cover object-right-top sm:h-full"
+                    width="400"
+                    height="170"
+                  />
+                </div>
+                <div className="flex min-w-[0] flex-1 flex-col justify-center px-4 py-4 sm:px-6 sm:py-4 text-white">
+                  <span className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#EE6662] sm:text-xs">
+                    Launch Offer
+                  </span>
+                  <h4 className={`${TYPE.h2} !text-white !leading-tight`}>
+                    2-Day Face Reading <br className="block sm:hidden" />
+                    <span className={WB_HIGHLIGHT}>Masterclass</span>
+                  </h4>
+                </div>
               </div>
             </div>
 
