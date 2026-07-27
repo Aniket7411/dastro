@@ -36,11 +36,11 @@ function RegistrationModal({
           <div className="overflow-y-auto">
             {/* HERO BAND */}
             <div className="relative h-[140px] w-full sm:h-[170px] bg-[#3B2261] overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2a1845] to-[#3B2261]/80 z-[1]" />
-              <img 
-                src="/images/masterclass-hero.webp" 
-                alt="Damini Shukla" 
-                className="absolute right-0 top-0 h-full w-[60%] object-cover object-right-top opacity-90 sm:w-[50%]"
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2a1845] via-[#2a1845]/60 to-transparent" />
+              <img
+                src="/images/damini.webp"
+                alt="Damini Shukla"
+                className="absolute right-0 top-0 h-full w-[60%] object-cover object-right-top sm:w-[50%]"
                 width="400"
                 height="170"
               />
