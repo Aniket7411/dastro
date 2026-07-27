@@ -55,8 +55,9 @@ function FaceReadingMasterclass() {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: sanitizedPhone,
-          type: 'Masterclass', // Different type
+          type: 'Webinar',
           courseName: '2-Day Face Reading Masterclass',
+          amount: 499,
         }),
       });
       const data = await res.json();
@@ -64,7 +65,7 @@ function FaceReadingMasterclass() {
         toast.success('Registration initiated. Redirecting to secure payment...');
         setIsModalOpen(false);
         navigate(
-          `/payment?leadId=${data.leadId}&name=${encodeURIComponent(data.name)}&email=${encodeURIComponent(data.email)}&phone=${data.phone}&amount=${data.amount}&orderId=${data.orderId}&keyId=${data.keyId}`,
+          `/payment?leadId=${data.leadId}&name=${encodeURIComponent(data.name)}&email=${encodeURIComponent(data.email)}&phone=${data.phone}&amount=${data.amount}&orderId=${data.orderId}&keyId=${data.keyId}&courseName=${encodeURIComponent(data.courseName || '2-Day Face Reading Masterclass')}`,
         );
       } else {
         toast.error(data.error || data.message || 'Failed to initiate registration. Please try again.');

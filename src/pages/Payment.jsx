@@ -18,6 +18,7 @@ function Payment() {
   const rawAmount = searchParams.get('amount') || '9900';
   const orderId = searchParams.get('orderId');
   const keyId = searchParams.get('keyId');
+  const courseName = decodeURIComponent(searchParams.get('courseName') || 'DS Astrology - Mega Astrology Webinar');
 
   const totalAmountNum = parseFloat(rawAmount) / 100 || 99;
   const totalAmount = totalAmountNum.toFixed(2);
@@ -138,6 +139,7 @@ function Payment() {
   return (
     <div className="flex min-h-screen w-full items-start justify-center bg-site-bg px-4 py-6 font-body text-site-text sm:items-center sm:px-6 sm:py-8 lg:px-12">
       <PaymentCheckoutCard
+        courseName={courseName}
         baseAmount={baseAmount}
         cgst={cgst}
         sgst={sgst}

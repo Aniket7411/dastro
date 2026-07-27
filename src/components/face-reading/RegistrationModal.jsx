@@ -153,7 +153,7 @@ function RegistrationModal({
                         inputMode="numeric"
                         autoComplete="tel"
                         placeholder="10-Digit Mobile Number"
-                        className={`${MODAL_INPUT} text-[16px] min-h-[48px] rounded-[12px] pl-11 focus:ring-2`}
+                        className={`${MODAL_INPUT} text-[16px] min-h-[48px] rounded-[12px] !pl-11 focus:ring-2`}
                       />
                     </div>
                   </div>
