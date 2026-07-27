@@ -73,7 +73,7 @@ function MentorSection({ onJoinNow }) {
               Meet Your Mentor — <span className={WB_HIGHLIGHT}>Damini Shukla</span>
             </h2>
 
-            <ul className="m-0 mb-8 flex flex-col gap-4 p-0 sm:mb-10 sm:gap-5 w-full">
+            <ul className="m-0 mb-8 flex flex-col py-1 gap-4 p-0 sm:mb-10 sm:gap-5 w-full">
               {HIGHLIGHTS.map((item) => (
                 <li key={item} className="flex items-start gap-3 w-full text-left">
                   <i
@@ -87,7 +87,7 @@ function MentorSection({ onJoinNow }) {
 
             <div className="space-y-4 w-full sm:space-y-5">
               {CREDENTIALS.map((item) => (
-                <div key={item.title} className="rounded-xl border border-white/10 bg-white/5 p-4 text-left sm:p-5">
+                <div key={item.title} className="rounded-xl border border-white/10 bg-white/5 !p-[18px] text-left sm:!p-6">
                   <p className="!m-0 font-heading text-sm font-bold text-[#EE6662] sm:text-[1rem]">
                     {item.title}
                   </p>
