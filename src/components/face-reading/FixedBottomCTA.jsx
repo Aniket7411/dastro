@@ -90,19 +90,19 @@ export function DigitalTimer() {
   return (
     <div className="flex items-center gap-6 md:gap-14 border border-[#F38025]/80 bg-[#160B05] rounded-[10px] md:rounded-[16px] px-5 py-2.5 md:px-8 md:py-3 w-full justify-center md:justify-start">
       <div className="flex flex-col items-center">
-        <span className="text-[36px] md:text-[52px] leading-[1.1] font-black italic text-transparent bg-clip-text bg-gradient-to-b from-[#FFF0B3] via-[#FFD363] to-[#F39C12] drop-shadow-sm" style={{ transform: 'skewX(-6deg)' }}>
+        <span className="text-[36px] md:text-[52px] leading-normal py-1 px-1 font-black italic text-transparent bg-clip-text bg-gradient-to-b from-[#FFF0B3] via-[#FFD363] to-[#F39C12] drop-shadow-sm" style={{ transform: 'skewX(-6deg)' }}>
           {time.h}
         </span>
-        <span className="text-[9px] md:text-[12px] font-bold text-white tracking-[0.1em] uppercase mt-0.5 md:mt-1">
+        <span className="text-[9px] md:text-[12px] font-bold text-white tracking-[0.1em] uppercase -mt-1 md:-mt-1">
           HOURS
         </span>
       </div>
       <div className="w-[1px] h-10 md:h-14 bg-[#7A5B45] shrink-0" />
       <div className="flex flex-col items-center">
-        <span className="text-[36px] md:text-[52px] leading-[1.1] font-black italic text-transparent bg-clip-text bg-gradient-to-b from-[#FFF0B3] via-[#FFD363] to-[#F39C12] drop-shadow-sm" style={{ transform: 'skewX(-6deg)' }}>
+        <span className="text-[36px] md:text-[52px] leading-normal py-1 px-1 font-black italic text-transparent bg-clip-text bg-gradient-to-b from-[#FFF0B3] via-[#FFD363] to-[#F39C12] drop-shadow-sm" style={{ transform: 'skewX(-6deg)' }}>
           {time.m}
         </span>
-        <span className="text-[9px] md:text-[12px] font-bold text-white tracking-[0.1em] uppercase mt-0.5 md:mt-1">
+        <span className="text-[9px] md:text-[12px] font-bold text-white tracking-[0.1em] uppercase -mt-1 md:-mt-1">
           MINUTES
         </span>
       </div>
