@@ -1,138 +1,43 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { Z_TIMER_BAR } from '../webinar/tokens';
 
-// Base 7-segment digit proportions, scaled up for legibility in the bar.
-const SCALE = 1.4;
-const W = 9 * SCALE;
-const H = 16 * SCALE;
-const T = 2.2 * SCALE;
-const G = 0.8 * SCALE;
-const SK = 0;
-
-const SEG_POINTS = {
-  a: [[G + SK, G], [W - G + SK, G], [W - G - T + SK, G + T], [G + T + SK, G + T]],
-  b: [[W - G + SK, G * 2], [W - G, H / 2 - G], [W - G - T, H / 2 - G - T], [W - G - T + SK, G * 2 + T]],
-  c: [[W - G, H / 2 + G], [W - G - SK, H - G * 2], [W - G - T - SK, H - G * 2 - T], [W - G - T, H / 2 + G + T]],
-  d: [[G + T - SK, H - G - T], [W - G - T - SK, H - G - T], [W - G - SK, H - G], [G - SK, H - G]],
-  e: [[G, H / 2 + G], [G + T, H / 2 + G + T], [G + T - SK, H - G * 2 - T], [G - SK, H - G * 2]],
-  f: [[G + SK, G * 2], [G + T + SK, G * 2 + T], [G + T, H / 2 - G - T], [G, H / 2 - G]],
-  g: [[G + T, H / 2 - T / 2], [W - G - T, H / 2 - T / 2], [W - G - T, H / 2 + T / 2], [G + T, H / 2 + T / 2]],
-};
-
-const DIGIT_MAP = {
-  0: ['a', 'b', 'c', 'd', 'e', 'f'],
-  1: ['b', 'c'],
-  2: ['a', 'b', 'g', 'e', 'd'],
-  3: ['a', 'b', 'g', 'c', 'd'],
-  4: ['f', 'g', 'b', 'c'],
-  5: ['a', 'f', 'g', 'c', 'd'],
-  6: ['a', 'f', 'g', 'e', 'c', 'd'],
-  7: ['a', 'b', 'c'],
-  8: ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
-  9: ['a', 'b', 'c', 'd', 'f', 'g'],
-};
-
-const pts = (arr) => arr.map(([x, y]) => `${x},${y}`).join(' ');
-const SEGS = Object.fromEntries(Object.entries(SEG_POINTS).map(([k, v]) => [k, pts(v)]));
-
-const ON_COLOR = '#ffaa22';
-const OFF_COLOR = 'rgba(255,90,0,0.09)';
-const ON_FILTER =
-  'drop-shadow(0 0 2px rgba(255,180,30,1)) drop-shadow(0 0 5px rgba(255,130,0,0.8))';
-
-function Digit({ char }) {
-  const on = new Set(DIGIT_MAP[char] || []);
-  return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="block overflow-visible">
-      {Object.entries(SEGS).map(([key, points]) => {
-        const lit = on.has(key);
-        return (
-          <polygon
-            key={key}
-            points={points}
-            fill={lit ? ON_COLOR : OFF_COLOR}
-            style={{ filter: lit ? ON_FILTER : 'none' }}
-          />
-        );
-      })}
-    </svg>
-  );
-}
-
-function SegColon({ visible }) {
-  const colonW = 8 * SCALE;
-  const dw = 2.2 * SCALE;
-  const dh = 4.5 * SCALE;
-  const cx = colonW / 2;
-  const color = visible ? '#ff8c00' : OFF_COLOR;
-  const glow = visible ? 'drop-shadow(0 0 3px rgba(255,160,0,0.9))' : 'none';
-  return (
-    <svg width={colonW} height={H} viewBox={`0 0 ${colonW} ${H}`} className="block overflow-visible">
-      <rect x={cx - dw / 2} y={H * 0.28 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
-      <rect x={cx - dw / 2} y={H * 0.72 - dh / 2} width={dw} height={dh} rx={1} fill={color} style={{ filter: glow }} />
-    </svg>
-  );
-}
-
-function DigitPair({ value, label }) {
-  const str = String(value).padStart(2, '0');
-  return (
-    <div className="flex flex-col items-center gap-0.5">
-      <div className="flex gap-0.5">
-        <Digit char={str[0]} />
-        <Digit char={str[1]} />
-      </div>
-      <span className="font-body text-[0.5rem] font-bold uppercase tracking-wider text-white/35 sm:text-[0.5625rem]">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-const STORAGE_KEY = 'face_reading_cta_timer';
-
-function getOrCreateTarget(hours = 24) {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    if (s) {
-      const stored = parseInt(s, 10);
-      if (stored > Date.now()) return stored;
-    }
-  } catch {
-    /* ignore */
+function getNextSundayMidnightIST() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const nowUtc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const nowIst = new Date(nowUtc + istOffset);
+  
+  const day = nowIst.getDay(); // 0 is Sunday
+  const daysUntilSunday = day === 0 ? 0 : 7 - day;
+  
+  let targetIst = new Date(nowIst);
+  targetIst.setDate(nowIst.getDate() + daysUntilSunday);
+  targetIst.setHours(23, 59, 0, 0);
+  
+  if (day === 0 && nowIst.getTime() > targetIst.getTime()) {
+    targetIst.setDate(targetIst.getDate() + 7);
   }
-  const t = Date.now() + hours * 3600 * 1000;
-  try {
-    localStorage.setItem(STORAGE_KEY, String(t));
-  } catch {
-    /* ignore */
-  }
-  return t;
+  
+  return targetIst.getTime() - istOffset;
 }
 
-function DigitalTimer() {
-  const [time, setTime] = useState({ h: 24, m: 0, s: 0 });
-  const [colonOn, setColon] = useState(true);
+export function SimpleDigitalTimer() {
+  const [time, setTime] = useState({ h: '00', m: '00', s: '00' });
 
   useEffect(() => {
-    let target = getOrCreateTarget(24);
     const tick = () => {
-      const now = Date.now();
-      if (target <= now) {
-        target = now + 24 * 3600 * 1000;
-        try {
-          localStorage.setItem(STORAGE_KEY, String(target));
-        } catch {
-          /* ignore */
-        }
-      }
-      const diff = target - now;
+      const target = getNextSundayMidnightIST();
+      const diff = Math.max(0, target - Date.now());
+      
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor(diff / 60000) % 60;
+      const seconds = Math.floor(diff / 1000) % 60;
+      
       setTime({
-        h: Math.floor(diff / 3600000),
-        m: Math.floor(diff / 60000) % 60,
-        s: Math.floor(diff / 1000) % 60,
+        h: String(hours).padStart(2, '0'),
+        m: String(minutes).padStart(2, '0'),
+        s: String(seconds).padStart(2, '0')
       });
-      setColon((v) => !v);
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -140,112 +45,48 @@ function DigitalTimer() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <p className="!m-0 font-body text-[0.5rem] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[0.5625rem]">
-        OFFER ENDS
-      </p>
-      <div className="relative overflow-hidden rounded-lg border border-orange-500/25 bg-[#0a0a0a]/90 px-3 py-2 sm:px-3.5 sm:py-2.5">
-        <div className="relative z-[1] flex items-center gap-1.5">
-          <DigitPair value={time.h} label="HRS" />
-          <div className="-mt-1.5">
-            <SegColon visible={colonOn} />
-          </div>
-          <DigitPair value={time.m} label="MIN" />
-          <div className="-mt-1.5">
-            <SegColon visible={colonOn} />
-          </div>
-          <DigitPair value={time.s} label="SEC" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PriceBlock() {
-  return (
-    <div className="flex flex-col items-center justify-center gap-0.5">
-      <span className="!m-0 font-body text-[0.6875rem] font-semibold uppercase !text-white sm:text-xs">
-        ONLY
+    <div className="flex items-center gap-2">
+      <span className="text-[10px] uppercase tracking-[0.10em] text-white/60">ENDS IN</span>
+      <span className="font-body text-[17px] font-bold text-white tabular-nums tracking-wider">
+        {time.h}:{time.m}:{time.s}
       </span>
-      <div className="flex items-end gap-1.5">
-          <span
-            className="!m-0 bg-gradient-to-br from-[#ffcc44] via-[#ff8800] to-[#ff5500] bg-clip-text font-body text-xl font-black leading-none text-transparent sm:text-2xl"
-            style={{ filter: 'drop-shadow(0 2px 4px rgba(255,140,0,0.24))' }}
-          >
-            ₹499
-          </span>
-          <span className="text-white/40 line-through text-xs mb-0.5">₹1,999</span>
-      </div>
     </div>
   );
 }
 
-function EnrollButton({ onClick, fullWidth }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`relative z-[1] inline-flex !m-0 cursor-pointer appearance-none items-center justify-center gap-1.5 overflow-hidden rounded-md border-0 bg-gradient-to-r from-[#ff9800] via-[#ff6200] to-[#ff4000] px-3 py-1.5 font-body !text-xs !font-bold !text-white shadow-[0_3px_10px_rgba(255,90,0,0.3)] transition hover:-translate-y-px ${
-        fullWidth ? 'min-h-8 w-full' : 'min-h-8 w-auto min-w-[7.5rem]'
-      }`}
-    >
-      <span className="relative">Enroll — ₹499</span>
-    </button>
-  );
-}
-
-export default function FixedBottomCTA({ visible, onJoinNow, onDismiss, onShow }) {
-  if (!visible) {
-    return (
-      <button
-        type="button"
-        onClick={onShow}
-        aria-label="Show the masterclass offer"
-        className="fixed bottom-4 left-4 z-[9999] flex items-center gap-2 rounded-full border border-orange-500/25 bg-[#0c0c0c]/95 py-2.5 pl-3 pr-4 shadow-2xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-orange-500/40"
-      >
-        <span className="relative flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-500 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-500" />
-        </span>
-        <span className="font-body text-xs font-bold text-white">Enroll Now — tap to view offer</span>
-      </button>
-    );
-  }
-
-  const handleWhatsApp = () => {
-    window.open("https://wa.me/919005575577?text=Hi,%20I'm%20interested%20in%20the%20Face%20Reading%20Masterclass.", "_blank");
-  };
+export default function FixedBottomCTA({ onJoinNow, isModalOpen }) {
+  // Hide completely if modal is open to prevent overlapping and respect Z ladder (FR-01)
+  if (isModalOpen) return null;
 
   return (
     <div
-      className="wb-fixed-cta fixed bottom-4 left-4 z-[9999] w-[min(90vw,21rem)] overflow-hidden rounded-2xl border border-orange-500/20 bg-[#0c0c0c]/95 p-3.5 shadow-2xl backdrop-blur-md sm:p-4"
-      style={{
-        backgroundImage:
-          'radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.05) 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.04) 0%, transparent 55%)',
-      }}
+      className={`fixed bottom-0 left-0 w-full ${Z_TIMER_BAR} border-t border-white/10 bg-[#141118] pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_24px_rgba(0,0,0,0.5)]`}
     >
-      <button
-        type="button"
-        onClick={onDismiss}
-        className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full border-0 bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
-        aria-label="Hide offer bar"
-      >
-        <X size={12} aria-hidden />
-      </button>
-
-      <div className="relative z-[1] flex flex-col items-center gap-2.5 pr-6">
-        <div className="flex w-full items-center justify-center gap-3">
-          <PriceBlock />
-          <DigitalTimer />
+      <div className="mx-auto flex h-[68px] w-full max-w-[1200px] items-center justify-between gap-3 px-4 sm:px-6">
+        
+        {/* Price and Timer Area */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6">
+          <div className="flex items-end gap-2">
+            <span className="font-body text-[20px] font-black leading-none text-[#F0703C]">
+              ₹499
+            </span>
+            <span className="text-[13px] text-white/55 line-through decoration-white/30 mb-0.5">
+              ₹1,999
+            </span>
+          </div>
+          <div className="hidden sm:block h-6 w-px bg-white/10" />
+          <SimpleDigitalTimer />
         </div>
-        <EnrollButton onClick={onJoinNow} fullWidth />
+
+        {/* CTA Button */}
         <button
           type="button"
-          onClick={handleWhatsApp}
-          className="!m-0 border-0 bg-transparent p-0 font-body text-[0.6875rem] font-semibold text-white/75 underline-offset-2 transition hover:text-white hover:underline flex items-center gap-1.5 mt-1"
+          onClick={onJoinNow}
+          className="relative shrink-0 flex min-h-[48px] items-center justify-center gap-2 rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-5 font-body text-[15px] font-bold text-white shadow-[0_4px_12px_rgba(238,102,98,0.3)] transition hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(238,102,98,0.4)]"
         >
-          Have a question? Chat with us <i className="fas fa-arrow-right text-[10px]"></i>
+          Enroll - ₹499
         </button>
+
       </div>
     </div>
   );

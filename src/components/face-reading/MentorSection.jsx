@@ -16,7 +16,7 @@ function MentorSection({ onJoinNow }) {
   const CREDENTIALS = [
     {
       title: 'Trusted by over 10,000+ followers',
-      body: 'Featured on Sony TV and leading media channels. Build a massive following across Instagram & YouTube through accurate, practical teachings.',
+      body: 'Build a massive following across Instagram & YouTube through accurate, practical teachings.',
     },
     {
       title: '500+ Personal Consultations',
@@ -34,16 +34,37 @@ function MentorSection({ onJoinNow }) {
         <div className="grid items-start gap-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-14">
           <div
             data-aos="fade-left"
-            className="mx-auto w-full max-w-[18rem] sm:max-w-[20rem] text-center lg:sticky lg:top-8 lg:mx-0 lg:max-w-none"
+            className="mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-none lg:w-full lg:sticky lg:top-8"
           >
-            <div className="overflow-hidden rounded-2xl shadow-xl flex items-center justify-center bg-[#2A1647] sm:bg-transparent h-auto">
-              <img
-                src="/images/masterclass-mentor.webp"
-                alt="Damini Ma'am Portrait"
-                className="w-full h-auto object-contain"
-                fetchpriority="high"
-                loading="eager"
-              />
+            <div className="relative mb-6">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-[#EE6662]/40 to-transparent blur-md"></div>
+              <div className="relative overflow-hidden rounded-[16px] border border-[#EE6662]/30 bg-[#2A1647] shadow-xl aspect-[4/5] flex items-center justify-center">
+                <img
+                  src="/images/masterclass-mentor.webp"
+                  alt="Damini Shukla Portrait"
+                  className="w-full h-full object-cover object-top"
+                  fetchPriority="high"
+                  loading="eager"
+                />
+              </div>
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#EE6662] px-4 py-1.5 font-body text-[11px] font-bold uppercase tracking-wider text-white shadow-lg">
+                Featured on National TV
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-5 text-center mt-4">
+              <div>
+                <h4 className="font-heading text-xl font-extrabold text-white">10k+</h4>
+                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Students</p>
+              </div>
+              <div>
+                <h4 className="font-heading text-xl font-extrabold text-white">500+</h4>
+                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Consults</p>
+              </div>
+              <div>
+                <h4 className="font-heading text-xl font-extrabold text-white">Sony</h4>
+                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">TV Appr.</p>
+              </div>
             </div>
           </div>
 
@@ -78,9 +99,10 @@ function MentorSection({ onJoinNow }) {
             <div className={`${WB_CTA_ROW} w-full text-center`}>
               <button
                 onClick={onJoinNow}
-                className="m-0 mt-4 inline-flex min-h-[3rem] cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body !text-sm !font-bold !text-white shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:min-h-[3.5rem] sm:px-10 sm:!text-base"
+                className="m-0 mt-4 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10"
               >
-                Join Masterclass — ₹499
+                <span className="text-[17px] font-semibold text-white">Join Masterclass</span>
+                <span className="text-[20px] font-black text-[#Fff] ml-1.5 drop-shadow-sm">- ₹499</span>
               </button>
             </div>
           </div>

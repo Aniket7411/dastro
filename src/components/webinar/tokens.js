@@ -2,6 +2,14 @@ import { PAGE_WRAP, TW_FIELD, TW_FIELD_LABEL, TW_FIELD_INPUT } from '../../utils
 
 export { TW_FIELD, TW_FIELD_LABEL, TW_FIELD_INPUT };
 
+export const Z_PAGE_CONTENT = 'z-[1]';
+export const Z_STICKY_HEADER = 'z-[100]';
+export const Z_FLOATING_WIDGET = 'z-[400]';
+export const Z_TIMER_BAR = 'z-[600]';
+export const Z_MODAL_OVERLAY = 'z-[900]';
+export const Z_MODAL = 'z-[1000]';
+export const Z_TOAST = 'z-[1100]';
+
 export const WB_WRAP = PAGE_WRAP;
 
 export const WB_PAGE = 'pb-28 sm:pb-32';
@@ -34,10 +42,10 @@ export const WB_SECTION_INTRO =
   'mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-center sm:gap-4';
 
 export const WB_INTRO_TITLE =
-  'w-full font-heading text-[clamp(1.125rem,2.2vw,1.625rem)] font-extrabold leading-snug tracking-tight text-[#3B2261] text-balance';
+  'w-full font-heading text-[26px] sm:text-[36px] font-extrabold leading-snug tracking-tight text-[#3B2261] text-balance';
 
 export const WB_INTRO_BODY =
-  'w-full max-w-2xl font-body text-[0.9375rem] leading-relaxed text-slate-600 sm:text-base';
+  'w-full max-w-2xl font-body text-[16px] sm:text-[18px] leading-relaxed text-slate-600';
 
 export const WB_WHY_GRID = 'mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4';
 
@@ -59,7 +67,7 @@ export const WB_PATTERN_GRID =
 export const WB_LEARN_GRID = 'mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-5';
 
 export const WB_LEARN_CARD =
-  '!m-0 flex items-start gap-3 rounded-lg border border-violet-100 bg-[#FDF4FF] !p-3.5 sm:!gap-3.5 sm:!p-4';
+  '!m-0 flex items-start gap-3 rounded-lg border border-violet-100 bg-[#FDF4FF] !p-4.5 sm:!gap-4 sm:!p-6';
 
 export const WB_LEARN_ICON = 'shrink-0 pt-0.5 text-xl text-[#3B2261] opacity-80 sm:text-[1.35rem]';
 
@@ -70,11 +78,11 @@ export const TYPE = {
   h1: '!m-0 font-heading !text-[clamp(1.25rem,2.8vw,2rem)] !font-extrabold !leading-[1.15] !tracking-tight !text-[#3B2261]',
   h1Center:
     '!m-0 mx-auto w-full max-w-[42rem] !text-center font-heading !text-[clamp(1.25rem,2.8vw,2rem)] !font-extrabold !leading-[1.15] !tracking-tight !text-[#3B2261] [&]:text-center',
-  h2: '!m-0 font-heading !text-[clamp(1.125rem,2.2vw,1.625rem)] !font-extrabold !leading-tight !tracking-tight !text-[#3B2261]',
+  h2: '!m-0 font-heading !text-[26px] sm:!text-[36px] !font-extrabold !leading-tight !tracking-tight !text-[#3B2261]',
   h2Center:
-    '!m-0 !mx-auto !block !w-full !max-w-3xl !text-center !font-heading !text-[clamp(1.125rem,2.2vw,1.625rem)] !font-extrabold !leading-tight !tracking-tight !text-[#3B2261]',
+    '!m-0 !mx-auto !block !w-full !max-w-3xl !text-center !font-heading !text-[26px] sm:!text-[36px] !font-extrabold !leading-tight !tracking-tight !text-[#3B2261]',
   h2OnDark:
-    '!m-0 text-center font-heading !text-[clamp(1.125rem,2.2vw,1.625rem)] !font-extrabold !leading-tight !tracking-tight !text-white',
+    '!m-0 text-center font-heading !text-[26px] sm:!text-[36px] !font-extrabold !leading-tight !tracking-tight !text-white',
   h3: '!m-0 font-heading !text-base !font-bold !leading-snug !text-[#3B2261] sm:!text-[1.0625rem]',
   h4: '!m-0 font-body !text-[0.6875rem] !font-bold uppercase !tracking-[0.08em] !text-white/80 sm:!text-xs',
   body: '!m-0 font-body !text-[0.9375rem] !font-normal !leading-[1.65] !text-slate-600 sm:!text-base',
@@ -122,7 +130,7 @@ export const WB_CARD =
   'rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_14px_rgba(15,23,42,0.05)]';
 
 export const WB_INFO_CARD =
-  'flex items-center gap-2.5 rounded-lg bg-[#3B2261] p-3 text-white transition hover:-translate-y-px sm:gap-3 sm:p-3.5';
+  'flex items-center gap-2.5 rounded-[14px] border border-white/10 bg-white/5 p-3.5 text-white transition hover:-translate-y-px sm:gap-4 sm:p-4';
 
 export const WB_SIDE_NAV =
   'absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/90 !text-sm text-[#3B2261] shadow-md backdrop-blur transition hover:border-[#EE6662] hover:bg-[#EE6662] hover:text-white hover:shadow-[0_0_16px_rgba(238,102,98,0.35)] max-md:hidden sm:h-11 sm:w-11';

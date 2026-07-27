@@ -61,15 +61,15 @@ function PatternsSection({ onJoinNow }) {
           {patterns.map((pattern) => (
             <div
               key={pattern.title}
-              className={WB_PATTERN_CARD}
+              className={`${WB_PATTERN_CARD} !p-[18px] sm:!p-[24px]`}
               data-aos="fade-up"
               data-aos-delay={pattern.delay}
             >
               <div className={WB_PATTERN_ICON}>
                 <i className={`fas ${pattern.icon}`} aria-hidden="true" />
               </div>
-              <h4 className={`${TYPE.h3} !mb-1`}>{pattern.title}</h4>
-              <p className={TYPE.bodySm}>{pattern.desc}</p>
+              <h4 className="font-heading text-[17px] sm:text-[19px] font-bold leading-[1.3] text-[#3B2261] mb-2">{pattern.title}</h4>
+              <p className="font-body text-[15.5px] sm:text-[16.5px] font-normal leading-[1.6] text-slate-600 opacity-90 m-0">{pattern.desc}</p>
             </div>
           ))}
         </div>
@@ -80,9 +80,10 @@ function PatternsSection({ onJoinNow }) {
             </p>
             <button
                 onClick={onJoinNow}
-                className="mt-4 sm:mt-6 inline-flex min-h-[3rem] cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body !text-sm !font-bold !text-white shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:min-h-[3.5rem] sm:px-10 sm:!text-base"
+                className="mt-4 sm:mt-6 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10"
             >
-                Join Masterclass — ₹499
+                <span className="text-[17px] font-semibold text-white">Join Masterclass</span>
+                <span className="text-[20px] font-black text-white ml-1.5 drop-shadow-sm">- ₹499</span>
             </button>
         </div>
       </div>

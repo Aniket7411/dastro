@@ -111,7 +111,8 @@ function FaceReadingMasterclass() {
       </div>
 
       <FixedBottomCTA
-        visible={ctaVisible}
+        visible={true}
+        isModalOpen={isModalOpen}
         onJoinNow={handleOpenModal}
         onDismiss={handleDismissCta}
         onShow={handleShowCta}

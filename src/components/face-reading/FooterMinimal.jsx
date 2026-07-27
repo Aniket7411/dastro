@@ -11,13 +11,13 @@ function FooterMinimal() {
           <div className="space-y-2 text-sm font-medium text-slate-400">
             <p>
               <i className="fab fa-whatsapp mr-2 text-green-400 text-lg align-middle"></i>
-              <a href="https://wa.me/919005575577" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline transition">
+              <a href="https://wa.me/919005575577" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline transition inline-flex items-center min-h-[44px] px-2 -ml-2">
                 +91 90055 75577
               </a>
             </p>
             <p>
               <i className="fas fa-envelope mr-2 text-[#EE6662] text-lg align-middle"></i>
-              <a href="mailto:info@dsastrology.com" className="hover:text-white hover:underline transition">
+              <a href="mailto:info@dsastrology.com" className="hover:text-white hover:underline transition inline-flex items-center min-h-[44px] px-2 -ml-2">
                 info@dsastrology.com
               </a>
             </p>
@@ -29,13 +29,13 @@ function FooterMinimal() {
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#EE6662]">Connect With Us</p>
             <p className="text-sm font-bold text-white mb-3">@Dsastrounfiltered</p>
             <div className="flex items-center justify-center gap-5 text-2xl">
-                <a href="https://www.instagram.com/dsastrounfiltered/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1">
+                <a href="https://www.instagram.com/dsastrounfiltered/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1 flex items-center justify-center min-h-[44px] min-w-[44px]">
                     <i className="fab fa-instagram"></i>
                 </a>
-                <a href="https://www.youtube.com/@dsastrounfiltered" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1">
+                <a href="https://www.youtube.com/@dsastrounfiltered" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1 flex items-center justify-center min-h-[44px] min-w-[44px]">
                     <i className="fab fa-youtube"></i>
                 </a>
-                <a href="https://www.facebook.com/dsastrounfiltered/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1">
+                <a href="https://www.facebook.com/dsastrounfiltered/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#EE6662] transition hover:-translate-y-1 flex items-center justify-center min-h-[44px] min-w-[44px]">
                     <i className="fab fa-facebook"></i>
                 </a>
             </div>

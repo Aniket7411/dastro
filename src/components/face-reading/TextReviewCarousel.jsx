@@ -17,35 +17,35 @@ import {
 const textReviews = [
   {
     id: 1,
-    text: 'Maine apne office colleague ka face read kiya — sab kuch match hua! Can’t believe this works so accurately.',
+    text: 'Sab kuch match hua! Can’t believe this works so accurately.',
     author: 'Neha Verma',
     role: 'HR Professional',
     avatar: '/images/avatars/neha.png'
   },
   {
     id: 2,
-    text: 'Damini Shukla’s teaching is so simple. No complicated terms, just pure observation. I could instantly read my family members.',
+    text: 'Damini Shukla’s teaching is so simple. I could instantly read my family members.',
     author: 'Rohit Sharma',
     role: 'Business Owner',
     avatar: '/images/avatars/rohit.png'
   },
   {
     id: 3,
-    text: 'This masterclass completely changed how I interact with people. I can now understand if someone is genuine or faking it within seconds.',
+    text: 'I can now understand if someone is genuine or faking it within seconds.',
     author: 'Priya Desai',
     role: 'Sales Executive',
     avatar: '/images/avatars/priya.png'
   },
   {
     id: 4,
-    text: 'The 160+ snapshot technique is mind-blowing. I never knew a person’s face could reveal so much about their personality.',
+    text: 'The 160+ snapshot technique is mind-blowing.',
     author: 'Karan Singh',
     role: 'Student',
     avatar: '/images/avatars/karan.png'
   },
   {
     id: 5,
-    text: 'I was always interested in psychology, but this ancient science of Samudrika Shastra took my understanding to another level. Highly recommended!',
+    text: 'This ancient science of Samudrika Shastra took my understanding to another level. Highly recommended!',
     author: 'Ananya Gupta',
     role: 'Psychology Enthusiast',
     avatar: '/images/avatars/ananya.png'
