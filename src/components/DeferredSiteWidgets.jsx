@@ -17,8 +17,8 @@ export function DeferredGlobalWidgets() {
 
   return (
     <Suspense fallback={null}>
-      <AstrologerChatFab />
-      <FloatingChatAssistant />
+      {/* <AstrologerChatFab /> */}
+      {/* <FloatingChatAssistant /> */}
     </Suspense>
   );
 }

@@ -19,7 +19,7 @@ function MentorSection({ onJoinNow }) {
       body: 'Build a massive following across Instagram & YouTube through accurate, practical teachings.',
     },
     {
-      title: '500+ Personal Consultations',
+      title: '5000+ Personal Consultations',
       body: 'Successfully guided individuals across career, marriage & business decisions using Face Reading and Vedic Astrology.',
     },
     {
@@ -58,7 +58,7 @@ function MentorSection({ onJoinNow }) {
                 <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Students</p>
               </div>
               <div>
-                <h4 className="font-heading text-xl font-extrabold text-white">500+</h4>
+                <h4 className="font-heading text-xl font-extrabold text-white">5000+</h4>
                 <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Consults</p>
               </div>
               <div>

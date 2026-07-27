@@ -36,7 +36,7 @@ function HeroSection({ onJoinNow }) {
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            Read Any Person’s <span className={WB_HIGHLIGHT}>Real Personality</span> in <span className="text-[#F0703C] font-black relative whitespace-nowrap">30 Seconds<svg className="absolute -bottom-1 left-0 w-full h-[6px] text-[#F0703C]/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none"/></svg></span> — Just by Looking at Their Face
+            Read Any Person’s <span className={WB_HIGHLIGHT}>Real Personality</span> in <span className="text-[#F0703C] font-black relative whitespace-nowrap">30 Seconds<svg className="absolute -bottom-1 left-0 w-full h-[6px] text-[#F0703C]/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" /></svg></span> — Just by Looking at Their Face
           </h1>
           <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
             Learn the ancient science of Samudrika Shastra, simplified into a powerful <span className="font-bold text-slate-900">160+ Snapshot Face Reading Technique</span>.
@@ -48,10 +48,10 @@ function HeroSection({ onJoinNow }) {
             className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none"
             data-aos="fade-right"
           >
-            <img 
-              src="/images/masterclass-hero.webp" 
-              alt="Face Reading Masterclass" 
-              className="block w-full h-auto object-contain" 
+            <img
+              src="/images/masterclass-hero.webp"
+              alt="Face Reading Masterclass"
+              className="block w-full h-auto object-contain"
               fetchPriority="high"
               loading="eager"
             />
@@ -75,7 +75,7 @@ function HeroSection({ onJoinNow }) {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-4 flex items-center justify-center gap-2 text-[13px] font-bold text-[#EE6662]">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EE6662] opacity-75" />
@@ -84,54 +84,49 @@ function HeroSection({ onJoinNow }) {
               Next batch starting soon - limited seats
             </div>
 
-            <div className={`${WB_CARD} mt-3 p-4 sm:mt-4 sm:p-4`}>
-              <div className="mb-2.5 text-center sm:mb-3">
+            <div className={`${WB_CARD} mt-3 sm:mt-4 overflow-hidden text-center shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200/60 w-full p-5 sm:p-6 bg-gradient-to-b from-white to-slate-50`}>
+              <div className="mb-4">
                 <span className={WB_INSTRUCTOR_BADGE}>Your Mentor</span>
               </div>
-              <div className="mb-3 flex items-center gap-3">
-                <div className="w-16 h-20 shrink-0 rounded-lg bg-slate-200 overflow-hidden sm:w-20 sm:h-24 flex items-center justify-center shadow-sm border border-slate-100">
-                  <img 
-                    src="/images/masterclass-mentor.webp" 
-                    alt="Damini Ma'am" 
-                    className="h-full w-full object-cover object-[center_20%]" 
+
+              <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6">
+                {/* PORTRAIT FRAMED IMAGE */}
+                <div className="w-[160px] sm:w-[130px] lg:w-[140px] aspect-[4/5] shrink-0 rounded-[16px] bg-slate-200 overflow-hidden shadow-md border-[3px] border-white relative mx-auto sm:mx-0">
+                  <img
+                    src="/images/damini-new.webp"
+                    alt="Damini Shukla"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_top]"
                     fetchPriority="high"
                     loading="eager"
                   />
+                  <div className="absolute inset-0 shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] rounded-[16px] pointer-events-none" />
                 </div>
-                <p className={`${TYPE.bodySm} !text-xs sm:!text-sm`}>
-                  <strong>Damini Shukla</strong> — Vedic astrologer & face reading expert, lead astrologer at DS Astro Institute.
-                </p>
-              </div>
-              <div className="flex justify-between gap-2 border-t border-slate-100 pt-3">
-                {[
-                  { stat: '10k+', label: 'Students' },
-                  { stat: '500+', label: 'Consultations' },
-                  { stat: 'Sony TV', label: 'Featured on' },
-                ].map((item) => (
-                  <div key={item.label} className="flex-1 text-center">
-                    <h4 className={TYPE.stat}>{item.stat}</h4>
-                    <p className={TYPE.statLabel}>{item.label}</p>
+
+                <div className="flex-1 flex flex-col justify-center sm:pt-1 min-w-0">
+                  <h3 className="text-slate-900 text-[20px] sm:text-[22px] mb-1.5 font-black tracking-tight truncate">Damini Shukla</h3>
+                  <p className={`${TYPE.bodySm} !text-[14px] sm:!text-[13px] lg:!text-[14px] text-slate-600 leading-relaxed font-medium mb-4 sm:mb-5`}>
+                    Vedic astrologer & face reading expert, lead astrologer at DS Astro Institute.
+                  </p>
+
+                  <div className="flex justify-between sm:justify-start sm:gap-6 lg:gap-8 border-t border-slate-100 pt-4">
+                    {[
+                      { stat: '10k+', label: 'Students' },
+                      { stat: '5000+', label: 'Consultations' },
+                      { stat: 'Sony TV', label: 'Featured on' },
+                    ].map((item) => (
+                      <div key={item.label} className="text-center sm:text-left px-1 sm:px-0">
+                        <h4 className={`${TYPE.stat} !text-[18px] sm:!text-[17px] lg:!text-[19px] text-[#F0703C]`}>{item.stat}</h4>
+                        <p className={`${TYPE.statLabel} !text-[9px] sm:!text-[8px] lg:!text-[9px]`}>{item.label}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className={WB_CTA_ROW} data-aos="zoom-in">
-           <button
-            onClick={onJoinNow}
-            className="m-0 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10"
-          >
-            <span className="text-[17px] font-semibold text-white">Join Masterclass</span>
-            <span className="text-[20px] font-black text-white ml-1.5 drop-shadow-sm">- ₹499</span>
-          </button>
-          <div className="mt-3 flex items-center justify-center gap-4 text-[13px] text-slate-600/75 leading-relaxed font-medium">
-            <span className="flex items-center gap-1.5"><i className="fas fa-chair text-slate-400"></i> Limited seats</span>
-            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-            <span className="flex items-center gap-1.5"><i className="fas fa-video text-slate-400"></i> Recording included</span>
-          </div>
-        </div>
+        {/* CTA removed as requested */}
       </div>
     </section>
   );
