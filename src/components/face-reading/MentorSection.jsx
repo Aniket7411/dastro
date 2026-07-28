@@ -18,7 +18,17 @@ function MentorSection() {
           </div>
 
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-6">
-            <div className="text-center md:text-left lg:order-1">
+            <div className="mx-auto w-full max-w-xl overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 shadow-sm shadow-slate-900/5 lg:order-2 order-1">
+              <img
+                src="/images/damini-new.jpg"
+                alt="Face Reading Review"
+                className="w-full object-contain object-center"
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+
+            <div className="text-center md:text-left lg:order-1 order-2">
               <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-[2.2rem]">
                 Damini Shukla
               </h2>
@@ -39,16 +49,6 @@ function MentorSection() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="mx-auto w-full max-w-xl overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 shadow-sm shadow-slate-900/5 lg:order-2">
-              <img
-                src="/images/damini-new.webp"
-                alt="Face Reading Review"
-                className="w-full object-contain object-center"
-                loading="eager"
-                fetchPriority="high"
-              />
             </div>
           </div>
 
