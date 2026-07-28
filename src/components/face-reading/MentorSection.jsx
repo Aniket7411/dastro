@@ -43,7 +43,7 @@ function MentorSection() {
 
             <div className="mx-auto w-full max-w-xl overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 shadow-sm shadow-slate-900/5 lg:order-2">
               <img
-                src="/facereading/facereadingreview.webp"
+                src="/images/damini-new.webp"
                 alt="Face Reading Review"
                 className="w-full object-contain object-center"
                 loading="eager"

@@ -33,28 +33,23 @@ function RegistrationModal({
             <i className="fa fa-times" aria-hidden="true" />
           </button>
 
-          <div className="flex h-full min-h-0 flex-col md:flex-row overflow-hidden">
-            {/* LEFT COLUMN: HERO IMAGE & TITLE */}
-            <div className="relative w-full md:w-[45%] bg-[#3B2261] overflow-hidden shrink-0 flex flex-row md:flex-col items-center md:items-stretch md:justify-end group p-5 md:p-0">
-
-              {/* IMAGE WRAPPER */}
-              <div className="relative w-[45%] sm:w-[38%] md:w-full aspect-[3/4] md:aspect-auto md:absolute md:inset-0 rounded-xl md:rounded-none overflow-hidden shrink-0 shadow-2xl md:shadow-none border-2 border-white/15 md:border-none bg-[#2a1845]">
+          <div className="flex h-full min-h-0 flex-col overflow-hidden">
+            <div className="grid w-full grid-cols-1 md:grid-cols-[1fr_1fr] md:min-h-[420px]">
+              <div className="relative w-full h-[280px] sm:h-[320px] md:h-auto overflow-hidden bg-black">
                 <img
-                  src="/images/damini-new.webp"
+                  src="/facereading/facereadingreview.webp"
                   alt="Damini Shukla"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-1000 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-1000"
                 />
-                <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-[#1a0f2e] via-[#1a0f2e]/60 to-transparent z-[1]" />
               </div>
 
-              {/* TITLE WRAPPER */}
-              <div className="relative z-[2] flex-1 pl-4 md:pl-0 md:p-6 lg:p-8 text-white md:mt-auto">
-                <span className="mb-2 md:mb-3 inline-block rounded-full bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 md:px-3.5 md:py-1.5 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/20">
+              <div className="flex flex-col justify-center bg-[#3B2261] px-6 py-8 text-white border-t border-white/10 md:border-t-0 md:border-l md:border-white/10">
+                <span className="mb-2 inline-block rounded-full bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/20">
                   Launch Offer
                 </span>
-                <h4 className={`${TYPE.h2} !text-white !leading-tight text-[18px] sm:text-[22px] md:text-[28px] lg:text-[34px] drop-shadow-md`}>
-                  2-Day Face Reading <br className="hidden md:block" />
-                  <span className={WB_HIGHLIGHT}>Masterclass</span>
+                <h4 className={`${TYPE.h2} !text-white !leading-tight text-[22px] sm:text-[26px] md:text-[30px] lg:text-[34px] drop-shadow-md`}>
+                  2-Day Face Reading
+                  <span className={`${WB_HIGHLIGHT} inline-block ml-1`}>Masterclass</span>
                 </h4>
               </div>
             </div>

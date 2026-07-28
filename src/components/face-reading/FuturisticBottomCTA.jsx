@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, Video, Play, Zap, ChevronRight } from 'lucide-react';
+import { Flame, Video, Play, Zap, ChevronRight, X } from 'lucide-react';
 
 export default function FuturisticBottomCTA({ onJoinNow }) {
   // Timer State (Default: 2 Hours, 00 Minutes, 00 Seconds)
   const [timeLeft, setTimeLeft] = useState(2 * 60 * 60);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -27,6 +28,14 @@ export default function FuturisticBottomCTA({ onJoinNow }) {
         
         {/* Main Glowing Banner Card */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0d0714] via-[#1a0b2e] to-[#0d0714] border border-[#ff2a8d]/40 p-4 sm:p-5 text-white shadow-[0_0_30px_rgba(255,42,141,0.25)]">
+          <button
+            type="button"
+            onClick={() => setIsHidden(true)}
+            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            aria-label="Hide offer"
+          >
+            <X className="h-4 w-4" />
+          </button>
           
           {/* Top Section: Title & Badges */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
