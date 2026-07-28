@@ -8,6 +8,8 @@ function PaymentFailed() {
   const type = searchParams.get('type') || 'payment';
   const courseName = searchParams.get('course') || searchParams.get('courseName');
   const reason = searchParams.get('reason');
+  const helpText = encodeURIComponent(`Hi DS Astro, I can't pay for ${courseName || 'my booking'}. Please help. Lead: ${leadId || 'not available'}`);
+  const whatsappHelpUrl = `https://wa.me/919005575577?text=${helpText}`;
 
   const getRetryPath = () => {
     const service = searchParams.get('service');
@@ -177,6 +179,29 @@ function PaymentFailed() {
           <i className="fas fa-headset me-1"></i>
           Need help? <Link to="/contact" style={{ color: '#8B4A1E', fontWeight: 700 }}>Contact Support</Link>
         </p>
+        <a
+          href={whatsappHelpUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            marginTop: '0.6rem',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.35rem',
+            borderRadius: '999px',
+            border: '1px solid rgba(31, 168, 85, 0.22)',
+            background: '#f0fdf4',
+            color: '#15803d',
+            padding: '0.42rem 0.75rem',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            textDecoration: 'none'
+          }}
+        >
+          <i className="fab fa-whatsapp" aria-hidden="true"></i>
+          Can't pay? WhatsApp us
+        </a>
       </motion.div>
 
       <style>{`

@@ -18,7 +18,7 @@ function RegistrationModal({
     <ModalPortal open={isOpen}>
       <ModalOverlay onClose={onClose} className="!items-center !p-3 sm:!p-4">
         <div
-          className="relative flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl mx-2 sm:mx-4"
+          className="relative mx-2 flex max-h-[calc(100vh-1rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[14px] bg-white shadow-[0_30px_80px_rgba(15,23,42,0.34)] ring-1 ring-white/15 sm:mx-4"
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
@@ -26,7 +26,7 @@ function RegistrationModal({
         >
           <button
             type="button"
-            className="absolute right-3 top-3 sm:right-4 sm:top-4 z-[100] flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/20 bg-white text-slate-900 shadow-md transition hover:bg-slate-100 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662]"
+            className="absolute right-3 top-3 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/95 text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662] sm:right-4 sm:top-4 sm:h-10 sm:w-10"
             onClick={onClose}
             aria-label="Close"
           >
@@ -34,69 +34,69 @@ function RegistrationModal({
           </button>
 
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
-            <div className="grid w-full grid-cols-1 md:grid-cols-[1fr_1fr] md:min-h-[420px]">
-              <div className="relative w-full h-[280px] sm:h-[320px] md:h-auto overflow-hidden bg-black">
+            <div className="grid w-full grid-cols-1 md:grid-cols-[0.82fr_1.18fr] md:min-h-[252px] lg:min-h-[280px]">
+              <div className="relative h-[165px] w-full overflow-hidden rounded-t-[6px] bg-[#140b17] sm:h-[190px] md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
                 <img
                   src="/facereading/facereadingreview.webp"
                   alt="Damini Shukla"
-                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-1000"
+                  className="absolute inset-0 h-full w-full object-cover object-[center_28%] transition-transform duration-1000 md:object-contain md:object-center"
                 />
               </div>
 
-              <div className="flex flex-col justify-center bg-[#3B2261] px-6 py-8 text-white border-t border-white/10 md:border-t-0 md:border-l md:border-white/10">
-                <span className="mb-2 inline-block rounded-full bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/20">
+              <div className="hidden flex-col justify-center border-t border-white/10 bg-[#3B2261] px-5 py-4 text-white md:order-1 md:flex md:border-r md:border-t-0 md:border-white/10 md:px-6 md:py-5 lg:px-7 lg:py-5">
+                <span className="mb-1.5 inline-flex w-fit rounded-full bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[7px] font-black uppercase tracking-[0.22em] text-white shadow-lg shadow-red-500/20 sm:text-[8px]">
                   Launch Offer
                 </span>
-                <h4 className={`${TYPE.h2} !text-white !leading-tight text-[22px] sm:text-[26px] md:text-[30px] lg:text-[34px] drop-shadow-md`}>
-                  2-Day Face Reading
-                  <span className={`${WB_HIGHLIGHT} inline-block ml-1`}>Masterclass</span>
+                <h4 className={`${TYPE.h2} !m-0 !text-white !leading-[1.08] text-[21px] drop-shadow-md sm:text-[24px] md:text-[28px] lg:text-[31px]`}>
+                  2-Day Face Reading{' '}
+                  <span className={`${WB_HIGHLIGHT} ml-1 inline-block`}>Masterclass</span>
                 </h4>
               </div>
             </div>
 
             {/* RIGHT COLUMN: CONTENT & FORM */}
-            <div className="flex-1 min-h-0 flex flex-col overflow-hidden bg-slate-50 relative">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
               {/* TIMER STRIP */}
               {/* <div className="flex w-full items-center justify-center gap-3 bg-[#141118] px-4 py-3 border-b border-white/5 shrink-0 shadow-sm z-10">
                 <SimpleDigitalTimer />
               </div> */}
 
-              <div className="flex-1 overflow-y-auto p-6 sm:p-8">
-                <div className="mb-2 border-b border-slate-200 pb-2">
-                  <h3 id="webinar-modal-title" className={`${TYPE.h3} mb-3 text-slate-800 flex items-center gap-2.5`}>
-                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#3B2261] text-white text-[11px] shadow-sm">
+              <div className="flex-1 overflow-y-auto p-3 sm:p-5">
+                <div className="mb-3 rounded-[18px] border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+                  <h3 id="webinar-modal-title" className={`${TYPE.h3} mb-2 flex items-center gap-2 text-[18px] text-slate-800 sm:text-[20px]`}>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2261] text-[11px] text-white shadow-sm">
                       <i className="fas fa-ticket-alt" />
                     </span>
                     Reserve Your Seat
                   </h3>
 
-                  <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold text-slate-600 mb-5">
-                    <span className="flex items-center gap-1.5 bg-slate-100/80 px-2.5 py-1 rounded-md border border-slate-200"><i className="far fa-calendar-alt text-slate-400"></i> 2 Days</span>
-                    <span className="flex items-center gap-1.5 bg-slate-100/80 px-2.5 py-1 rounded-md border border-slate-200"><i className="far fa-clock text-slate-400"></i> 2 hrs/day</span>
-                    <span className="flex items-center gap-1.5 bg-green-50 px-2.5 py-1 rounded-md border border-green-100 text-green-700"><i className="fas fa-video text-green-500"></i> Live on Zoom</span>
+                  <div className="mb-3 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-600 sm:text-[12px]">
+                    <span className="flex items-center gap-1.5 bg-slate-100/80 px-2 py-0.5 rounded-md border border-slate-200"><i className="far fa-calendar-alt text-slate-400"></i> 2 Days</span>
+                    <span className="flex items-center gap-1.5 bg-slate-100/80 px-2 py-0.5 rounded-md border border-slate-200"><i className="far fa-clock text-slate-400"></i> 2 hrs/day</span>
+                    <span className="flex items-center gap-1.5 bg-green-50 px-2 py-0.5 rounded-md border border-green-100 text-green-700"><i className="fas fa-video text-green-500"></i> Live on Zoom</span>
                   </div>
 
-                  <div className="p-4 sm:p-5 rounded-xl bg-gradient-to-br from-orange-50/80 to-red-50/80 border border-orange-100/60 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-[#EE6662] to-[#D9534F] text-white text-[9px] font-black px-3 py-1.5 rounded-bl-xl uppercase tracking-wider shadow-sm">
+                  <div className="relative overflow-hidden rounded-[14px] border border-orange-200/70 bg-gradient-to-br from-orange-50 via-white to-red-50 p-3 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)] sm:p-4">
+                    <div className="absolute right-0 top-0 rounded-bl-xl bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[8px] font-black uppercase tracking-wider text-white shadow-sm">
                       Save ₹1,500
                     </div>
-                    <p className="text-[11px] font-bold text-orange-800/70 mb-1 uppercase tracking-wider">Limited Time Offer</p>
+                    <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-orange-800/70">Limited Time Offer</p>
                     <div className="flex items-end gap-3">
-                      <span className="font-body text-[36px] sm:text-[40px] font-black leading-none text-[#F0703C] tracking-tight">₹499</span>
-                      <span className="text-slate-400 line-through mb-1.5 font-bold text-lg">₹1,999</span>
+                      <span className="font-body text-[30px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">₹499</span>
+                      <span className="mb-1.5 text-base font-bold text-slate-400 line-through sm:text-lg">₹1,999</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mb-7">
-                  <ul className="m-0 space-y-3.5 p-0">
+                <div className="mb-3">
+                  <ul className="m-0 grid gap-1.5 p-0 sm:grid-cols-3">
                     {[
                       'Live on Zoom + Recording included',
                       'Learn the 160+ Snapshot Technique',
                       'No prior astrology knowledge needed',
                     ].map((point) => (
-                      <li key={point} className={`${TYPE.bodySm} flex items-start gap-3 !text-slate-700 font-semibold`}>
-                        <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100 mt-0.5">
+                      <li key={point} className={`${TYPE.bodySm} flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2 !text-[12px] !leading-snug !text-slate-700 font-semibold shadow-sm`}>
+                        <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100">
                           <i className="fa fa-check text-[10px] text-green-600" aria-hidden="true" />
                         </div>
                         {point}
@@ -105,9 +105,9 @@ function RegistrationModal({
                   </ul>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="webinar-name" className={MODAL_LABEL}>
+                    <label htmlFor="webinar-name" className={`${MODAL_LABEL} !mb-1 !text-[11px]`}>
                       Full Name
                     </label>
                     <input
@@ -119,11 +119,11 @@ function RegistrationModal({
                       required
                       autoComplete="name"
                       placeholder="Enter Your Full Name"
-                      className={`${MODAL_INPUT} text-[16px] min-h-[52px] rounded-[12px] bg-white border-slate-200 shadow-sm focus:ring-2`}
+                      className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm focus:ring-2`}
                     />
                   </div>
                   <div>
-                    <label htmlFor="webinar-email" className={MODAL_LABEL}>
+                    <label htmlFor="webinar-email" className={`${MODAL_LABEL} !mb-1 !text-[11px]`}>
                       Email Address
                     </label>
                     <input
@@ -136,15 +136,15 @@ function RegistrationModal({
                       inputMode="email"
                       autoComplete="email"
                       placeholder="Enter Your Best Email"
-                      className={`${MODAL_INPUT} text-[16px] min-h-[52px] rounded-[12px] bg-white border-slate-200 shadow-sm focus:ring-2`}
+                      className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm focus:ring-2`}
                     />
                   </div>
-                  <div>
-                    <label htmlFor="webinar-phone" className={MODAL_LABEL}>
+                  <div className="sm:col-span-2">
+                    <label htmlFor="webinar-phone" className={`${MODAL_LABEL} !mb-1 !text-[11px]`}>
                       Phone (WhatsApp)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold border-r border-slate-200 pr-2">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold border-r border-slate-200 pr-2">
                         +91
                       </span>
                       <input
@@ -156,23 +156,27 @@ function RegistrationModal({
                         required
                         inputMode="numeric"
                         autoComplete="tel"
+                        pattern="[6-9][0-9]{9}"
+                        maxLength={10}
+                        minLength={10}
+                        title="Enter a valid 10-digit Indian mobile number"
                         placeholder="10-Digit Mobile Number"
-                        className={`${MODAL_INPUT} text-[16px] min-h-[52px] rounded-[12px] bg-white border-slate-200 shadow-sm !pl-[60px] focus:ring-2`}
+                        className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm !pl-[54px] focus:ring-2`}
                       />
                     </div>
                   </div>
 
-                  <div className="pt-2">
+                  <div className="pt-1 sm:col-span-2">
                     <button
                       type="submit"
-                      className={`${WB_CTA} w-full justify-center min-h-[56px] rounded-[12px] !text-[16px] shadow-lg shadow-red-500/25 transition-transform hover:-translate-y-1`}
+                      className={`${WB_CTA} w-full justify-center min-h-[48px] rounded-[10px] !text-[14px] shadow-lg shadow-red-500/25 transition-transform hover:-translate-y-1`}
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Processing...' : 'Complete Registration - ₹499'}
                     </button>
                   </div>
 
-                  <div className="flex flex-col items-center gap-1.5 pt-2 text-center text-slate-500">
+                  <div className="flex flex-col items-center gap-1 pt-0.5 text-center text-slate-500 sm:col-span-2">
                     <p className="m-0 text-[11px] font-bold flex items-center gap-1.5 text-slate-400">
                       <i className="fas fa-lock" aria-hidden="true" />
                       Secured by Razorpay · UPI, cards

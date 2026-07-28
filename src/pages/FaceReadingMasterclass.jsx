@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
@@ -25,7 +24,7 @@ function FaceReadingMasterclass() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(true);
-  const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     if (window.AOS) {
@@ -34,7 +33,9 @@ function FaceReadingMasterclass() {
   }, []);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const nextValue = name === 'phone' ? value.replace(/\D/g, '').slice(0, 10) : value;
+    setFormData({ ...formData, [name]: nextValue });
   };
 
   const handleSubmit = async (e) => {
@@ -63,20 +64,22 @@ function FaceReadingMasterclass() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Registration initiated. Redirecting to payment page...');
         setIsModalOpen(false);
+        setShowSuccessModal(true);
+        toast.success('Seat reserved. Opening payment page...');
         const query = new URLSearchParams({
           leadId: data.leadId,
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
+          name: data.name || formData.name.trim(),
+          email: data.email || formData.email.trim(),
+          phone: data.phone || sanitizedPhone,
           amount: String(data.amount || '49900'),
-          orderId: data.orderId || '',
-          keyId: data.keyId || '',
+          ref: data.leadId ? `DS-${String(data.leadId).slice(-6).toUpperCase()}` : `DS-${Date.now().toString().slice(-6)}`,
           courseName: data.courseName || '2-Day Face Reading Masterclass',
         });
 
-        window.location.href = `/ds-astro-payment-page.html?${query.toString()}`;
+        window.setTimeout(() => {
+          window.location.assign(`/ds-astro-payment-page.html?${query.toString()}`);
+        }, 1200);
       } else {
         toast.error(data.error || data.message || 'Failed to initiate registration. Please try again.');
       }
@@ -142,6 +145,22 @@ function FaceReadingMasterclass() {
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm" role="status" aria-live="polite">
+          <div className="w-full max-w-[360px] rounded-[18px] bg-white p-6 text-center shadow-[0_24px_70px_rgba(15,23,42,0.32)] ring-1 ring-white/60">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <i className="fas fa-check text-xl" aria-hidden="true" />
+            </div>
+            <h2 className="m-0 font-heading text-[22px] font-extrabold leading-tight text-[#2A1647]">Seat Reserved</h2>
+            <p className="mx-auto mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-600">
+              Your details are saved. Taking you to the payment page for the final ₹499 step.
+            </p>
+            <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-slate-100">
+              <div className="h-full w-2/3 animate-pulse rounded-full bg-[#EE6662]" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

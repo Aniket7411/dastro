@@ -1,486 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DS Astro Payment | Complete Your Registration</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: #0f0811;
-        color: #f9f5ee;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: radial-gradient(circle at top left, rgba(255, 182, 70, 0.16), transparent 26%),
-          radial-gradient(circle at bottom right, rgba(129, 56, 214, 0.18), transparent 30%),
-          #0f0811;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .page-shell {
-        width: min(1200px, calc(100% - 2rem));
-        margin: 0 auto;
-        padding: 2rem 0 3rem;
-      }
-
-      .brand-bar {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 2rem;
-      }
-
-      .brand-logo {
-        width: 48px;
-        height: 48px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 0.35rem;
-      }
-
-      .brand-logo img {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-
-      .brand-title {
-        display: grid;
-        gap: 0.2rem;
-      }
-
-      .brand-title strong {
-        font-size: 0.92rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #ffd966;
-      }
-
-      .brand-subtitle {
-        font-size: 1.1rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-      }
-
-      .layout {
-        display: grid;
-        gap: 1.5rem;
-      }
-
-      .hero-panel,
-      .payment-panel {
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 28px;
-        padding: 1.75rem;
-        background: rgba(255, 255, 255, 0.04);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
-      }
-
-      .hero-panel {
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero-panel::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at top left, rgba(255, 184, 70, 0.18), transparent 28%),
-          radial-gradient(circle at bottom right, rgba(231, 84, 59, 0.16), transparent 25%);
-        pointer-events: none;
-      }
-
-      .hero-panel > * {
-        position: relative;
-        z-index: 1;
-      }
-
-      .hero-eyebrow {
-        font-size: 0.78rem;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: #f8d588;
-        margin-bottom: 1rem;
-      }
-
-      .hero-title {
-        margin: 0;
-        font-size: clamp(2rem, 4vw, 3.6rem);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
-      }
-
-      .hero-copy {
-        margin: 1.5rem 0 0;
-        max-width: 44rem;
-        line-height: 1.8;
-        color: #d7c8b9;
-      }
-
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1.6rem;
-        padding: 0.85rem 1rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #ffe6ae;
-        font-size: 0.82rem;
-        font-weight: 700;
-      }
-
-      .hero-list {
-        margin: 2rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
-        gap: 1rem;
-      }
-
-      .hero-list li {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 0.8rem;
-        align-items: flex-start;
-        color: #f0e7dc;
-      }
-
-      .hero-list li::before {
-        content: "\2713";
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.9rem;
-        height: 1.9rem;
-        border-radius: 999px;
-        background: #ffd966;
-        color: #1b0813;
-        font-size: 0.9rem;
-        font-weight: 800;
-      }
-
-      .payment-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-      }
-
-      .payment-panel h2 {
-        margin: 0;
-        font-size: 1.2rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #ffd966;
-      }
-
-      .payment-panel h3 {
-        margin: 0.55rem 0 0;
-        font-size: 2.45rem;
-        line-height: 1;
-        color: #fff;
-      }
-
-      .payment-note {
-        display: grid;
-        gap: 0.8rem;
-        font-size: 0.95rem;
-        color: #e1d5c5;
-      }
-
-      .price-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        padding: 0.9rem 1rem;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.09);
-        color: #fff;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-      }
-
-      .payment-box {
-        display: grid;
-        gap: 1rem;
-        border-radius: 24px;
-        padding: 1.25rem;
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .qr-block {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .qr-placeholder {
-        min-height: 240px;
-        border-radius: 24px;
-        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 55%),
-          linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 42%),
-          #1b1118;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        display: grid;
-        place-items: center;
-        color: #d3c5b4;
-        font-size: 0.95rem;
-        text-align: center;
-      }
-
-      .payment-field {
-        display: grid;
-        gap: 0.55rem;
-      }
-
-      .payment-field label {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.14em;
-        color: #f0e7dc;
-      }
-
-      .payment-field input {
-        width: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 14px;
-        padding: 0.95rem 1rem;
-        background: rgba(255, 255, 255, 0.04);
-        color: #f7efe3;
-        font-size: 1rem;
-      }
-
-      .payment-field input:focus {
-        outline: 2px solid rgba(255, 217, 102, 0.35);
-        outline-offset: 2px;
-      }
-
-      .button-group {
-        display: grid;
-        gap: 0.85rem;
-      }
-
-      .btn-primary,
-      .btn-secondary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 54px;
-        border-radius: 16px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.18s ease, box-shadow 0.18s ease;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, #ffd966, #ffb849);
-        color: #1b0813;
-        box-shadow: 0 20px 35px rgba(255, 185, 70, 0.24);
-      }
-
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: #f8e9d7;
-      }
-
-      .btn-primary:hover,
-      .btn-secondary:hover {
-        transform: translateY(-1px);
-      }
-
-      .support-note {
-        margin-top: 0.5rem;
-        font-size: 0.92rem;
-        color: #ccc0b3;
-      }
-
-      .divider {
-        height: 1px;
-        background: rgba(255, 255, 255, 0.08);
-        border: none;
-        margin: 0;
-      }
-
-      .footer-note {
-        font-size: 0.9rem;
-        line-height: 1.6;
-        color: #bfb3a3;
-      }
-
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.55rem 0.9rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #f7efe3;
-        font-size: 0.82rem;
-      }
-
-      .chip strong {
-        color: #ffe9b7;
-      }
-
-      .status-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem 0.9rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-      }
-
-      @media (min-width: 1024px) {
-        .layout {
-          grid-template-columns: minmax(0, 1.3fr) minmax(360px, 1fr);
-          align-items: start;
-        }
-      }
-
-      @media (max-width: 720px) {
-        .brand-bar,
-        .hero-panel,
-        .payment-panel {
-          padding: 1.25rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page-shell">
-      <header class="brand-bar">
-        <span class="brand-logo">
-          <img src="/dsnewlogo.png" alt="DS Astro Institute" />
-        </span>
-        <div class="brand-title">
-          <strong>DS Astro Institute</strong>
-          <p class="brand-subtitle">Secure payment for your masterclass booking</p>
-        </div>
-      </header>
-
-      <div class="layout">
-        <section class="hero-panel">
-          <p class="hero-eyebrow">Complete payment</p>
-          <h1 class="hero-title">Finish registration for the 2-Day Face Reading Masterclass</h1>
-          <div class="hero-copy">
-            Welcome to DS Astro’s secure checkout. Your seat is being held for a short time. Use the QR code or UPI payment details below to complete your booking.
-          </div>
-
-          <div class="hero-badge">₹499 only — early enrollee price</div>
-
-          <ul class="hero-list">
-            <li>Live Zoom sessions + recordings included</li>
-            <li>Quick 2-minute payment via UPI / QR</li>
-            <li>Batch details and Zoom link on WhatsApp instantly</li>
-          </ul>
-
-          <div class="payment-note">
-            <p class="chip"><strong>Note:</strong> Payment page is a secure DS Astro landing page. Do not share the payment link with others.</p>
-            <p class="support-note">If your payment does not go through, connect with us on WhatsApp at <strong>+91 90055 75577</strong>.</p>
-          </div>
-        </section>
-
-        <aside class="payment-panel">
-          <div>
-            <h2>Payment details</h2>
-            <h3 id="display-amount">₹499</h3>
-            <p class="support-note">Pay the exact amount shown to confirm your registration instantly.</p>
-          </div>
-
-          <div class="payment-box">
-            <div class="qr-block">
-              <div class="status-pill">Scan QR to pay</div>
-              <div class="qr-placeholder">QR code placeholder<br />Scan with any UPI app</div>
-            </div>
-
-            <div class="payment-field">
-              <label for="upi-id">UPI ID</label>
-              <input id="upi-id" type="text" readonly value="dsastro@paytm" />
-            </div>
-
-            <div class="button-group">
-              <button type="button" class="btn-primary" id="copyBtn">Copy UPI ID</button>
-              <button type="button" class="btn-secondary" id="whatsappBtn">Contact support on WhatsApp</button>
-            </div>
-
-            <p class="footer-note">Use the UPI ID above if your QR scanner fails. The amount is automatically updated for your current booking.</p>
-          </div>
-
-          <hr class="divider" />
-
-          <div class="payment-note">
-            <p class="chip"><strong>Booked for</strong> <span id="display-name">Guest</span></p>
-            <p class="support-note" id="display-course">2-Day Face Reading Masterclass</p>
-          </div>
-        </aside>
-      </div>
-    </main>
-
-    <script>
-      (function () {
-        const params = new URLSearchParams(window.location.search);
-        const name = params.get('name') ? decodeURIComponent(params.get('name')) : 'Guest';
-        const courseName = params.get('courseName') ? decodeURIComponent(params.get('courseName')) : '2-Day Face Reading Masterclass';
-        const rawAmount = params.get('amount');
-
-        const amountElement = document.getElementById('display-amount');
-        const nameElement = document.getElementById('display-name');
-        const courseElement = document.getElementById('display-course');
-        const upiInput = document.getElementById('upi-id');
-        const copyBtn = document.getElementById('copyBtn');
-        const whatsappBtn = document.getElementById('whatsappBtn');
-
-        let displayAmount = '₹499';
-        if (rawAmount) {
-          const amountValue = Number(rawAmount);
-          if (!Number.isNaN(amountValue)) {
-            displayAmount = amountValue > 1000 ? `₹${(amountValue / 100).toFixed(0)}` : `₹${amountValue.toFixed(0)}`;
-          }
-        }
-
-        amountElement.textContent = displayAmount;
-        nameElement.textContent = name;
-        courseElement.textContent = courseName;
-
-        copyBtn.addEventListener('click', async function () {
-          try {
-            await navigator.clipboard.writeText(upiInput.value);
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => {
-              copyBtn.textContent = 'Copy UPI ID';
-            }, 2000);
-          } catch (err) {
-            copyBtn.textContent = 'Copy failed';
-          }
-        });
-
-        whatsappBtn.addEventListener('click', function () {
-          const text = encodeURIComponent('Hi DS Astro, I need help completing my Face Reading Masterclass payment.');
-          window.open(`https://wa.me/919005575577?text=${text}`, '_blank');
-        });
-      })();
-    </script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Complete your payment - DS Astro Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#241238;--ink-soft:#5B4A6B;--paper:#FBF7F1;--card:#FFFFFF;--line:#E8DDCE;--coral:#E2593F;--coral-soft:#FCEDE8;--brass:#B08B4F;--whats:#1FA855;--radius:14px}*{box-sizing:border-box;margin:0;padding:0}html{-webkit-text-size-adjust:100%}body{background:var(--paper);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;line-height:1.55;padding:20px 16px 48px;display:flex;justify-content:center}.wrap{width:100%;max-width:440px}.brand{display:flex;align-items:center;gap:11px;margin-bottom:24px}.mark{width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}.mark img{width:36px;height:36px;object-fit:contain}.brand-name{font-weight:700;font-size:14px;letter-spacing:.01em}.brand-sub{font-size:11.5px;color:var(--ink-soft)}.eyebrow{display:inline-block;background:var(--coral-soft);color:#9E3A24;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:100px;margin-bottom:12px}h1{font-family:"Bricolage Grotesque",sans-serif;font-size:29px;line-height:1.15;font-weight:700;margin-bottom:8px}.lede{font-size:14px;color:var(--ink-soft);margin-bottom:12px}.timer{background:var(--coral);color:#fff;border-radius:var(--radius);padding:15px 18px 14px;text-align:center;margin-bottom:12px}.timer-label{display:flex;align-items:center;justify-content:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.94}.timer-clock{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;margin:3px 0 1px}.timer-note{font-size:12px;opacity:.9}.timer.ended{background:#F3EBE0;color:var(--ink)}.timer.ended .timer-clock{font-size:28px}.dot{width:7px;height:7px;border-radius:50%;background:#fff;flex:none}@media (prefers-reduced-motion:no-preference){.dot{animation:pulse 2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}}.qr-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px 22px;text-align:center;position:relative;margin-bottom:10px;box-shadow:0 14px 34px rgba(36,18,56,.06)}.seal{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--brass);color:#fff;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:0 0 8px 8px}.amount{font-family:"Bricolage Grotesque",sans-serif;font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1;margin-top:12px}.amount-note{font-size:12px;color:var(--ink-soft);margin-top:5px;margin-bottom:20px}.qr-frame{width:210px;height:210px;margin:0 auto;padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center}.qr-frame img{width:100%;height:100%;object-fit:contain;display:block}.payee{margin-top:16px;font-weight:700;font-size:14.5px;letter-spacing:.06em}.payee-role{font-size:11.5px;color:var(--ink-soft);margin-top:2px}.upi{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.upi code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--ink)}.copy{background:none;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding:4px 10px;cursor:pointer}.copy:hover{border-color:var(--ink-soft);color:var(--ink)}.ref{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-bottom:24px}.ref strong{font-family:ui-monospace,monospace;color:var(--ink);letter-spacing:.04em}.steps-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}.steps{list-style:none;position:relative;margin-bottom:24px}.steps::before{content:"";position:absolute;left:12.5px;top:12px;bottom:14px;width:1px;background:var(--line)}.steps li{display:flex;gap:14px;padding-bottom:18px;position:relative}.steps li:last-child{padding-bottom:0}.num{width:26px;height:26px;border-radius:50%;flex:none;position:relative;z-index:1;background:var(--coral);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}.steps p{font-size:13.5px;padding-top:3px}.hindi{background:#F3EBE0;border-radius:var(--radius);padding:18px 18px 16px;margin-bottom:24px}.hindi h2{font-family:"Noto Sans Devanagari",sans-serif;font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink)}.hindi ol{margin:0;padding-left:19px}.hindi li{font-family:"Noto Sans Devanagari",sans-serif;font-size:13.5px;line-height:1.85;color:#3F2E4E}.cta{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--whats);color:#fff;text-decoration:none;font-weight:700;font-size:15.5px;padding:16px;border-radius:12px;margin-bottom:9px}.cta:hover{background:#188C46}.cta svg{width:20px;height:20px;fill:currentColor;flex:none}.cta-note{text-align:center;font-size:12px;color:var(--ink-soft);margin-bottom:10px}.tiny-help{display:block;width:max-content;max-width:100%;margin:0 auto 24px;padding:5px 9px;border-radius:999px;border:1px solid rgba(31,168,85,.18);background:#fff;color:#168044;text-decoration:none;font-size:11px;font-weight:700}.assure{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:28px}.assure svg{width:17px;height:17px;flex:none;margin-top:2px;stroke:var(--brass);fill:none;stroke-width:1.8}.assure p{font-size:12.5px;color:var(--ink-soft);line-height:1.6}footer{border-top:1px solid var(--line);padding-top:18px;text-align:center}footer .co{font-size:12.5px;font-weight:700;margin-bottom:4px}footer .meta{font-size:11.5px;color:var(--ink-soft);line-height:1.7}footer a{color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="mark"><img src="/updatedlogo.svg" alt="DS Astro Institute"></div><div><div class="brand-name">DS Astro Institute</div><div class="brand-sub">Face Reading Masterclass</div></div></div>
+  <span class="eyebrow">Last step</span>
+  <h1>Complete your payment</h1>
+  <p class="lede">Scan the code below to pay, then send us the screenshot. We'll confirm your seat and call you with your batch details.</p>
+  <div class="timer" id="timer"><div class="timer-label"><span class="dot"></span> Your seat is reserved for</div><div class="timer-clock" id="clock">05:00</div><div class="timer-note" id="timerNote">Complete the payment before the timer ends</div></div>
+  <div class="qr-card"><span class="seal">Scan to pay</span><div class="amount" id="amount">₹499</div><div class="amount-note">2-Day Face Reading Masterclass · Live on Zoom</div><div class="qr-frame"><img id="qrImg" alt="UPI payment QR code"></div><div class="payee">DAMINI SHUKLA</div><div class="payee-role">DS Astro Institute</div><div class="upi"><code id="upiId">dsastro@paytm</code><button class="copy" id="copyBtn" type="button">Copy</button></div></div>
+  <p class="ref">Your reference number: <strong id="refNo">DS-000000</strong></p>
+  <div class="steps-title">What happens next</div>
+  <ol class="steps"><li><span class="num">1</span><p>Pay ₹499 by scanning the QR code above with any UPI app.</p></li><li><span class="num">2</span><p>Send the payment screenshot along with your name and mobile number to our WhatsApp number below.</p></li><li><span class="num">3</span><p>Once we confirm your payment, our team will call you on a working day between 10 AM and 7 PM to share your batch day and timing.</p></li></ol>
+  <div class="hindi"><h2>हिन्दी में</h2><ol><li>ऊपर दिए गए QR कोड को किसी भी UPI ऐप से स्कैन करके ₹499 का भुगतान करें।</li><li>भुगतान के बाद उसका स्क्रीनशॉट, अपना नाम और मोबाइल नंबर नीचे दिए गए व्हाट्सएप नंबर पर भेजें।</li><li>भुगतान की पुष्टि होते ही हमारी टीम कार्य दिवसों में सुबह 10 बजे से शाम 7 बजे के बीच आपको कॉल करके बैच का दिन और समय बताएगी।</li></ol></div>
+  <a class="cta" id="waLink" href="https://wa.me/919005575577" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2A9.9 9.9 0 0 0 2.15 11.9c0 1.74.46 3.44 1.32 4.94L2.06 22l5.3-1.39a9.86 9.86 0 0 0 4.68 1.19h.01a9.9 9.9 0 0 0 0-19.8Zm5.76 14.06c-.24.68-1.4 1.3-1.94 1.35-.5.05-.98.23-3.3-.69-2.78-1.1-4.55-3.94-4.69-4.12-.14-.18-1.12-1.49-1.12-2.84 0-1.35.71-2.02.96-2.29a1 1 0 0 1 .73-.34h.52c.17 0 .4-.06.62.48.24.57.8 1.98.87 2.13.07.14.12.31.02.5-.1.18-.14.29-.28.45l-.42.49c-.14.14-.28.29-.12.57.16.27.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.17-.2.7-.81.88-1.09.18-.27.36-.23.61-.14.25.09 1.6.75 1.87.89.28.14.46.2.53.32.07.11.07.66-.17 1.34Z"/></svg>Send screenshot on WhatsApp</a>
+  <p class="cta-note">+91 90055 75577 · Mon to Sat, 10 AM - 7 PM</p>
+  <a class="tiny-help" id="payHelpLink" href="https://wa.me/919005575577" target="_blank" rel="noopener">Can't pay? Get help</a>
+  <div class="assure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3z"/><path d="M9 12.5l2 2 4-4.5"/></svg><p>Payments are verified manually by our team, usually within a few hours. If you don't hear from us within one working day, message the same WhatsApp number with your reference number.</p></div>
+  <footer><div class="co">DS Astro Institute LLP</div><div class="meta">Lucknow, Uttar Pradesh, India<br><a href="mailto:support@dsastrology.com">support@dsastrology.com</a><br>dsastrology.com</div></footer>
+</div>
+<script>
+(function(){
+  var UPI_ID = 'dsastro@paytm';
+  var PAYEE = 'DAMINI SHUKLA';
+  var params = new URLSearchParams(location.search);
+  var name = params.get('name') || '';
+  var phone = params.get('phone') || '';
+  var rawAmount = params.get('amount') || '49900';
+  var amount = Number(rawAmount) > 1000 ? Math.round(Number(rawAmount) / 100) : Math.round(Number(rawAmount) || 499);
+  var ref = params.get('ref') || ('DS-' + String(Math.floor(100000 + Math.random() * 900000)));
+  document.getElementById('refNo').textContent = ref;
+  document.getElementById('amount').textContent = '₹' + amount;
+  document.getElementById('upiId').textContent = UPI_ID;
+  var upiUri = 'upi://pay?pa=' + encodeURIComponent(UPI_ID) + '&pn=' + encodeURIComponent(PAYEE) + '&am=' + encodeURIComponent(String(amount)) + '&cu=INR&tn=' + encodeURIComponent('Face Reading Masterclass ' + ref);
+  document.getElementById('qrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=10&data=' + encodeURIComponent(upiUri);
+  var msg = 'Hi, I have paid Rs ' + amount + ' for the 2-Day Face Reading Masterclass.\n\nName: ' + name + '\nMobile: ' + phone + '\nReference: ' + ref + '\n\nSharing my payment screenshot here.';
+  var helpMsg = 'Hi DS Astro, I am unable to pay for the Face Reading Masterclass.\n\nName: ' + name + '\nMobile: ' + phone + '\nReference: ' + ref;
+  document.getElementById('waLink').href = 'https://wa.me/919005575577?text=' + encodeURIComponent(msg);
+  document.getElementById('payHelpLink').href = 'https://wa.me/919005575577?text=' + encodeURIComponent(helpMsg);
+  var btn = document.getElementById('copyBtn');
+  btn.addEventListener('click', function(){
+    navigator.clipboard.writeText(UPI_ID).then(function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy';},1800);}).catch(function(){btn.textContent='Copy failed';});
+  });
+  var remaining = 300;
+  var clock = document.getElementById('clock');
+  var timer = document.getElementById('timer');
+  var note = document.getElementById('timerNote');
+  function tick(){
+    var min = String(Math.floor(remaining / 60)).padStart(2, '0');
+    var sec = String(remaining % 60).padStart(2, '0');
+    clock.textContent = min + ':' + sec;
+    if(remaining <= 0){timer.classList.add('ended');clock.textContent='Seat hold ended';note.textContent='You can still pay, but confirmation depends on availability.';return;}
+    remaining -= 1;
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
+</body>
 </html>
