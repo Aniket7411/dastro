@@ -26,7 +26,6 @@ const Tarot = lazy(() => import('./pages/Tarot'));
 const Love = lazy(() => import('./pages/Love'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const Webinar = lazy(() => import('./pages/Webinar'));
-const FaceReadingMasterclass = lazy(() => import('./pages/FaceReadingMasterclass'));
 const NewReading = lazy(() => import('./pages/NewReading'));
 const Payment = lazy(() => import('./pages/Payment'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
@@ -184,7 +183,7 @@ function App() {
               </Route>
 
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/face-reading-masterclass" element={<FaceReadingMasterclass />} />
+              <Route path="/face-reading-masterclass" element={<NewReading />} />
               <Route path="/new-reading" element={<NewReading />} />
 
               {/* Live chat session — full-screen chat UI, no main layout */}
