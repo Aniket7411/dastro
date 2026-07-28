@@ -36,14 +36,14 @@ function MentorSection() {
                 Vedic astrologer & face reading expert, lead astrologer at DS Astro Institute.
               </p>
               <div className="mx-auto mt-4 h-px w-16 rounded-full bg-slate-200 md:mx-0" />
-              <div className="mt-6 grid gap-3 grid-cols-2 md:grid-cols-3">
+              <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
                 {CREDENTIALS.map((item) => (
                   <div
                     key={item.label}
-                    className="flex min-h-[108px] flex-col justify-center rounded-[24px] border border-slate-200 bg-slate-50 px-3 py-3 text-center shadow-sm"
+                    className="flex min-h-[84px] flex-col justify-center rounded-[18px] border border-slate-200 bg-slate-50 px-2 py-2 text-center shadow-sm sm:min-h-[108px] sm:rounded-[24px] sm:px-3 sm:py-3"
                   >
-                    <p className="text-xl font-extrabold tracking-tight text-slate-950">{item.value}</p>
-                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                    <p className="text-[1rem] font-extrabold tracking-tight text-slate-950 sm:text-xl">{item.value}</p>
+                    <p className="mt-1 text-[8px] font-semibold uppercase leading-tight tracking-[0.12em] text-slate-500 sm:mt-2 sm:text-[10px] sm:tracking-[0.28em]">
                       {item.label}
                     </p>
                   </div>
