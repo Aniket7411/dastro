@@ -49,7 +49,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-right"
           >
             <img
-              src="/images/masterclass-hero.webp"
+              src="/facereading/facereadingbanner.webp"
               alt="Face Reading Masterclass"
               className="block w-full h-auto object-contain"
               fetchPriority="high"
