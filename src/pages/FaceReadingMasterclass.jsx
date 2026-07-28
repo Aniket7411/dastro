@@ -15,7 +15,8 @@ import ItinerarySection from '../components/face-reading/ItinerarySection';
 import MentorSection from '../components/face-reading/MentorSection';
 import TextReviewCarousel from '../components/face-reading/TextReviewCarousel';
 import FaqSection from '../components/face-reading/FaqSection';
-import FixedBottomCTA from '../components/face-reading/FixedBottomCTA';
+// import FixedBottomCTA from '../components/face-reading/FixedBottomCTA';
+import FuturisticBottomCTA from '../components/face-reading/FuturisticBottomCTA';
 import RegistrationModal from '../components/face-reading/RegistrationModal';
 import FooterMinimal from '../components/face-reading/FooterMinimal';
 
@@ -23,7 +24,7 @@ function FaceReadingMasterclass() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ctaVisible, setCtaVisible] = useState(false);
+  const [ctaVisible, setCtaVisible] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,11 +63,20 @@ function FaceReadingMasterclass() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Registration initiated. Redirecting to secure payment...');
+        toast.success('Registration initiated. Redirecting to payment page...');
         setIsModalOpen(false);
-        navigate(
-          `/payment?leadId=${data.leadId}&name=${encodeURIComponent(data.name)}&email=${encodeURIComponent(data.email)}&phone=${data.phone}&amount=${data.amount}&orderId=${data.orderId}&keyId=${data.keyId}&courseName=${encodeURIComponent(data.courseName || '2-Day Face Reading Masterclass')}`,
-        );
+        const query = new URLSearchParams({
+          leadId: data.leadId,
+          name: data.name || '',
+          email: data.email || '',
+          phone: data.phone || '',
+          amount: String(data.amount || '49900'),
+          orderId: data.orderId || '',
+          keyId: data.keyId || '',
+          courseName: data.courseName || '2-Day Face Reading Masterclass',
+        });
+
+        window.location.href = `/ds-astro-payment-page.html?${query.toString()}`;
       } else {
         toast.error(data.error || data.message || 'Failed to initiate registration. Please try again.');
       }
@@ -111,13 +121,18 @@ function FaceReadingMasterclass() {
         <FooterMinimal />
       </div>
 
+      {/* Old CTA retained for reference — commented out while new CTA is active */}
+      {/*
       <FixedBottomCTA
-        visible={true}
+        visible={ctaVisible}
         isModalOpen={isModalOpen}
         onJoinNow={handleOpenModal}
         onDismiss={handleDismissCta}
         onShow={handleShowCta}
       />
+      */}
+
+      <FuturisticBottomCTA onJoinNow={handleOpenModal} />
 
       <RegistrationModal
         isOpen={isModalOpen}

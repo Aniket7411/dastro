@@ -62,12 +62,12 @@ function RegistrationModal({
             {/* RIGHT COLUMN: CONTENT & FORM */}
             <div className="flex-1 min-h-0 flex flex-col overflow-hidden bg-slate-50 relative">
               {/* TIMER STRIP */}
-              <div className="flex w-full items-center justify-center gap-3 bg-[#141118] px-4 py-3 border-b border-white/5 shrink-0 shadow-sm z-10">
+              {/* <div className="flex w-full items-center justify-center gap-3 bg-[#141118] px-4 py-3 border-b border-white/5 shrink-0 shadow-sm z-10">
                 <SimpleDigitalTimer />
-              </div>
+              </div> */}
 
               <div className="flex-1 overflow-y-auto p-6 sm:p-8">
-                <div className="mb-6 border-b border-slate-200 pb-5">
+                <div className="mb-2 border-b border-slate-200 pb-2">
                   <h3 id="webinar-modal-title" className={`${TYPE.h3} mb-3 text-slate-800 flex items-center gap-2.5`}>
                     <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#3B2261] text-white text-[11px] shadow-sm">
                       <i className="fas fa-ticket-alt" />

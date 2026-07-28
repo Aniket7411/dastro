@@ -78,7 +78,8 @@ function LearnSection({ onJoinNow }) {
         </div>
         <div className={WB_CTA_ROW}>
           <button
-            onClick={onJoinNow}
+            type="button"
+            onClick={() => onJoinNow?.()}
             className="m-0 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10"
           >
             <span className="text-[17px] font-semibold text-white">Join Masterclass</span>
