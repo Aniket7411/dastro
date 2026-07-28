@@ -1,111 +1,58 @@
-import {
-  WB_WRAP,
-  WB_HIGHLIGHT,
-  WB_SECTION,
-  WB_CTA_ROW,
-  TYPE,
-} from '../webinar/tokens';
+import { WB_WRAP } from '../webinar/tokens';
 
-function MentorSection({ onJoinNow }) {
-  const HIGHLIGHTS = [
-    'Vedic astrologer & face reading expert',
-    'Lead astrologer at DS Astro Institute',
-    'Known for simple, practical teaching — no heavy Sanskrit, no confusion'
-  ];
-
+function MentorSection() {
   const CREDENTIALS = [
-    {
-      title: 'Trusted by over 10,000+ followers',
-      body: 'Build a massive following across Instagram & YouTube through accurate, practical teachings.',
-    },
-    {
-      title: '5000+ Personal Consultations',
-      body: 'Successfully guided individuals across career, marriage & business decisions using Face Reading and Vedic Astrology.',
-    },
-    {
-      title: 'Brand Collaborations',
-      body: 'Trusted by leading Indian consumer brands for astrology and personality reading expertise.',
-    },
+    { value: '10k+', label: 'Students' },
+    { value: '5000+', label: 'Consultations' },
+    { value: 'Sony TV', label: 'Featured on' },
   ];
 
   return (
-    <section className={`${WB_SECTION} relative overflow-hidden bg-[#3B2261] text-white`}>
+    <section className="py-6 sm:py-7 bg-slate-50">
       <div className={WB_WRAP}>
-        <div className="grid items-start gap-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-14">
-          <div
-            data-aos="fade-left"
-            className="mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-none lg:w-full lg:sticky lg:top-8"
-          >
-            <div className="relative mb-6">
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-[#EE6662]/40 to-transparent blur-md"></div>
-              <div className="relative overflow-hidden rounded-[16px] border border-[#EE6662]/30 bg-[#2A1647] shadow-xl aspect-[4/5] flex items-center justify-center">
-                <img
-                  src="/images/masterclass-mentor.webp"
-                  alt="Damini Shukla Portrait"
-                  className="w-full h-full object-cover object-top"
-                  fetchPriority="high"
-                  loading="eager"
-                />
-              </div>
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#EE6662] px-4 py-1.5 font-body text-[11px] font-bold uppercase tracking-wider text-white shadow-lg">
-                Featured on National TV
+        <div className="mx-auto max-w-5xl rounded-[28px] bg-white px-4 py-6 shadow-[0_20px_48px_rgba(15,23,42,0.08)] sm:px-5 sm:py-7 lg:px-7 lg:py-8">
+          <div className="flex justify-center">
+            <span className="rounded-full bg-[#EE6662] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-white">
+              YOUR MENTOR
+            </span>
+          </div>
+
+          <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-6">
+            <div className="text-center md:text-left lg:order-1">
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-[2.2rem]">
+                Damini Shukla
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 md:mx-0 md:max-w-none">
+                Vedic astrologer & face reading expert, lead astrologer at DS Astro Institute.
+              </p>
+              <div className="mx-auto mt-4 h-px w-16 rounded-full bg-slate-200 md:mx-0" />
+              <div className="mt-6 grid gap-3 grid-cols-2 md:grid-cols-3">
+                {CREDENTIALS.map((item) => (
+                  <div
+                    key={item.label}
+                    className="flex min-h-[108px] flex-col justify-center rounded-[24px] border border-slate-200 bg-slate-50 px-3 py-3 text-center shadow-sm"
+                  >
+                    <p className="text-xl font-extrabold tracking-tight text-slate-950">{item.value}</p>
+                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      {item.label}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-5 text-center mt-4">
-              <div>
-                <h4 className="font-heading text-xl font-extrabold text-white">10k+</h4>
-                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Students</p>
-              </div>
-              <div>
-                <h4 className="font-heading text-xl font-extrabold text-white">5000+</h4>
-                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">Consults</p>
-              </div>
-              <div>
-                <h4 className="font-heading text-xl font-extrabold text-white">Sony</h4>
-                <p className="font-body text-[10px] font-bold uppercase tracking-wider text-slate-400">TV Appr.</p>
-              </div>
+            <div className="mx-auto w-full max-w-xl overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 shadow-sm shadow-slate-900/5 lg:order-2">
+              <img
+                src="/facereading/facereadingreview.webp"
+                alt="Face Reading Review"
+                className="w-full object-contain object-center"
+                loading="eager"
+                fetchPriority="high"
+              />
             </div>
           </div>
 
-          <div data-aos="fade-right" className="flex flex-col w-full">
-            <h2 className={`${TYPE.h2OnDark} mb-8 w-full text-center lg:text-left sm:mb-10 lg:-mt-2`}>
-              Meet Your Mentor — <span className={WB_HIGHLIGHT}>Damini Shukla</span>
-            </h2>
-
-            <ul className="m-0 mb-8 flex flex-col py-1 gap-4 p-0 sm:mb-10 sm:gap-5 w-full">
-              {HIGHLIGHTS.map((item) => (
-                <li key={item} className="flex items-start gap-3 w-full text-left">
-                  <i
-                    className="fas fa-check-circle shrink-0 mt-1 text-[1.05rem] text-[#EE6662]"
-                    aria-hidden="true"
-                  />
-                  <span className={`${TYPE.bodyOnDark} font-medium text-left`}>{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="space-y-4 w-full sm:space-y-5">
-              {CREDENTIALS.map((item) => (
-                <div key={item.title} className="rounded-xl border border-white/10 bg-white/5 !p-[18px] text-left sm:!p-6">
-                  <p className="!m-0 font-heading text-sm font-bold text-[#EE6662] sm:text-[1rem]">
-                    {item.title}
-                  </p>
-                  <p className={`${TYPE.bodySmOnDark} mt-2`}>{item.body}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className={`${WB_CTA_ROW} w-full text-center`}>
-              <button
-                onClick={onJoinNow}
-                className="m-0 mt-4 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10"
-              >
-                <span className="text-[17px] font-semibold text-white">Join Masterclass</span>
-                <span className="text-[20px] font-black text-[#Fff] ml-1.5 drop-shadow-sm">- ₹499</span>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>

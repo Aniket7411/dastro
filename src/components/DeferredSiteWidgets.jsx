@@ -9,11 +9,13 @@ const SiteOffersModal = lazy(() => import('./offers/SiteOffersModal'));
 
 /** Chat FABs — loaded after first paint / idle time. */
 export function DeferredGlobalWidgets() {
+  const { pathname } = useLocation();
   const [ready, setReady] = useState(false);
+  const blockedPaths = ['/face-reading-masterclass'];
 
   useEffect(() => runWhenIdle(() => setReady(true), 3000), []);
 
-  if (!ready) return null;
+  if (blockedPaths.includes(pathname) || !ready) return null;
 
   return (
     <Suspense fallback={null}>

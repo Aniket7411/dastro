@@ -133,91 +133,72 @@ export default function FixedBottomCTA({ onJoinNow, isModalOpen }) {
   if (isDismissed) {
     return (
       <div className={`fixed bottom-4 md:bottom-6 left-4 md:left-6 z-[90] ${Z_TIMER_BAR}`}>
-        <button 
+        <button
           onClick={() => setIsDismissed(false)}
-          className="flex items-center gap-2.5 bg-[#1A1A1A] border border-white/10 rounded-full pl-3 pr-4 py-2.5 shadow-xl hover:scale-[1.02] transition-transform animate-in fade-in slide-in-from-left-4 duration-300"
+          className="flex items-center gap-2 rounded-full bg-[#181818] border border-white/10 px-3 py-2 shadow-lg transition hover:scale-[1.02]"
         >
-          <div className="w-2.5 h-2.5 rounded-full bg-[#F54B00] shadow-[0_0_8px_rgba(245,75,0,0.8)]" />
-          <span className="text-white text-[13px] md:text-[14px] font-bold tracking-tight">Masterclass — tap to view offer</span>
+          <span className="h-2.5 w-2.5 rounded-full bg-[#F54B00] shadow-[0_0_8px_rgba(245,75,0,0.8)]" />
+          <span className="text-white text-[13px] font-semibold tracking-tight">Masterclass — tap to view</span>
         </button>
       </div>
     );
   }
 
   return (
-    <div className={`fixed bottom-0 md:bottom-6 left-0 md:left-1/2 md:-translate-x-1/2 w-full md:w-[calc(100%-2rem)] md:max-w-[840px] z-[90] ${Z_TIMER_BAR}`}>
-      <button 
+    <div className={`fixed bottom-0 md:bottom-6 left-0 md:left-1/2 md:-translate-x-1/2 w-full md:w-[calc(100%-2rem)] md:max-w-[760px] z-[90] ${Z_TIMER_BAR}`}>
+      <button
         onClick={() => setIsDismissed(true)}
-        className="absolute -top-3 -right-2 md:-top-4 md:-right-4 w-7 h-7 md:w-10 md:h-10 bg-[#180E09] border border-[#3E2312] rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-[#2A180E] shadow-lg z-[100] transition-colors"
+        className="absolute -top-3 -right-2 md:-top-4 md:-right-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#180E09] border border-[#3E2312] text-white/60 shadow-lg transition hover:text-white hover:bg-[#2A180E]"
         aria-label="Close"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      <div className="bg-[#180E09] border-t md:border border-[#2A180E] rounded-[20px] md:rounded-[24px] p-4 md:p-6 shadow-[0_-10px_40px_rgba(243,128,37,0.15)] md:shadow-[0_0_50px_rgba(243,128,37,0.15)] flex flex-row items-center justify-between gap-4 md:gap-8 mx-1 mb-1 md:mx-0 md:mb-0">
 
-        {/* Left Area */}
-        <div className="w-[49%] md:w-auto flex flex-col items-start gap-3 md:gap-5">
-          {/* Fire + Title */}
-          <div className="flex flex-col w-full relative">
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className="relative w-11 h-11 md:w-14 md:h-14 shrink-0 rounded-full bg-gradient-to-br from-[#F5A623] to-[#D75317] flex items-center justify-center shadow-[0_0_24px_rgba(242,140,40,0.5)] z-10">
-                <Flame className="w-5 h-5 md:w-7 md:h-7 text-white fill-white" />
-              </div>
-              <div className="flex flex-col z-10">
-                <span className="text-white font-bold text-[14px] md:text-[22px] leading-tight mb-0.5 md:mb-1">Next batch starting soon</span>
-                <span className="text-[#FFD363] text-[10px] md:text-[15px] font-medium leading-tight">Limited Seats Available</span>
-              </div>
+      <div className="bg-[#180E09] border-t md:border border-[#2A180E] rounded-[18px] p-3 md:p-4 shadow-[0_-8px_36px_rgba(243,128,37,0.14)] flex flex-col gap-3 md:flex-row md:items-center md:justify-between mx-2 md:mx-0">
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#D75317] text-white shadow-sm">
+              <Flame className="h-4 w-4" />
             </div>
-            {/* Faded Line */}
-            <div className="absolute bottom-[-10px] md:bottom-[-12px] left-[52px] md:left-[72px] h-[1.5px] md:h-[2px] w-[140px] md:w-[200px] bg-gradient-to-r from-[#FFD363] to-transparent opacity-80" />
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-white">Next batch starting soon</span>
+              <span className="text-[10px] uppercase tracking-[0.24em] text-[#FFD363]">Limited seats available</span>
+            </div>
           </div>
-
-          {/* Timer Box */}
           <DigitalTimer />
         </div>
 
-        {/* Right Area */}
-        <div className="w-[49%] md:w-[380px] flex flex-col items-end gap-3 md:gap-5">
-          {/* Tags */}
-          <div className="flex items-center gap-2.5 md:gap-3 w-full justify-end">
-            <div className="bg-[#1D130D] border border-[#3E2312] rounded-full px-3 py-1 md:px-4 md:py-1.5 flex items-center gap-1 md:gap-2 shadow-sm">
-              <Video className="w-3 h-3 md:w-4 md:h-4 text-[#FFD363] fill-[#FFD363]" />
-              <span className="text-white text-[9px] md:text-[13px] font-medium leading-none">Live on Zoom</span>
+        <div className="flex flex-col gap-3 md:w-[340px] md:items-end">
+          <div className="flex flex-wrap justify-end gap-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#3E2312] bg-[#1D130D] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-sm">
+              <Video className="h-3 w-3 text-[#FFD363]" />
+              Live on Zoom
             </div>
-            <div className="bg-[#1D130D] border border-[#3E2312] rounded-full px-3 py-1 md:px-4 md:py-1.5 flex items-center gap-1 md:gap-2 shadow-sm">
-              <Play className="w-3 h-3 md:w-4 md:h-4 text-[#FFD363] fill-[#FFD363]" />
-              <span className="text-white text-[9px] md:text-[13px] font-medium leading-none">Recording incl.</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#3E2312] bg-[#1D130D] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-sm">
+              <Play className="h-3 w-3 text-[#FFD363]" />
+              Recording incl.
             </div>
           </div>
 
-          {/* Button Container */}
-          <div className="relative w-full mt-2 md:mt-2">
-            {/* Floating Tag */}
-            <div className="absolute -top-3.5 md:-top-4 left-3 md:left-6 bg-gradient-to-r from-[#FFD659] to-[#F19D17] rounded-[4px] md:rounded-md px-2.5 md:px-3.5 py-[5px] md:py-1.5 flex items-center gap-1 md:gap-1.5 shadow-[0_2px_10px_rgba(0,0,0,0.4)] z-20 border border-[#F19D17]/50">
-              <Zap className="w-3 h-3 md:w-4 md:h-4 text-black fill-black" />
-              <span className="text-[9px] md:text-[12px] font-bold text-black leading-none">Special price for early enrollees!</span>
-            </div>
-
-            {/* Main Button */}
-            <button onClick={onJoinNow} className="w-full block rounded-[12px] md:rounded-[16px] bg-gradient-to-b from-[#FFD659] to-[#E98214] transition-transform duration-300 hover:scale-[1.02] shadow-[0_8px_20px_rgba(233,130,20,0.3)] p-3 md:p-5 relative overflow-hidden group">
-              <div className="flex items-center justify-between w-full h-full relative z-10">
-                <div className="flex flex-col items-start gap-0.5 md:gap-1">
-                  <span className="text-black font-semibold text-[13px] md:text-[18px] leading-none">Join Masterclass</span>
-                  <div className="flex items-baseline gap-2 md:gap-3 mt-1 md:mt-1">
-                    <span className="text-black font-black text-[26px] md:text-[40px] leading-none tracking-tight">₹499</span>
-                    <span className="text-[#7A6B5D] line-through text-[13px] md:text-[20px] font-bold decoration-[#7A6B5D]/60">₹1,999</span>
-                  </div>
-                </div>
-                <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-[#1A0E08] flex items-center justify-center shrink-0 shadow-inner group-hover:bg-black transition-colors">
-                  <ChevronRight className="w-4.5 h-4.5 md:w-7 md:h-7 text-[#FFD363]" strokeWidth={2.5} />
-                </div>
+          <button
+            onClick={onJoinNow}
+            className="rounded-[14px] bg-gradient-to-br from-[#FFD659] to-[#E98214] px-4 py-3 text-left text-sm font-semibold text-slate-950 shadow-sm transition hover:-translate-y-[0.5px] hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[13px] font-semibold leading-none">Join Masterclass</p>
+                <p className="text-[18px] font-black leading-none">₹499</p>
               </div>
-            </button>
-          </div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1A0E08] text-[#FFD363] shadow-inner">
+                <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
+              </div>
+            </div>
+            <span className="mt-1 block text-[10px] uppercase tracking-[0.18em] text-slate-950/80">Early bird price</span>
+          </button>
         </div>
-
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ function HeroSection({ onJoinNow }) {
           </p>
         </div>
 
-        <div className={`${WB_STACK} grid items-start gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
+        <div className={`${WB_STACK} grid items-center justify-center gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
           <div
             className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none"
             data-aos="fade-right"
@@ -57,10 +57,10 @@ function HeroSection({ onJoinNow }) {
             />
           </div>
 
-          <div data-aos="fade-left">
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+          <div data-aos="fade-left" className="mx-auto w-full max-w-xl text-center lg:text-left">
+            <div className="grid grid-cols-2 gap-2 sm:gap-2.5 justify-items-center">
               {infoCards.map((card) => (
-                <div key={card.label} className={`${WB_INFO_CARD} !bg-white/50 border-slate-200 !text-slate-800`}>
+                <div key={card.label} className={`${WB_INFO_CARD} !bg-white/50 border-slate-200 !text-slate-800 w-full`}>
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#EE6662] text-sm sm:h-9 sm:w-9 sm:text-base !text-white">
                     <i className={`fas ${card.icon}`} aria-hidden="true" />
                   </div>
@@ -76,52 +76,12 @@ function HeroSection({ onJoinNow }) {
               ))}
             </div>
 
-            <div className="mt-4 flex items-center justify-center gap-2 text-[13px] font-bold text-[#EE6662]">
+            <div className="mt-4 flex items-center justify-center gap-2 text-[13px] font-bold text-[#EE6662] lg:justify-start">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EE6662] opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EE6662]" />
               </span>
               Next batch starting soon - limited seats
-            </div>
-
-            <div className={`${WB_CARD} mt-3 sm:mt-4 overflow-hidden text-center shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200/60 w-full p-5 sm:p-6 bg-gradient-to-b from-white to-slate-50`}>
-              <div className="mb-4">
-                <span className={WB_INSTRUCTOR_BADGE}>Your Mentor</span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6">
-                {/* PORTRAIT FRAMED IMAGE */}
-                <div className="w-[160px] sm:w-[130px] lg:w-[140px] aspect-[4/5] shrink-0 rounded-[16px] bg-slate-200 overflow-hidden shadow-md border-[3px] border-white relative mx-auto sm:mx-0">
-                  <img
-                    src="/images/damini-new.webp"
-                    alt="Damini Shukla"
-                    className="absolute inset-0 h-full w-full object-cover object-[center_top]"
-                    fetchPriority="high"
-                    loading="eager"
-                  />
-                  <div className="absolute inset-0 shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] rounded-[16px] pointer-events-none" />
-                </div>
-
-                <div className="flex-1 flex flex-col justify-center sm:pt-1 min-w-0">
-                  <h3 className="text-slate-900 text-[20px] sm:text-[22px] mb-1.5 font-black tracking-tight truncate">Damini Shukla</h3>
-                  <p className={`${TYPE.bodySm} !text-[14px] sm:!text-[13px] lg:!text-[14px] text-slate-600 leading-relaxed font-medium mb-4 sm:mb-5`}>
-                    Vedic astrologer & face reading expert, lead astrologer at DS Astro Institute.
-                  </p>
-
-                  <div className="flex justify-between sm:justify-start sm:gap-6 lg:gap-8 border-t border-slate-100 pt-4">
-                    {[
-                      { stat: '10k+', label: 'Students' },
-                      { stat: '5000+', label: 'Consultations' },
-                      { stat: 'Sony TV', label: 'Featured on' },
-                    ].map((item) => (
-                      <div key={item.label} className="text-center sm:text-left px-1 sm:px-0">
-                        <h4 className={`${TYPE.stat} !text-[18px] sm:!text-[17px] lg:!text-[19px] text-[#F0703C]`}>{item.stat}</h4>
-                        <p className={`${TYPE.statLabel} !text-[9px] sm:!text-[8px] lg:!text-[9px]`}>{item.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
