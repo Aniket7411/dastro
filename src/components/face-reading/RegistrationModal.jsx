@@ -26,7 +26,7 @@ function RegistrationModal({
         >
           <button
             type="button"
-            className="absolute right-3 top-3 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/95 text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662] sm:right-4 sm:top-4 sm:h-10 sm:w-10"
+            className="absolute right-3 top-10 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/95 text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662] sm:right-4 sm:top-11 sm:h-10 sm:w-10"
             onClick={onClose}
             aria-label="Close"
           >
@@ -35,11 +35,11 @@ function RegistrationModal({
 
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
             <div className="grid w-full grid-cols-1 md:grid-cols-[0.82fr_1.18fr] md:min-h-[252px] lg:min-h-[280px]">
-              <div className="relative h-[165px] w-full overflow-hidden rounded-t-[6px] bg-[#140b17] sm:h-[190px] md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
+              <div className="relative h-[275px] w-full overflow-hidden rounded-t-[6px] bg-[#140b17] sm:h-[310px] md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
                 <img
                   src="/facereading/facereadingreview.webp"
                   alt="Damini Shukla"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_28%] transition-transform duration-1000 md:object-contain md:object-center"
+                  className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-1000"
                 />
               </div>
 
@@ -190,7 +190,7 @@ function RegistrationModal({
                       rel="noopener noreferrer"
                       className="m-0 text-[11px] font-bold text-green-600 hover:underline hover:text-green-700 mt-1 transition-colors"
                     >
-                      Need help? WhatsApp +91 90055 75577
+                      Need help? WhatsApp 9005575577
                     </a>
                   </div>
                 </form>

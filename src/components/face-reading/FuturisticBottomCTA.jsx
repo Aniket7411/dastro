@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronRight, Flame, Play, Video, X, Zap } from 'lucide-react';
+import { ChevronRight, Flame, Play, Video, Zap } from 'lucide-react';
 
 const SEGMENTS_BY_DIGIT = {
   0: ['a', 'b', 'c', 'd', 'e', 'f'],
@@ -67,10 +67,9 @@ function TimerColon() {
 
 export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) {
   const [timeLeft, setTimeLeft] = useState(2 * 60 * 60);
-  const [isHidden, setIsHidden] = useState(false);
   const [isPanelMounted, setIsPanelMounted] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
-  const shouldShowPanel = !isHidden && !isModalOpen;
+  const shouldShowPanel = !isModalOpen;
 
   useEffect(() => {
     let showTimer;
@@ -105,18 +104,6 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
   const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
   const seconds = String(timeLeft % 60).padStart(2, '0');
 
-  if (isHidden) {
-    return (
-      <button
-        type="button"
-        onClick={() => setIsHidden(false)}
-        className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full border border-[#ff9b42]/35 bg-[#120816]/95 px-4 py-3 text-sm font-bold text-white shadow-[0_14px_34px_rgba(0,0,0,0.42),0_0_20px_rgba(255,111,37,0.25)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5"
-      >
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ffb84d] shadow-[0_0_12px_rgba(255,184,77,0.9)]" />
-        Show offer
-      </button>
-    );
-  }
 
   if (!isPanelMounted) return null;
 
@@ -131,21 +118,13 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_8%_18%,rgba(255,45,116,0.34),transparent_24%),radial-gradient(circle_at_82%_56%,rgba(255,133,43,0.26),transparent_28%),linear-gradient(115deg,rgba(255,255,255,0.06),transparent_32%,rgba(255,255,255,0.04))]" />
           <div className="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(35deg,rgba(255,123,53,0.14)_1px,transparent_1px)] [background-size:58px_58px]" />
 
-          <button
-            type="button"
-            onClick={() => setIsHidden(true)}
-            className="absolute right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-3 sm:top-3 sm:h-9 sm:w-9"
-            aria-label="Hide offer"
-          >
-            <X className="h-4 w-4" />
-          </button>
 
           <div className="relative z-10 p-3 sm:p-4">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 pr-8 sm:gap-3 sm:pr-10">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
               <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-                <div className="relative flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#221134] shadow-[0_0_0_1px_rgba(255,105,56,0.35),0_0_28px_rgba(255,45,116,0.55)] sm:h-14 sm:w-14">
-                  <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[#ff265f] via-[#ff6a27] to-[#ffb545] opacity-85 blur-[1px]" />
-                  <Flame className="relative h-5 w-5 fill-white text-white sm:h-7 sm:w-7" />
+                <div className="relative flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#221134] shadow-[0_0_0_1px_rgba(255,105,56,0.35),0_0_22px_rgba(255,45,116,0.48)] min-[380px]:h-9 min-[380px]:w-9 sm:h-14 sm:w-14">
+                  <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[#ff265f] via-[#ff6a27] to-[#ffb545] opacity-80 blur-[1px]" />
+                  <Flame className="relative h-[18px] w-[18px] fill-white text-white min-[380px]:h-5 min-[380px]:w-5 sm:h-7 sm:w-7" />
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-[0.72rem] font-extrabold leading-tight text-white min-[380px]:text-[0.82rem] sm:text-[1.35rem]">
@@ -209,10 +188,10 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                 <button
                   type="button"
                   onClick={() => onJoinNow?.()}
-                  className="group relative ml-2 inline-flex h-10 w-10 flex-none items-center justify-center rounded-full border border-[#ffad56]/60 bg-[#2b1037] text-[#ffd482] shadow-[0_0_22px_rgba(255,134,54,0.7),inset_0_0_16px_rgba(255,148,54,0.16)] transition duration-200 hover:scale-105 hover:bg-[#3a1647] active:scale-95 sm:ml-3 sm:h-16 sm:w-16"
+                  className="group relative ml-2 inline-flex h-9 w-9 flex-none items-center justify-center rounded-full border border-[#ffad56]/60 bg-[#2b1037] text-[#ffd482] shadow-[0_0_18px_rgba(255,134,54,0.62),inset_0_0_14px_rgba(255,148,54,0.14)] transition duration-200 hover:scale-105 hover:bg-[#3a1647] active:scale-95 min-[380px]:h-10 min-[380px]:w-10 sm:ml-3 sm:h-16 sm:w-16"
                   aria-label="Join Masterclass Now"
                 >
-                  <ChevronRight className="h-6 w-6 stroke-[3] transition-transform group-hover:translate-x-0.5 sm:h-10 sm:w-10" />
+                  <ChevronRight className="h-5 w-5 stroke-[3] min-[380px]:h-6 min-[380px]:w-6 transition-transform group-hover:translate-x-0.5 sm:h-10 sm:w-10" />
                 </button>
               </div>
             </div>

@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function ConsentBanner() {
+  const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+  const isSuppressedPage = pathname === '/face-reading-masterclass' || pathname === '/new-reading';
 
   useEffect(() => {
+    if (isSuppressedPage) {
+      setIsVisible(false);
+      return;
+    }
+
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
       setIsVisible(true);
     }
-  }, []);
+  }, [isSuppressedPage]);
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
@@ -21,7 +28,7 @@ export default function ConsentBanner() {
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (isSuppressedPage || !isVisible) return null;
 
   return (
     <div
