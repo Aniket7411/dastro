@@ -113,7 +113,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
         isPanelVisible ? 'translate-y-0 opacity-100' : 'translate-y-[115%] opacity-0'
       }`}
     >
-      <div className="mx-auto max-w-[920px]">
+      <div className="mx-auto w-full max-w-[920px] lg:max-w-[90vw]">
         <div className="relative overflow-hidden rounded-[18px] border border-[#ff9b42]/35 bg-[#100617] text-white shadow-[0_18px_60px_rgba(0,0,0,0.55),0_0_34px_rgba(255,81,60,0.28)] sm:rounded-[22px]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_8%_18%,rgba(255,45,116,0.34),transparent_24%),radial-gradient(circle_at_82%_56%,rgba(255,133,43,0.26),transparent_28%),linear-gradient(115deg,rgba(255,255,255,0.06),transparent_32%,rgba(255,255,255,0.04))]" />
           <div className="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(35deg,rgba(255,123,53,0.14)_1px,transparent_1px)] [background-size:58px_58px]" />
