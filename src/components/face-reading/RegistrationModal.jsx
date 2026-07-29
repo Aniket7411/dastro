@@ -59,7 +59,7 @@ function RegistrationModal({
 
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
             <div className="grid w-full grid-cols-1 md:grid-cols-[0.82fr_1.18fr] md:min-h-[252px] lg:min-h-[280px]">
-              <div className="relative h-[275px] w-full overflow-hidden rounded-t-[6px] bg-white p-2 sm:h-[310px] sm:p-3 md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
+              <div className="relative mt-2 h-[275px] w-full overflow-hidden rounded-t-[6px] bg-white p-2 sm:mt-0 sm:h-[310px] sm:p-3 md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
                 <img
                   src="/facereading/facereadingreview.webp"
                   alt="Damini Shukla"
