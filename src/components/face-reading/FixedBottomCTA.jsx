@@ -4,7 +4,7 @@ import { ChevronRight, X } from 'lucide-react';
 const STORAGE_KEY = 'fr_masterclass_timer';
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 
-function getTargetTimestamp() {
+export function getTargetTimestamp() {
   if (typeof window === 'undefined') return Date.now() + TWO_HOURS_MS;
 
   let target = localStorage.getItem(STORAGE_KEY);
@@ -16,7 +16,7 @@ function getTargetTimestamp() {
   return Number(target);
 }
 
-function formatTime(diff) {
+export function formatTime(diff) {
   const hours = Math.floor(diff / 3600000);
   const minutes = Math.floor(diff / 60000) % 60;
   const seconds = Math.floor(diff / 1000) % 60;

@@ -1,8 +1,32 @@
+import { useEffect, useState } from 'react';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
 import { WB_CTA, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
-import { SimpleDigitalTimer } from './FixedBottomCTA';
+import { formatTime, getTargetTimestamp } from './FixedBottomCTA';
 
+function OfferTimer() {
+  const [secondsLeft, setSecondsLeft] = useState(2 * 60 * 60);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setSecondsLeft((value) => Math.max(0, value - 1));
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const hours = String(Math.floor(secondsLeft / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, '0');
+  const seconds = String(secondsLeft % 60).padStart(2, '0');
+
+  return (
+    <div className="rounded-[10px] border border-[#F0703C]/25 bg-white/90 px-2 py-1.5 text-left shadow-[0_8px_18px_rgba(240,112,60,0.16)] sm:rounded-[12px] sm:px-3 sm:py-2">
+      <p className="m-0 text-[7px] font-black uppercase tracking-[0.14em] text-[#B94A2F] sm:text-[8px] sm:tracking-[0.18em]">Offer ends in</p>
+      <p className="m-0 mt-1 font-body text-[16px] font-black leading-none tracking-tight text-[#F0703C] tabular-nums sm:text-[24px]">
+        {hours}:{minutes}:{seconds}
+      </p>
+    </div>
+  );
+}
 function RegistrationModal({
   isOpen,
   onClose,
@@ -35,11 +59,11 @@ function RegistrationModal({
 
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
             <div className="grid w-full grid-cols-1 md:grid-cols-[0.82fr_1.18fr] md:min-h-[252px] lg:min-h-[280px]">
-              <div className="relative h-[275px] w-full overflow-hidden rounded-t-[6px] bg-[#140b17] sm:h-[310px] md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
+              <div className="relative h-[275px] w-full overflow-hidden rounded-t-[6px] bg-white p-2 sm:h-[310px] sm:p-3 md:order-2 md:h-auto md:rounded-t-none md:rounded-tr-[14px]">
                 <img
                   src="/facereading/facereadingreview.webp"
                   alt="Damini Shukla"
-                  className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-1000"
+                  className="h-full w-full rounded-[14px] object-contain object-center transition-transform duration-1000"
                 />
               </div>
 
@@ -67,7 +91,7 @@ function RegistrationModal({
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2261] text-[11px] text-white shadow-sm">
                       <i className="fas fa-ticket-alt" />
                     </span>
-                    Reserve Your Seat
+                    2-Day Face Reading Masterclass
                   </h3>
 
                   <div className="mb-3 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-600 sm:text-[12px]">
@@ -80,10 +104,17 @@ function RegistrationModal({
                     <div className="absolute right-0 top-0 rounded-bl-xl bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[8px] font-black uppercase tracking-wider text-white shadow-sm">
                       Save ₹1,500
                     </div>
-                    <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-orange-800/70">Limited Time Offer</p>
-                    <div className="flex items-end gap-3">
-                      <span className="font-body text-[30px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">₹499</span>
-                      <span className="mb-1.5 text-base font-bold text-slate-400 line-through sm:text-lg">₹1,999</span>
+                    <div className="flex flex-row items-end justify-between gap-2 pt-3 sm:gap-4 sm:pt-2">
+                      <div>
+                        <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-orange-800/70">Limited Time Offer</p>
+                        <div className="flex items-end gap-3">
+                          <span className="font-body text-[28px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">₹499</span>
+                          <span className="mb-1 text-sm font-bold text-slate-400 line-through sm:mb-1.5 sm:text-lg">₹1,999</span>
+                        </div>
+                      </div>
+                      <div className="w-[128px] shrink-0 sm:w-auto sm:min-w-[168px]">
+                        <OfferTimer />
+                      </div>
                     </div>
                   </div>
                 </div>

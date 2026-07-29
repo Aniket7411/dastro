@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, Flame, Play, Video, Zap } from 'lucide-react';
+import { getTargetTimestamp } from './FixedBottomCTA';
 
 const SEGMENTS_BY_DIGIT = {
   0: ['a', 'b', 'c', 'd', 'e', 'f'],
@@ -66,7 +67,7 @@ function TimerColon() {
 }
 
 export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) {
-  const [timeLeft, setTimeLeft] = useState(2 * 60 * 60);
+  const [timeLeft, setTimeLeft] = useState(() => Math.max(0, Math.floor((getTargetTimestamp() - Date.now()) / 1000)));
   const [isPanelMounted, setIsPanelMounted] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
   const shouldShowPanel = !isModalOpen;
@@ -91,14 +92,12 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
   }, [shouldShowPanel]);
 
   useEffect(() => {
-    if (timeLeft <= 0) return undefined;
-
-    const interval = window.setInterval(() => {
-      setTimeLeft((prevTime) => Math.max(0, prevTime - 1));
-    }, 1000);
-
+    const target = getTargetTimestamp();
+    const tick = () => setTimeLeft(Math.max(0, Math.floor((target - Date.now()) / 1000)));
+    tick();
+    const interval = window.setInterval(tick, 1000);
     return () => window.clearInterval(interval);
-  }, [timeLeft]);
+  }, []);
 
   const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
   const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
