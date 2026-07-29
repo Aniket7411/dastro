@@ -5,24 +5,21 @@ import { WB_CTA, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
 import { formatTime, getTargetTimestamp } from './FixedBottomCTA';
 
 function OfferTimer() {
-  const [secondsLeft, setSecondsLeft] = useState(2 * 60 * 60);
+  const [time, setTime] = useState({ h: '02', m: '00', s: '00' });
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setSecondsLeft((value) => Math.max(0, value - 1));
-    }, 1000);
+    const target = getTargetTimestamp();
+    const tick = () => setTime(formatTime(Math.max(0, target - Date.now())));
+    tick();
+    const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, []);
-
-  const hours = String(Math.floor(secondsLeft / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, '0');
-  const seconds = String(secondsLeft % 60).padStart(2, '0');
 
   return (
     <div className="rounded-[10px] border border-[#F0703C]/25 bg-white/90 px-2 py-1.5 text-left shadow-[0_8px_18px_rgba(240,112,60,0.16)] sm:rounded-[12px] sm:px-3 sm:py-2">
       <p className="m-0 text-[7px] font-black uppercase tracking-[0.14em] text-[#B94A2F] sm:text-[8px] sm:tracking-[0.18em]">Offer ends in</p>
-      <p className="m-0 mt-1 font-body text-[16px] font-black leading-none tracking-tight text-[#F0703C] tabular-nums sm:text-[24px]">
-        {hours}:{minutes}:{seconds}
+      <p className="m-0 mt-1 font-body text-[15px] font-black leading-none tracking-[0.02em] text-[#F0703C] tabular-nums sm:text-[24px] sm:tracking-tight">
+        {time.h}:{time.m}:{time.s}
       </p>
     </div>
   );
