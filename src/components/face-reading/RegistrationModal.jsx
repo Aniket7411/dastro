@@ -50,7 +50,7 @@ function RegistrationModal({
         >
           <button
             type="button"
-            className="absolute right-3 top-10 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/95 text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662] sm:right-4 sm:top-11 sm:h-10 sm:w-10"
+            className="absolute right-3 top-14 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/95 text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] backdrop-blur transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE6662] sm:right-4 sm:top-11 sm:h-10 sm:w-10"
             onClick={onClose}
             aria-label="Close"
           >
