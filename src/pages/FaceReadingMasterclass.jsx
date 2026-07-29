@@ -97,7 +97,7 @@ function FaceReadingMasterclass() {
   const handleShowCta = () => setCtaVisible(true);
 
   // We add pageBottomPad so the sticky CTA doesn't cover footer content
-  const pageBottomPad = ctaVisible ? WB_PAGE : WB_PAGE_NO_CTA;
+  const pageBottomPad = ctaVisible ? 'pb-44 sm:pb-32' : WB_PAGE_NO_CTA;
 
   return (
     <div className={`${WB_PAGE_SHELL} flex flex-col min-h-screen bg-slate-50`}>

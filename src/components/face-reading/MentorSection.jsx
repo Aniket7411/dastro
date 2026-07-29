@@ -18,11 +18,11 @@ function MentorSection() {
           </div>
 
           <div className="mt-4 grid gap-3 sm:mt-6 sm:gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-6">
-            <div className="order-1 mx-auto w-full max-w-[20rem] overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 shadow-sm shadow-slate-900/5 sm:max-w-sm md:max-w-md lg:order-2 lg:max-w-lg">
+            <div className="group order-1 mx-auto w-full max-w-[20rem] overflow-hidden rounded-[26px] bg-transparent shadow-[0_14px_34px_rgba(15,23,42,0.10)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(15,23,42,0.16)] sm:max-w-sm md:max-w-md lg:order-2 lg:max-w-lg">
               <img
-                src="/images/damini-new.jpg"
+                src="/updatedmentor.webp"
                 alt="Face Reading Review"
-                className="h-[220px] w-full object-contain object-center sm:h-[250px] md:h-[290px] lg:h-[330px] xl:h-[350px]"
+                className="h-[220px] w-full scale-[1.06] object-cover object-top transition duration-500 group-hover:scale-[1.1] sm:h-[250px] md:h-[290px] lg:h-[330px] xl:h-[350px]"
                 loading="eager"
                 fetchPriority="high"
               />
