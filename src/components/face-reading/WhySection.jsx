@@ -19,6 +19,7 @@ function WhySection({ onJoinNow }) {
     "Rishtey ke liye ladka/ladki dekhne gaye — but make-up and rehearsed answers ke aage kuch samajh nahi aaya",
     "People say one thing on the face and do something else behind your back",
     "You meet 50 people a week — but can't tell who is genuine and who is fake",
+    "You invest time and energy into someone, only to realize later that they were just using you",
   ];
 
   return (

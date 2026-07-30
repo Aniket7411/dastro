@@ -15,7 +15,10 @@ function WhoIsThisForSection() {
     "You want a skill people actually pay ₹2,000–₹5,000 per reading for"
   ];
   const notFor = [
-    "You want to judge or insult people — we teach reading with compassion"
+    "You want to judge or insult people — we teach reading with compassion",
+    "You are looking for a magic trick to manipulate others — this is about understanding",
+    "You aren't willing to practice — face reading requires active observation and learning",
+    "You just want to predict the future — this is about analyzing character and personality"
   ];
 
   return (
