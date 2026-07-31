@@ -1,4 +1,4 @@
-import {
+﻿import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_SECTION,
@@ -57,10 +57,9 @@ function ItinerarySection() {
               <ul className="m-0 list-none space-y-3 p-0">
                 {day.items.map((item) => (
                   <li key={item} className="flex items-center gap-3">
-                    <i
-                      className="fas fa-play flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-50 text-xs text-[#EE6662]"
-                      aria-hidden="true"
-                    />
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-50" aria-hidden="true">
+                      <i className="fas fa-play translate-x-[1px] text-[11px] leading-none text-[#EE6662]" />
+                    </span>
                     <span className={TYPE.lead}>{item}</span>
                   </li>
                 ))}
