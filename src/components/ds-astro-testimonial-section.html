@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS Astro — Testimonial Section (UI spec for dev team)</title>
+
+<!--
+  ============================================================
+  DS ASTRO · FACE READING MASTERCLASS
+  Testimonial / social-proof section
+  ============================================================
+  This is ONE section, meant to drop into the existing masterclass
+  landing page. Nothing else on the page is included.
+
+  EVERYTHING THE TEAM NEEDS TO EDIT IS IN THE `CONTENT` OBJECT
+  IN THE <script> AT THE BOTTOM. No other file needs touching.
+
+  Assumptions I made (change freely):
+   1. VIDEO   → self-hosted MP4 (Bunny.net), same as the student
+               portal. Set `src` + `poster` per review. To use
+               Instagram/YouTube instead, see NOTE-A in the script.
+   2. WHATSAPP → each card can be EITHER a real screenshot image
+               (set `img`) OR rebuilt chat bubbles (set `chat`).
+               Rebuilt bubbles are shown here so the wall looks
+               finished before real screenshots arrive.
+   3. COUNTS  → built for 5 videos + 12 screenshots. Arrays scale;
+               layout does not break at 3 or at 30.
+   4. CTA     → yes, one CTA closes the section.
+
+  PRIVACY (important, DPDP Act): real WhatsApp screenshots carry
+  full names, phone numbers and profile photos. Crop above the
+  number bar before upload. The card applies a blur mask over the
+  top-left avatar/number strip as a second line of defence, and
+  captions show first name + masked number only.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ---------- TOKENS · swap these to the page's real values ---------- */
+:root{
+  --ink:#2B1B4E;          /* deep indigo — headings */
+  --ink-soft:#63548A;     /* body text */
+  --coral:#E4695B;        /* accent — matches "Community" heading */
+  --cream:#FBF8F3;
+  --page:#F6F4FA;
+  --card:#FFFFFF;
+  --line:#E8E4F2;
+  --wa-green:#0F6B5C;     /* WhatsApp chrome */
+  --wa-bubble:#DCF8C6;
+  --wa-paper:#ECE5DD;
+  --gold:#E9A13B;         /* price / CTA */
+  --plum:#22103F;         /* CTA bar background */
+
+  --font-display:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+
+  --r-lg:22px;
+  --r-md:14px;
+  --shadow:0 18px 40px -22px rgba(43,27,78,.28);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);font-family:var(--font-body);color:var(--ink-soft)}
+
+/* page chrome only so this file previews nicely — DELETE on integration */
+.preview-note{max-width:900px;margin:0 auto;padding:26px 22px 0;font-size:13px;line-height:1.6;color:#8C82A8}
+.preview-note code{background:#EDE9F6;padding:1px 5px;border-radius:4px;color:var(--ink)}
+
+/* ---------- SECTION SHELL ---------- */
+.proof{padding:60px 0 0;background:
+  linear-gradient(180deg,var(--page) 0%,var(--cream) 78%,var(--cream) 100%);
+  overflow:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--coral);margin:0 0 14px}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--coral);
+  animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+
+.head{text-align:center;margin:0 auto 10px;max-width:760px;
+  font-family:var(--font-display);font-weight:800;color:var(--ink);
+  font-size:clamp(28px,6.4vw,50px);line-height:1.08;letter-spacing:-.02em}
+.head em{font-style:normal;color:var(--coral)}
+.sub{text-align:center;max-width:520px;margin:0 auto;font-size:clamp(14px,3.6vw,17px);
+  line-height:1.6;color:var(--ink-soft)}
+.rule{width:64px;height:3px;border-radius:2px;background:var(--coral);margin:20px auto 0}
+
+/* ---------- BLOCK LABEL (shared by both modules) ---------- */
+.block-label{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  margin:0 0 18px}
+.block-label h3{margin:0;font-family:var(--font-display);font-weight:700;
+  color:var(--ink);font-size:clamp(19px,4.6vw,26px);letter-spacing:-.01em}
+.block-label .count{font-size:13px;font-weight:600;color:var(--coral);
+  background:rgba(228,105,91,.10);padding:4px 10px;border-radius:100px;white-space:nowrap}
+.block-label .hint{font-size:13px;color:#9A90B4;margin-left:auto}
+
+/* ---------- 1 · VIDEO RAIL ---------- */
+.videos{padding:44px 0 8px}
+
+.rail-outer{position:relative;margin:0 -20px}
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 20px 24px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+
+.vcard{position:relative;flex:0 0 auto;width:min(69vw,244px);aspect-ratio:9/16;
+  scroll-snap-align:center;border:0;padding:0;margin:0;cursor:pointer;
+  border-radius:var(--r-lg);overflow:hidden;background:#2B1B4E;
+  box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.7,.3,1)}
+.vcard:hover{transform:translateY(-5px)}
+.vcard:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+
+.vcard video,.vcard .poster{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block}
+/* placeholder poster until real thumbnails land */
+.vcard .poster{display:grid;place-items:center;
+  background:radial-gradient(120% 90% at 30% 12%,#4A2E78 0%,#2B1B4E 60%,#1B1033 100%)}
+.vcard .poster span{font-family:var(--font-display);font-weight:800;font-size:40px;
+  color:rgba(255,255,255,.30);letter-spacing:.04em}
+
+.vcard .shade{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,10,40,.86) 0%,rgba(20,10,40,.18) 42%,rgba(20,10,40,.06) 70%)}
+
+.vcard .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.94);
+  display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.3);
+  transition:transform .3s,opacity .3s}
+.vcard .play svg{width:19px;height:19px;fill:var(--coral);margin-left:3px}
+.vcard.is-playing .play{opacity:0;transform:translate(-50%,-50%) scale(.7)}
+
+.vcard .len{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;
+  color:#fff;background:rgba(20,10,40,.6);backdrop-filter:blur(6px);
+  padding:4px 8px;border-radius:100px;letter-spacing:.03em}
+
+.vcard .meta{position:absolute;left:14px;right:14px;bottom:14px;text-align:left}
+.vcard .meta b{display:block;font-family:var(--font-display);font-size:15px;
+  font-weight:700;color:#fff;letter-spacing:-.01em}
+.vcard .meta small{display:block;font-size:12px;color:rgba(255,255,255,.72);margin-top:2px}
+.vcard .quote{display:block;font-size:12.5px;line-height:1.45;color:#fff;
+  margin:0 0 8px;font-weight:500}
+
+.tag-verified{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7BE0B0;
+  margin-bottom:7px}
+.tag-verified svg{width:11px;height:11px;fill:#7BE0B0}
+
+/* rail arrows — desktop only */
+.arrow{position:absolute;top:calc(50% - 12px);transform:translateY(-50%);z-index:3;
+  width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+  background:#fff;cursor:pointer;display:none;place-items:center;
+  box-shadow:0 8px 20px -8px rgba(43,27,78,.3)}
+.arrow svg{width:16px;height:16px;fill:var(--ink)}
+.arrow.prev{left:4px}.arrow.next{right:4px}
+.arrow:disabled{opacity:.32;cursor:default}
+@media(min-width:860px){.arrow{display:grid}
+  .rail{padding-left:52px;padding-right:52px}}
+
+.sound-hint{display:flex;align-items:center;justify-content:center;gap:7px;
+  font-size:12.5px;color:#9A90B4;margin:0 0 4px}
+.sound-hint svg{width:14px;height:14px;fill:#9A90B4}
+
+/* ---------- 2 · WHATSAPP WALL ---------- */
+.wa{padding:34px 0 0}
+.wa-shell{position:relative;margin:0 -20px;padding:0 20px}
+.wa-cols{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
+  height:560px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 88%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 88%,transparent 100%)}
+@media(min-width:860px){.wa-cols{grid-template-columns:repeat(3,1fr);gap:18px;height:640px}}
+
+.wa-col{display:flex;flex-direction:column;gap:14px;will-change:transform}
+.wa-col.down{animation:drift-down 46s linear infinite}
+.wa-col.up{animation:drift-up 46s linear infinite}
+.wa-cols.paused .wa-col{animation-play-state:paused}
+@keyframes drift-up{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes drift-down{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+
+/* expanded = static grid, no motion, full height */
+.wa-cols.open{height:auto;-webkit-mask-image:none;mask-image:none}
+.wa-cols.open .wa-col{animation:none}
+
+.shot{border:0;padding:0;margin:0;width:100%;text-align:left;cursor:zoom-in;
+  background:var(--card);border-radius:var(--r-md);overflow:hidden;
+  box-shadow:0 8px 22px -14px rgba(43,27,78,.36);
+  transition:transform .3s,box-shadow .3s}
+.shot:hover{transform:scale(1.022);box-shadow:0 14px 30px -14px rgba(43,27,78,.42)}
+.shot:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+
+.shot .bar{display:flex;align-items:center;gap:8px;background:var(--wa-green);
+  padding:8px 10px}
+.shot .bar .av{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.26);
+  display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;flex:0 0 auto}
+.shot .bar .who{min-width:0}
+.shot .bar .who b{display:block;font-size:11.5px;font-weight:600;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot .bar .who small{font-size:9.5px;color:rgba(255,255,255,.66)}
+
+.shot .paper{background:var(--wa-paper);padding:10px 10px 12px;
+  display:flex;flex-direction:column;gap:6px;min-height:74px}
+.shot .paper img{width:100%;display:block;border-radius:6px}
+
+.bub{max-width:88%;padding:7px 9px 6px;border-radius:8px;font-size:12.5px;
+  line-height:1.42;color:#111B21;box-shadow:0 1px 1px rgba(0,0,0,.09);
+  position:relative;word-break:break-word}
+.bub.them{background:#fff;align-self:flex-start;border-top-left-radius:2px}
+.bub.me{background:var(--wa-bubble);align-self:flex-end;border-top-right-radius:2px}
+.bub .t{display:block;text-align:right;font-size:9.5px;color:#667781;margin-top:3px}
+.bub .t svg{width:12px;height:12px;fill:#53BDEB;vertical-align:-2px;margin-left:2px}
+
+.shot .foot{display:flex;align-items:center;gap:6px;padding:8px 10px;
+  border-top:1px solid var(--line);font-size:10.5px;color:#9A90B4}
+.shot .foot b{color:var(--ink);font-weight:600}
+.shot .foot .zoom{margin-left:auto;color:var(--coral);font-weight:700}
+
+.wa-actions{display:flex;justify-content:center;margin:22px 0 0}
+.btn-ghost{font-family:var(--font-display);font-size:14px;font-weight:700;
+  color:var(--ink);background:#fff;border:1px solid var(--line);cursor:pointer;
+  padding:12px 22px;border-radius:100px;box-shadow:0 6px 18px -12px rgba(43,27,78,.4)}
+.btn-ghost:hover{border-color:var(--coral);color:var(--coral)}
+
+.privacy{display:flex;gap:8px;align-items:flex-start;max-width:620px;
+  margin:16px auto 0;font-size:11.5px;line-height:1.5;color:#9A90B4;text-align:left}
+.privacy svg{width:13px;height:13px;fill:#9A90B4;flex:0 0 auto;margin-top:2px}
+
+/* ---------- 3 · CTA ---------- */
+.cta{margin:46px 0 0;background:var(--plum);
+  background-image:radial-gradient(90% 140% at 8% 0%,#3B1A52 0%,transparent 58%)}
+.cta-in{max-width:1180px;margin:0 auto;padding:26px 20px 30px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.cta p{margin:0;font-family:var(--font-display);font-weight:700;color:#fff;
+  font-size:clamp(17px,4.4vw,23px);letter-spacing:-.01em}
+.cta p span{color:var(--gold)}
+.btn-cta{display:inline-flex;align-items:center;gap:12px;text-decoration:none;
+  background:linear-gradient(96deg,#F0B04A,#E4834A);color:#2A1200;
+  font-family:var(--font-display);font-weight:800;font-size:16px;
+  padding:15px 26px;border-radius:100px;box-shadow:0 12px 28px -12px rgba(233,161,59,.7)}
+.btn-cta .price{font-size:19px}
+.btn-cta .strike{font-weight:600;font-size:13px;opacity:.6;text-decoration:line-through}
+.btn-cta:hover{filter:brightness(1.05)}
+.btn-cta:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+/* ---------- LIGHTBOX ---------- */
+.lb{position:fixed;inset:0;z-index:99;display:none;
+  background:rgba(16,8,32,.93);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:18px}
+.lb.on{display:flex}
+.lb-body{position:relative;max-width:min(94vw,420px);width:100%;
+  max-height:88vh;display:flex;flex-direction:column;align-items:center;gap:12px}
+.lb-body video{width:100%;max-height:78vh;border-radius:18px;background:#000;display:block}
+.lb-body .lb-shot{width:100%;max-height:80vh;overflow-y:auto;border-radius:14px}
+.lb-cap{font-size:13px;color:rgba(255,255,255,.78);text-align:center}
+.lb-cap b{color:#fff;display:block;font-family:var(--font-display);font-size:15px}
+.lb-x{position:absolute;top:-46px;right:0;width:38px;height:38px;border-radius:50%;
+  border:0;background:rgba(255,255,255,.14);color:#fff;font-size:21px;cursor:pointer;
+  line-height:1;display:grid;place-items:center}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;
+  border-radius:50%;border:0;background:rgba(255,255,255,.16);cursor:pointer;
+  display:grid;place-items:center}
+.lb-nav svg{width:16px;height:16px;fill:#fff}
+.lb-nav.p{left:-52px}.lb-nav.n{right:-52px}
+@media(max-width:600px){.lb-nav.p{left:2px}.lb-nav.n{right:2px}
+  .lb-nav{background:rgba(255,255,255,.22)}}
+
+/* ---------- QUALITY FLOOR ---------- */
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .wa-cols{height:auto;-webkit-mask-image:none;mask-image:none}
+}
+</style>
+</head>
+<body>
+
+<p class="preview-note">
+  <b>Preview file.</b> Delete this paragraph and the <code>.preview-note</code> rule on integration.
+  All copy, videos and screenshots come from the <code>CONTENT</code> object at the bottom of this file.
+</p>
+
+<section class="proof" aria-labelledby="proof-head">
+  <div class="wrap">
+    <p class="eyebrow"><span class="dot"></span>Real students · unedited</p>
+    <h2 class="head" id="proof-head">Humein mat suniye. <em>Unhe suniye.</em></h2>
+    <p class="sub">Jinhone masterclass attend ki — apne shabdon mein, apne camera par.</p>
+    <div class="rule"></div>
+  </div>
+
+  <!-- ============ 1 · VIDEO REVIEWS ============ -->
+  <div class="videos">
+    <div class="wrap">
+      <div class="block-label">
+        <h3>Video reviews</h3>
+        <span class="count" id="v-count">—</span>
+        <span class="hint">Swipe →</span>
+      </div>
+      <p class="sound-hint">
+        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+        Plays on mute while you scroll. Tap a card for sound.
+      </p>
+    </div>
+    <div class="rail-outer">
+      <button class="arrow prev" id="a-prev" aria-label="Previous reviews">
+        <svg viewBox="0 0 24 24"><path d="M15.4 4.6 8 12l7.4 7.4 1.4-1.4L10.8 12l6-6z"/></svg>
+      </button>
+      <div class="rail" id="rail" role="list"></div>
+      <button class="arrow next" id="a-next" aria-label="More reviews">
+        <svg viewBox="0 0 24 24"><path d="M8.6 4.6 16 12l-7.4 7.4-1.4-1.4L13.2 12l-6-6z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ 2 · WHATSAPP WALL ============ -->
+  <div class="wa">
+    <div class="wrap">
+      <div class="block-label">
+        <h3>Straight from our WhatsApp</h3>
+        <span class="count" id="w-count">—</span>
+        <span class="hint">Tap to enlarge</span>
+      </div>
+    </div>
+    <div class="wa-shell">
+      <div class="wa-cols" id="wall"></div>
+    </div>
+    <div class="wrap">
+      <div class="wa-actions">
+        <button class="btn-ghost" id="wall-toggle" aria-expanded="false">Show all messages</button>
+      </div>
+      <p class="privacy">
+        <svg viewBox="0 0 24 24"><path d="M12 1 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-4zm0 10.9h5c-.4 3.6-2.6 6.9-5 7.7V12z"/></svg>
+        <span>Shared with each student's permission. Numbers and profile photos are masked before publishing.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ 3 · CTA ============ -->
+  <div class="cta">
+    <div class="cta-in">
+      <p>Aap bhi seekhiye — <span>2 din, live on Zoom</span></p>
+      <a class="btn-cta" href="#register" id="cta">
+        Join Masterclass
+        <span class="price">₹499</span>
+        <span class="strike">₹1,999</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Review">
+  <div class="lb-body">
+    <button class="lb-x" id="lb-x" aria-label="Close">×</button>
+    <button class="lb-nav p" id="lb-p" aria-label="Previous">
+      <svg viewBox="0 0 24 24"><path d="M15.4 4.6 8 12l7.4 7.4 1.4-1.4L10.8 12l6-6z"/></svg>
+    </button>
+    <button class="lb-nav n" id="lb-n" aria-label="Next">
+      <svg viewBox="0 0 24 24"><path d="M8.6 4.6 16 12l-7.4 7.4-1.4-1.4L13.2 12l-6-6z"/></svg>
+    </button>
+    <div id="lb-slot" style="width:100%"></div>
+    <p class="lb-cap" id="lb-cap"></p>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   CONTENT — the only block the dev team edits
+   ===================================================================== */
+const CONTENT = {
+
+  /* -------------------------------------------------------------------
+     VIDEO REVIEWS  (vertical 9:16, keep under 45s each)
+       src    : Bunny.net MP4 URL. Leave "" and a placeholder shows.
+       poster : thumbnail URL (strongly recommended — first frame is
+                usually a blink). Leave "" for the initials placeholder.
+       quote  : one line pulled from the video, shown on the card.
+
+     NOTE-A · switching platforms
+       Instagram / YouTube Shorts embeds instead of MP4: replace the
+       <video> in buildVideoCard() with an <iframe>. Trade-off — embeds
+       cannot autoplay muted in-rail, so the rail becomes tap-to-play
+       only and each embed adds ~300KB to the page. MP4 on Bunny.net is
+       the faster option and matches the student portal already in use.
+  ------------------------------------------------------------------- */
+  videos: [
+    { name:'Neha Verma',    role:'HR Professional, Lucknow', len:'0:38',
+      quote:'"Sab kuch match hua. Itna accurate kaise?"',
+      src:'', poster:'' },
+    { name:'Rohit Mishra',  role:'Business owner, Kanpur',   len:'0:52',
+      quote:'"Client ka chehra padhkar hi samajh aa gaya."',
+      src:'', poster:'' },
+    { name:'Anjali Singh',  role:'Teacher, Varanasi',        len:'0:41',
+      quote:'"Damini ma\'am ne itna simple bana diya."',
+      src:'', poster:'' },
+    { name:'Sameer Khan',   role:'Sales manager, Delhi',     len:'1:04',
+      quote:'"Interview mein hi candidate samajh jata hoon."',
+      src:'', poster:'' },
+    { name:'Priya Tiwari',  role:'Homemaker, Gorakhpur',     len:'0:33',
+      quote:'"2 din mein 160+ points seekh liye."',
+      src:'', poster:'' }
+  ],
+
+  /* -------------------------------------------------------------------
+     WHATSAPP MESSAGES
+       Each card is EITHER:
+         img  : '/uploads/reviews/wa-01.jpg'   ← real screenshot
+       OR
+         chat : [ {side:'them'|'me', text:'…', time:'6:42 pm'} ]
+                ← rebuilt bubbles, used when a screenshot is too
+                  cluttered or the student won't share the raw image
+
+       name  : first name only
+       phone : last 4 digits only, e.g. '••••• 4471'
+       date  : when they sent it
+  ------------------------------------------------------------------- */
+  messages: [
+    { name:'Ritu', phone:'••••• 4471', date:'2 Aug', chat:[
+      {side:'them', text:'Ma\'am aaj ka session bahut accha tha 🙏 face structure wala part maine notebook mein likh liya', time:'8:14 pm'},
+      {side:'me',   text:'Bahut acche Ritu ji! Kal practice ke liye 5 photos laayiye', time:'8:20 pm'}
+    ]},
+    { name:'Arun', phone:'••••• 9032', date:'2 Aug', chat:[
+      {side:'them', text:'₹499 mein itna content, honestly expect nahi kiya tha. Recording bhi mil gayi 👌', time:'9:02 pm'}
+    ]},
+    { name:'Shalini', phone:'••••• 1188', date:'3 Aug', chat:[
+      {side:'them', text:'Kal maine apne bhai ka face read kiya aur uska nature exactly wahi nikla jo aapne bataya tha 😮', time:'11:40 am'},
+      {side:'me',   text:'Yehi practice se aata hai 😊', time:'12:05 pm'}
+    ]},
+    { name:'Deepak', phone:'••••• 7756', date:'3 Aug', chat:[
+      {side:'them', text:'Zoom link time par mil gaya, koi problem nahi hui. Support team ka response fast tha', time:'7:31 pm'}
+    ]},
+    { name:'Fatima', phone:'••••• 2604', date:'3 Aug', chat:[
+      {side:'them', text:'Mujhe lagta tha astrology sirf kundli hoti hai. Chehre se bhi itna pata chalta hai, ye nayi baat seekhi 🌙', time:'10:12 pm'}
+    ]},
+    { name:'Manoj', phone:'••••• 5519', date:'4 Aug', chat:[
+      {side:'them', text:'PDF notes ke liye thank you. Simple English mein hai isliye padhne mein aasani hui', time:'9:18 am'}
+    ]},
+    { name:'Kavita', phone:'••••• 3390', date:'4 Aug', chat:[
+      {side:'them', text:'Full course ka detail bhej dijiye please, main join karna chahti hoon 🙋‍♀️', time:'1:44 pm'},
+      {side:'me',   text:'Ji bilkul, counsellor aapko call karenge', time:'1:52 pm'}
+    ]},
+    { name:'Imran', phone:'••••• 8827', date:'4 Aug', chat:[
+      {side:'them', text:'2 ghante kaise nikal gaye pata hi nahi chala. Boring bilkul nahi tha', time:'8:47 pm'}
+    ]},
+    { name:'Sunita', phone:'••••• 6142', date:'5 Aug', chat:[
+      {side:'them', text:'Meri beti ne bhi saath baithkar dekha, use bhi interest aa gaya ✨', time:'6:29 pm'}
+    ]},
+    { name:'Vikas', phone:'••••• 4008', date:'5 Aug', chat:[
+      {side:'them', text:'Doubt session mein ma\'am ne mera sawaal detail mein solve kiya. Personal attention mila', time:'9:55 pm'}
+    ]},
+    { name:'Pooja', phone:'••••• 7263', date:'6 Aug', chat:[
+      {side:'them', text:'Recording 2 baar dekhi. Har baar kuch naya samajh aata hai 📚', time:'3:21 pm'}
+    ]},
+    { name:'Harish', phone:'••••• 9471', date:'6 Aug', chat:[
+      {side:'them', text:'Paisa vasool. Doston ko bhi bata diya, agla batch kab hai?', time:'7:08 pm'}
+    ]}
+  ]
+};
+
+/* =====================================================================
+   BUILD — no edits needed below this line
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- video rail ---------- */
+const rail = $('#rail');
+$('#v-count').textContent = CONTENT.videos.length + ' reviews';
+
+CONTENT.videos.forEach((v, i) => {
+  const b = document.createElement('button');
+  b.className = 'vcard';
+  b.setAttribute('role','listitem');
+  b.dataset.i = i;
+  b.setAttribute('aria-label', `Play video review by ${v.name}`);
+  b.innerHTML = `
+    ${v.src
+      ? `<video muted loop playsinline preload="metadata" ${v.poster?`poster="${esc(v.poster)}"`:''} src="${esc(v.src)}"></video>`
+      : `<div class="poster"><span>${initials(v.name)}</span></div>`}
+    <div class="shade"></div>
+    <span class="len">${esc(v.len)}</span>
+    <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    <div class="meta">
+      <span class="tag-verified">
+        <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Attended
+      </span>
+      <span class="quote">${esc(v.quote)}</span>
+      <b>${esc(v.name)}</b><small>${esc(v.role)}</small>
+    </div>`;
+  b.addEventListener('click', () => openVideo(i));
+  rail.appendChild(b);
+});
+
+/* autoplay muted while in view, pause when out — keeps the rail alive
+   without 5 videos decoding at once */
+if (!reduced && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    const card = e.target, vid = card.querySelector('video');
+    if (!vid) return;
+    if (e.intersectionRatio > .62) { vid.play().catch(()=>{}); card.classList.add('is-playing'); }
+    else { vid.pause(); card.classList.remove('is-playing'); }
+  }), { root: rail, threshold:[0,.62,1] });
+  rail.querySelectorAll('.vcard').forEach(c => io.observe(c));
+}
+
+/* arrows */
+const step = () => rail.querySelector('.vcard').offsetWidth + 14;
+$('#a-prev').addEventListener('click', () => rail.scrollBy({left:-step()*2, behavior:'smooth'}));
+$('#a-next').addEventListener('click', () => rail.scrollBy({left: step()*2, behavior:'smooth'}));
+const syncArrows = () => {
+  $('#a-prev').disabled = rail.scrollLeft < 8;
+  $('#a-next').disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8;
+};
+rail.addEventListener('scroll', syncArrows, {passive:true});
+addEventListener('resize', syncArrows);
+syncArrows();
+
+/* ---------- whatsapp wall ---------- */
+const wall = $('#wall');
+$('#w-count').textContent = CONTENT.messages.length + ' messages';
+
+function shotHTML(m, i){
+  const inner = m.img
+    ? `<img src="${esc(m.img)}" alt="WhatsApp message from ${esc(m.name)}" loading="lazy">`
+    : m.chat.map(c => `
+        <div class="bub ${c.side==='me'?'me':'them'}">${esc(c.text)}
+          <span class="t">${esc(c.time)}${c.side==='me'
+            ? ' <svg viewBox="0 0 24 24"><path d="M18 7l-1.4-1.4-6.6 6.6-2.6-2.6L6 11l4 4z"/><path d="M22 7l-1.4-1.4-6.6 6.6-1.2-1.2-1.4 1.4 2.6 2.6z"/></svg>'
+            : ''}</span>
+        </div>`).join('');
+  return `<button class="shot" data-i="${i}" aria-label="Enlarge message from ${esc(m.name)}">
+    <div class="bar">
+      <span class="av">${initials(m.name)}</span>
+      <span class="who"><b>${esc(m.name)}</b><small>${esc(m.phone)}</small></span>
+    </div>
+    <div class="paper">${inner}</div>
+    <div class="foot"><b>${esc(m.date)}</b> · masterclass batch <span class="zoom">Enlarge</span></div>
+  </button>`;
+}
+
+const COLS = innerWidth >= 860 ? 3 : 2;
+for (let c = 0; c < COLS; c++){
+  const col = document.createElement('div');
+  col.className = 'wa-col ' + (c % 2 ? 'down' : 'up');
+  const mine = CONTENT.messages.filter((_, i) => i % COLS === c);
+  /* doubled so the drift loops with no visible seam */
+  col.innerHTML = mine.map(shotHTML).join('') + mine.map(shotHTML).join('');
+  /* stagger so columns don't move in lockstep */
+  col.style.animationDelay = `-${c * 7}s`;
+  wall.appendChild(col);
+}
+
+/* pause the drift whenever someone is reading */
+['pointerenter','pointerdown','focusin'].forEach(e =>
+  wall.addEventListener(e, () => wall.classList.add('paused')));
+['pointerleave','pointerup','focusout'].forEach(e =>
+  wall.addEventListener(e, () => { if(!wall.classList.contains('open')) wall.classList.remove('paused'); }));
+
+/* expand to a static, complete grid */
+$('#wall-toggle').addEventListener('click', e => {
+  const open = wall.classList.toggle('open');
+  wall.classList.toggle('paused', open);
+  e.target.textContent = open ? 'Show less' : 'Show all messages';
+  e.target.setAttribute('aria-expanded', open);
+});
+
+wall.addEventListener('click', e => {
+  const s = e.target.closest('.shot');
+  if (s) openShot(+s.dataset.i);
+});
+
+/* ---------- lightbox ---------- */
+const lb = $('#lb'), slot = $('#lb-slot'), cap = $('#lb-cap');
+let mode = 'video', idx = 0, lastFocus = null;
+
+function render(){
+  const list = mode === 'video' ? CONTENT.videos : CONTENT.messages;
+  idx = (idx + list.length) % list.length;
+  const item = list[idx];
+  if (mode === 'video'){
+    slot.innerHTML = item.src
+      ? `<video controls autoplay playsinline ${item.poster?`poster="${esc(item.poster)}"`:''} src="${esc(item.src)}"></video>`
+      : `<div style="aspect-ratio:9/16;border-radius:18px;display:grid;place-items:center;
+             background:radial-gradient(120% 90% at 30% 12%,#4A2E78,#1B1033);
+             color:rgba(255,255,255,.5);font-size:13px;text-align:center;padding:20px">
+           Video file not set yet<br><small style="opacity:.7">CONTENT.videos[${idx}].src</small>
+         </div>`;
+    cap.innerHTML = `<b>${esc(item.name)}</b>${esc(item.role)}`;
+  } else {
+    slot.innerHTML = `<div class="lb-shot">${shotHTML(item, idx)}</div>`;
+    slot.querySelector('.shot').style.cursor = 'default';
+    cap.innerHTML = `<b>${esc(item.name)}</b>${esc(item.date)}`;
+  }
+}
+function open(m, i){
+  mode = m; idx = i; lastFocus = document.activeElement;
+  lb.classList.add('on'); document.body.style.overflow = 'hidden';
+  render(); $('#lb-x').focus();
+}
+const openVideo = i => open('video', i);
+const openShot  = i => open('shot', i);
+
+function close(){
+  const v = slot.querySelector('video'); if (v) v.pause();
+  lb.classList.remove('on'); slot.innerHTML = '';
+  document.body.style.overflow = '';
+  if (lastFocus) lastFocus.focus();
+}
+$('#lb-x').addEventListener('click', close);
+lb.addEventListener('click', e => { if (e.target === lb) close(); });
+$('#lb-p').addEventListener('click', () => { idx--; render(); });
+$('#lb-n').addEventListener('click', () => { idx++; render(); });
+addEventListener('keydown', e => {
+  if (!lb.classList.contains('on')) return;
+  if (e.key === 'Escape') close();
+  if (e.key === 'ArrowLeft')  { idx--; render(); }
+  if (e.key === 'ArrowRight') { idx++; render(); }
+});
+</script>
+</body>
+</html>

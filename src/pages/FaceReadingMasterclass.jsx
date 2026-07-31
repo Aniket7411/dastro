@@ -12,7 +12,8 @@ import LearnSection from '../components/face-reading/LearnSection';
 import WhoIsThisForSection from '../components/face-reading/WhoIsThisForSection';
 import ItinerarySection from '../components/face-reading/ItinerarySection';
 import MentorSection from '../components/face-reading/MentorSection';
-import TextReviewCarousel from '../components/face-reading/TextReviewCarousel';
+// import TextReviewCarousel from '../components/face-reading/TextReviewCarousel';
+import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
 import FaqSection from '../components/face-reading/FaqSection';
 // import FixedBottomCTA from '../components/face-reading/FixedBottomCTA';
 import FuturisticBottomCTA from '../components/face-reading/FuturisticBottomCTA';
@@ -116,7 +117,7 @@ function FaceReadingMasterclass() {
           <WhoIsThisForSection />
           <ItinerarySection />
           <MentorSection onJoinNow={handleOpenModal} />
-          <TextReviewCarousel />
+          {/* <TextReviewCarousel /> */}`r`n          <DsAstroTestimonials onJoinNow={handleOpenModal} />
           <FaqSection />
       </div>
 

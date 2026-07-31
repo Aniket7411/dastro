@@ -19,7 +19,7 @@
   <h1>Complete your payment</h1>
   <p class="lede">Scan the code below to pay, then send us the screenshot. We'll confirm your seat and call you with your batch details.</p>
   <div class="timer" id="timer"><div class="timer-label"><span class="dot"></span> Your seat is reserved for</div><div class="timer-clock" id="clock">05:00</div><div class="timer-note" id="timerNote">Complete the payment before the timer ends</div></div>
-  <div class="qr-card"><span class="seal">Scan to pay</span><div class="amount" id="amount">₹499</div><div class="amount-note">2-Day Face Reading Masterclass · Live on Zoom</div><div class="qr-frame"><img id="qrImg" alt="UPI payment QR code"></div><div class="payee">DAMINI SHUKLA</div><div class="payee-role">DS Astro Institute</div><div class="upi"><code id="upiId">dsastro@paytm</code><button class="copy" id="copyBtn" type="button">Copy</button></div></div>
+  <div class="qr-card"><span class="seal">Scan to pay</span><div class="amount" id="amount">₹499</div><div class="amount-note">2-Day Face Reading Masterclass · Live on Zoom</div><div class="qr-frame"><img id="qrImg" alt="UPI payment QR code"></div><div class="payee">DAMINI SHUKLA</div><div class="payee-role">DS Astro Institute</div><!-- <div class="upi"><code id="upiId">dsastro@paytm</code><button class="copy" id="copyBtn" type="button">Copy</button></div> --></div>
   <p class="ref">Your reference number: <strong id="refNo">DS-000000</strong></p>
   <div class="steps-title">What happens next</div>
   <ol class="steps"><li><span class="num">1</span><p>Pay ₹499 by scanning the QR code above with any UPI app.</p></li><li><span class="num">2</span><p>Send the payment screenshot along with your name and mobile number to our WhatsApp number below.</p></li><li><span class="num">3</span><p>Once we confirm your payment, our team will call you on a working day between 10 AM and 7 PM to share your batch day and timing.</p></li></ol>
@@ -28,7 +28,7 @@
   <p class="cta-note">9005575577 · WhatsApp support</p>
   <a class="tiny-help" id="payHelpLink" href="https://wa.me/919005575577" target="_blank" rel="noopener">Can't pay? Get help</a>
   <div class="assure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3z"/><path d="M9 12.5l2 2 4-4.5"/></svg><p>Payments are verified manually by our team, usually within a few hours. If you don't hear from us within one working day, message the same WhatsApp number with your reference number.</p></div>
-  <footer><div class="co">DS Astro Institute LLP</div><div class="meta">Lucknow, Uttar Pradesh, India<br><a href="mailto:support@dsastrology.com">support@dsastrology.com</a><br>dsastrology.com</div></footer>
+  <!-- <footer><div class="co">DS Astro Institute LLP</div><div class="meta">Lucknow, Uttar Pradesh, India<br><a href="mailto:support@dsastrology.com">support@dsastrology.com</a><br>dsastrology.com</div></footer> -->
 </div>
 <script>
 (function(){
@@ -42,7 +42,8 @@
   var ref = params.get('ref') || ('DS-' + String(Math.floor(100000 + Math.random() * 900000)));
   document.getElementById('refNo').textContent = ref;
   document.getElementById('amount').textContent = '₹' + amount;
-  document.getElementById('upiId').textContent = UPI_ID;
+  var upiIdEl = document.getElementById('upiId');
+  if (upiIdEl) upiIdEl.textContent = UPI_ID;
   var upiUri = 'upi://pay?pa=' + encodeURIComponent(UPI_ID) + '&pn=' + encodeURIComponent(PAYEE) + '&am=' + encodeURIComponent(String(amount)) + '&cu=INR&tn=' + encodeURIComponent('Face Reading Masterclass ' + ref);
   document.getElementById('qrImg').src = '/qrcode.jpeg';
   var msg = 'Hi, I have paid Rs ' + amount + ' for the 2-Day Face Reading Masterclass.\n\nName: ' + name + '\nMobile: ' + phone + '\nReference: ' + ref + '\n\nSharing my payment screenshot here.';
