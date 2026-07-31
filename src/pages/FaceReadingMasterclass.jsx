@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
@@ -103,8 +103,8 @@ function FaceReadingMasterclass() {
   return (
     <div className={`${WB_PAGE_SHELL} flex flex-col min-h-screen bg-slate-50`}>
       <SEO
-        title="2-Day Face Reading Masterclass by Damini Shukla — Live on Zoom | ₹499"
-        description="Learn to decode anyone’s personality through their face. 2-day live face reading masterclass (Samudrika Shastra) with Damini Shukla — 1 & 2 Aug, 6–8 PM. Recording included. Enroll for ₹499."
+        title="2-Day Face Reading Masterclass by Damini Shukla â€” Live on Zoom | â‚¹499"
+        description="Learn to decode anyoneâ€™s personality through their face. 2-day live face reading masterclass (Samudrika Shastra) with Damini Shukla â€” 1 & 2 Aug, 6â€“8 PM. Recording included. Enroll for â‚¹499."
         url="/face-reading-masterclass"
       />
       
@@ -117,7 +117,8 @@ function FaceReadingMasterclass() {
           <WhoIsThisForSection />
           <ItinerarySection />
           <MentorSection onJoinNow={handleOpenModal} />
-          {/* <TextReviewCarousel /> */}`r`n          <DsAstroTestimonials onJoinNow={handleOpenModal} />
+          {/* <TextReviewCarousel /> */}
+          <DsAstroTestimonials onJoinNow={handleOpenModal} />
           <FaqSection />
       </div>
 
@@ -125,7 +126,7 @@ function FaceReadingMasterclass() {
         <FooterMinimal />
       </div>
 
-      {/* Old CTA retained for reference — commented out while new CTA is active */}
+      {/* Old CTA retained for reference â€” commented out while new CTA is active */}
       {/*
       <FixedBottomCTA
         visible={ctaVisible}
@@ -154,7 +155,7 @@ function FaceReadingMasterclass() {
             </div>
             <h2 className="m-0 font-heading text-[22px] font-extrabold leading-tight text-[#2A1647]">Seat Reserved</h2>
             <p className="mx-auto mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-600">
-              Your details are saved. Taking you to the payment page for the final ₹499 step.
+              Your details are saved. Taking you to the payment page for the final â‚¹499 step.
             </p>
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-slate-100">
               <div className="h-full w-2/3 animate-pulse rounded-full bg-[#EE6662]" />
