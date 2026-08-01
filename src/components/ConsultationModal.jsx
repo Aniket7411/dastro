@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { X, Phone, CreditCard, Loader2 } from 'lucide-react';
 import { BOOKING_MODES } from '../utils/consultationBooking';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+import { isValidIndianMobile } from '../utils/validation';
 import { ModalPortal, ModalOverlay, useModalLock } from './modal/ModalLayer';
 import {
   MODAL_TITLE,
@@ -12,6 +13,7 @@ import {
   MODAL_INPUT_ERROR,
   MODAL_SUBMIT,
 } from './modal/modalTypography';
+import PhoneInput from './PhoneInput';
 
 const REQ = <span className="font-normal text-red-500" aria-hidden="true"> *</span>;
 
@@ -42,9 +44,9 @@ function validate(data, isFixedService) {
   if (!data.name.trim()) e.name = 'Full name is required';
   else if (data.name.trim().length < 2) e.name = 'Enter a valid name';
 
-  const ph = data.phone.replace(/[\s-]/g, '');
-  if (!ph) e.phone = 'Phone number is required';
-  else if (!/^\d{10}$/.test(ph)) e.phone = 'Enter a valid 10-digit number';
+  const ph = data.phone;
+  if (!ph || !ph.trim()) e.phone = 'Phone number is required';
+  else if (!isValidIndianMobile(ph)) e.phone = 'Enter a valid phone number';
 
   if (!data.email.trim()) e.email = 'Email is required';
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = 'Enter a valid email';
@@ -186,14 +188,12 @@ function ConsultationModal({
                   <FieldLabel htmlFor="consult-phone" required>
                     Phone
                   </FieldLabel>
-                  <input
+                  <PhoneInput
                     id="consult-phone"
-                    type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={onChange}
                     placeholder="10-digit mobile"
-                    maxLength={10}
                     inputMode="numeric"
                     className={fieldClass(errors.phone)}
                     autoComplete="tel"

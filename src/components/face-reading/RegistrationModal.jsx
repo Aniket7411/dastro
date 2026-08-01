@@ -3,6 +3,7 @@ import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
 import { WB_CTA, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
 import { formatTime, getTargetTimestamp } from './FixedBottomCTA';
+import PhoneInput from '../PhoneInput';
 
 function OfferTimer() {
   const [time, setTime] = useState({ h: '02', m: '00', s: '00' });
@@ -172,24 +173,16 @@ function RegistrationModal({
                       Phone (WhatsApp)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold border-r border-slate-200 pr-2">
-                        +91
-                      </span>
-                      <input
+                      <PhoneInput
                         id="webinar-phone"
-                        type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
                         required
                         inputMode="numeric"
                         autoComplete="tel"
-                        pattern="[6-9][0-9]{9}"
-                        maxLength={10}
-                        minLength={10}
-                        title="Enter a valid 10-digit Indian mobile number"
-                        placeholder="10-Digit Mobile Number"
-                        className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm !pl-[54px] focus:ring-2`}
+                        placeholder="Mobile Number"
+                        className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm focus:ring-2`}
                       />
                     </div>
                   </div>

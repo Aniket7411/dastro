@@ -10,6 +10,7 @@ import {
   TW_FIELD_INPUT,
   SITE_BTN_PRIMARY,
 } from '../../utils/siteTokens';
+import PhoneInput from '../PhoneInput';
 
 /** Accent links inside contact content */
 const LINK =
@@ -104,9 +105,8 @@ export function ContactForm({ formData, isSubmitting, onChange, onSubmit }) {
               <i className="fas fa-phone text-xs" aria-hidden="true" />
               Phone <span className="text-red-500">*</span>
             </label>
-            <input
+            <PhoneInput
               id="contact-phone"
-              type="tel"
               name="phone"
               value={formData.phone}
               onChange={onChange}

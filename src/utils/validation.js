@@ -5,7 +5,15 @@ export const normalizeIndianMobile = (value = '') => {
   return digits;
 };
 
-export const isValidIndianMobile = (value = '') => /^[6-9]\d{9}$/.test(normalizeIndianMobile(value));
+export const isValidIndianMobile = (value = '') => {
+  const strValue = String(value).trim();
+  if (strValue.startsWith('+') && !strValue.startsWith('+91')) {
+    // Basic international validation: + followed by 7 to 15 digits
+    const digitsOnly = strValue.slice(1).replace(/\D/g, '');
+    return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+  }
+  return /^[6-9]\d{9}$/.test(normalizeIndianMobile(strValue));
+};
 
 export const isValidEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value).trim());
 

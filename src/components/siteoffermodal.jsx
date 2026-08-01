@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, User, Phone, Sparkles, Gift } from 'lucide-react';
+import { X, User, Sparkles, Gift } from 'lucide-react';
+import PhoneInput from './PhoneInput';
 
 const OfferModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -88,17 +89,13 @@ const OfferModal = ({ isOpen, onClose }) => {
 
             {/* Mobile Input */}
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-                <Phone size={18} />
-              </span>
-              <input
-                type="tel"
+              <PhoneInput
                 name="mobileNumber"
                 required
                 value={formData.mobileNumber}
                 onChange={handleInputChange}
                 placeholder="Mobile number"
-                className="w-full py-3.5 pl-12 pr-4 text-sm text-gray-900 bg-[#F4F6F9] border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-[#009FB7] transition-all"
+                className="w-full py-3.5 pr-4 text-sm text-gray-900 bg-[#F4F6F9] border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-[#009FB7] transition-all"
               />
             </div>
 

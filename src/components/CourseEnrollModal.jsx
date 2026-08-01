@@ -9,6 +9,7 @@ import {
   MODAL_INPUT,
   MODAL_SUBMIT,
 } from './modal/modalTypography';
+import PhoneInput from './PhoneInput';
 
 const REQ = <span className="font-normal text-red-500" aria-hidden="true"> *</span>;
 
@@ -108,14 +109,12 @@ function CourseEnrollModal({
                     <FieldLabel htmlFor="ce-phone" required>
                       Phone
                     </FieldLabel>
-                    <input
+                    <PhoneInput
                       id="ce-phone"
-                      type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={onChange}
                       placeholder="10-digit mobile"
-                      maxLength={10}
                       inputMode="numeric"
                       className={MODAL_INPUT}
                       autoComplete="tel"

@@ -4,6 +4,7 @@ import { Play, Check, CheckCircle2, Shield, EyeOff, Loader2 } from 'lucide-react
 import API_BASE from '../utils/api';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 import SEO from '../components/SEO';
+import PhoneInput from '../components/PhoneInput';
 
 const DEFAULT_AVATAR = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=8b4a1e&color=fff&size=128&bold=true`;
 
@@ -151,9 +152,8 @@ function UserInfoModal({ astrologer, freeMinutes, onStart, onClose }) {
               className="w-full border border-site-accent-dark/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-site-accent/25 focus:border-site-accent bg-site-bg text-site-primary font-semibold" />
           </div>
           <div>
-            <label className="block text-xs font-bold text-site-primary mb-1">Phone <span className="font-semibold text-site-soft">(optional, 10-digit Indian number)</span></label>
-            <input type="tel" value={phone} onChange={(e) => { setPhone(e.target.value); setErr(''); }} placeholder="98765 43210"
-              inputMode="numeric" maxLength={15}
+            <label className="block text-xs font-bold text-site-primary mb-1">Phone <span className="font-semibold text-site-soft">(optional)</span></label>
+            <PhoneInput name="phone" value={phone} onChange={(e) => { setPhone(e.target.value); setErr(''); }} placeholder="Mobile number"
               className="w-full border border-site-accent-dark/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-site-accent/25 focus:border-site-accent bg-site-bg text-site-primary font-semibold" />
           </div>
           {err && <p className="text-xs text-rose-600 font-bold">{err}</p>}

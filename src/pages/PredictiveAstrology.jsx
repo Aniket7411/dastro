@@ -4,6 +4,7 @@ import API_BASE from '../utils/api';
 import toast from '../utils/toast';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { ONLINE_PAYMENT_ENABLED } from '../config/payments';
+import PhoneInput from '../components/PhoneInput';
 
 function PredictiveAstrology() {
   const [showModal, setShowModal] = useState(false);
@@ -360,7 +361,7 @@ function PredictiveAstrology() {
               </div>
               <div className="mb-3">
                 <label className="form-label">Phone</label>
-                <input type="tel" className="form-control-v2" name="phone" value={formData.phone} onChange={handleInputChange} required />
+                <PhoneInput className="form-control-v2" name="phone" value={formData.phone} onChange={handleInputChange} required placeholder="Mobile number" />
               </div>
               <div className="mb-4">
                 <label className="form-label">Experience Level</label>

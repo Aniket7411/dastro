@@ -11,6 +11,7 @@ import {
   adminUnsuspendCounsellor,
   adminUpdateCounsellor,
 } from '../utils/freeConsultationApi';
+import PhoneInput from '../components/PhoneInput';
 
 const EMPTY_FORM = { name: '', email: '', mobile: '', password: '', sendEmail: true };
 
@@ -167,13 +168,11 @@ function CounsellorFormModal({ mode, initial, onClose, onSaved }) {
 
           <label className="block">
             <span className="mb-1 block text-xs font-bold uppercase tracking-wide text-slate-500">Mobile</span>
-            <input
-              type="tel"
-              inputMode="numeric"
-              maxLength={10}
-              placeholder="10-digit number"
+            <PhoneInput
+              name="mobile"
+              placeholder="Mobile number"
               value={form.mobile}
-              onChange={(e) => setForm((f) => ({ ...f, mobile: e.target.value.replace(/\D/g, '').slice(0, 10) }))}
+              onChange={(e) => setForm((f) => ({ ...f, mobile: e.target.value }))}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
             />
           </label>

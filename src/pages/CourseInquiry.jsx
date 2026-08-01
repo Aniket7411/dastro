@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import PhoneInput from '../components/PhoneInput';
 
 
 function CourseInquiry() {
@@ -97,7 +98,7 @@ function CourseInquiry() {
                   </div>
                   <div className="form-group">
                     <label>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-digit Indian mobile number" />
+                    <PhoneInput name="phone" value={formData.phone} onChange={handleChange} required placeholder="Mobile number" />
                   </div>
                   <div className="form-group">
                     <label>Complete Address</label>

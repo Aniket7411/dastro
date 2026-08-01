@@ -2,6 +2,7 @@ import { Check, CheckCircle2, CreditCard, Loader2, Percent, Phone, Tag, X } from
 import { BTN, TYPE } from './consultation/tokens';
 import { ModalPortal, ModalOverlay, useModalLock } from './modal/ModalLayer';
 import { MODAL_INPUT, MODAL_SUBMIT } from './modal/modalTypography';
+import PhoneInput from './PhoneInput';
 
 // Shared by CheckoutModal / CouponControls
 const INPUT = MODAL_INPUT;
@@ -193,16 +194,13 @@ export function CheckoutModal({
           <label htmlFor="checkout-phone" className={LABEL}>
             Phone
           </label>
-          <input
+          <PhoneInput
             id="checkout-phone"
-            type="tel"
             name="phone"
             value={formData.phone}
             onChange={onInputChange}
             placeholder="10-digit mobile"
             inputMode="numeric"
-            maxLength={10}
-            pattern="[6-9][0-9]{9}"
             required
             className={INPUT}
           />
@@ -346,16 +344,13 @@ export function EnquiryModal({ open, onClose, course, enquiryData, onChange, onS
                     <label htmlFor="enq-phone" className={LABEL}>
                       Phone
                     </label>
-                    <input
+                    <PhoneInput
                       id="enq-phone"
-                      type="tel"
                       name="phone"
                       value={enquiryData.phone}
                       onChange={onChange}
                       placeholder="10-digit mobile"
                       inputMode="numeric"
-                      maxLength={10}
-                      pattern="[6-9][0-9]{9}"
                       autoComplete="tel"
                       required
                       className={INPUT}

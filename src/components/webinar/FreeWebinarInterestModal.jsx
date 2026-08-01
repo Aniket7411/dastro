@@ -5,6 +5,7 @@ import API_BASE from '@/utils/api';
 import { getContactValidationError, normalizeIndianMobile } from '@/utils/validation';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL, MODAL_SUBMIT, MODAL_TITLE, MODAL_HINT } from '../modal/modalTypography';
+import PhoneInput from '../PhoneInput';
 
 const EMPTY_FORM = { name: '', email: '', phone: '' };
 
@@ -28,7 +29,7 @@ export default function FreeWebinarInterestModal({ open, onClose, source = 'navb
     const { name, value } = event.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === 'phone' ? value.replace(/\D/g, '').slice(0, 10) : value,
+      [name]: value,
     }));
   };
 
@@ -143,14 +144,13 @@ export default function FreeWebinarInterestModal({ open, onClose, source = 'navb
               <label htmlFor="free-webinar-phone" className={MODAL_LABEL}>
                 Mobile number
               </label>
-              <input
+              <PhoneInput
                 id="free-webinar-phone"
-                type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
                 required
-                placeholder="10-digit mobile number"
+                placeholder="Mobile number"
                 className={MODAL_INPUT}
               />
             </div>

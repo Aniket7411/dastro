@@ -16,6 +16,7 @@ import API_BASE from '../utils/api';
 import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
+import PhoneInput from '../components/PhoneInput';
 
 const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
 const CARD = 'rounded-2xl border border-site-accent-dark/12 bg-white shadow-sm';
@@ -680,16 +681,15 @@ function CoursePlayer() {
                         <span className="mb-1.5 block font-body text-[11px] font-bold uppercase tracking-wide text-white/60">
                           Mobile (WhatsApp)
                         </span>
-                        <input
-                          type="tel"
+                        <PhoneInput
+                          name="mobile"
                           required
                           value={consultData.mobile}
                           onChange={(e) =>
                             setConsultData({ ...consultData, mobile: e.target.value })
                           }
                           className={consultInputCls}
-                          inputMode="numeric"
-                          maxLength={10}
+                          placeholder="Mobile number"
                         />
                       </label>
                       <label className="block">

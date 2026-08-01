@@ -22,6 +22,7 @@ import {
   TW_FIELD_LABEL,
 } from '../utils/siteTokens';
 import { BTN } from '../components/consultation/tokens';
+import PhoneInput from '../components/PhoneInput';
 
 const CARD =
   'rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_4px_16px_rgba(42,15,2,0.06)]';
@@ -575,15 +576,14 @@ export default function Careers() {
                         />
                       </Field>
                       <Field id="career-phone" label="Phone" icon={<Phone size={11} aria-hidden="true" />}>
-                        <input
+                        <PhoneInput
                           id="career-phone"
                           className={TW_FIELD_INPUT}
-                          type="tel"
                           name="phone"
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          placeholder="+91 XXXXX XXXXX"
+                          placeholder="Mobile number"
                         />
                       </Field>
                       <Field id="career-city" label="City" icon={<Home size={11} aria-hidden="true" />}>

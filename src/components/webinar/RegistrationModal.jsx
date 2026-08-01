@@ -1,6 +1,7 @@
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
 import { WB_CTA, WB_CTA_FREE, WB_HIGHLIGHT, TYPE } from './tokens';
+import PhoneInput from '../PhoneInput';
 
 function RegistrationModal({
   isOpen,
@@ -100,14 +101,13 @@ function RegistrationModal({
                     <label htmlFor="webinar-phone" className={MODAL_LABEL}>
                       Phone Number
                     </label>
-                    <input
+                    <PhoneInput
                       id="webinar-phone"
-                      type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      placeholder="10-Digit Mobile Number"
+                      placeholder="Mobile Number"
                       className={MODAL_INPUT}
                     />
                   </div>

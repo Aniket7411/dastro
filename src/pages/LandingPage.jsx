@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
-
+import PhoneInput from '../components/PhoneInput';
 
 function LandingPage() {
   const [searchParams] = useSearchParams();
@@ -778,7 +778,7 @@ function LandingPage() {
                     </div>
                     <div className="input-box">
                       <label>📞 Phone Number</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
+                      <PhoneInput name="phone" value={formData.phone} onChange={handleChange} required placeholder="Mobile number" />
                     </div>
                     
                     <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
@@ -821,7 +821,7 @@ function LandingPage() {
                   </div>
                   <div className="input-box">
                     <label>📞 Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
+                    <PhoneInput name="phone" value={formData.phone} onChange={handleChange} required placeholder="Mobile number" />
                   </div>
                   
                   <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
