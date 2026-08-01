@@ -2,14 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 const CONTENT = {
   videos: [
-    { name: 'Neha Verma', role: 'HR Professional, Lucknow', len: '0:38', quote: '"Sab kuch match hua. Itna accurate kaise?"', src: '', poster: '' },
-    { name: 'Rohit Mishra', role: 'Business owner, Kanpur', len: '0:52', quote: '"Client ka chehra padhkar hi samajh aa gaya."', src: '', poster: '' },
-    { name: 'Anjali Singh', role: 'Teacher, Varanasi', len: '0:41', quote: '"Damini maam ne itna simple bana diya."', src: '', poster: '' },
-    { name: 'Sameer Khan', role: 'Sales manager, Delhi', len: '1:04', quote: '"Interview mein hi candidate samajh jata hoon."', src: '', poster: '' },
-    { name: 'Priya Tiwari', role: 'Homemaker, Gorakhpur', len: '0:33', quote: '"2 din mein 160+ points seekh liye."', src: '', poster: '' },
+    // { name: 'Neha Verma', role: 'HR Professional, Lucknow', len: '0:38', quote: '"Sab kuch match hua. Itna accurate kaise?"', src: '', poster: '' },
+    // { name: 'Rohit Mishra', role: 'Business owner, Kanpur', len: '0:52', quote: '"Client ka chehra padhkar hi samajh aa gaya."', src: '', poster: '' },
+    // { name: 'Anjali Singh', role: 'Teacher, Varanasi', len: '0:41', quote: '"Damini maam ne itna simple bana diya."', src: '', poster: '' },
+    // { name: 'Sameer Khan', role: 'Sales manager, Delhi', len: '1:04', quote: '"Interview mein hi candidate samajh jata hoon."', src: '', poster: '' },
+    // { name: 'Priya Tiwari', role: 'Homemaker, Gorakhpur', len: '0:33', quote: '"2 din mein 160+ points seekh liye."', src: '', poster: '' },
     { name: 'Ankita Soni', role: 'House wife, Lucknow', len: '0:10', quote: '"Mujhe masterclass se bahut kuch seekhne ko mila."', src: '/IMG_4605.mp4', poster: '' },
     { name: 'Khushi', role: 'PHD student, Bihar', len: '0:24', quote: '"Bohot detail mein har topic ko explain kiya gaya."', src: '/IMG_4609.mp4', poster: '' },
-    { name: 'Priyanshi', role: 'Lawyer, Jhansi', len: '0:30', quote: '"Mera experience bohot badhiya raha. Highly recommended!"', src: '/IMG_4611.mp4', poster: '' },
+    { name: 'Priyanshi', role: 'Lawyer, Jhansi', len: '0:30', quote: '"Mera experience bohot badhiya raha. Highly recommended!"', src: '/IMG_4611.MP4', poster: '' },
     { name: 'Harsh', role: 'IT professional, Hyderabad', len: '1:05', quote: '"Face reading ki techniques bohot practical hain."', src: '/IMG_4613.mp4', poster: '' },
   ],
   messages: [
