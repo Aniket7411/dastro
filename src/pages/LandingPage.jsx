@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import PhoneInput from '../components/PhoneInput';
+import { isValidIndianMobile } from '../utils/validation';
 
 function LandingPage() {
   const [searchParams] = useSearchParams();
@@ -78,9 +79,8 @@ function LandingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sanitizedPhone = formData.phone.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '').replace(/^0(?=\d{10}$)/, '');
-    if (!/^[6-9]\d{9}$/.test(sanitizedPhone)) {
-      toast.error('📞 Please enter a valid 10-digit phone number.');
+    if (!isValidIndianMobile(formData.phone)) {
+      toast.error('📞 Please enter a valid phone number.');
       return;
     }
     if (formData.name.trim().length < 3) {

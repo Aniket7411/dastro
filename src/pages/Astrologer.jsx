@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { isValidIndianMobile } from '../utils/validation';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 
@@ -105,7 +106,7 @@ function LeadModal({ astrologer, onClose, onSuccess }) {
     const e = {};
     if (!form.name.trim()) e.name = 'Name is required';
     if (!form.phone.trim()) e.phone = 'Required';
-    else if (!/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, ''))) e.phone = 'Valid 10-digit mobile';
+    else if (!isValidIndianMobile(form.phone)) e.phone = 'Valid mobile number';
     if (!form.dob) e.dob = 'Required';
     if (!form.tob) e.tob = 'Required';
     if (!form.pob.trim()) e.pob = 'Place of birth required';
@@ -197,7 +198,7 @@ function LeadModal({ astrologer, onClose, onSuccess }) {
               <input
                 value={form.phone}
                 onChange={(e) => set('phone', e.target.value)}
-                placeholder="10-digit number"
+                placeholder="Mobile number"
                 inputMode="tel"
                 autoComplete="tel"
                 className={iCls(errors.phone)}

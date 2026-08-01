@@ -12,6 +12,7 @@ import {
   adminUpdateCounsellor,
 } from '../utils/freeConsultationApi';
 import PhoneInput from '../components/PhoneInput';
+import { isValidIndianMobile } from '../utils/validation';
 
 const EMPTY_FORM = { name: '', email: '', mobile: '', password: '', sendEmail: true };
 
@@ -99,8 +100,8 @@ function CounsellorFormModal({ mode, initial, onClose, onSaved }) {
       return;
     }
 
-    if (form.mobile && !/^[6-9]\d{9}$/.test(form.mobile.trim())) {
-      toast.error('Enter a valid 10-digit Indian mobile number');
+    if (form.mobile && !isValidIndianMobile(form.mobile.trim())) {
+      toast.error('Enter a valid mobile number');
       return;
     }
 

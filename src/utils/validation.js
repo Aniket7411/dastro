@@ -1,7 +1,12 @@
 export const normalizeIndianMobile = (value = '') => {
-  const digits = String(value).replace(/\D/g, '');
-  if (digits.length === 12 && digits.startsWith('91')) return digits.slice(2);
-  if (digits.length === 11 && digits.startsWith('0')) return digits.slice(1);
+  const str = String(value).trim();
+  if (str.startsWith('+')) {
+    return '+' + str.replace(/\D/g, '');
+  }
+  const digits = str.replace(/\D/g, '');
+  if (digits.length === 12 && digits.startsWith('91')) return '+' + digits;
+  if (digits.length === 11 && digits.startsWith('0')) return '+91' + digits.slice(1);
+  if (digits.length === 10) return '+91' + digits;
   return digits;
 };
 
@@ -12,7 +17,10 @@ export const isValidIndianMobile = (value = '') => {
     const digitsOnly = strValue.slice(1).replace(/\D/g, '');
     return digitsOnly.length >= 7 && digitsOnly.length <= 15;
   }
-  return /^[6-9]\d{9}$/.test(normalizeIndianMobile(strValue));
+  // For Indian numbers, extract the last 10 digits to validate
+  const digitsOnly = strValue.replace(/\D/g, '');
+  const localPart = digitsOnly.length > 10 ? digitsOnly.slice(-10) : digitsOnly;
+  return /^[6-9]\d{9}$/.test(localPart);
 };
 
 export const isValidEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value).trim());
