@@ -13,7 +13,7 @@ const CONTENT = {
     { name: 'Harsh', role: 'IT professional, Hyderabad', len: '1:05', quote: '"Face reading ki techniques bohot practical hain."', src: '/IMG_4613.mp4', poster: '' },
     { name: 'Sakshi', role: 'BA student, Lucknow', len: '', quote: '"Masterclass ne meri soch badal di."', src: '/IMG_4621.MP4', poster: '' },
     { name: 'Akanksha', role: 'B Com student, Lucknow', len: '', quote: '"Itna practical content pehle kabhi nahi dekha."', src: '/IMG_4622.MP4', poster: '' },
-    { name: 'Student', role: 'Student', len: '', quote: '"Awesome experience! Highly recommended."', src: '/IMG_5247.MOV', poster: '' },
+    { name: 'Student', role: 'Student', len: '', quote: '"Awesome experience! Highly recommended."', src: '/IMG_5247_compressed.mp4', poster: '' },
   ],
   messages: [
     { name: 'Ritu', phone: '***** 4471', date: '2 Aug', chat: [{ side: 'them', text: 'Maam aaj ka session bahut accha tha. Face structure wala part maine notebook mein likh liya.', time: '8:14 pm' }, { side: 'me', text: 'Bahut acche Ritu ji! Kal practice ke liye 5 photos laayiye.', time: '8:20 pm' }] },
