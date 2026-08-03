@@ -52,7 +52,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-right"
           >
             <img
-              src="/tarot_hero_image.webp"
+              src="/vedic-astrology/7.webp"
               alt="Face Reading Masterclass"
               className="block w-full h-auto object-contain"
               fetchPriority="high"
