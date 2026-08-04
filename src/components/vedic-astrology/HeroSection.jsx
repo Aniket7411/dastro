@@ -36,7 +36,8 @@ function HeroSection({ onJoinNow }) {
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            Apni Kundli Khud Padhiye
+            Apni <span className={WB_HIGHLIGHT}>Kundli</span>{' '}
+            <span className="text-[#F0703C] font-black relative whitespace-nowrap">Khud Padhiye<svg className="absolute -bottom-1 left-0 w-full h-[6px] text-[#F0703C]/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" /></svg></span>
           </h1>
 
           <p
