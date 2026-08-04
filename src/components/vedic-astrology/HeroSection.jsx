@@ -34,13 +34,30 @@ function HeroSection({ onJoinNow }) {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-4xl text-center" data-aos="fade-up">
+        <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            <span className={WB_HIGHLIGHT}>Apni Kundli</span> Khud Padhiye
+            Aapke Numbers Ka Secret
           </h1>
-          <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
-            Do din mein apni kundli kholiye, usme har graha aur bhaav pehchaniye, aur apne baare mein teen cheezein khud padhiye - bina kisi prior knowledge ke.
-            Seekhiye <span className="font-bold text-slate-900">The 3-Layer Reading Formula - Planet + Sign + House</span>. Wahi formula jisse professional astrologers kisi bhi chart ki pehli reading karte hain. 9 grahas · 12 rashis · 12 bhavas.
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            Do din mein apna birth grid padhiye, apna name number nikaliye, aur jaaniye
+            ki aapka mobile number aapke saath kaam kar raha hai ya aapke khilaaf.
+          </p>
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
+            Na kundli chahiye, na deck, na software. Sirf aapki date of birth, aapka
+            naam aur aapka mobile number.{" "}
+            <span className="font-bold text-slate-900">
+              Seekhiye The 4-Number Method + Lo Shu Grid.
+            </span>
           </p>
         </div>
 

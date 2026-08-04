@@ -36,13 +36,32 @@ function HeroSection({ onJoinNow }) {
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            Apni Pehli Tarot Reading
+            Apni Pehli <span className={WB_HIGHLIGHT}>Tarot Reading</span>
           </h1>
-          <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
-            Do din mein ek poori 3-card reading kijiye - apne liye ya kisi aur ke liye - bina ek bhi card ka meaning ratte.
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            Do din mein ek poori 3-card reading kijiye - apne liye ya kisi aur ke liye
+            - bina ek bhi card ka meaning ratte.
           </p>
-          <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`} data-aos="fade-up" data-aos-delay="150">
-            Seekhiye The Image + Element + Number Method - wo tarika jisse aap koi bhi card padh sakte hain, chahe wo card aapne zindagi mein pehle kabhi dekha na ho. 78 cards, ek method.
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
+            Seekhiye{" "}
+            <span className="font-bold text-slate-900">
+              The Image + Element + Number Method
+            </span>{" "}
+            - wo tarika jisse aap koi bhi card padh sakte hain, chahe wo card aapne
+            zindagi mein pehle kabhi dekha na ho.{" "}
+            <span className="font-semibold text-slate-700">
+              78 cards, ek method.
+            </span>
           </p>
         </div>
 
