@@ -39,7 +39,7 @@ function HeroSection({ onJoinNow }) {
             <span className={WB_HIGHLIGHT}>Apni Kundli</span> Khud Padhiye
           </h1>
           <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
-            Do din mein apni kundli kholiye, usme har graha aur bhaav pehchaniye, aur apne baare mein teen cheezein khud padhiye - bina kisi prior knowledge ke.<br /><br />
+            Do din mein apni kundli kholiye, usme har graha aur bhaav pehchaniye, aur apne baare mein teen cheezein khud padhiye - bina kisi prior knowledge ke.
             Seekhiye <span className="font-bold text-slate-900">The 3-Layer Reading Formula - Planet + Sign + House</span>. Wahi formula jisse professional astrologers kisi bhi chart ki pehli reading karte hain. 9 grahas · 12 rashis · 12 bhavas.
           </p>
         </div>
