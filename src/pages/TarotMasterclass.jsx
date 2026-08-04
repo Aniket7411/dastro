@@ -14,6 +14,7 @@ import ItinerarySection from '../components/tarot-masterclass/ItinerarySection';
 import MentorSection from '../components/tarot-masterclass/MentorSection';
 // import TextReviewCarousel from '../components/tarot-masterclass/TextReviewCarousel';
 import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
+import ValueInclusionsBand from '../components/tarot-masterclass/ValueInclusionsBand';
 import FaqSection from '../components/tarot-masterclass/FaqSection';
 // import FixedBottomCTA from '../components/tarot-masterclass/FixedBottomCTA';
 import FuturisticBottomCTA from '../components/tarot-masterclass/FuturisticBottomCTA';
@@ -21,7 +22,7 @@ import RegistrationModal from '../components/tarot-masterclass/RegistrationModal
 import FooterMinimal from '../components/tarot-masterclass/FooterMinimal';
 
 function TarotMasterclass() {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', city: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(true);
@@ -58,6 +59,7 @@ function TarotMasterclass() {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: sanitizedPhone,
+          city: formData.city.trim(),
           type: 'Webinar',
           courseName: '2-Day Tarot Masterclass',
           amount: 500,
@@ -73,6 +75,7 @@ function TarotMasterclass() {
           name: data.name || formData.name.trim(),
           email: data.email || formData.email.trim(),
           phone: data.phone || sanitizedPhone,
+          city: data.city || formData.city.trim(),
           amount: String(data.amount || '50000'),
           ref: data.leadId ? `DS-${String(data.leadId).slice(-6).toUpperCase()}` : `DS-${Date.now().toString().slice(-6)}`,
           courseName: data.courseName || '2-Day Tarot Masterclass',
@@ -103,9 +106,9 @@ function TarotMasterclass() {
   return (
     <div className={`${WB_PAGE_SHELL} flex flex-col min-h-screen bg-slate-50`}>
       <SEO
-        title="2-Day Tarot Masterclass by Damini Shukla â€” Live on Zoom | â‚¹500"
-        description="Learn to decode anyoneâ€™s personality through their face. 2-day live face reading masterclass (Samudrika Shastra) with Damini Shukla â€” 1 & 2 Aug, 6â€“8 PM. Recording included. Enroll for â‚¹500."
-        url="/tarot-masterclass-masterclass"
+        title="Apni Pehli Tarot Reading - 2-Day Live Tarot Foundation Masterclass | DS Astro Institute"
+        description="Sirf 2 din mein apni pehli poori 3-card tarot reading kijiye - bina ek bhi card ka meaning ratte. Live on Zoom with Damini Shukla. Deck zaroori nahi. Recording + PDF notes. Rs 500 only."
+        url="/tarot-masterclass"
       />
       
       {/* Main Content Area */}
@@ -119,6 +122,7 @@ function TarotMasterclass() {
           <MentorSection onJoinNow={handleOpenModal} />
           {/* <TextReviewCarousel /> */}
           <DsAstroTestimonials onJoinNow={handleOpenModal} />
+          <ValueInclusionsBand />
           <FaqSection />
       </div>
 
@@ -168,3 +172,4 @@ function TarotMasterclass() {
 }
 
 export default TarotMasterclass;
+

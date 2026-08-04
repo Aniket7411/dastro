@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
@@ -20,7 +20,7 @@ import RegistrationModal from '../components/vedic-numerology/RegistrationModal'
 import FooterMinimal from '../components/face-reading/FooterMinimal';
 
 function VedicNumerologyMasterclass() {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', city: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(true);
@@ -57,6 +57,7 @@ function VedicNumerologyMasterclass() {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: sanitizedPhone,
+          city: formData.city.trim(),
           type: 'Webinar',
           courseName: '2-Day Vedic Numerology Masterclass',
           amount: 500,
@@ -72,6 +73,7 @@ function VedicNumerologyMasterclass() {
           name: data.name || formData.name.trim(),
           email: data.email || formData.email.trim(),
           phone: data.phone || sanitizedPhone,
+          city: data.city || formData.city.trim(),
           amount: String(data.amount || '50000'),
           ref: data.leadId ? `DS-${String(data.leadId).slice(-6).toUpperCase()}` : `DS-${Date.now().toString().slice(-6)}`,
           courseName: data.courseName || '2-Day Vedic Numerology Masterclass',
@@ -99,7 +101,7 @@ function VedicNumerologyMasterclass() {
     <div className={`${WB_PAGE_SHELL} flex flex-col min-h-screen bg-slate-50`}>
       <SEO
         title="Aapke Numbers Ka Secret - 2-Day Live Vedic Numerology Masterclass | DS Astro Institute"
-        description="Sirf 2 din mein apna Lo Shu grid, driver-conductor, name number aur mobile number padhna seekhiye. Na kundli, na janm samay. Live on Zoom with Damini Shukla. ₹500 only."
+        description="Sirf 2 din mein apna Lo Shu grid, driver-conductor, name number aur mobile number padhna seekhiye. Na kundli, na janm samay. Live on Zoom with Damini Shukla. Rs 500 only."
         url="/vedic-numerology-masterclass"
       />
 
@@ -131,7 +133,7 @@ function VedicNumerologyMasterclass() {
             </div>
             <h2 className="m-0 font-heading text-[22px] font-extrabold leading-tight text-[#2A1647]">Seat Reserved</h2>
             <p className="mx-auto mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-600">
-              Your details are saved. Taking you to the payment page for the final ₹500 step.
+              Your details are saved. Taking you to the payment page for the final â‚¹500 step.
             </p>
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-slate-100">
               <div className="h-full w-2/3 animate-pulse rounded-full bg-[#EE6662]" />
@@ -144,3 +146,4 @@ function VedicNumerologyMasterclass() {
 }
 
 export default VedicNumerologyMasterclass;
+

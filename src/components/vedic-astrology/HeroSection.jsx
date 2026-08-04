@@ -1,4 +1,4 @@
-import {
+﻿import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_PURPLE,
@@ -30,7 +30,7 @@ function HeroSection({ onJoinNow }) {
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-video" aria-hidden="true" />
             </span>
-            2-Day Vedic Astrology Masterclass — ₹500
+            2-Day Vedic Astrology Masterclass - Rs 500
           </div>
         </div>
 
@@ -41,19 +41,11 @@ function HeroSection({ onJoinNow }) {
           </h1>
 
           <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
+            className={`${TYPE.lead} mx-auto max-w-[44ch] text-center mt-4 sm:mt-5 sm:max-w-[72ch] text-slate-600 sm:text-lg`}
             data-aos="fade-up"
             data-aos-delay="100"
           >
             Do din mein apni kundli kholiye, usme har graha aur bhaav pehchaniye, aur apne baare mein teen cheezein khud padhiye - bina kisi prior knowledge ke.
-          </p>
-
-          <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
-            data-aos="fade-up"
-            data-aos-delay="150"
-          >
-            Seekhiye The 3-Layer Reading Formula - Planet + Sign + House. Wahi formula jisse professional astrologers kisi bhi chart ki pehli reading karte hain. 9 grahas · 12 rashis · 12 bhavas.
           </p>
         </div>
 
@@ -105,3 +97,5 @@ function HeroSection({ onJoinNow }) {
 }
 
 export default HeroSection;
+
+

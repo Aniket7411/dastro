@@ -1,4 +1,4 @@
-import {
+﻿import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_PURPLE,
@@ -30,7 +30,7 @@ function HeroSection({ onJoinNow }) {
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-video" aria-hidden="true" />
             </span>
-            LIVE ON ZOOM · 2 DAYS
+            LIVE ON ZOOM Â· 2 DAYS
           </div>
         </div>
 
@@ -72,7 +72,7 @@ function HeroSection({ onJoinNow }) {
           >
             <img
               src="/vedic-astrology/7.webp"
-              alt="Face Reading Masterclass"
+              alt="Tarot Foundation Masterclass"
               className="block w-full h-auto object-contain"
               fetchPriority="high"
               loading="eager"
@@ -115,3 +115,4 @@ function HeroSection({ onJoinNow }) {
 }
 
 export default HeroSection;
+

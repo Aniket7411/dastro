@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { ChevronRight, Flame, Play, Video, Zap } from 'lucide-react';
 import { getTargetTimestamp } from '../face-reading/FixedBottomCTA';
 
@@ -29,7 +29,7 @@ function SevenSegmentDigit({ digit }) {
   const activeSegments = SEGMENTS_BY_DIGIT[digit] || [];
 
   return (
-    <span className="relative inline-block h-[2rem] w-[1.12rem] sm:h-[3.85rem] sm:w-[2.2rem]" aria-hidden="true">
+    <span className="relative inline-block h-[2rem] w-[1.12rem] sm:h-[3.2rem] sm:w-[1.85rem] lg:h-[3.55rem] lg:w-[2.05rem]" aria-hidden="true">
       {Object.entries(SEGMENT_CLASS).map(([segment, position]) => {
         const isActive = activeSegments.includes(segment);
         return (
@@ -59,7 +59,7 @@ function SevenSegmentNumber({ value }) {
 
 function TimerColon() {
   return (
-    <span className="flex h-[2rem] flex-col items-center justify-center gap-1.5 pb-1 sm:h-[3.85rem] sm:gap-3" aria-hidden="true">
+    <span className="flex h-[2rem] flex-col items-center justify-center gap-1.5 pb-1 sm:h-[3.2rem] sm:gap-2.5 lg:h-[3.55rem] lg:gap-3" aria-hidden="true">
       <span className="h-1 w-1 rounded-full bg-[#ff9a5f] shadow-[0_0_9px_rgba(255,154,95,0.95)] sm:h-2 sm:w-2" />
       <span className="h-1 w-1 rounded-full bg-[#ff9a5f] shadow-[0_0_9px_rgba(255,154,95,0.95)] sm:h-2 sm:w-2" />
     </span>
@@ -112,7 +112,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
         isPanelVisible ? 'translate-y-0 opacity-100' : 'translate-y-[115%] opacity-0'
       }`}
     >
-      <div className="mx-auto w-full max-w-[920px] lg:max-w-[90vw]">
+      <div className="mx-auto w-full max-w-[920px] lg:max-w-[1120px]">
         <div className="relative overflow-hidden rounded-[18px] border border-[#ff9b42]/35 bg-[#100617] text-white shadow-[0_18px_60px_rgba(0,0,0,0.55),0_0_34px_rgba(255,81,60,0.28)] sm:rounded-[22px]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_8%_18%,rgba(255,45,116,0.34),transparent_24%),radial-gradient(circle_at_82%_56%,rgba(255,133,43,0.26),transparent_28%),linear-gradient(115deg,rgba(255,255,255,0.06),transparent_32%,rgba(255,255,255,0.04))]" />
           <div className="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(35deg,rgba(255,123,53,0.14)_1px,transparent_1px)] [background-size:58px_58px]" />
@@ -148,7 +148,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
             </div>
 
             <div className="mt-3 grid grid-cols-2 items-stretch gap-2 sm:gap-3 min-[760px]:grid-cols-[1.08fr_0.92fr]">
-              <div className="flex min-h-[78px] items-center justify-center self-stretch rounded-[16px] border border-[#ff8b55]/25 bg-[#0b0613]/90 px-2 py-2 shadow-[inset_0_0_22px_rgba(255,112,57,0.08)] sm:min-h-[112px] sm:rounded-[20px] sm:px-4 sm:py-3">
+              <div className="flex min-h-[78px] items-center justify-center self-stretch rounded-[16px] border border-[#ff8b55]/25 bg-[#0b0613]/90 px-2 py-2 shadow-[inset_0_0_22px_rgba(255,112,57,0.08)] sm:min-h-[96px] lg:min-h-[104px] sm:rounded-[20px] sm:px-4 sm:py-3">
                 <div className="grid w-full grid-cols-[1fr_auto_1fr_auto_1fr] items-end gap-1 text-center sm:gap-4">
                   {[
                     { value: hours, label: 'Hours' },
@@ -168,7 +168,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                 </div>
               </div>
 
-              <div className="relative flex min-h-[78px] items-center justify-between self-stretch overflow-visible rounded-[16px] border border-[#ff7a3a]/70 bg-[#1d092b] px-2.5 pb-2 pt-5 shadow-[0_0_22px_rgba(255,93,47,0.35)] sm:min-h-[112px] sm:rounded-[20px] sm:px-5 sm:pb-3 sm:pt-5">
+              <div className="relative flex min-h-[78px] items-center justify-between self-stretch overflow-visible rounded-[16px] border border-[#ff7a3a]/70 bg-[#1d092b] px-2.5 pb-2 pt-5 shadow-[0_0_22px_rgba(255,93,47,0.35)] sm:min-h-[96px] lg:min-h-[104px] sm:rounded-[20px] sm:px-5 sm:pb-3 sm:pt-5">
                 <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[16px] bg-[radial-gradient(circle_at_84%_48%,rgba(255,156,55,0.28),transparent_29%),linear-gradient(135deg,rgba(255,28,126,0.35),rgba(49,10,80,0.65))] sm:rounded-[20px]" />
                 <div className="relative min-w-0">
                   <div className="absolute left-0 -top-5 z-10 inline-flex max-w-none -translate-y-1/2 items-center gap-0.5 rounded-[6px] border border-[#ffb24f]/75 bg-[#341144]/95 px-1 py-0.5 text-[0.36rem] font-black uppercase leading-none text-[#ffd36d] shadow-[0_0_14px_rgba(255,108,43,0.32)] min-[380px]:text-[0.4rem] min-[430px]:gap-1 min-[430px]:px-1.5 min-[430px]:text-[0.48rem] sm:left-0 sm:px-2.5 sm:py-1 sm:text-[0.72rem]">
@@ -177,19 +177,19 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                   </div>
                   <p className="text-[0.86rem] font-extrabold leading-none text-white sm:text-[1.25rem]">Join Masterclass</p>
                   <div className="mt-1.5 flex flex-wrap items-end gap-2">
-                    <span className="text-[1.55rem] font-black leading-none text-[#ffc24d] drop-shadow-[0_0_12px_rgba(255,194,77,0.55)] sm:text-[2.85rem]">
-                      ₹500
+                    <span className="text-[1.55rem] font-black leading-none text-[#ffc24d] drop-shadow-[0_0_12px_rgba(255,194,77,0.55)] sm:text-[2.35rem] lg:text-[2.65rem]">
+                      â‚¹500
                     </span>
-                    <span className="pb-0.5 text-[0.72rem] font-bold text-white/45 line-through sm:pb-1 sm:text-[1.15rem]">₹1,999</span>
+                    <span className="pb-0.5 text-[0.72rem] font-bold text-white/45 line-through sm:pb-1 sm:text-[1.15rem]">â‚¹1,999</span>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => onJoinNow?.()}
-                  className="group relative ml-2 inline-flex h-9 w-9 flex-none items-center justify-center rounded-full border border-[#ffad56]/60 bg-[#2b1037] text-[#ffd482] shadow-[0_0_18px_rgba(255,134,54,0.62),inset_0_0_14px_rgba(255,148,54,0.14)] transition duration-200 hover:scale-105 hover:bg-[#3a1647] active:scale-95 min-[380px]:h-10 min-[380px]:w-10 sm:ml-3 sm:h-16 sm:w-16"
+                  className="group relative ml-2 inline-flex h-9 w-9 flex-none items-center justify-center rounded-full border border-[#ffad56]/60 bg-[#2b1037] text-[#ffd482] shadow-[0_0_18px_rgba(255,134,54,0.62),inset_0_0_14px_rgba(255,148,54,0.14)] transition duration-200 hover:scale-105 hover:bg-[#3a1647] active:scale-95 min-[380px]:h-10 min-[380px]:w-10 sm:ml-3 sm:h-[3.25rem] sm:w-[3.25rem] lg:h-14 lg:w-14"
                   aria-label="Join Masterclass Now"
                 >
-                  <ChevronRight className="h-5 w-5 stroke-[3] min-[380px]:h-6 min-[380px]:w-6 transition-transform group-hover:translate-x-0.5 sm:h-10 sm:w-10" />
+                  <ChevronRight className="h-5 w-5 stroke-[3] min-[380px]:h-6 min-[380px]:w-6 transition-transform group-hover:translate-x-0.5 sm:h-8 sm:w-8 lg:h-9 lg:w-9" />
                 </button>
               </div>
             </div>
@@ -199,3 +199,6 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
     </div>
   );
 }
+
+
+

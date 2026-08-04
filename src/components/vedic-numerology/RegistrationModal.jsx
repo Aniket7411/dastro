@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
 import { WB_CTA, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
@@ -80,14 +80,14 @@ function RegistrationModal({
 
                   <div className="relative overflow-hidden rounded-[14px] border border-orange-200/70 bg-gradient-to-br from-orange-50 via-white to-red-50 p-3 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)] sm:p-4">
                     <div className="absolute right-0 top-0 rounded-bl-xl bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[8px] font-black uppercase tracking-wider text-white shadow-sm">
-                      Save ₹1,499
+                      Save â‚¹1,499
                     </div>
                     <div className="flex flex-row items-end justify-between gap-2 pt-3 sm:gap-4 sm:pt-2">
                       <div>
                         <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-orange-800/70">Limited Time Offer</p>
                         <div className="flex items-end gap-3">
-                          <span className="font-body text-[28px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">₹500</span>
-                          <span className="mb-1 text-sm font-bold text-slate-400 line-through sm:mb-1.5 sm:text-lg">₹1,999</span>
+                          <span className="font-body text-[28px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">â‚¹500</span>
+                          <span className="mb-1 text-sm font-bold text-slate-400 line-through sm:mb-1.5 sm:text-lg">â‚¹1,999</span>
                         </div>
                       </div>
                       <div className="w-[128px] shrink-0 sm:w-auto sm:min-w-[168px]">
@@ -127,7 +127,7 @@ function RegistrationModal({
                     </label>
                     <input id="webinar-email" type="email" name="email" value={formData.email} onChange={handleChange} required inputMode="email" autoComplete="email" placeholder="Enter Your Best Email" className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm focus:ring-2`} />
                   </div>
-                  <div className="sm:col-span-2">
+                  <div>
                     <label htmlFor="webinar-phone" className={`${MODAL_LABEL} !mb-1 !text-[11px]`}>
                       Phone (WhatsApp)
                     </label>
@@ -136,16 +136,32 @@ function RegistrationModal({
                     </div>
                   </div>
 
+                  <div>
+                    <label htmlFor="webinar-city" className={`${MODAL_LABEL} !mb-1 !text-[11px]`}>
+                      City
+                    </label>
+                    <input
+                      id="webinar-city"
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                      autoComplete="address-level2"
+                      placeholder="Enter Your City"
+                      className={`${MODAL_INPUT} text-[15px] min-h-[44px] rounded-[10px] bg-white border-slate-200 shadow-sm focus:ring-2`}
+                    />
+                  </div>
                   <div className="pt-1 sm:col-span-2">
                     <button type="submit" className={`${WB_CTA} w-full justify-center min-h-[48px] rounded-[10px] !text-[14px] shadow-lg shadow-red-500/25 transition-transform hover:-translate-y-1`} disabled={isSubmitting}>
-                      {isSubmitting ? 'Processing...' : 'Complete Registration - ₹500'}
+                      {isSubmitting ? 'Processing...' : 'Proceed to Pay Rs 500'}
                     </button>
                   </div>
 
                   <div className="flex flex-col items-center gap-1 pt-0.5 text-center text-slate-500 sm:col-span-2">
                     <p className="m-0 text-[11px] font-bold flex items-center gap-1.5 text-slate-400">
                       <i className="fas fa-lock" aria-hidden="true" />
-                      Secured by Razorpay · UPI, cards
+                      Secured by Razorpay Â· UPI, cards
                     </p>
                     <p className="m-0 text-[11px] font-medium text-slate-600 mt-1">
                       Batch dates & Zoom link on WhatsApp right after registration
@@ -165,3 +181,4 @@ function RegistrationModal({
 }
 
 export default RegistrationModal;
+
