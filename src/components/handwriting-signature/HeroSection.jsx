@@ -32,13 +32,47 @@ function HeroSection({ onJoinNow }) {
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            <span className={WB_HIGHLIGHT}>Handwriting</span> Se Personality <span className="text-[#F0703C] font-black relative whitespace-nowrap">Decode<svg className="absolute -bottom-1 left-0 w-full h-[6px] text-[#F0703C]/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" /></svg></span>
+            <span className={WB_HIGHLIGHT}>Handwriting</span> Se Personality{" "}
+            <span className="text-[#F0703C] font-black relative whitespace-nowrap">
+              Decode
+              <svg
+                className="absolute -bottom-1 left-0 w-full h-[6px] text-[#F0703C]/30"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0 5 Q50 10 100 5"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                />
+              </svg>
+            </span>
           </h1>
-          <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
-            Kisi ki bhi handwriting aur signature dekhkar uski Personality, Behaviour, Strengths aur Hidden Traits pehchaniye - sirf 2 din mein. Seekhiye Graphology ka <span className="font-bold text-slate-900">8-Marker Method</span> - 8 markers, 40+ readings, aur ek poora signature decode. Wahi system jo duniya bhar mein HR, forensic experts aur counsellors use karte hain. Koi belief system nahi chahiye - sirf ek pen aur ek kaagaz.
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            Kisi ki bhi handwriting aur signature dekhkar uski Personality,
+            Behaviour, Strengths aur Hidden Traits pehchaniye – sirf 2 din mein.
+          </p>
+
+          <p
+            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
+            Seekhiye{" "}
+            <span className="font-bold text-slate-900">
+              Graphology ka 8-Marker Method
+            </span>{" "}
+            – 8 markers, 40+ readings, aur ek poora signature decode. Wahi system jo
+            duniya bhar mein HR, forensic experts aur counsellors use karte hain. Koi
+            belief system nahi chahiye – sirf ek pen aur ek kaagaz.
           </p>
         </div>
-
         <div className={`${WB_STACK} grid items-center justify-center gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
           <div
             className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none"
