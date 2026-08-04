@@ -63,7 +63,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-right"
           >
             <img
-              src="/vedic-astrology/hero-image.png"
+              src="/vedic-astrology/3.webp"
               alt="Vedic Astrology Masterclass"
               className="block w-full h-auto object-cover"
               fetchPriority="high"
