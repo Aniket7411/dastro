@@ -125,13 +125,13 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                   <Flame className="relative h-[18px] w-[18px] fill-white text-white min-[380px]:h-5 min-[380px]:w-5 sm:h-7 sm:w-7" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-[0.72rem] font-extrabold leading-tight text-white min-[380px]:text-[0.82rem] sm:text-[1.15rem]">
-                    Aap bhi seekhiye - 2 din, live on Zoom
+                  <h3 className="text-[0.72rem] font-extrabold leading-tight text-white min-[380px]:text-[0.82rem] sm:text-[1.35rem]">
+                    Next batch starting soon
                   </h3>
-                  <p className="text-[0.64rem] font-bold leading-tight text-[#ffc463] min-[380px]:text-[0.7rem] sm:text-[0.85rem] mt-0.5 truncate">
-                    Ek pen. Ek kaagaz. Aur logon ko padhne ka ek system.
+                  <p className="text-[0.64rem] font-bold leading-tight text-[#ffc463] min-[380px]:text-[0.7rem] sm:text-[0.95rem]">
+                    Limited Seats Available
                   </p>
-                  <div className="mt-1 h-0.5 w-24 rounded-full bg-gradient-to-r from-[#ffc463] via-[#ff8f4a] to-transparent sm:mt-1.5 sm:h-1 sm:w-52" />
+                  <div className="mt-1 h-0.5 w-24 rounded-full bg-gradient-to-r from-[#ffc463] via-[#ff8f4a] to-transparent sm:mt-2 sm:h-1 sm:w-52" />
                 </div>
               </div>
 
@@ -173,7 +173,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                 <div className="relative min-w-0">
                   <div className="absolute left-0 -top-5 z-10 inline-flex max-w-none -translate-y-1/2 items-center gap-0.5 rounded-[6px] border border-[#ffb24f]/75 bg-[#341144]/95 px-1 py-0.5 text-[0.36rem] font-black uppercase leading-none text-[#ffd36d] shadow-[0_0_14px_rgba(255,108,43,0.32)] min-[380px]:text-[0.4rem] min-[430px]:gap-1 min-[430px]:px-1.5 min-[430px]:text-[0.48rem] sm:left-0 sm:px-2.5 sm:py-1 sm:text-[0.72rem]">
                     <Zap className="hidden h-2.5 w-2.5 fill-[#ffd36d] text-[#ffd36d] min-[430px]:block sm:h-3 sm:w-3" />
-                    <span className="whitespace-nowrap">Next batch starting soon</span>
+                    <span className="whitespace-nowrap">Special price for early enrollees!</span>
                   </div>
                   <p className="text-[0.86rem] font-extrabold leading-none text-white sm:text-[1.25rem]">Join Masterclass</p>
                   <div className="mt-1.5 flex flex-wrap items-end gap-2">

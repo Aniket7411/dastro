@@ -12,7 +12,7 @@ import LearnSection from '../components/handwriting-signature/LearnSection';
 import WhoIsThisForSection from '../components/handwriting-signature/WhoIsThisForSection';
 import ItinerarySection from '../components/handwriting-signature/ItinerarySection';
 import MentorSection from '../components/face-reading/MentorSection';
-import DsAstroTestimonials from '../components/handwriting-signature/DsAstroTestimonials';
+import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
 import ValueInclusionsBand from '../components/handwriting-signature/ValueInclusionsBand';
 import FaqSection from '../components/handwriting-signature/FaqSection';
 import FuturisticBottomCTA from '../components/handwriting-signature/FuturisticBottomCTA';
