@@ -36,7 +36,7 @@ function HeroSection({ onJoinNow }) {
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            Aapke Numbers Ka Secret
+            Apni Kundli Khud Padhiye
           </h1>
 
           <p
@@ -44,8 +44,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Do din mein apna birth grid padhiye, apna name number nikaliye, aur jaaniye
-            ki aapka mobile number aapke saath kaam kar raha hai ya aapke khilaaf.
+            Do din mein apni kundli kholiye, usme har graha aur bhaav pehchaniye, aur apne baare mein teen cheezein khud padhiye - bina kisi prior knowledge ke.
           </p>
 
           <p
@@ -53,11 +52,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-up"
             data-aos-delay="150"
           >
-            Na kundli chahiye, na deck, na software. Sirf aapki date of birth, aapka
-            naam aur aapka mobile number.{" "}
-            <span className="font-bold text-slate-900">
-              Seekhiye The 4-Number Method + Lo Shu Grid.
-            </span>
+            Seekhiye The 3-Layer Reading Formula - Planet + Sign + House. Wahi formula jisse professional astrologers kisi bhi chart ki pehli reading karte hain. 9 grahas · 12 rashis · 12 bhavas.
           </p>
         </div>
 
@@ -67,7 +62,7 @@ function HeroSection({ onJoinNow }) {
             data-aos="fade-right"
           >
             <img
-              src="/vedic-astrology/3.webp"
+              src="/vedic-astrology/hero-image.png"
               alt="Vedic Astrology Masterclass"
               className="block w-full h-auto object-cover"
               fetchPriority="high"
