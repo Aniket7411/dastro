@@ -14,7 +14,7 @@ import {
   TYPE,
 } from '../webinar/tokens';
 
-function HeroSection({ onJoinNow }) {
+function HeroSection() {
   const infoCards = [
     { icon: 'fa-hourglass-half', label: 'DURATION', value: '2 Days' },
     { icon: 'fa-clock', label: 'SESSIONS', value: '2 hrs / day' },
@@ -28,48 +28,30 @@ function HeroSection({ onJoinNow }) {
         <div className="mb-6 flex justify-center sm:mb-8" data-aos="fade-up">
           <div className={WB_BADGE}>
             <span className={WB_BADGE_ICON}>
-              <i className="fas fa-video" aria-hidden="true" />
+              <i className="fas fa-calculator" aria-hidden="true" />
             </span>
-            2-Day Vedic Astrology Masterclass — ₹500
+            2-Day Vedic Numerology Masterclass — ₹500
           </div>
         </div>
 
         <div className="mx-auto w-full max-w-3xl text-center" data-aos="fade-up">
           <h1 className={`wb-hero-title ${WB_TITLE_HERO}`}>
-            Aapke Numbers Ka Secret
+            Aapke <span className={WB_HIGHLIGHT}>Numbers Ka Secret</span>
           </h1>
-
-          <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
-            data-aos="fade-up"
-            data-aos-delay="100"
-          >
-            Do din mein apna birth grid padhiye, apna name number nikaliye, aur jaaniye
-            ki aapka mobile number aapke saath kaam kar raha hai ya aapke khilaaf.
-          </p>
-
-          <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
-            data-aos="fade-up"
-            data-aos-delay="150"
-          >
-            Na kundli chahiye, na deck, na software. Sirf aapki date of birth, aapka
-            naam aur aapka mobile number.{" "}
-            <span className="font-bold text-slate-900">
-              Seekhiye The 4-Number Method + Lo Shu Grid.
-            </span>
+          <p className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`} data-aos="fade-up" data-aos-delay="100">
+            Do din mein apna birth grid padhiye, apna name number nikaliye, aur jaaniye ki aapka mobile number aapke saath kaam kar raha hai ya aapke khilaaf.
           </p>
         </div>
 
-        <div className={`${WB_STACK} mt-10 grid items-center justify-center gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
+        <div className={`${WB_STACK} grid items-center justify-center gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
           <div
             className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none"
             data-aos="fade-right"
           >
             <img
               src="/vedic-astrology/5.webp"
-              alt="Vedic Astrology Masterclass"
-              className="block w-full h-auto object-cover"
+              alt="Vedic Numerology Masterclass"
+              className="block w-full h-auto object-contain"
               fetchPriority="high"
               loading="eager"
             />
@@ -103,6 +85,8 @@ function HeroSection({ onJoinNow }) {
             </div>
           </div>
         </div>
+
+        {/* CTA removed as requested */}
       </div>
     </section>
   );

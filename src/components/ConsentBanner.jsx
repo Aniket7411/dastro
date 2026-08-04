@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 export default function ConsentBanner() {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
-  const isSuppressedPage = pathname === '/face-reading-masterclass' || pathname === '/new-reading';
+  const isSuppressedPage = pathname === '/face-reading-masterclass' || pathname === '/new-reading' || pathname === '/vedic-numerology-masterclass';
 
   useEffect(() => {
     if (isSuppressedPage) {
