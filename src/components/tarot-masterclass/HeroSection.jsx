@@ -30,7 +30,7 @@ function HeroSection({ onJoinNow }) {
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-video" aria-hidden="true" />
             </span>
-            LIVE ON ZOOM Â· 2 DAYS
+            LIVE ON ZOOM - 2 DAYS
           </div>
         </div>
 
@@ -40,28 +40,12 @@ function HeroSection({ onJoinNow }) {
           </h1>
 
           <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-4 sm:mt-5 sm:max-w-[52ch] text-slate-600 sm:text-lg`}
+            className={`${TYPE.lead} mx-auto max-w-[44ch] text-center mt-4 sm:mt-5 sm:max-w-[72ch] text-slate-600 sm:text-lg`}
             data-aos="fade-up"
             data-aos-delay="100"
           >
             Do din mein ek poori 3-card reading kijiye - apne liye ya kisi aur ke liye
             - bina ek bhi card ka meaning ratte.
-          </p>
-
-          <p
-            className={`${TYPE.lead} mx-auto max-w-[34ch] text-center mt-2 sm:max-w-[52ch] text-slate-500 sm:text-md`}
-            data-aos="fade-up"
-            data-aos-delay="150"
-          >
-            Seekhiye{" "}
-            <span className="font-bold text-slate-900">
-              The Image + Element + Number Method
-            </span>{" "}
-            - wo tarika jisse aap koi bhi card padh sakte hain, chahe wo card aapne
-            zindagi mein pehle kabhi dekha na ho.{" "}
-            <span className="font-semibold text-slate-700">
-              78 cards, ek method.
-            </span>
           </p>
         </div>
 
@@ -115,4 +99,5 @@ function HeroSection({ onJoinNow }) {
 }
 
 export default HeroSection;
+
 

@@ -25,6 +25,27 @@ function WhySection({ onJoinNow }) {
   return (
     <section className={`${WB_SECTION} bg-white`}>
       <div className={WB_WRAP}>
+        <div
+          className="mx-auto mb-6 max-w-5xl rounded-2xl border border-[#EE6662]/20 bg-gradient-to-br from-white via-rose-50/60 to-white p-4 text-center shadow-[0_14px_34px_rgba(238,102,98,0.10)] sm:mb-8 sm:p-5 lg:p-6"
+          data-aos="fade-up"
+        >
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-[#EE6662] text-white shadow-[0_10px_24px_rgba(238,102,98,0.28)] sm:h-12 sm:w-12">
+            <i className="fas fa-clone text-base sm:text-lg" aria-hidden="true" />
+          </div>
+          <p className={`${TYPE.lead} mx-auto mt-3 max-w-[58rem] text-slate-700 sm:mt-4 sm:text-lg`}>
+            Seekhiye <span className="font-extrabold text-[#3B2261]">The Image + Element + Number Method</span>
+          </p>
+          <div className="mx-auto mt-3 flex max-w-4xl flex-wrap justify-center gap-2">
+            {['Image', 'Element', 'Number', '78 cards', '1 method'].map((item) => (
+              <span key={item} className="inline-flex min-h-8 items-center rounded-full border border-[#EE6662]/25 bg-white px-3 py-1 text-xs font-extrabold text-[#EE6662] shadow-sm sm:text-sm">
+                {item}
+              </span>
+            ))}
+          </div>
+          <p className="mx-auto mt-3 max-w-[72ch] text-sm font-semibold leading-relaxed text-slate-600 sm:text-base">
+            Wo tarika jisse aap koi bhi card padh sakte hain, chahe wo card aapne zindagi mein pehle kabhi dekha na ho.
+          </p>
+        </div>
         <div className={WB_SECTION_INTRO} data-aos="fade-up">
           <h2 className={WB_INTRO_TITLE}>
             Kabhi socha hai -{' '}
@@ -56,3 +77,4 @@ function WhySection({ onJoinNow }) {
 }
 
 export default WhySection;
+
