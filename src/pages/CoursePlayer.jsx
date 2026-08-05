@@ -17,9 +17,10 @@ import toast from '../utils/toast';
 import SEO from '../components/SEO';
 import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 import PhoneInput from '../components/PhoneInput';
+import ProtectedScreenGuard from '../components/security/ProtectedScreenGuard';
 
-const WRAP = 'mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-12';
-const CARD = 'rounded-2xl border border-site-accent-dark/12 bg-white shadow-sm';
+const WRAP = 'mx-auto w-full max-w-[96rem] px-3 sm:px-5 lg:px-8 xl:px-10';
+const CARD = 'rounded-[16px] border border-site-accent-dark/12 bg-white shadow-[0_10px_30px_rgba(61,35,17,0.07)]';
 
 const consultInputCls = [
   'w-full rounded-xl border border-white/20 bg-white/10 px-4 py-2.5',
@@ -432,6 +433,7 @@ function CoursePlayer() {
         description={course.description}
         url={`/student/course/${id}`}
       />
+      <ProtectedScreenGuard label="Protected course video" />
 
       {securityNotice && (
         <div className="fixed left-1/2 top-24 z-[9999] flex -translate-x-1/2 items-center gap-2 rounded-full bg-site-primary px-5 py-2.5 font-body text-sm font-bold text-white shadow-lg">
@@ -440,25 +442,25 @@ function CoursePlayer() {
         </div>
       )}
 
-      <div className={`${WRAP} py-4 pb-10 sm:py-5 sm:pb-12`}>
+      <div className={`${WRAP} pt-4 pb-8 sm:pt-5 sm:pb-10 lg:pt-6 lg:pb-12`}>
         {/* Back link */}
         <Link
           to="/dashboard"
-          className="mb-3 inline-flex items-center gap-1.5 font-body text-sm font-bold text-site-primary no-underline transition hover:text-site-accent sm:mb-4"
+          className="mb-4 inline-flex min-h-[36px] items-center gap-1.5 rounded-full px-1 font-body text-sm font-bold text-site-primary no-underline transition hover:text-site-accent sm:mb-5"
         >
           <ArrowLeft size={15} strokeWidth={2.5} />
           Back to dashboard
         </Link>
 
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start lg:gap-6 xl:grid-cols-[320px_minmax(0,1fr)] xl:gap-7">
 
-          {/* ── Left column ── */}
-          <div className="min-w-0 space-y-4">
+          {/* Course content */}
+          <div className="order-2 grid min-w-0 gap-4 lg:order-2 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-start xl:gap-5">
 
-            {/* Video player — capped width so height stays compact */}
-            <div className="mx-auto w-full max-w-2xl lg:max-w-3xl">
+            {/* Video player */}
+            <div className="w-full">
             <div
-              className="relative aspect-video overflow-hidden rounded-xl bg-black shadow-[0_10px_28px_rgba(0,0,0,0.16)]"
+              className="relative aspect-video w-full overflow-hidden rounded-[18px] border border-black/10 bg-black shadow-[0_18px_48px_rgba(61,35,17,0.16)]"
               onContextMenu={(e) => e.preventDefault()}
             >
               {accessPending ? (
@@ -489,7 +491,7 @@ function CoursePlayer() {
                       disablePictureInPicture
                       playsInline
                       onContextMenu={(e) => e.preventDefault()}
-                      className="h-full w-full bg-black transition-[filter] duration-200"
+                      className="h-full w-full bg-black object-contain transition-[filter] duration-200"
                       style={{ filter: isWindowFocused ? 'none' : 'blur(14px)' }}
                       onEnded={() => handleVideoEnded(activeVideo)}
                     />
@@ -499,7 +501,7 @@ function CoursePlayer() {
                       title={activeVideo.title || 'Course video'}
                       loading="lazy"
                       referrerPolicy="strict-origin-when-cross-origin"
-                      className="h-full w-full border-0 transition-[filter] duration-200"
+                      className="h-full w-full border-0 bg-black transition-[filter] duration-200"
                       style={{ filter: isWindowFocused ? 'none' : 'blur(12px)' }}
                       allow="accelerometer; gyroscope; autoplay; encrypted-media;"
                       allowFullScreen={false}
@@ -531,7 +533,7 @@ function CoursePlayer() {
             </div>
 
             {/* Lesson info */}
-            <div className={`${CARD} overflow-hidden`}>
+            <div className={`${CARD} h-full overflow-hidden`}>
               {/* Progress indicator strip */}
               {videos.length > 0 && (
                 <div className="h-1 w-full bg-site-accent-dark/8">
@@ -542,7 +544,7 @@ function CoursePlayer() {
                 </div>
               )}
 
-              <div className="p-4 sm:p-5">
+              <div className="p-4 sm:p-5 xl:p-5">
                 {/* Lesson label */}
                 {videos.length > 0 && (
                   <p className="mb-1.5 font-body text-[0.6875rem] font-bold uppercase tracking-[0.13em] text-site-accent">
@@ -550,7 +552,7 @@ function CoursePlayer() {
                   </p>
                 )}
 
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between xl:flex-col">
                   <h1 className="font-heading text-lg font-extrabold leading-snug text-site-primary sm:text-xl">
                     {activeVideo ? activeVideo.title : course.title}
                   </h1>
@@ -558,7 +560,7 @@ function CoursePlayer() {
                     <button
                       type="button"
                       onClick={() => handleToggleComplete(activeVideo)}
-                      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl px-4 py-2 font-body text-xs font-bold transition shadow-sm border ${
+                      className={`inline-flex min-h-[38px] shrink-0 items-center justify-center gap-1.5 rounded-xl px-4 py-2 font-body text-xs font-bold transition shadow-sm border xl:w-full ${
                         activeVideo.isCompleted
                           ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100/70'
                           : 'bg-white border-site-accent-dark/15 text-site-muted hover:border-site-accent/40 hover:text-site-primary'
@@ -570,12 +572,12 @@ function CoursePlayer() {
                   )}
                 </div>
 
-                <p className="mt-2 font-body text-sm leading-relaxed text-site-muted">
+                <p className="mt-2 font-body text-sm leading-relaxed text-site-muted xl:text-[13px]">
                   {course.description}
                 </p>
 
                 {validity && (
-                  <div className="mt-4 rounded-xl border border-site-accent-dark/10 bg-site-bg p-3.5 sm:p-4">
+                  <div className="mt-4 rounded-xl border border-site-accent-dark/10 bg-site-bg/80 p-3.5 sm:p-4">
                     <p className="mb-2.5 font-body text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-site-accent">
                       Course validity
                     </p>
@@ -616,24 +618,95 @@ function CoursePlayer() {
               </div>
             </div>
 
+
+          </div>
+
+          {/* Curriculum navigation */}
+          <aside className={`${CARD} order-1 flex flex-col overflow-hidden lg:order-1 lg:sticky lg:top-[7rem] lg:max-h-[calc(100vh-8rem)]`}>
+            {/* Header */}
+            <div className="shrink-0 border-b border-site-accent-dark/10 bg-gradient-to-br from-amber-50/80 to-white px-4 py-4 sm:px-5">
+              <h2 className="font-heading text-sm font-extrabold text-site-primary">
+                Course curriculum
+              </h2>
+              <p className="mt-0.5 font-body text-xs font-semibold text-site-muted">
+                {videos.length} lesson{videos.length !== 1 ? 's' : ''}{' '}
+                {activeIndex >= 0 && (
+                  <span className="text-site-accent">· on {activeIndex + 1}</span>
+                )}
+              </p>
+            </div>
+
+            {/* Lesson list */}
+            <div className="flex-1 overflow-y-auto p-2 sm:p-2.5">
+              {videos.length === 0 ? (
+                <p className="py-8 text-center font-body text-xs font-semibold text-site-muted">
+                  No lessons available yet.
+                </p>
+              ) : (
+                videos.map((vid, index) => {
+                  const active = isActiveVideo(vid);
+                  return (
+                    <button
+                      key={vid._id || vid.videoId || vid.id}
+                      type="button"
+                      onClick={() => handleSelectVideo(vid)}
+                      className={`mb-1.5 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${
+                        active
+                          ? 'border border-site-accent/30 bg-site-accent/5 shadow-sm'
+                          : 'border border-transparent hover:bg-site-bg hover:border-site-accent-dark/10'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition ${
+                          vid.isCompleted
+                            ? 'bg-emerald-600 text-white shadow-sm'
+                            : active
+                            ? 'bg-site-accent text-white shadow-sm'
+                            : 'bg-site-accent-dark/8 text-site-muted'
+                        }`}
+                      >
+                        {vid.isCompleted ? (
+                          <Check size={11} strokeWidth={3} />
+                        ) : active ? (
+                          <Play size={11} strokeWidth={3} />
+                        ) : (
+                          index + 1
+                        )}
+                      </span>
+                      <span
+                        className={`min-w-0 flex-1 font-body text-[0.8125rem] leading-snug ${
+                          active
+                            ? 'font-bold text-site-primary'
+                            : 'font-semibold text-site-text'
+                        }`}
+                      >
+                        {vid.title}
+                      </span>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </aside>
+        </div>
             {/* Consultation CTA */}
-            <div className="overflow-hidden rounded-xl bg-gradient-to-br from-site-primary via-[#2e1208] to-[#1a0a01] shadow-md">
-              <div className="p-4 sm:p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="mt-5 overflow-hidden rounded-[18px] bg-gradient-to-br from-site-primary via-[#2e1208] to-[#1a0a01] shadow-[0_18px_44px_rgba(61,35,17,0.18)] sm:mt-6 lg:mt-7">
+              <div className="p-4 sm:p-6 lg:p-7">
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                   <div className="min-w-0">
-                    <h2 className="flex items-center gap-2 font-heading text-lg font-extrabold text-[#f5c98d] sm:text-xl">
+                    <h2 className="flex items-center gap-2 font-heading text-xl font-extrabold leading-tight text-[#f5c98d] sm:text-2xl">
                       <Gem size={19} />
                       Book your 1 free consultation
                     </h2>
-                    <p className="mt-1.5 font-body text-sm leading-relaxed text-[#fff7ed]/85">
-                      Complete the course first — then book to get the most from your session.
+                    <p className="mt-2 max-w-2xl font-body text-sm font-medium leading-relaxed text-[#fff7ed]/85 sm:text-[15px]">
+                      Complete the course first - then book to get the most from your session.
                     </p>
                   </div>
                   {!existingConsultation && !showConsultForm && (
                     <button
                       type="button"
                       onClick={() => setShowConsultForm(true)}
-                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-site-accent px-5 py-2.5 font-body text-sm font-bold text-white transition hover:bg-site-accent-dark sm:min-h-[42px]"
+                      className="group inline-flex min-h-[46px] shrink-0 items-center justify-center gap-2 rounded-full bg-[#f5c98d] px-6 py-3 font-body text-sm font-black text-site-primary shadow-[0_12px_26px_rgba(245,201,141,0.22)] transition hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#f5c98d]/60 focus:ring-offset-2 focus:ring-offset-site-primary sm:min-w-[210px]"
                     >
                       <CheckCircle2 size={15} />
                       Book consultation
@@ -642,8 +715,8 @@ function CoursePlayer() {
                 </div>
 
                 {existingConsultation && (
-                  <div className="mt-5 border-t border-white/10 pt-5">
-                    <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl bg-white/10 px-4 py-3.5">
+                  <div className="mt-5 border-t border-white/10 pt-5 lg:mt-6 lg:pt-6">
+                    <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-5">
                       <div className="min-w-0">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-300">
                           <CheckCircle2 size={11} />
@@ -674,9 +747,9 @@ function CoursePlayer() {
                 {!existingConsultation && showConsultForm && (
                   <form
                     onSubmit={handleConsultSubmit}
-                    className="mt-5 border-t border-white/10 pt-5"
+                    className="mt-5 border-t border-white/10 pt-5 lg:mt-6 lg:pt-6"
                   >
-                    <div className="grid gap-3.5 sm:grid-cols-2">
+                    <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                       <label className="block">
                         <span className="mb-1.5 block font-body text-[11px] font-bold uppercase tracking-wide text-white/60">
                           Mobile (WhatsApp)
@@ -731,13 +804,12 @@ function CoursePlayer() {
                       <button
                         type="submit"
                         disabled={bookingLoading}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-site-accent px-6 py-2.5 font-body text-sm font-bold text-white transition hover:bg-site-accent-dark disabled:opacity-60"
+                        className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#f5c98d] px-7 py-2.5 font-body text-sm font-black text-site-primary transition hover:bg-white disabled:opacity-60"
                       >
                         {bookingLoading ? (
                           <>
                             <Loader2 size={14} className="animate-spin" />
-                            Submitting…
-                          </>
+                            Submitting...</>
                         ) : (
                           'Confirm request'
                         )}
@@ -747,76 +819,7 @@ function CoursePlayer() {
                 )}
               </div>
             </div>
-          </div>
 
-          {/* ── Sidebar curriculum ── */}
-          <aside className={`${CARD} flex flex-col overflow-hidden lg:sticky lg:top-[8.5rem] lg:max-h-[calc(100vh-9.5rem)]`}>
-            {/* Header */}
-            <div className="shrink-0 border-b border-site-accent-dark/10 bg-gradient-to-br from-amber-50/60 to-transparent px-4 py-3">
-              <h2 className="font-heading text-sm font-extrabold text-site-primary">
-                Course curriculum
-              </h2>
-              <p className="mt-0.5 font-body text-xs font-semibold text-site-muted">
-                {videos.length} lesson{videos.length !== 1 ? 's' : ''}{' '}
-                {activeIndex >= 0 && (
-                  <span className="text-site-accent">· on {activeIndex + 1}</span>
-                )}
-              </p>
-            </div>
-
-            {/* Lesson list */}
-            <div className="flex-1 overflow-y-auto p-2 sm:p-2.5">
-              {videos.length === 0 ? (
-                <p className="py-8 text-center font-body text-xs font-semibold text-site-muted">
-                  No lessons available yet.
-                </p>
-              ) : (
-                videos.map((vid, index) => {
-                  const active = isActiveVideo(vid);
-                  return (
-                    <button
-                      key={vid._id || vid.videoId || vid.id}
-                      type="button"
-                      onClick={() => handleSelectVideo(vid)}
-                      className={`mb-1 flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-left transition ${
-                        active
-                          ? 'border border-site-accent/30 bg-site-accent/5 shadow-sm'
-                          : 'border border-transparent hover:bg-site-bg hover:border-site-accent-dark/10'
-                      }`}
-                    >
-                      <span
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition ${
-                          vid.isCompleted
-                            ? 'bg-emerald-600 text-white shadow-sm'
-                            : active
-                            ? 'bg-site-accent text-white shadow-sm'
-                            : 'bg-site-accent-dark/8 text-site-muted'
-                        }`}
-                      >
-                        {vid.isCompleted ? (
-                          <Check size={11} strokeWidth={3} />
-                        ) : active ? (
-                          <Play size={11} strokeWidth={3} />
-                        ) : (
-                          index + 1
-                        )}
-                      </span>
-                      <span
-                        className={`min-w-0 flex-1 font-body text-[0.8125rem] leading-snug ${
-                          active
-                            ? 'font-bold text-site-primary'
-                            : 'font-semibold text-site-text'
-                        }`}
-                      >
-                        {vid.title}
-                      </span>
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </aside>
-        </div>
       </div>
 
       <style>{`

@@ -19,6 +19,7 @@ import {
 } from '../components/student-dashboard/DashboardPanels';
 import DashboardLoading, { DashboardStats } from '../components/student-dashboard/DashboardStats';
 import { DASHBOARD_ROOT, PAGE_WRAP } from '../components/student-dashboard/tokens';
+import ProtectedScreenGuard from '../components/security/ProtectedScreenGuard';
 
 const ANNOUNCEMENT_DISMISS_KEY = 'dismissedAnnouncementText';
 
@@ -135,6 +136,7 @@ export default function StudentDashboardTailwind() {
   return (
     <div className={DASHBOARD_ROOT}>
       <SEO title="Student Dashboard" description="Your courses, materials, and account." url="/dashboard" />
+      <ProtectedScreenGuard label="Protected student dashboard" />
 
       {showAnnouncement && (
         <DashboardAnnouncement text={announcementText} onDismiss={dismissAnnouncement} />
