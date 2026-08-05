@@ -1,4 +1,4 @@
-﻿import {
+import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_SECTION,
@@ -44,7 +44,7 @@ function PatternsSection({ onJoinNow }) {
         <div className="mt-8 text-center" data-aos="fade-up">
           <p className={`${TYPE.lead} mb-6 mx-auto max-w-2xl`}>Yehi structure aapko poore <span className="font-bold text-[#EE6662]">78 cards</span> ka access de deta hai - ek bhi meaning ratte bina.</p>
           <button type="button" onClick={() => onJoinNow?.()} className="mt-4 sm:mt-6 inline-flex min-h-[52px] w-full sm:w-auto cursor-pointer appearance-none items-center justify-center rounded-[12px] border-0 bg-gradient-to-br from-[#EE6662] to-[#D9534F] px-8 py-3 font-body shadow-[0_6px_14px_rgba(238,102,98,0.24)] transition duration-300 hover:-translate-y-px hover:shadow-[0_8px_18px_rgba(238,102,98,0.32)] sm:px-10">
-            <span className="text-[17px] font-semibold text-white">Join Masterclass</span><span className="text-[20px] font-black text-white ml-1.5 drop-shadow-sm">- ₹500</span>
+            <span className="text-[17px] font-semibold text-white">Join Masterclass</span><span className="text-[20px] font-black text-white ml-1.5 drop-shadow-sm">- ₹499</span>
           </button>
         </div>
       </div>

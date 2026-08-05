@@ -1,4 +1,4 @@
-﻿import { WB_WRAP, WB_SECTION, WB_SECTION_INTRO, WB_INTRO_TITLE, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
+import { WB_WRAP, WB_SECTION, WB_SECTION_INTRO, WB_INTRO_TITLE, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
 
 function ValueInclusionsBand() {
   const inclusions = [
@@ -14,7 +14,7 @@ function ValueInclusionsBand() {
     <section className={`${WB_SECTION} bg-[#FAF9F6]`}>
       <div className={WB_WRAP}>
         <div className={`${WB_SECTION_INTRO} mb-6 sm:mb-8`}>
-          <h2 className={WB_INTRO_TITLE}>₹500 mein aapko <span className={WB_HIGHLIGHT}>mil raha hai:</span></h2>
+          <h2 className={WB_INTRO_TITLE}>₹499 mein aapko <span className={WB_HIGHLIGHT}>mil raha hai:</span></h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 max-w-4xl mx-auto">
           {inclusions.map((item) => (

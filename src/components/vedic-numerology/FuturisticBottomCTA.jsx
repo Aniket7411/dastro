@@ -173,7 +173,7 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                   <p className="text-[0.86rem] font-extrabold leading-none text-white sm:text-[1.25rem]">Join Masterclass</p>
                   <div className="mt-1.5 flex flex-wrap items-end gap-2">
                     <span className="text-[1.55rem] font-black leading-none text-[#ffc24d] drop-shadow-[0_0_12px_rgba(255,194,77,0.55)] sm:text-[2.85rem]">
-                      ₹500
+                      ₹499
                     </span>
                     <span className="pb-0.5 text-[0.72rem] font-bold text-white/45 line-through sm:pb-1 sm:text-[1.15rem]">₹1,999</span>
                   </div>

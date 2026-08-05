@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
@@ -60,7 +60,7 @@ function VedicAstrologyMasterclass() {
           city: formData.city.trim(),
           type: 'Webinar',
           courseName: '2-Day Vedic Astrology Masterclass',
-          amount: 500,
+          amount: 499,
         }),
       });
       const data = await res.json();
@@ -74,7 +74,7 @@ function VedicAstrologyMasterclass() {
           email: data.email || formData.email.trim(),
           phone: data.phone || sanitizedPhone,
           city: data.city || formData.city.trim(),
-          amount: String(data.amount || '50000'),
+          amount: String(data.amount || '49900'),
           ref: data.leadId ? `DS-${String(data.leadId).slice(-6).toUpperCase()}` : `DS-${Date.now().toString().slice(-6)}`,
           courseName: data.courseName || '2-Day Vedic Astrology Masterclass',
         });
@@ -102,7 +102,7 @@ function VedicAstrologyMasterclass() {
     <div className={`${WB_PAGE_SHELL} flex flex-col min-h-screen bg-slate-50`}>
       <SEO
         title="Apni Kundli Khud Padhiye - 2-Day Live Vedic Astrology Foundation Masterclass | DS Astro Institute"
-        description="Sirf 2 din mein apni kundli khud padhna seekhiye - Lagna, 9 grahas, 12 bhavas aur The 3-Layer Reading Formula. Live on Zoom with Damini Shukla. Recording + PDF notes. Rs 500 only."
+        description="Sirf 2 din mein apni kundli khud padhna seekhiye - Lagna, 9 grahas, 12 bhavas aur The 3-Layer Reading Formula. Live on Zoom with Damini Shukla. Recording + PDF notes. Rs 499 only."
         url="/vedic-astrology-masterclass"
       />
       
@@ -142,7 +142,7 @@ function VedicAstrologyMasterclass() {
             </div>
             <h2 className="m-0 font-heading text-[22px] font-extrabold leading-tight text-[#2A1647]">Seat Reserved</h2>
             <p className="mx-auto mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-600">
-              Your details are saved. Taking you to the payment page for the final â‚¹500 step.
+              Your details are saved. Taking you to the payment page for the final ₹499 step.
             </p>
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-slate-100">
               <div className="h-full w-2/3 animate-pulse rounded-full bg-[#EE6662]" />

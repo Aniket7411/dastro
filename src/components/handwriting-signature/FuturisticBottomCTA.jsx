@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronRight, Flame, Play, Video, Zap } from 'lucide-react';
 import { getTargetTimestamp } from '../face-reading/FixedBottomCTA';
 

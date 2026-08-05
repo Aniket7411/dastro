@@ -39,7 +39,7 @@ function FaqSection() {
     },
     {
       q: 'Fee kitni hai?',
-      a: '₹500 (MRP ₹1,999). Isme dono live sessions, recording, PDF notes aur worksheet shamil hain.',
+      a: '₹499 (MRP ₹1,999). Isme dono live sessions, recording, PDF notes aur worksheet shamil hain.',
     },
   ];
 

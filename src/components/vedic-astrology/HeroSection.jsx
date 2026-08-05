@@ -1,4 +1,4 @@
-﻿import {
+import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_PURPLE,
@@ -30,7 +30,7 @@ function HeroSection({ onJoinNow }) {
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-video" aria-hidden="true" />
             </span>
-            2-Day Vedic Astrology Masterclass - Rs 500
+            2-Day Vedic Astrology Masterclass - Rs 499
           </div>
         </div>
 

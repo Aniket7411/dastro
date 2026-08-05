@@ -18,7 +18,7 @@ const CONTENT = {
   messages: [
     { name: 'Pooja', phone: '***** 4471', date: '2 Aug', chat: [{ side: 'them', text: 'Maam aaj ka session bahut accha tha. Practice wala part maine notebook mein likh liya. Kal ka wait kar rahi hoon.', time: '8:14 pm' }] },
     { name: 'Ritu', phone: '***** 9032', date: '2 Aug', chat: [{ side: 'them', text: 'Recording 2 baar dekhi. Har baar kuch naya samajh aata hai 🙏', time: '9:02 pm' }] },
-    { name: 'Deepak', phone: '***** 7756', date: '3 Aug', chat: [{ side: 'them', text: 'Honestly ₹500 mein itna expect nahi kiya tha. Recording bhi mil gayi aur PDF notes bhi.', time: '7:31 pm' }] },
+    { name: 'Deepak', phone: '***** 7756', date: '3 Aug', chat: [{ side: 'them', text: 'Honestly ₹499 mein itna expect nahi kiya tha. Recording bhi mil gayi aur PDF notes bhi.', time: '7:31 pm' }] },
     { name: 'Manoj', phone: '***** 5519', date: '3 Aug', chat: [{ side: 'them', text: 'Zoom link time par mil gaya, koi problem nahi hui. DS Astro ki support team ka response fast tha.', time: '10:12 pm' }] },
     { name: 'Khushi', phone: '***** 2604', date: '4 Aug', chat: [{ side: 'them', text: 'PDF notes ke liye thank you. Simple English mein hai isliye padhne mein aasani hui.', time: '9:18 am' }] },
     { name: 'Anjali', phone: '***** 1188', date: '4 Aug', chat: [{ side: 'them', text: 'Meri beti bhi saath baithkar dekh rahi thi, use bhi interest aa gaya 😊', time: '1:44 pm' }] },
@@ -277,7 +277,7 @@ function DsAstroTestimonials({ onJoinNow }) {
         </div>
       </div>
 
-      <div className="ds-cta"><div className="ds-cta-in"><p>Aap bhi seekhiye <span>2 din, live on Zoom</span></p><button className="ds-btn-cta" type="button" onClick={onJoinNow}>Join Masterclass <span className="price">₹500</span><span className="strike">₹1,999</span></button></div></div>
+      <div className="ds-cta"><div className="ds-cta-in"><p>Aap bhi seekhiye <span>2 din, live on Zoom</span></p><button className="ds-btn-cta" type="button" onClick={onJoinNow}>Join Masterclass <span className="price">₹499</span><span className="strike">₹1,999</span></button></div></div>
 
       <Lightbox lightbox={lightbox} onClose={() => setLightbox(null)} onMove={moveLightbox} />
     </section>

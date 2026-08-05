@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { WB_WRAP, WB_HIGHLIGHT, WB_PURPLE, WB_SECTION, WB_SECTION_HEADER, TYPE } from '../webinar/tokens';
 
 function FaqSection() {
@@ -14,7 +14,7 @@ function FaqSection() {
     { q: 'Session record hota hai?', a: 'Haan. Dono din ki recording aapko di jaati hai, saath mein dono din ke PDF notes bhi.' },
     { q: 'Kya mujhe pehle se tarot ya astrology aani chahiye?', a: 'Bilkul nahi. Ye masterclass un logon ke liye banayi gayi hai jinhone kabhi deck chhua hi nahi.' },
     { q: 'Kya certificate milega?', a: 'Is 2-din ki masterclass ka certificate nahi milta - ye ek practical learning session hai. Aapko recording aur PDF notes milte hain.' },
-    { q: 'Fee kitni hai?', a: '₹500 (MRP ₹1,999). Isme dono live sessions, recording aur PDF notes shamil hain.' },
+    { q: 'Fee kitni hai?', a: '₹499 (MRP ₹1,999). Isme dono live sessions, recording aur PDF notes shamil hain.' },
   ];
 
   return (

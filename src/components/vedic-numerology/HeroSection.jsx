@@ -30,7 +30,7 @@ function HeroSection() {
             <span className={WB_BADGE_ICON}>
               <i className="fas fa-calculator" aria-hidden="true" />
             </span>
-            2-Day Vedic Numerology Masterclass — ₹500
+            2-Day Vedic Numerology Masterclass — ₹499
           </div>
         </div>
 

@@ -18,7 +18,7 @@ const CONTENT = {
   messages: [
     { name: 'Pooja', phone: '***** 4471', date: '', chat: [{ side: 'them', text: 'Maam aaj ka session bahut accha tha. Practice wala part maine notebook mein likh liya. Kal ka wait kar rahi hoon.', time: '8:14 pm' }] },
     { name: 'Ritu', phone: '***** 9032', date: '', chat: [{ side: 'them', text: 'Recording 2 baar dekhi. Har baar kuch naya samajh aata hai 🙏', time: '9:02 pm' }] },
-    { name: 'Deepak', phone: '***** 1188', date: '', chat: [{ side: 'them', text: 'Honestly ₹500 mein itna expect nahi kiya tha. Recording bhi mil gayi aur PDF notes bhi.', time: '11:40 am' }] },
+    { name: 'Deepak', phone: '***** 1188', date: '', chat: [{ side: 'them', text: 'Honestly ₹499 mein itna expect nahi kiya tha. Recording bhi mil gayi aur PDF notes bhi.', time: '11:40 am' }] },
     { name: 'Manoj', phone: '***** 7756', date: '', chat: [{ side: 'them', text: 'Zoom link time par mil gaya, koi problem nahi hui. DS Astro ki support team ka response fast tha.', time: '7:31 pm' }] },
     { name: 'Khushi', phone: '***** 2604', date: '', chat: [{ side: 'them', text: 'PDF notes ke liye thank you. Simple English mein hai isliye padhne mein aasani hui.', time: '10:12 pm' }] },
     { name: 'Anjali', phone: '***** 5519', date: '', chat: [{ side: 'them', text: 'Meri beti bhi saath baithkar dekh rahi thi, use bhi interest aa gaya 😊', time: '9:18 am' }] },

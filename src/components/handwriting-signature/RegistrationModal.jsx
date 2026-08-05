@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalPortal, ModalOverlay, useModalLock } from '../modal/ModalLayer';
 import { MODAL_INPUT, MODAL_LABEL } from '../modal/modalTypography';
 import { WB_CTA, WB_HIGHLIGHT, TYPE } from '../webinar/tokens';
@@ -205,7 +205,7 @@ function RegistrationModal({
                       className={`${WB_CTA} w-full justify-center min-h-[48px] rounded-[10px] !text-[14px] shadow-lg shadow-red-500/25 transition-transform hover:-translate-y-1`}
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? 'Processing...' : 'Proceed to Pay â‚¹500'}
+                      {isSubmitting ? 'Processing...' : 'Proceed to Pay ₹499'}
                     </button>
                   </div>
 

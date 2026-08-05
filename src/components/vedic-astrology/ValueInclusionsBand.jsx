@@ -22,7 +22,7 @@ function ValueInclusionsBand() {
       <div className={WB_WRAP}>
         <div className={`${WB_SECTION_INTRO} mb-6 sm:mb-8`}>
           <h2 className={WB_INTRO_TITLE}>
-            ₹500 mein aapko <span className={WB_HIGHLIGHT}>mil raha hai:</span>
+            ₹499 mein aapko <span className={WB_HIGHLIGHT}>mil raha hai:</span>
           </h2>
         </div>
         
