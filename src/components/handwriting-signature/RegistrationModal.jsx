@@ -96,14 +96,14 @@ function RegistrationModal({
 
                   <div className="relative overflow-hidden rounded-[14px] border border-orange-200/70 bg-gradient-to-br from-orange-50 via-white to-red-50 p-3 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)] sm:p-4">
                     <div className="absolute right-0 top-0 rounded-bl-xl bg-gradient-to-r from-[#EE6662] to-[#D9534F] px-2.5 py-1 text-[8px] font-black uppercase tracking-wider text-white shadow-sm">
-                      Save â‚¹1,499
+                      Save ₹1,500
                     </div>
                     <div className="flex flex-row items-end justify-between gap-2 pt-3 sm:gap-4 sm:pt-2">
                       <div>
                         <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-orange-800/70">LIMITED TIME OFFER</p>
                         <div className="flex items-end gap-3">
-                          <span className="font-body text-[28px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">â‚¹500</span>
-                          <span className="mb-1 text-sm font-bold text-slate-400 line-through sm:mb-1.5 sm:text-lg">â‚¹1,999</span>
+                          <span className="font-body text-[28px] font-black leading-none tracking-tight text-[#F0703C] sm:text-[38px]">₹499</span>
+                          <span className="mb-1 text-sm font-bold text-slate-400 line-through sm:mb-1.5 sm:text-lg">₹1,999</span>
                         </div>
                       </div>
                       <div className="w-[128px] shrink-0 sm:w-auto sm:min-w-[168px]">
@@ -212,7 +212,7 @@ function RegistrationModal({
                   <div className="flex flex-col items-center gap-1 pt-0.5 text-center text-slate-500 sm:col-span-2">
                     <p className="m-0 text-[11px] font-bold flex items-center gap-1.5 text-slate-400">
                       <i className="fas fa-lock" aria-hidden="true" />
-                      Secured by Razorpay Â· UPI, cards
+                      Secured by Razorpay · UPI, cards
                     </p>
                     <p className="m-0 text-[11px] font-medium text-slate-600 mt-1">
                       Batch dates & Zoom link on WhatsApp right after registration
