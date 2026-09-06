@@ -1,4 +1,4 @@
-import {
+﻿import {
   WB_WRAP,
   WB_HIGHLIGHT,
   WB_BADGE,

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
+import LazyOnView from '../components/LazyOnView';
 import { WB_PAGE_NO_CTA, WB_PAGE_SHELL } from '../components/webinar/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
@@ -113,7 +114,9 @@ function VedicNumerologyMasterclass() {
         <WhoIsThisForSection />
         <ItinerarySection />
         <MentorSection onJoinNow={handleOpenModal} />
-        <DsAstroTestimonials onJoinNow={handleOpenModal} />
+        <LazyOnView minHeight="600px">
+          <DsAstroTestimonials onJoinNow={handleOpenModal} />
+        </LazyOnView>
         <ValueInclusionsBand />
         <FaqSection />
       </div>

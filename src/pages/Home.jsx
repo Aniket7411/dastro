@@ -695,19 +695,16 @@ function Home() {
   }, [bannerReady, carouselPaused, nextSlide]);
 
   useEffect(() => {
-    const onAosReady = () => window.AOS?.refresh();
-    window.addEventListener('aos:ready', onAosReady);
-    if (window.AOS) onAosReady();
-    return () => window.removeEventListener('aos:ready', onAosReady);
-  }, []);
-
-  useEffect(() => {
-    if (!bannerReady) return;
+    if (!bannerReady) return undefined;
     const video = bannerVideoRef.current;
-    if (!video) return;
-    video.preload = 'auto';
-    video.load();
-    video.play().catch(() => {});
+    if (!video) return undefined;
+    // Load the heavy banner video only once the main thread is idle, so it doesn't
+    // compete with critical CSS/JS/fonts for bandwidth right after first paint.
+    return runWhenIdle(() => {
+      video.preload = 'auto';
+      video.load();
+      video.play().catch(() => {});
+    }, 1500);
   }, [bannerReady]);
 
   return (

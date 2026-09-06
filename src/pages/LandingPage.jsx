@@ -168,16 +168,6 @@ function LandingPage() {
           line-height: 1.5;
         }
         
-        /* AOS animations */
-        [data-aos] {
-          opacity: 0;
-          transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        
-        [data-aos].aos-animate {
-          opacity: 1;
-        }
-        
         .text-gradient { 
           background: linear-gradient(135deg, var(--lp-purple) 0%, var(--lp-accent) 100%);
           -webkit-background-clip: text; 
@@ -761,7 +751,7 @@ function LandingPage() {
                 <h1 className="hero-h1">Let the Stars Shape<br/><span className="text-gradient">Your Journey</span></h1>
                 <p className="hero-p">{content.subtitle}</p>
                 <div className="video-box" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="200">
-                  <video src={content.heroVideo} autoPlay muted loop playsInline></video>
+                  <video src={content.heroVideo} poster={content.heroImage} autoPlay muted loop playsInline preload="none"></video>
                 </div>
               </div>
               <div data-aos="fade-left" data-aos-duration="800" data-aos-delay="300">
@@ -805,7 +795,7 @@ function LandingPage() {
               </div>
               
               <div className="video-box" style={{maxWidth: '720px', margin: '0 auto 48px'}} data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">
-                <video src={content.heroVideo} autoPlay muted loop playsInline></video>
+                <video src={content.heroVideo} poster={content.heroImage} autoPlay muted loop playsInline preload="none"></video>
               </div>
 
               <div className="form-card-glass" style={{maxWidth: '560px', margin: '0 auto'}} data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">

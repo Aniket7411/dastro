@@ -9,7 +9,6 @@ import { SettingsProvider } from './context/SettingsContext';
 import ConsentBanner from './components/ConsentBanner';
 import { DeferredGlobalWidgets } from './components/DeferredSiteWidgets';
 import { HelmetProvider } from 'react-helmet-async';
-import { loadScript, loadStylesheet, runWhenIdle } from './utils/loadScript';
 
 const Home = lazy(() => import('./pages/Home'));
 const Consultations = lazy(() => import('./pages/Consultations'));
@@ -83,33 +82,11 @@ function LazyImageLoader() {
   return null;
 }
 
-// Global AOS init — CSS/JS loaded after idle so they don't block first paint
-let aosInitialised = false;
-function GlobalAOS() {
-  useEffect(() => {
-    if (aosInitialised) return undefined;
-
-    const bootAOS = async () => {
-      try {
-        await loadStylesheet('https://unpkg.com/aos@next/dist/aos.css');
-        await loadScript('https://unpkg.com/aos@next/dist/aos.js');
-        if (window.AOS && !aosInitialised) {
-          aosInitialised = true;
-          window.AOS.init({ duration: 1000, once: true, offset: 50 });
-          window.dispatchEvent(new Event('aos:ready'));
-        }
-      } catch {
-        // Non-critical — page works without scroll animations
-      }
-    };
-
-    return runWhenIdle(() => {
-      bootAOS();
-    }, 2500);
-  }, []);
-  return null;
-}
-
+// AOS ("animate on scroll") used to be loaded here to fade/slide sections up as the
+// user scrolled past them. It's intentionally disabled: on this site it made every
+// section start hidden and pop in on scroll, which read as the page still loading.
+// Sections now render statically (no scroll-triggered reveal); the leftover
+// `data-aos` attributes throughout the components are inert without this loader.
 function App() {
   return (
     <HelmetProvider>
@@ -117,7 +94,6 @@ function App() {
         <BrowserRouter>
           <ScrollToTop />
           <LazyImageLoader />
-          <GlobalAOS />
           <ToastContainer
             position="top-center"
             autoClose={4000}
