@@ -32,7 +32,7 @@ export default function HomeFinalCTA() {
         aria-hidden
       />
 
-      <div className={`container relative ${SITE_BAND} !mx-auto !max-w-[90rem] !border-0 !bg-transparent !p-0 !shadow-none`}>
+      <div className={`container relative ${SITE_BAND} !mx-auto !max-w-[90rem] !border-0 !bg-transparent !px-6 !py-0 !shadow-none sm:!px-8`}>
         <div className="mx-auto max-w-3xl text-center">
           <p className={`${TW_KICKER} mb-2 !text-site-gold`}>Begin Your Journey</p>
           <h2 id="home-final-cta-heading" className={SITE_BAND_TITLE}>
