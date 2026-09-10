@@ -84,8 +84,8 @@ function HeroSection({ onJoinNow, onJoinFree }) {
               </div>
               <div className="mb-3 flex items-center gap-3">
                 <img
-                  src="/images/mentor-ava.png"
-                  alt="Mentor"
+                  src="/images/damini.webp"
+                  alt="Damini Shukla - Mentor"
                   className="h-14 w-14 shrink-0 rounded-lg bg-slate-200 object-cover sm:h-16 sm:w-16"
                 />
                 <p className={`${TYPE.bodySm} !text-xs sm:!text-sm`}>
