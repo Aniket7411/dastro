@@ -13,7 +13,7 @@ import HeroSection from '../components/webinar/HeroSection';
 import WhySection from '../components/webinar/WhySection';
 import PatternsSection from '../components/webinar/PatternsSection';
 import LearnSection from '../components/webinar/LearnSection';
-import MentorSection from '../components/webinar/MentorSection';
+import MentorSection from '../components/webinar/MentorMeet';
 import ItinerarySection from '../components/webinar/ItinerarySection';
 import FaqSection from '../components/webinar/FaqSection';
 import FixedBottomCTA from '../components/webinar/FixedBottomCTA';

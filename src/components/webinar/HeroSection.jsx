@@ -17,8 +17,8 @@ import WebinarActionButtons from './WebinarActionButtons';
 
 function HeroSection({ onJoinNow, onJoinFree }) {
   const infoCards = [
-    { icon: 'fa-calendar-day', label: 'Date', value: '25th – 26th April' },
-    { icon: 'fa-clock', label: 'Time:', value: '1:00 PM' },
+    { icon: 'fa-calendar-day', label: 'Date', value: 'Starting Soon' },
+    { icon: 'fa-clock', label: 'Time:', value: 'Shared after booking' },
     { icon: 'fa-hourglass-half', label: 'Duration:', value: '4 Hours' },
     { icon: 'fa-laptop', label: 'Format:', value: '2 days Webinar' },
   ];
@@ -43,16 +43,16 @@ function HeroSection({ onJoinNow, onJoinFree }) {
           </h1>
         </div>
 
-        <div className={`${WB_STACK} grid items-start gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6`}>
+        <div className={`${WB_STACK} grid items-start gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-6`}>
           <div
-            className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none"
+            className="relative mx-auto w-full max-w-xl overflow-hidden rounded-lg border border-slate-200 shadow-md lg:max-w-none lg:h-full"
             data-aos="fade-right"
           >
             <video
               src="/videohomefinal.mp4"
               controls
               poster="/images/bg-bannerpic.jpg"
-              className="block max-h-[220px] w-full object-cover sm:max-h-[260px] lg:max-h-[280px]"
+              className="block h-full max-h-[220px] w-full object-cover sm:max-h-[260px] lg:max-h-none"
             />
             <div className="absolute bottom-0 left-0 z-[5] w-full bg-[#3B2261]/95 px-3 py-1.5 font-body text-[0.625rem] font-bold uppercase tracking-[0.08em] text-white sm:px-4 sm:py-2 sm:text-[0.6875rem]">
               BY – ASTRO AVA
@@ -62,13 +62,15 @@ function HeroSection({ onJoinNow, onJoinFree }) {
           <div data-aos="fade-left">
             <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               {infoCards.map((card) => (
-                <div key={card.label} className={WB_INFO_CARD}>
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#EE6662] text-sm sm:h-9 sm:w-9 sm:text-base">
+                <div key={card.label} className={`${WB_INFO_CARD} !bg-white/50 border-slate-200 !text-slate-800`}>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#EE6662] text-sm text-white sm:h-9 sm:w-9 sm:text-base">
                     <i className={`fas ${card.icon}`} aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className={TYPE.h4}>{card.label}</h4>
-                    <p className="!m-0 font-body !text-xs !font-bold !text-white sm:!text-sm">
+                    <h4 className="!m-0 font-body !text-[0.625rem] !font-bold uppercase !tracking-[0.08em] !text-[#EE6662] sm:!text-xs">
+                      {card.label}
+                    </h4>
+                    <p className="!m-0 font-body !text-xs !font-bold !text-slate-800 sm:!text-sm">
                       {card.value}
                     </p>
                   </div>
