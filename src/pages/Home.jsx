@@ -734,11 +734,13 @@ function Home() {
             ref={bannerVideoRef}
             className={`banner-bg-layer banner-bg-video ${currentSlide === 0 ? 'is-active' : ''}`}
             src="/bannervideo.mp4"
+            poster="/bannervideo-poster.jpg"
             autoPlay
             muted
             loop
             playsInline
-            preload="none"
+            preload="auto"
+            fetchPriority="high"
           />
           {BANNER_SLIDES.map((slide, index) =>
             slide.bgImage ? (
