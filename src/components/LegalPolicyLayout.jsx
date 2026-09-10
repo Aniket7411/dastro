@@ -62,7 +62,7 @@ function LegalPolicyLayout({ seo, banner, sections, children }) {
             <p className="mb-2 hidden px-[0.45rem] font-body text-kicker font-extrabold uppercase tracking-[0.12em] text-site-accent-dark lg:block">
               Contents
             </p>
-            <div className="flex flex-row flex-nowrap gap-[0.45rem] overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:grid-cols-none lg:flex-col lg:gap-[0.45rem]">
               {sections.map((section) => {
                 const isActive = activeSection === section.id;
                 return (
