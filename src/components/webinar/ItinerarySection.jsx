@@ -57,10 +57,9 @@ function ItinerarySection() {
               <ul className="m-0 list-none space-y-3 p-0">
                 {day.items.map((item) => (
                   <li key={item} className="flex items-center gap-3">
-                    <i
-                      className="fas fa-play flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-50 text-xs text-[#EE6662]"
-                      aria-hidden="true"
-                    />
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-50">
+                      <i className="fas fa-play pl-0.5 text-xs text-[#EE6662]" aria-hidden="true" />
+                    </span>
                     <span className={TYPE.lead}>{item}</span>
                   </li>
                 ))}
