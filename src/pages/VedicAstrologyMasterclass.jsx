@@ -119,8 +119,8 @@ function VedicAstrologyMasterclass() {
           <LazyOnView minHeight="600px">
             <DsAstroTestimonials onJoinNow={handleOpenModal} />
           </LazyOnView>
-          <FaqSection />
           <ValueInclusionsBand />
+          <FaqSection />
       </div>
 
       <div className={`bg-[#2A1647] ${pageBottomPad}`}>
