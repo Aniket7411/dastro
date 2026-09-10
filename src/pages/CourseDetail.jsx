@@ -637,7 +637,11 @@ function CourseDetail() {
                 ) : null}
 
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
+                {course.category ? (
+                  <span className="m-0 inline-flex items-center rounded-full bg-site-accent/12 px-2.5 py-0.5 font-body text-[13px] font-semibold uppercase tracking-[0.16em] text-site-accent-dark">
+                    {course.category}
+                  </span>
+                ) : null}
                 {course.tier ? (
                   <span
                     className={`m-0 inline-flex items-center rounded-full px-2.5 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-[0.1em] ${
