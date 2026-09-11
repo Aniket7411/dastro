@@ -21,6 +21,7 @@ function WhySection({ onJoinNow, onJoinFree }) {
     "You earn but somehow it doesn't stay or grow the way you want",
     "You feel like you're living someone else's script, not your own",
     'You feel misunderstood by people close to you.',
+    "You keep making the right moves but timing never feels in your favour",
   ];
 
   return (
