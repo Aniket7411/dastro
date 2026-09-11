@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import toast from '../utils/toast';
 import API_BASE from '../utils/api';
 
-import LogoCarousel from '../components/webinar/LogoCarousel';
-import NewsCarousel from '../components/webinar/NewsCarousel';
 import PictureGallery from '../components/webinar/PictureGallery';
 import VideoReviewCarousel from '../components/webinar/VideoReviewCarousel';
 import TextReviewCarousel from '../components/webinar/TextReviewCarousel';
@@ -128,8 +126,6 @@ function Webinar() {
         url="/webinar"
       />
       <HeroSection {...sectionProps} />
-      <LogoCarousel />
-      <NewsCarousel />
       <WhySection {...sectionProps} />
       <PictureGallery />
       <PatternsSection {...sectionProps} />
