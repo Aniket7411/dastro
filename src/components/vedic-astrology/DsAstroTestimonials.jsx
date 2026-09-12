@@ -51,6 +51,7 @@ function useColumnCount() {
 function VideoCard({ video, isActive, onPlay, onStop }) {
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef(null);
+  const cardRef = useRef(null);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -63,6 +64,20 @@ function VideoCard({ video, isActive, onPlay, onStop }) {
       v.currentTime = 0;
     }
   }, [isActive]);
+
+  useEffect(() => {
+    if (!isActive) return undefined;
+    const el = cardRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) onStop();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isActive, onStop]);
 
   const handlePlay = (e) => {
     e.stopPropagation();
@@ -90,7 +105,7 @@ function VideoCard({ video, isActive, onPlay, onStop }) {
   };
 
   return (
-    <div className={`ds-vcard${isActive ? ' is-playing' : ''}`} role="listitem">
+    <div className={`ds-vcard${isActive ? ' is-playing' : ''}`} role="listitem" ref={cardRef}>
       {!isActive && <p className="ds-card-quote">{video.quote}</p>}
       <div className="ds-thumb">
         {video.src ? (
