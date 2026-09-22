@@ -62,8 +62,8 @@ function ClassSelector({ activeId, onSelect, onJoinNow, panelRef }) {
         {/* Detail panel */}
         <div key={active.id} className="hub-panel-enter mt-8 rounded-[22px] border border-slate-200 bg-[#FAF9F6] p-3 shadow-[0_20px_50px_rgba(15,23,42,0.06)] sm:mt-10 sm:p-5 lg:p-7">
           <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8 lg:items-center">
-            <div className="relative mx-auto w-full max-w-lg overflow-hidden rounded-[16px] border border-slate-200 shadow-md">
-              <img src={active.image} alt={active.title} className="block h-auto w-full object-contain" loading="lazy" />
+            <div className="relative mx-auto aspect-video w-full max-w-lg overflow-hidden rounded-[16px] border border-slate-200 bg-slate-50 shadow-md">
+              <img src={active.image} alt={active.title} className="absolute inset-0 h-full w-full object-contain" loading="eager" />
               <div className="absolute left-3 top-3 rounded-full bg-[#3B2261]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
                 2-Day Masterclass
               </div>

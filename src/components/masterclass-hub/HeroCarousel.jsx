@@ -14,6 +14,14 @@ function HeroCarousel({ activeId, onSelect, onJoinNow }) {
     onSelect(MASTERCLASSES[wrapped].id);
   };
 
+  // Preload every slide's image up front so switching slides never shows a blank/loading gap.
+  useEffect(() => {
+    MASTERCLASSES.forEach((mc) => {
+      const img = new window.Image();
+      img.src = mc.image;
+    });
+  }, []);
+
   useEffect(() => {
     const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (isPaused || prefersReduced) return undefined;
@@ -35,11 +43,13 @@ function HeroCarousel({ activeId, onSelect, onJoinNow }) {
       </p>
 
       <div className="grid grid-cols-1 overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-[0_20px_50px_rgba(59,34,97,0.12)] sm:rounded-[28px] lg:grid-cols-2">
-        <div key={`${active.id}-image`} className="hub-carousel-fade relative flex w-full items-center justify-center overflow-hidden bg-slate-50">
+        <div key={`${active.id}-image`} className="hub-carousel-fade relative aspect-video w-full overflow-hidden bg-slate-50">
           <img
             src={active.image}
             alt={active.title}
-            className="block h-auto w-full object-contain"
+            className="absolute inset-0 h-full w-full object-contain"
+            loading="eager"
+            fetchPriority={index === 0 ? 'high' : 'auto'}
           />
           <div className="absolute left-3 top-3 rounded-full bg-[#3B2261]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
             2-Day Masterclass
