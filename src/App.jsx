@@ -30,6 +30,7 @@ const HandwritingSignatureMasterclass = lazy(() => import('./pages/HandwritingSi
 const VedicAstrologyMasterclass = lazy(() => import('./pages/VedicAstrologyMasterclass'));
 const TarotMasterclass = lazy(() => import('./pages/TarotMasterclass'));
 const VedicNumerologyMasterclass = lazy(() => import('./pages/VedicNumerologyMasterclass'));
+const ChooseYourMasterclass = lazy(() => import('./pages/ChooseYourMasterclass'));
 const Payment = lazy(() => import('./pages/Payment'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const PaymentFailed = lazy(() => import('./pages/PaymentFailed'));
@@ -169,6 +170,7 @@ function App() {
               <Route path="/vedic-astrology-masterclass" element={<VedicAstrologyMasterclass />} />
               <Route path="/vedic-numerology-masterclass" element={<VedicNumerologyMasterclass />} />
               <Route path="/tarot-masterclass" element={<TarotMasterclass />} />
+              <Route path="/choose-your-masterclass" element={<ChooseYourMasterclass />} />
 
               {/* Live chat session — full-screen chat UI, no main layout */}
               <Route path="/live/:astrologerId" element={<LiveSession />} />
