@@ -80,7 +80,7 @@ function MenuCard({ mc, index, highlighted, onBook }) {
               onClick={() => onBook(mc.id)}
               className="flex h-[44px] min-w-0 flex-grow items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-br from-[#EE6662] to-[#D9534F] text-[14px] font-semibold text-white shadow-[0_10px_22px_rgba(238,102,98,0.3)] transition hover:shadow-[0_14px_28px_rgba(238,102,98,0.42)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EE6662]"
             >
-              {PRICE} mein book karein
+              Book now at {PRICE}
               <i className="fas fa-arrow-right text-[11px] transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </button>
             <Link

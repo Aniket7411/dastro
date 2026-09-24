@@ -47,23 +47,23 @@ function MenuHero({ classes, onPick, onExplore }) {
       </div>
 
       <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10">
-        <div className="grid items-center gap-10 pb-14 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:pb-24 lg:pt-16">
-          {/* Copy */}
-          <div className="text-center lg:text-left">
+        <div className="grid gap-y-8 pb-20 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-x-8 lg:gap-y-0 lg:pb-24 lg:pt-16">
+          {/* Copy — row 1 on desktop; the stats sit under it (row 2) while the orbit spans both */}
+          <div className="[text-align:center] lg:col-start-1 lg:row-start-1 lg:self-end lg:[text-align:left]">
             <div className="mcm-rise inline-flex items-center gap-2 rounded-full border border-[#EE6662]/40 bg-[#EE6662]/10 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.16em] text-[#FFB4A6] sm:text-xs">
               <span className="mcm-pulse h-2 w-2 rounded-full bg-[#EE6662]" />
               LIVE MASTERCLASS · {PRICE} ONLY
             </div>
 
             <h1
-              className="mcm-rise m-0 mt-[20px] font-heading text-[34px] font-bold leading-[1.1] tracking-[-0.01em] text-white sm:text-[46px] lg:text-[58px]"
+              className="mcm-rise mb-0 mt-[20px] font-heading text-[34px] font-bold leading-[1.1] tracking-[-0.01em] text-white sm:text-[46px] lg:text-[58px]"
               style={{ animationDelay: '.08s' }}
             >
               Aap kaun si <span className="mcm-shine">Live Masterclass</span> join karna chahte hain?
             </h1>
 
             <p
-              className="mcm-rise mx-auto mt-[20px] max-w-[34rem] text-[15px] leading-relaxed text-white/70 sm:text-[17px] lg:mx-0"
+              className="mcm-rise mb-0 mt-[20px] max-w-[34rem] text-[15px] leading-relaxed text-white/70 [margin-inline:auto] sm:text-[17px] lg:[margin-inline:0]"
               style={{ animationDelay: '.16s' }}
             >
               {classes.length} subjects, har masterclass sirf {PRICE} mein — 2 din, 2 ghante roz, Damini Ma&apos;am ke saath
@@ -71,7 +71,7 @@ function MenuHero({ classes, onPick, onExplore }) {
             </p>
 
             <div
-              className="mcm-rise mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
+              className="mcm-rise mt-7 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start"
               style={{ animationDelay: '.24s' }}
             >
               <button
@@ -92,23 +92,10 @@ function MenuHero({ classes, onPick, onExplore }) {
                 Pehle baat karni hai?
               </a>
             </div>
-
-            <dl
-              className="mcm-rise mx-auto mt-9 grid max-w-md grid-cols-3 gap-3 border-t border-white/10 pt-6 lg:mx-0"
-              style={{ animationDelay: '.32s' }}
-            >
-              {STATS.map((s) => (
-                <div key={s.label}>
-                  <dt className="sr-only">{s.label}</dt>
-                  <dd className="m-0 font-heading text-[22px] font-bold text-white sm:text-[26px]">{s.value}</dd>
-                  <p className="m-0 mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50 sm:text-[11px]">{s.label}</p>
-                </div>
-              ))}
-            </dl>
           </div>
 
           {/* Orbit visual */}
-          <div className="relative mx-auto aspect-square w-full max-w-[340px] sm:max-w-[440px] lg:max-w-[520px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[340px] self-center sm:max-w-[440px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-[520px]">
             <div className="absolute inset-[6%] overflow-hidden rounded-full opacity-45 [mask-image:radial-gradient(circle,#000_55%,transparent_71%)]">
               <img src="/zodiac_wheel.webp" alt="" width="900" height="900" className="mcm-spin h-full w-full object-cover" fetchPriority="high" />
             </div>
@@ -129,11 +116,24 @@ function MenuHero({ classes, onPick, onExplore }) {
               <OrbitBadge key={mc.id} mc={mc} position={ORBIT_POSITIONS[i % ORBIT_POSITIONS.length]} delay={i * 0.6} onPick={onPick} />
             ))}
           </div>
+
+          {/* Stats — below the circle on mobile, under the copy on desktop */}
+          <dl
+            className="mcm-rise mb-0 grid w-full max-w-md grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-[20px] [margin-inline:auto] [text-align:center] lg:col-start-1 lg:row-start-2 lg:mt-9 lg:self-start lg:divide-x-0 lg:[margin-inline:0] lg:[text-align:left]"
+            style={{ animationDelay: '.32s' }}
+          >
+            {STATS.map((s) => (
+              <div key={s.label} className="flex flex-col-reverse px-1 lg:px-0">
+                <dt className="mt-1 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-white/55 sm:text-[11px] sm:tracking-[0.14em]">{s.label}</dt>
+                <dd className="m-0 font-heading text-[22px] font-bold leading-none text-white sm:text-[26px]">{s.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
 
       {/* Fade into the cream cards section */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-[#FAF6EE]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-[#FAF6EE] sm:h-16" />
     </section>
   );
 }
