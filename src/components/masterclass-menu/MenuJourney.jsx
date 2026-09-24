@@ -9,7 +9,7 @@ const STEPS = [
 
 function MenuJourney() {
   return (
-    <section className="relative isolate overflow-hidden bg-[#150824] py-16 text-white sm:py-20">
+    <section className="relative isolate overflow-hidden bg-[#150824] py-[32px] text-white sm:py-[44px]">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="mcm-stars absolute inset-0 opacity-40" />
         <div className="absolute inset-0 bg-[radial-gradient(50%_60%_at_85%_20%,rgba(123,63,228,0.28),transparent_70%),radial-gradient(45%_50%_at_10%_85%,rgba(238,102,98,0.2),transparent_70%)]" />
@@ -23,7 +23,7 @@ function MenuJourney() {
           </h2>
         </div>
 
-        <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+        <ul className="mb-0 mt-[22px] grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
           {HUB_INCLUSIONS.map((item, i) => (
             <li
               key={item.text}
@@ -38,12 +38,12 @@ function MenuJourney() {
           ))}
         </ul>
 
-        <div className="mcm-reveal mt-16 text-center">
+        <div className="mcm-reveal mt-[34px] text-center">
           <p className="m-0 text-[11px] font-semibold tracking-[0.18em] text-[#FFB4A6] sm:text-xs">JOIN KAISE KAREIN</p>
           <h2 className="m-0 mt-3 font-heading text-white text-[28px] font-bold leading-tight sm:text-[38px]">Bas 3 steps</h2>
         </div>
 
-        <div className="relative mt-10">
+        <div className="relative mt-[22px]">
           <div className="pointer-events-none absolute left-[16%] right-[16%] top-7 hidden h-px bg-gradient-to-r from-[#EE6662]/0 via-[#EE6662]/60 to-[#EE6662]/0 md:block" />
           <ol className="relative m-0 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-3 md:gap-6">
             {STEPS.map((step, i) => (

@@ -74,21 +74,21 @@ function MenuCard({ mc, index, highlighted, onBook }) {
             <span className="text-[14px] text-[#9A8B7C] line-through">{MRP}</span>
             <span className="ml-auto rounded-full bg-[#E8F7EE] px-2 py-0.5 text-[11px] font-semibold text-[#1E7A45]">75% off</span>
           </div>
-          <div className="flex gap-2.5">
+          <div className="grid grid-cols-[2fr_3fr] gap-2.5">
+            <Link
+              to={mc.detailsPath}
+              className="flex h-[44px] items-center justify-center rounded-xl border border-[#D8C9B2] px-[14px] text-[14px] font-semibold text-[#3A302A] transition-colors hover:border-[#3B2261] hover:text-[#3B2261]"
+            >
+              Details
+            </Link>
             <button
               type="button"
               onClick={() => onBook(mc.id)}
-              className="flex h-[44px] min-w-0 flex-grow items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-br from-[#EE6662] to-[#D9534F] text-[14px] font-semibold text-white shadow-[0_10px_22px_rgba(238,102,98,0.3)] transition hover:shadow-[0_14px_28px_rgba(238,102,98,0.42)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EE6662]"
+              className="flex h-[44px] min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-br from-[#EE6662] to-[#D9534F] text-[14px] font-semibold text-white shadow-[0_10px_22px_rgba(238,102,98,0.3)] transition hover:shadow-[0_14px_28px_rgba(238,102,98,0.42)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EE6662]"
             >
               Book now at {PRICE}
               <i className="fas fa-arrow-right text-[11px] transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </button>
-            <Link
-              to={mc.detailsPath}
-              className="flex h-[44px] shrink-0 items-center justify-center rounded-xl border border-[#D8C9B2] px-[14px] text-[14px] font-semibold text-[#3A302A] transition-colors hover:border-[#3B2261] hover:text-[#3B2261]"
-            >
-              Details
-            </Link>
           </div>
         </div>
       </div>
