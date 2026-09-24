@@ -31,6 +31,7 @@ const VedicAstrologyMasterclass = lazy(() => import('./pages/VedicAstrologyMaste
 const TarotMasterclass = lazy(() => import('./pages/TarotMasterclass'));
 const VedicNumerologyMasterclass = lazy(() => import('./pages/VedicNumerologyMasterclass'));
 const ChooseYourMasterclass = lazy(() => import('./pages/ChooseYourMasterclass'));
+const MasterclassMenu = lazy(() => import('./pages/MasterclassMenu'));
 const Payment = lazy(() => import('./pages/Payment'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const PaymentFailed = lazy(() => import('./pages/PaymentFailed'));
@@ -171,6 +172,7 @@ function App() {
               <Route path="/vedic-numerology-masterclass" element={<VedicNumerologyMasterclass />} />
               <Route path="/tarot-masterclass" element={<TarotMasterclass />} />
               <Route path="/choose-your-masterclass" element={<ChooseYourMasterclass />} />
+              <Route path="/masterclasses" element={<MasterclassMenu />} />
 
               {/* Live chat session — full-screen chat UI, no main layout */}
               <Route path="/live/:astrologerId" element={<LiveSession />} />

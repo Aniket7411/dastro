@@ -4,6 +4,12 @@
 export const MASTERCLASSES = [
   {
     id: 'tarot',
+    detailsPath: '/tarot-masterclass',
+    menu: {
+      label: 'TAROT',
+      title: 'Apni Pehli Tarot Reading',
+      description: 'Cards ka meaning aur simple spread seekh kar apni pehli reading live karke dekhiye. Deck optional hai.',
+    },
     icon: 'fa-magic',
     title: 'Tarot Reading',
     tagline: 'Apni Pehli Tarot Reading',
@@ -30,6 +36,12 @@ export const MASTERCLASSES = [
   },
   {
     id: 'vedic-astrology',
+    detailsPath: '/vedic-astrology-masterclass',
+    menu: {
+      label: 'VEDIC ASTROLOGY',
+      title: 'Apni Kundli Khud Padhiye',
+      description: 'Houses, planets aur signs ka base samajh kar apni kundli khud padhna shuru kijiye.',
+    },
     icon: 'fa-star',
     title: 'Vedic Astrology',
     tagline: 'Apni Kundli Khud Padhiye',
@@ -56,6 +68,12 @@ export const MASTERCLASSES = [
   },
   {
     id: 'vedic-numerology',
+    detailsPath: '/vedic-numerology-masterclass',
+    menu: {
+      label: 'NUMEROLOGY',
+      title: 'Aapke Numbers Ka Secret',
+      description: 'Date of birth aur naam ke numbers se apna pattern, timing aur strengths samajhna seekhiye.',
+    },
     icon: 'fa-calculator',
     title: 'Vedic Numerology',
     tagline: 'Aapke Numbers Ka Secret',
@@ -82,6 +100,12 @@ export const MASTERCLASSES = [
   },
   {
     id: 'handwriting-signature',
+    detailsPath: '/handwriting-signature-masterclass',
+    menu: {
+      label: 'GRAPHOLOGY',
+      title: 'Handwriting Se Personality Decode',
+      description: 'Handwriting ke 8 markers aur signature analysis se kisi ka mindset samajhna seekhiye.',
+    },
     icon: 'fa-pen-nib',
     title: 'Handwriting & Signature',
     tagline: 'Handwriting Se Personality Decode',
@@ -108,6 +132,12 @@ export const MASTERCLASSES = [
   },
   {
     id: 'face-reading',
+    detailsPath: '/face-reading-masterclass',
+    menu: {
+      label: 'FACE READING',
+      title: 'Chehre Se Personality Padhiye',
+      description: 'Chehre ke structure, features aur marks se kisi ki nature, strengths aur pattern padhna seekhiye.',
+    },
     icon: 'fa-eye',
     title: 'Face Reading',
     tagline: "Read Any Person's Real Personality",
@@ -133,6 +163,9 @@ export const MASTERCLASSES = [
     ],
   },
 ];
+
+/** Card order on the /masterclasses menu page. */
+export const MENU_ORDER = ['face-reading', 'handwriting-signature', 'vedic-astrology', 'tarot', 'vedic-numerology'];
 
 export const HUB_INCLUSIONS = [
   { icon: 'fa-video', text: "2 live sessions with Damini Ma'am — 2 days, 2 hours a day, on Zoom" },

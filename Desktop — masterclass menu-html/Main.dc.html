@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<title>Masterclass menu — desktop</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body { margin: 0; font-family: 'IBM Plex Sans', system-ui, sans-serif; background: #FAF6EE; }
+a { color: #8A4B22; text-decoration: none; }
+a:hover { color: #6E3A19; }
+</style>
+</helmet>
+<div style="width: 1440px; height: 1640px; box-sizing: border-box; background: #FAF6EE; color: #1F1A16; padding: 48px 80px 56px; display: flex; flex-direction: column; gap: 40px">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E3D9C9; padding-bottom: 20px">
+    <div style="display: flex; align-items: center; gap: 14px">
+      <div style="width: 44px; height: 44px; border: 1px dashed #C0AD90; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 9px; letter-spacing: 0.04em; color: #6B5A45; text-align: center">LOGO</div>
+      <div style="font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 17px; font-weight: 600; letter-spacing: 0.02em">DS Astro Institute</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 28px; font-size: 14px; color: #4A4038">
+      <span>Live on Zoom · Recording included</span>
+      <a href="#" style="font-weight: 600">Help: [YOUR NUMBER]</a>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 900px">
+    <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: {{accent}}">LIVE MASTERCLASS · ₹500</div>
+    <h1 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 50px; line-height: 1.12; font-weight: 700; color: #1F1A16">Aap kaun si Live Masterclass<br>join karna chahte hain?</h1>
+    <p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4A4038">6 subjects, har masterclass sirf ₹500 mein — 2 din, 2 ghante roz, Damini Ma'am ke saath live. Apna subject choose kijiye aur seedha uske page par jaaiye.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px">
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — FACE READING]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">FACE READING</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">Chehre Se Personality Padhiye</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">Chehre ke structure, features aur marks se kisi ki nature, strengths aur pattern padhna seekhiye.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — HANDWRITING &amp; SIGNATURE]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">GRAPHOLOGY</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">Handwriting Se Personality Decode</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">Handwriting ke 8 markers aur signature analysis se kisi ka mindset samajhna seekhiye.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — KUNDLI]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">VEDIC ASTROLOGY</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">Apni Kundli Khud Padhiye</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">Houses, planets aur signs ka base samajh kar apni kundli khud padhna shuru kijiye.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — TAROT]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">TAROT</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">Apni Pehli Tarot Reading</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">Cards ka meaning aur simple spread seekh kar apni pehli reading live karke dekhiye. Deck optional hai.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — NUMEROLOGY]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">NUMEROLOGY</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">Aapke Numbers Ka Secret</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">Date of birth aur naam ke numbers se apna pattern, timing aur strengths samajhna seekhiye.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+    <article style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E3D9C9; border-radius: 14px; overflow: hidden">
+      <div style="height: 228px; background: #F1E8D9; border-bottom: 1px solid #E3D9C9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; letter-spacing: 0.06em; color: #6B5A45; padding: 0 16px">[LANDSCAPE IMAGE 16:9 — 6TH MASTERCLASS]</div>
+      <div style="padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: #8A4B22">[SUBJECT]</div>
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif; font-size: 21px; line-height: 1.28; font-weight: 600">[6TH MASTERCLASS KA NAAM]</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A4038">[Ek line mein bataiye ki is masterclass mein student kya seekhega.]</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #3A302A">
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 din</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">2 ghante roz</span>
+          <span style="background: #F6F0E6; border-radius: 999px; padding: 5px 10px">₹500</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 6px">
+          <a href="#" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; background: #8A4B22; color: #FFFFFF; border-radius: 8px; font-size: 14px; font-weight: 600">₹500 mein book karein</a>
+          <a href="#" style="height: 46px; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #C9B99F; border-radius: 8px; font-size: 14px; font-weight: 600; color: #3A302A">Details</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div style="margin-top: auto; border-top: 1px solid #E3D9C9; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: #4A4038">
+    <span>Har masterclass live hoti hai aur recording bhi milti hai. Batch ki date aur time payment ke baad share ki jaati hai.</span>
+    <span style="color: #3A302A; font-weight: 600">Sawaal hai? Call ya WhatsApp: [YOUR NUMBER]</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#8A4B22","options":["#8A4B22","#1F1A16","#3F6B57"]},"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#8A4B22' };
+  }
+}
+</script>
+</body>
+</html>
