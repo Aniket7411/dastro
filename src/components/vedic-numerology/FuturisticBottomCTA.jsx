@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronRight, Flame, Play, Video, Zap } from 'lucide-react';
+import { ChevronRight, ChevronUp, Flame, Minus, Play, Video, Zap } from 'lucide-react';
 import { getTargetTimestamp } from '../face-reading/FixedBottomCTA';
 
 const SEGMENTS_BY_DIGIT = {
@@ -66,11 +66,11 @@ function TimerColon() {
   );
 }
 
-export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) {
+export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false, visible = true, onDismiss, onShow }) {
   const [timeLeft, setTimeLeft] = useState(() => Math.max(0, Math.floor((getTargetTimestamp() - Date.now()) / 1000)));
   const [isPanelMounted, setIsPanelMounted] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
-  const shouldShowPanel = !isModalOpen;
+  const shouldShowPanel = !isModalOpen && visible;
 
   useEffect(() => {
     let showTimer;
@@ -102,6 +102,26 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
   const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
   const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
   const seconds = String(timeLeft % 60).padStart(2, '0');
+
+  if (!visible && !isModalOpen) {
+    return (
+      <div className="fixed inset-x-0 bottom-0 z-50 flex justify-end px-3 pb-3 sm:px-4 sm:pb-4">
+        <button
+          type="button"
+          onClick={() => onShow?.()}
+          className="group inline-flex items-center gap-2 rounded-full border border-[#ff9b42]/40 bg-[#100617] px-4 py-2.5 text-white shadow-[0_14px_34px_rgba(0,0,0,0.45),0_0_20px_rgba(255,81,60,0.24)] transition hover:-translate-y-0.5 sm:px-5 sm:py-3"
+          aria-label="Show masterclass offer"
+        >
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffc463] opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffc463]" />
+          </span>
+          <span className="text-[11px] font-bold sm:text-[13px]">Join Masterclass — ₹499</span>
+          <ChevronUp className="h-3.5 w-3.5 stroke-[3] text-[#ffc463] transition-transform group-hover:-translate-y-0.5 sm:h-4 sm:w-4" />
+        </button>
+      </div>
+    );
+  }
 
   if (!isPanelMounted) return null;
 
@@ -139,6 +159,17 @@ export default function FuturisticBottomCTA({ onJoinNow, isModalOpen = false }) 
                   <Play className="h-3 w-3 fill-[#ff9c39] text-[#ff9c39] sm:h-3.5 sm:w-3.5" />
                   Recording Incl.
                 </span>
+                {onDismiss && (
+                  <button
+                    type="button"
+                    onClick={() => onDismiss()}
+                    className="ml-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white lg:inline-flex"
+                    aria-label="Minimize offer panel"
+                    title="Minimize"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </div>
 

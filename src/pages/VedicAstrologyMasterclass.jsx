@@ -97,6 +97,9 @@ function VedicAstrologyMasterclass() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   // We add pageBottomPad so the sticky CTA doesn't cover footer content
+  const handleDismissCta = () => setCtaVisible(false);
+  const handleShowCta = () => setCtaVisible(true);
+
   const pageBottomPad = ctaVisible ? 'pb-44 sm:pb-32' : WB_PAGE_NO_CTA;
 
   return (
@@ -127,7 +130,13 @@ function VedicAstrologyMasterclass() {
         <FooterMinimal />
       </div>
 
-      <FuturisticBottomCTA onJoinNow={handleOpenModal} isModalOpen={isModalOpen} />
+      <FuturisticBottomCTA
+        onJoinNow={handleOpenModal}
+        isModalOpen={isModalOpen}
+        visible={ctaVisible}
+        onDismiss={handleDismissCta}
+        onShow={handleShowCta}
+      />
 
       <RegistrationModal
         isOpen={isModalOpen}

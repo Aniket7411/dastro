@@ -140,7 +140,13 @@ function FaceReadingMasterclass() {
       />
       */}
 
-      <FuturisticBottomCTA onJoinNow={handleOpenModal} isModalOpen={isModalOpen} />
+      <FuturisticBottomCTA
+        onJoinNow={handleOpenModal}
+        isModalOpen={isModalOpen}
+        visible={ctaVisible}
+        onDismiss={handleDismissCta}
+        onShow={handleShowCta}
+      />
 
       <RegistrationModal
         isOpen={isModalOpen}

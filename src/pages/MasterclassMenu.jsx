@@ -4,6 +4,7 @@ import SEO from '../components/SEO';
 import HubRegistrationModal from '../components/masterclass-hub/HubRegistrationModal';
 import SeatReservedOverlay from '../components/masterclass-hub/SeatReservedOverlay';
 import useMasterclassRegistration from '../hooks/useMasterclassRegistration';
+import { SITE_LOGO, SITE_LOGO_ALT } from '../utils/brandAssets';
 import { MASTERCLASSES, MENU_ORDER } from '../data/masterclassHubData';
 
 const PRICE = '₹499';
@@ -90,7 +91,7 @@ function MasterclassMenu() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-7 pt-6 lg:gap-10 lg:px-20 lg:pb-14 lg:pt-12">
         <header className="flex items-center justify-between border-b border-[#E3D9C9] pb-3.5 lg:pb-5">
           <Link to="/" className="flex items-center gap-2.5 lg:gap-3.5">
-            <img src="/dsnewlogo.png" alt="" width="44" height="44" className="h-9 w-9 object-contain lg:h-11 lg:w-11" />
+            <img src={SITE_LOGO} alt={SITE_LOGO_ALT} width="56" height="56" className="h-11 w-11 object-contain lg:h-14 lg:w-14" />
             <span className="font-heading text-[15px] font-semibold tracking-[0.02em] text-[#1F1A16] lg:text-[17px]">
               DS Astro Institute
             </span>
