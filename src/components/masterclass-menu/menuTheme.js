@@ -51,10 +51,18 @@ export const MENU_CSS = `
 .mcm-selected { animation: mcm-select 2.2s ease-out both; }
 .mcm-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
 .mcm-reveal[data-in] { opacity: 1; transform: none; }
+.mcm-press { position: relative; overflow: hidden; isolation: isolate; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.mcm-ripple {
+  position: absolute; z-index: -1; border-radius: 9999px; pointer-events: none;
+  background: currentColor; opacity: .28; transform: translate(-50%, -50%) scale(0);
+  animation: mcm-ripple .6s ease-out forwards;
+}
+@keyframes mcm-ripple { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .mcm-spin, .mcm-float, .mcm-stars-2, .mcm-shine, .mcm-pulse, .mcm-rise { animation: none !important; }
   .mcm-selected { animation: none; box-shadow: 0 0 0 3px var(--mcm-accent); }
   .mcm-reveal { opacity: 1; transform: none; transition: none; }
+  .mcm-ripple { display: none; }
 }
 `;

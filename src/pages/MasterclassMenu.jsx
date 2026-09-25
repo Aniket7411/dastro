@@ -6,7 +6,7 @@ import HubRegistrationModal from '../components/masterclass-hub/HubRegistrationM
 import SeatReservedOverlay from '../components/masterclass-hub/SeatReservedOverlay';
 // import MentorSection from '../components/face-reading/MentorSection';
 // import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
-import FooterMinimal from '../components/face-reading/FooterMinimal';
+// import FooterMinimal from '../components/face-reading/FooterMinimal';
 import MenuNavbar from '../components/masterclass-menu/MenuNavbar';
 import MenuHero from '../components/masterclass-menu/MenuHero';
 import MenuCard from '../components/masterclass-menu/MenuCard';
@@ -51,11 +51,6 @@ function MasterclassMenu() {
   } = useMasterclassRegistration(selectedClass);
 
   useEffect(() => () => window.clearTimeout(highlightTimer.current), []);
-
-  const handleBook = (id) => {
-    setSelectedId(id);
-    openModal();
-  };
 
   const scrollToCards = () => {
     cardsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -105,7 +100,7 @@ function MasterclassMenu() {
           <div className="mx-auto grid max-w-[460px] grid-cols-1 gap-[20px] md:max-w-none md:grid-cols-4 md:gap-[24px] xl:grid-cols-6 xl:gap-[28px]">
             {MENU_CLASSES.map((mc, i) => (
               <div key={mc.id} className={`flex md:col-span-2 ${cardPlacement(i, MENU_CLASSES.length)}`}>
-                <MenuCard mc={mc} index={i} highlighted={highlightId === mc.id} onBook={handleBook} />
+                <MenuCard mc={mc} index={i} highlighted={highlightId === mc.id} />
               </div>
             ))}
           </div>
@@ -128,9 +123,9 @@ function MasterclassMenu() {
 
       {/* <MenuFinalCta onExplore={scrollToCards} /> */}
 
-      <div className="bg-[#2A1647]">
+      {/* <div className="bg-[#2A1647]">
         <FooterMinimal />
-      </div>
+      </div> */}
 
       <HubRegistrationModal
         isOpen={isModalOpen}

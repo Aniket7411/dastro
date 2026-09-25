@@ -1,7 +1,21 @@
 import { Link } from 'react-router-dom';
 import { MRP, PRICE, SUBJECT_ACCENT, cardAnchor } from './menuTheme';
 
-function MenuCard({ mc, index, highlighted, onBook }) {
+/** Spawn a ripple from the tap/click point; works for touch, pen and mouse. */
+function addRipple(e) {
+  const btn = e.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2.4;
+  const ripple = document.createElement('span');
+  ripple.className = 'mcm-ripple';
+  ripple.style.width = ripple.style.height = `${size}px`;
+  ripple.style.left = `${e.clientX - rect.left}px`;
+  ripple.style.top = `${e.clientY - rect.top}px`;
+  ripple.addEventListener('animationend', () => ripple.remove());
+  btn.appendChild(ripple);
+}
+
+function MenuCard({ mc, index, highlighted }) {
   const accent = SUBJECT_ACCENT[mc.id] || '#EE6662';
 
   return (
@@ -18,7 +32,12 @@ function MenuCard({ mc, index, highlighted, onBook }) {
         style={{ boxShadow: `0 26px 56px -18px ${accent}80` }}
       />
 
-      <div className="relative aspect-video overflow-hidden bg-[#1c0c2e]">
+      <Link
+        to={mc.detailsPath}
+        tabIndex={-1}
+        aria-label={`${mc.title} masterclass details`}
+        className="relative block aspect-video cursor-pointer overflow-hidden bg-[#1c0c2e]"
+      >
         <img
           src={mc.image}
           alt={`${mc.title} live masterclass`}
@@ -33,7 +52,7 @@ function MenuCard({ mc, index, highlighted, onBook }) {
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
           LIVE
         </span>
-      </div>
+      </Link>
 
       <div className="relative flex flex-grow flex-col gap-[10px] px-[16px] pb-[16px] pt-[14px] sm:px-[20px] sm:pb-[18px] sm:pt-[16px]">
         <div className="flex items-center gap-2">
@@ -81,18 +100,19 @@ function MenuCard({ mc, index, highlighted, onBook }) {
           <div className="grid grid-cols-2 gap-2.5">
             <Link
               to={mc.detailsPath}
-              className="flex h-[44px] items-center justify-center rounded-xl border border-[#D8C9B2] px-2.5 text-center text-[14px] font-semibold leading-tight text-[#3A302A] transition duration-200 hover:-translate-y-0.5 hover:border-[#3B2261] hover:bg-[#F6F0E6] hover:text-[#3B2261] hover:shadow-[0_8px_18px_-10px_rgba(59,34,97,0.45)]"
+              onPointerDown={addRipple}
+              className="mcm-press flex h-[44px] items-center justify-center rounded-xl border border-[#D8C9B2] px-2.5 text-center text-[14px] font-semibold leading-tight text-[#3A302A] transition duration-200 hover:-translate-y-0.5 hover:border-[#3B2261] hover:bg-[#F6F0E6] hover:text-[#3B2261] hover:shadow-[0_8px_18px_-10px_rgba(59,34,97,0.45)] active:translate-y-0 active:scale-95 active:border-[#3B2261] active:bg-[#EFE4D3] active:text-[#3B2261] active:shadow-none active:duration-75"
             >
               Explore masterclass
             </Link>
-            <button
-              type="button"
-              onClick={() => onBook(mc.id)}
-              className="flex h-[44px] min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-br from-[#EE6662] to-[#D9534F] text-[14px] font-semibold text-white shadow-[0_10px_22px_rgba(238,102,98,0.3)] transition hover:shadow-[0_14px_28px_rgba(238,102,98,0.42)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EE6662]"
+            <Link
+              to={mc.detailsPath}
+              onPointerDown={addRipple}
+              className="mcm-press flex h-[44px] min-w-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-br from-[#EE6662] to-[#D9534F] text-[14px] font-semibold text-white shadow-[0_10px_22px_rgba(238,102,98,0.3)] transition duration-200 hover:shadow-[0_14px_28px_rgba(238,102,98,0.42)] active:scale-95 active:brightness-95 active:shadow-[0_4px_10px_rgba(238,102,98,0.35)] active:duration-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EE6662]"
             >
               Book now at {PRICE}
               <i className="fas fa-arrow-right text-[11px] transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
