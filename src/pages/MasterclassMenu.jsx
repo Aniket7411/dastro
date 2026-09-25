@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import SEO from '../components/SEO';
-import LazyOnView from '../components/LazyOnView';
+// import LazyOnView from '../components/LazyOnView';
 import HubRegistrationModal from '../components/masterclass-hub/HubRegistrationModal';
-import HubFaqSection from '../components/masterclass-hub/HubFaqSection';
+// import HubFaqSection from '../components/masterclass-hub/HubFaqSection';
 import SeatReservedOverlay from '../components/masterclass-hub/SeatReservedOverlay';
-import MentorSection from '../components/face-reading/MentorSection';
-import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
+// import MentorSection from '../components/face-reading/MentorSection';
+// import DsAstroTestimonials from '../components/face-reading/DsAstroTestimonials';
 import FooterMinimal from '../components/face-reading/FooterMinimal';
 import MenuNavbar from '../components/masterclass-menu/MenuNavbar';
 import MenuHero from '../components/masterclass-menu/MenuHero';
 import MenuCard from '../components/masterclass-menu/MenuCard';
-import MenuJourney from '../components/masterclass-menu/MenuJourney';
-import MenuFinalCta from '../components/masterclass-menu/MenuFinalCta';
+// import MenuJourney from '../components/masterclass-menu/MenuJourney';
+// import MenuFinalCta from '../components/masterclass-menu/MenuFinalCta';
 import useReveal from '../components/masterclass-menu/useReveal';
 import WhatsAppFab from '../components/masterclass-menu/WhatsAppFab';
 import { MENU_CSS, PRICE, cardAnchor } from '../components/masterclass-menu/menuTheme';
@@ -112,6 +112,7 @@ function MasterclassMenu() {
         </div>
       </section>
 
+      {/* Hidden for now — journey, mentor, testimonials and FAQ sections
       <MenuJourney />
 
       <div className="bg-slate-50 pt-6 sm:pt-8">
@@ -123,8 +124,9 @@ function MasterclassMenu() {
       </LazyOnView>
 
       <HubFaqSection />
+      */}
 
-      <MenuFinalCta onExplore={scrollToCards} />
+      {/* <MenuFinalCta onExplore={scrollToCards} /> */}
 
       <div className="bg-[#2A1647]">
         <FooterMinimal />

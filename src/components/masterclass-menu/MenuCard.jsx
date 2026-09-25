@@ -7,7 +7,7 @@ function MenuCard({ mc, index, highlighted, onBook }) {
   return (
     <article
       id={cardAnchor(mc.id)}
-      className={`mcm-reveal group relative flex w-full flex-col overflow-hidden rounded-[18px] border border-[#E9DFCF] bg-white shadow-[0_1px_2px_rgba(31,26,22,0.04),0_12px_30px_-18px_rgba(31,26,22,0.25)] transition-transform duration-300 hover:-translate-y-1 ${
+      className={`mcm-reveal group relative flex scroll-mt-24 sm:scroll-mt-28 w-full flex-col overflow-hidden rounded-[18px] border border-[#E9DFCF] bg-white shadow-[0_1px_2px_rgba(31,26,22,0.04),0_12px_30px_-18px_rgba(31,26,22,0.25)] transition-transform duration-300 hover:-translate-y-1 ${
         highlighted ? 'mcm-selected' : ''
       }`}
       style={{ '--mcm-accent': accent, transitionDelay: `${(index % 3) * 70}ms` }}
@@ -51,6 +51,9 @@ function MenuCard({ mc, index, highlighted, onBook }) {
         <h3 className="m-0 font-heading text-[19px] font-semibold leading-[1.25] text-[#1F1A16] sm:text-[20px]">
           {mc.menu.title}
         </h3>
+        <p className="m-0 text-[14px] font-medium italic leading-[1.5] text-[#5A4E44]">{mc.menu.tagline}</p>
+
+        {/* Longer description, highlights and chips — hidden in favour of the tagline above
         <p className="m-0 text-[14px] leading-[1.55] text-[#5A4E44]">{mc.menu.description}</p>
 
         <ul className="m-0 flex list-none flex-col gap-[6px] p-0">
@@ -67,6 +70,7 @@ function MenuCard({ mc, index, highlighted, onBook }) {
             <span key={chip} className="rounded-full bg-[#F6F0E6] px-2.5 py-[5px]">{chip}</span>
           ))}
         </div>
+        */}
 
         <div className="mt-auto border-t border-dashed border-[#E9DFCF] pt-[12px]">
           <div className="mb-[10px] flex items-center gap-2">
@@ -74,12 +78,12 @@ function MenuCard({ mc, index, highlighted, onBook }) {
             <span className="text-[14px] text-[#9A8B7C] line-through">{MRP}</span>
             <span className="ml-auto rounded-full bg-[#E8F7EE] px-2 py-0.5 text-[11px] font-semibold text-[#1E7A45]">75% off</span>
           </div>
-          <div className="grid grid-cols-[2fr_3fr] gap-2.5">
+          <div className="grid grid-cols-2 gap-2.5">
             <Link
               to={mc.detailsPath}
-              className="flex h-[44px] items-center justify-center rounded-xl border border-[#D8C9B2] px-[14px] text-[14px] font-semibold text-[#3A302A] transition-colors hover:border-[#3B2261] hover:text-[#3B2261]"
+              className="flex h-[44px] items-center justify-center rounded-xl border border-[#D8C9B2] px-2.5 text-center text-[14px] font-semibold leading-tight text-[#3A302A] transition duration-200 hover:-translate-y-0.5 hover:border-[#3B2261] hover:bg-[#F6F0E6] hover:text-[#3B2261] hover:shadow-[0_8px_18px_-10px_rgba(59,34,97,0.45)]"
             >
-              Details
+              Explore masterclass
             </Link>
             <button
               type="button"

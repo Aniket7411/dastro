@@ -45,9 +45,9 @@ function MenuNavbar({ classes }) {
       }`}
       aria-label="Masterclass navigation"
     >
-      <div className="relative mx-auto flex h-[64px] max-w-[1280px] items-center justify-between px-4 sm:h-[72px] sm:px-6 lg:px-10">
+      <div className="relative mx-auto flex h-[76px] max-w-[1280px] items-center justify-between px-4 sm:h-[88px] sm:px-6 lg:px-10">
         <Link to="/" className="flex items-center" aria-label="DS Astrology home">
-          <img src={SITE_LOGO} alt={SITE_LOGO_ALT} width="56" height="56" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
+          <img src={SITE_LOGO} alt={SITE_LOGO_ALT} width="72" height="72" className="h-[60px] w-[60px] object-contain sm:h-[72px] sm:w-[72px]" />
         </Link>
 
         <button
@@ -57,12 +57,15 @@ function MenuNavbar({ classes }) {
           aria-expanded={open}
           aria-controls="mcm-nav-panel"
           aria-label={open ? 'Menu band kijiye' : 'Menu kholiye'}
-          className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-[#E9DFCF] bg-white text-[#2A1647] transition hover:border-[#2A1647]/30 hover:bg-[#FAF6EE]"
+          className={`group relative flex h-11 items-center gap-2.5 rounded-full pl-4 pr-3.5 text-[13px] font-semibold tracking-wide transition duration-200 hover:shadow-[0_8px_20px_-8px_rgba(42,22,71,0.6)] ${
+            open ? 'bg-[#EE6662] text-white' : 'bg-[#2A1647] text-white hover:bg-[#3B2261]'
+          }`}
         >
-          <span className="relative block h-[14px] w-5" aria-hidden="true">
-            <span className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${open ? 'top-[6px] rotate-45' : 'top-0'}`} />
-            <span className={`absolute left-0 top-[6px] h-[2px] w-5 rounded-full bg-current transition-opacity duration-200 ${open ? 'opacity-0' : 'opacity-100'}`} />
-            <span className={`absolute left-0 h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${open ? 'top-[6px] -rotate-45' : 'top-[12px]'}`} />
+          <span className="hidden sm:inline">{open ? 'Close' : 'Menu'}</span>
+          <span className="relative block h-[14px] w-[22px]" aria-hidden="true">
+            <span className={`absolute right-0 h-[2px] rounded-full bg-current transition-all duration-300 ${open ? 'top-[6px] w-[22px] rotate-45' : 'top-0 w-[22px]'}`} />
+            <span className={`absolute right-0 top-[6px] h-[2px] rounded-full bg-current transition-all duration-300 ${open ? 'w-0 opacity-0' : 'w-[14px] opacity-100 group-hover:w-[22px]'}`} />
+            <span className={`absolute right-0 h-[2px] rounded-full bg-current transition-all duration-300 ${open ? 'top-[6px] w-[22px] -rotate-45' : 'top-[12px] w-[18px] group-hover:w-[22px]'}`} />
           </span>
         </button>
 
